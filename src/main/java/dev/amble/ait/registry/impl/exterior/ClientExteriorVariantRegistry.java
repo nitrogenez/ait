@@ -134,6 +134,11 @@ public class ClientExteriorVariantRegistry extends DatapackRegistry<ClientExteri
             public BiomeOverrides overrides() {
                 return variant.overrides();
             }
+
+            @Override
+            public boolean hasTransparentDoors() {
+                return variant.hasTransparentDoors();
+            }
         };
     }
 

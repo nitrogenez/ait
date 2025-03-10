@@ -248,14 +248,14 @@ AITModDataGenerator implements DataGeneratorEntrypoint {
                     .criterion(hasItem(Blocks.IRON_BARS), conditionsFromItem(Blocks.IRON_BARS)));
 
 
-            provider.addShapedRecipe(ShapedRecipeJsonBuilder.create(RecipeCategory.TOOLS, AITItems.IRON_GOAT_HORN, 1)
+            /*provider.addShapedRecipe(ShapedRecipeJsonBuilder.create(RecipeCategory.TOOLS, AITItems.IRON_GOAT_HORN, 1)
                     .pattern("III")
                     .pattern("IBI")
                     .pattern("III")
                     .input('I', Items.IRON_INGOT)
                     .input('B', Items.GOAT_HORN)
                     .criterion(hasItem(Items.IRON_INGOT), conditionsFromItem(Items.IRON_INGOT))
-                    .criterion(hasItem(Items.GOAT_HORN), conditionsFromItem(Items.GOAT_HORN)));
+                    .criterion(hasItem(Items.GOAT_HORN), conditionsFromItem(Items.GOAT_HORN)));*/
 
             provider.addShapedRecipe(ShapedRecipeJsonBuilder.create(RecipeCategory.MISC, PlanetItems.FABRIC, 1)
                     .pattern("SSS")
@@ -591,7 +591,7 @@ AITModDataGenerator implements DataGeneratorEntrypoint {
                 AITMod.id("classic_key_smithing"));
 
         // Horn Crafting
-        provider.addSmithingTransformRecipe(
+        /*provider.addSmithingTransformRecipe(
                 SmithingTransformRecipeJsonBuilder
                         .create(Ingredient.ofItems(AITItems.GOLD_KEY_UPGRADE_SMITHING_TEMPLATE),
                                 Ingredient.ofItems(AITItems.IRON_GOAT_HORN), Ingredient.ofItems(Items.GOLD_NUGGET),
@@ -623,7 +623,7 @@ AITModDataGenerator implements DataGeneratorEntrypoint {
                         .criterion(hasItem(AITItems.NETHERITE_GOAT_HORN), conditionsFromItem(AITItems.NETHERITE_GOAT_HORN))
                         .criterion(hasItem(Items.AMETHYST_SHARD), conditionsFromItem(Items.AMETHYST_SHARD))
                         .criterion(hasItem(AITItems.CLASSIC_KEY), conditionsFromItem(AITItems.CLASSIC_KEY)),
-                AITMod.id("classic_goat_horn_smithing"));
+                AITMod.id("classic_goat_horn_smithing"));*/
     }
 
     public void generateSoundData(FabricDataGenerator.Pack pack) {
@@ -916,10 +916,10 @@ AITModDataGenerator implements DataGeneratorEntrypoint {
         provider.addTranslation("block.ait.fabricator.tooltip.use", "(Place on top of a Smithing Table)");
         provider.addTranslation("tooltip.ait.use_in_tardis", "(Place inside a TARDIS)");
         provider.addTranslation("block.ait.artron_collector_block.tooltip.use", "(Charges inside of Rift Chunks)");
-        provider.addTranslation("tooltip.ait.power_converter", "(Convert Zeiton,Lava,Coal and Wood into Artron)");
+        provider.addTranslation("tooltip.ait.power_converter", "(Convert zeiton, lava, coal and wood into Artron)");
         provider.addTranslation("tooltip.ait.singularity", "(Give the TARDIS Coral this to allow the generation of the interior)");
-        provider.addTranslation("tooltip.ait.tardis_coral", "(Place the CORAL on soul sand in a rift chunk and give it a SMS to generate your interior)");
-        provider.addTranslation("tooltip.ait.matrix_energizer", "(Place this on a naturally generating shriker and give it a nether star)");
+        provider.addTranslation("tooltip.ait.tardis_coral", "(Place the Tardis Coral on Soul Sand in a Rift Chunk to grow a TARDIS)");
+        provider.addTranslation("tooltip.ait.matrix_energizer", "(Place on a naturally-occurring shrieker to produce a Personality Matrix)");
 
         // Painting
         provider.addTranslation("painting.ait.crab_thrower.title", "Crab Thrower");
@@ -989,6 +989,9 @@ AITModDataGenerator implements DataGeneratorEntrypoint {
         provider.addTranslation("message.ait.unlocked_all", "Unlocked all: ");
         provider.addTranslation("message.ait.all_types", "TARDIS Consoles, TARDIS Exteriors & Sonic Casings");
         provider.addTranslation("screen.ait.sonic_casing", "Sonic Casing");
+        provider.addTranslation("sonic.ait.mode.tardis.location_summon", "Summoned TARDIS To Your Location, Please Wait...");
+        provider.addTranslation("sonic.ait.mode.tardis.refuel", "Engaged Handbrake, TARDIS Refueling...");
+        provider.addTranslation("sonic.ait.mode.tardis.flight", "Disengaged Handbrake, TARDIS Dematerialising...");
         provider.addTranslation("screen.ait.current_au", "Current AU");
         provider.addTranslation("screen.ait.linked_tardis", "Linked TARDIS");
         provider.addTranslation("message.ait.control.xlandtype.on", "Horizontal Search: ENGAGED");

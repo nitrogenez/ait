@@ -106,13 +106,8 @@ public class TardisItemBuilder extends Item {
                 loyalty -> {
                     loyalty.setMessageEnabled(false);
                     loyalty.set(serverPlayer, new Loyalty(Loyalty.Type.OWNER));
+                    loyalty.setMessageEnabled(true);
                 });
-
-        TardisBuilder builder1 = new TardisBuilder().at(pos)
-                .<LoyaltyHandler> with(TardisComponent.Id.LOYALTY,
-                        loyalty -> {
-                            loyalty.setMessageEnabled(true);
-                        });
 
         if (this.exterior == null || this.desktop == null) {
             DefaultThemes.getRandom().apply(builder);
@@ -124,9 +119,6 @@ public class TardisItemBuilder extends Item {
         ServerTardis created = ServerTardisManager.getInstance()
                 .create(builder);
 
-        ServerTardis created1 = ServerTardisManager.getInstance()
-                .create(builder1);
-
         player.sendMessage(
                 Text.empty()
                         .append(Text.translatable("message.ait.unlocked_all").formatted(Formatting.WHITE))
@@ -134,7 +126,7 @@ public class TardisItemBuilder extends Item {
                         .append(Text.literal("!").formatted(Formatting.WHITE)), false);
 
 
-        if ( created == null || created1 == null) {
+        if ( created == null ) {
             player.sendMessage(Text.translatable("message.ait.max_tardises"), true);
             return ActionResult.FAIL;
         }

@@ -6,6 +6,7 @@ import dev.amble.lib.util.TeleportUtil;
 
 import net.minecraft.block.*;
 import net.minecraft.entity.*;
+import net.minecraft.entity.mob.AmbientEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
@@ -16,21 +17,21 @@ import net.minecraft.state.property.Properties;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Box;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.Direction;
-import net.minecraft.util.math.random.ChunkRandom;
 import net.minecraft.world.*;
 import net.minecraft.world.chunk.Chunk;
 
 import dev.amble.ait.AITMod;
 import dev.amble.ait.core.*;
-import dev.amble.ait.core.entities.base.DummyAmbientEntity;
 import dev.amble.ait.core.item.SonicItem;
 import dev.amble.ait.core.util.StackUtil;
 import dev.amble.ait.core.util.WorldUtil;
+import dev.amble.ait.core.world.RiftChunkManager;
+import dev.amble.ait.module.planet.core.util.ISpaceImmune;
 
-public class RiftEntity extends DummyAmbientEntity {
-
+public class RiftEntity extends AmbientEntity implements ISpaceImmune {
     private int interactAmount = 0;
     private int ambientSoundCooldown = 0;
     private int currentSoundIndex = 0;
@@ -53,12 +54,8 @@ public class RiftEntity extends DummyAmbientEntity {
     }
 
     @Override
-    public boolean cannotDespawn() {
-        return true;
-    }
-
-    @Override
     public void onPlayerCollision(PlayerEntity player) {
+        if (WorldUtil.getTimeVortex() == null) return;
         TeleportUtil.teleport(player, WorldUtil.getTimeVortex(), player.getPos(), player.bodyYaw);
     }
 
@@ -111,7 +108,6 @@ public class RiftEntity extends DummyAmbientEntity {
 
                 BlockState currentState = world.getBlockState(targetPos);
                 BlockState newState = getReplacementBlock(currentState);
-
                 if (newState != null) {
                     world.setBlockState(targetPos, newState, Block.NOTIFY_ALL);
 
@@ -182,17 +178,22 @@ public class RiftEntity extends DummyAmbientEntity {
     public static boolean canSpawn(EntityType<RiftEntity> rift,
                                    ServerWorldAccess serverWorldAccess, SpawnReason spawnReason,
                                    BlockPos pos, net.minecraft.util.math.random.Random random) {
-        if (!(serverWorldAccess instanceof StructureWorldAccess worldAccess)) return false;
+        if (!(serverWorldAccess instanceof StructureWorldAccess worldAccess))
+            return false;
 
-        if (spawnReason == SpawnReason.STRUCTURE)
-            return RiftEntity.canMobSpawn(rift, worldAccess, spawnReason, pos, random);
+        Chunk chunk = worldAccess.getChunk(pos);
+        ChunkPos chunkPos = chunk.getPos();
+        BlockPos startPos = new BlockPos(chunkPos.getStartX(), chunk.getBottomY(), chunkPos.getStartZ());
+        BlockPos endPos = new BlockPos(chunkPos.getEndX(), worldAccess.getHeight(), chunkPos.getEndZ());
+        Box box = new Box(startPos, endPos);
 
-        ChunkPos chunkPos = new ChunkPos(pos);
-        boolean bl = ChunkRandom.getSlimeRandom(chunkPos.x, chunkPos.z,
-                worldAccess.getSeed(), 987234910L).nextInt(8) == 0;
+        if (spawnReason == SpawnReason.STRUCTURE && serverWorldAccess.getEntitiesByType(rift, box,
+                predicate -> true).isEmpty())
+            return worldAccess.getBlockState(pos).isAir() && worldAccess.getBlockState(pos.down()).isAir();
 
-        if (random.nextInt(25) == 0 && bl)
-            return RiftEntity.canMobSpawn(rift, worldAccess, spawnReason, pos, random);
+        if (random.nextInt(10) == 0 && serverWorldAccess.getEntitiesByType(rift, box,
+                predicate -> true).isEmpty() && RiftChunkManager.isRiftChunk(worldAccess, pos))
+            return worldAccess.getBlockState(pos).isAir() && worldAccess.getBlockState(pos.down()).isAir();
 
         return false;
     }
@@ -200,7 +201,7 @@ public class RiftEntity extends DummyAmbientEntity {
     @Override
     public void onSpawnPacket(EntitySpawnS2CPacket packet) {
         double d = packet.getX();
-        double e = packet.getY() + 0;
+        double e = packet.getY();
         double f = packet.getZ();
         float g = packet.getYaw();
         float h = packet.getPitch();

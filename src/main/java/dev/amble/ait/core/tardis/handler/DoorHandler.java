@@ -4,6 +4,7 @@ import dev.amble.lib.data.DirectedBlockPos;
 import net.fabricmc.fabric.api.util.TriState;
 import org.jetbrains.annotations.Nullable;
 
+import net.minecraft.entity.Entity;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
@@ -133,7 +134,7 @@ public class DoorHandler extends KeyedTardisComponent implements TardisTickable 
         // Get all entities in the Tardis interior
         TardisUtil.getLivingEntitiesInInterior(tardis.asServer()).stream()
                 .filter(entity -> !(entity instanceof ConsoleControlEntity)) // Exclude control entities
-                .filter(entity -> !(entity instanceof ServerPlayerEntity && entity.isSpectator())) // Exclude spectators
+                .filter(entity -> !(entity instanceof Entity && entity.isSpectator())) // Exclude spectators
                 .forEach(entity -> {
 
                     DirectedBlockPos directed = tardis.getDesktop().getDoorPos();

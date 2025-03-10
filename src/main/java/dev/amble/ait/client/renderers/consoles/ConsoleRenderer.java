@@ -122,6 +122,12 @@ public class ConsoleRenderer<T extends ConsoleBlockEntity> implements BlockEntit
                 RenderLayer.getEntityTranslucentCull(variant.texture())), light, overlay, 1,
                 1, 1, 1);
 
+
+        matrices.pop();
+        matrices.push();
+
+        matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees(180f));
+
         if (hasPower) {
             profiler.swap("emission"); // emission {
 

@@ -9,6 +9,7 @@ import net.minecraft.util.math.RotationAxis;
 
 import dev.amble.ait.AITMod;
 import dev.amble.ait.api.link.v2.block.AbstractLinkableBlockEntity;
+import dev.amble.ait.core.tardis.ServerTardis;
 import dev.amble.ait.core.tardis.handler.DoorHandler;
 
 public class PoliceBoxCoralDoorModel extends DoorModel {

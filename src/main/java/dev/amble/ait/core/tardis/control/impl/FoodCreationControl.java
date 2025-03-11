@@ -25,6 +25,7 @@ public class FoodCreationControl extends Control {
     @Override
     public boolean runServer(Tardis tardis, ServerPlayerEntity player, ServerWorld world, BlockPos console,
                              boolean leftClick) {
+        super.runServer(tardis, player, world, console, leftClick);
         if (tardis.fuel().getCurrentFuel() < 500)
             return false;
 

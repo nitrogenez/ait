@@ -15,7 +15,6 @@ import dev.amble.ait.core.tardis.control.Control;
 import dev.amble.ait.core.tardis.control.impl.pos.IncrementManager;
 import dev.amble.ait.core.tardis.handler.travel.TravelHandler;
 import dev.amble.ait.core.tardis.handler.travel.TravelUtil;
-import dev.amble.ait.core.tardis.util.AsyncLocatorUtil;
 
 public class RandomiserControl extends Control {
 
@@ -23,12 +22,10 @@ public class RandomiserControl extends Control {
         super(AITMod.id("randomiser"));
     }
 
-    /**
-     * TODO rewrite the randomizer to follow the async stuff like this class
-     * {@link AsyncLocatorUtil}
-     */
     @Override
     public boolean runServer(Tardis tardis, ServerPlayerEntity player, ServerWorld world, BlockPos console, boolean leftClick) {
+        super.runServer(tardis, player, world, console, leftClick);
+
         TravelHandler travel = tardis.travel();
 
         TravelUtil.randomPos(tardis, 10, IncrementManager.increment(tardis), cached -> {

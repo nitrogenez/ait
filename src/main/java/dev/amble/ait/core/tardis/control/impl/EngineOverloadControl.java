@@ -32,6 +32,8 @@ public class EngineOverloadControl extends Control {
 
     @Override
     public boolean runServer(Tardis tardis, ServerPlayerEntity player, ServerWorld world, BlockPos console, boolean leftClick) {
+        super.runServer(tardis, player, world, console, leftClick);
+
         if (tardis.fuel().getCurrentFuel() < 25000) {
             player.sendMessage(Text.literal("§cERROR, TARDIS REQUIRES AT LEAST 25K ARTRON TO EXECUTE THIS ACTION."), true);
             world.playSound(null, player.getBlockPos(), AITSounds.CLOISTER, SoundCategory.BLOCKS, 1.0F, 1.0F);

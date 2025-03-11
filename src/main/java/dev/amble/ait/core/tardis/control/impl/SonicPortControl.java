@@ -29,6 +29,8 @@ public class SonicPortControl extends Control {
 
     @Override
     public boolean runServer(Tardis tardis, ServerPlayerEntity player, ServerWorld world, BlockPos console, boolean leftClick) {
+        super.runServer(tardis, player, world, console, leftClick);
+
         SonicHandler handler = tardis.sonic();
         ButlerHandler butler = tardis.butler();
 

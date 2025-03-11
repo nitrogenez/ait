@@ -25,6 +25,8 @@ public class VisualiserControl extends Control {
 
     @Override
     public boolean runServer(Tardis tardis, ServerPlayerEntity player, ServerWorld world, BlockPos console, boolean rightClick) {
+        super.runServer(tardis, player, world, console, rightClick);
+
         if (!AITMod.CONFIG.SERVER.RWF_ENABLED) {
             player.sendMessage(Text.translatable("tardis.message.control.rwf_disabled"), true);
             return true;

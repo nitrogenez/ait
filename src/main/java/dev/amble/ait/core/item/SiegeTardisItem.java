@@ -62,21 +62,19 @@ public class SiegeTardisItem extends LinkableItem {
         }
     }
 
+
     @Override
     public ActionResult useOnBlock(ItemUsageContext context) {
-        if (context.getHand() != Hand.MAIN_HAND)
+        if (context.getHand() != Hand.MAIN_HAND || context.getPlayer() == null)
             return ActionResult.FAIL; // bc i cba
+
+        context.getPlayer().getMainHandStack().decrement(1);
 
         if (context.getWorld().isClient())
             return ActionResult.SUCCESS;
 
         ItemStack stack = context.getStack();
         Tardis tardis = this.getTardis(context.getWorld(), stack);
-
-        ServerPlayerEntity player = (ServerPlayerEntity) context.getPlayer();
-        context.getStack().setCount(0);
-
-        player.getInventory().markDirty();
 
         if (tardis == null)
             return ActionResult.FAIL;

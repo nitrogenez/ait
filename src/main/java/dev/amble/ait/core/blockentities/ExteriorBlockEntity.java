@@ -250,6 +250,8 @@ public class ExteriorBlockEntity extends AbstractLinkableBlockEntity implements 
 
         boolean previouslyLocked = tardis.door().previouslyLocked().get();
 
+        if (tardis.siege().isActive()) return;
+
         if (travel.getState() == TravelHandlerBase.State.DEMAT) return;
 
         if (!previouslyLocked && travel.getState() == TravelHandlerBase.State.MAT

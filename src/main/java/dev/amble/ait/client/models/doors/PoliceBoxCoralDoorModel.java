@@ -169,7 +169,7 @@ public class PoliceBoxCoralDoorModel extends DoorModel {
     public void renderWithAnimations(AbstractLinkableBlockEntity doorEntity, ModelPart root, MatrixStack matrices,
                                      VertexConsumer vertices, int light, int overlay, float red, float green, float blue, float pAlpha) {
         if (!AITMod.CONFIG.CLIENT.ANIMATE_DOORS) {
-            Tardis tardis = doorEntity.tardis.get();
+            Tardis tardis = doorEntity.tardis().get();
             if (tardis == null) return;
             DoorHandler door = tardis.door();
 

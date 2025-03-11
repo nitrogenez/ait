@@ -123,7 +123,7 @@ public class StallionExteriorModel extends ExteriorModel {
         if (isBOTI) {
             matrices.push();
             matrices.scale(0.95f, 0.95f, 0.95f);
-            matrices.translate(0, -1.5f, 0);
+            matrices.translate(10, 10f, -1);
             body.getChild("door").render(matrices, vertices, light, overlay, red, green, blue, pAlpha);
             matrices.pop();
         }

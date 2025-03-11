@@ -498,7 +498,7 @@ public class AITModClient implements ClientModInitializer {
             stack.scale(1, -1, -1);
             stack.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(RotationPropertyHelper.toDegrees(exterior.getCachedState().get(ExteriorBlock.ROTATION))));
             int light = world.getLightLevel(pos);
-            if (tardis.door().getLeftRot() > 0 && !tardis.isGrowth()) {
+            if ((tardis.door().getLeftRot() > 0 || variant.hasTransparentDoors()) && !tardis.isGrowth()) {
                 light = LightmapTextureManager.pack(world.getLightLevel(LightType.BLOCK, pos), world.getLightLevel(LightType.SKY, pos));
                 TardisExteriorBOTI boti = new TardisExteriorBOTI();
                 boti.renderExteriorBoti(exterior, variant, stack,
@@ -530,7 +530,7 @@ public class AITModClient implements ClientModInitializer {
                 stack.scale(1, -1, -1);
                 stack.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(door.getCachedState().get(DoorBlock.FACING).asRotation()));
                 int light = world.getLightLevel(pos.up());
-                if (tardis.door().getLeftRot() > 0 && !tardis.isGrowth()) {
+                if ((tardis.door().getLeftRot() > 0  || variant.hasTransparentDoors()) && !tardis.isGrowth()) {
                     light = LightmapTextureManager.pack(world.getLightLevel(LightType.BLOCK, pos), world.getLightLevel(LightType.SKY, pos));
                     TardisDoorBOTI.renderInteriorDoorBoti(tardis, door, variant, stack,
                             AITMod.id("textures/environment/tardis_sky.png"), model,

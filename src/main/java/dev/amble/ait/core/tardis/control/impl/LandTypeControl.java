@@ -16,9 +16,6 @@ import dev.amble.ait.data.schema.console.variant.coral.*;
 import dev.amble.ait.data.schema.console.variant.renaissance.*;
 
 public class LandTypeControl extends Control {
-
-    private SoundEvent soundEvent = AITSounds.LAND_TYPE;
-
     public LandTypeControl() {
         super(AITMod.id("land_type"));
     }
@@ -43,20 +40,12 @@ public class LandTypeControl extends Control {
             return value;
         });
 
-        if (world.getBlockEntity(console) instanceof ConsoleBlockEntity consoleBlockEntity) {
-            if (isRenaissanceVariant(consoleBlockEntity)) {
-                this.soundEvent = AITSounds.RENAISSANCE_LAND_TYPE_ALT;
-            } else if (isCoralVariant(consoleBlockEntity)) {
-                this.soundEvent = AITSounds.CORAL_LAND_TYPE_ALT;
-            }
-        }
-
         return Result.SUCCESS;
     }
 
     @Override
     public SoundEvent getFallbackSound() {
-        return this.soundEvent;
+        return AITSounds.LAND_TYPE;
     }
 
     public void messageYPlayer(ServerPlayerEntity player, TravelHandlerBase.GroundSearch value) {

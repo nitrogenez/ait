@@ -68,7 +68,7 @@ public class HandBrakeControl extends Control {
     }
 
     @Override
-    public SoundEvent getSound() {
+    public SoundEvent getFallbackSound() {
         return this.soundEvent;
     }
 

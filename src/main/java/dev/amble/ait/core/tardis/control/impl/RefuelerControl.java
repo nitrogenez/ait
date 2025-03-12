@@ -42,7 +42,7 @@ public class RefuelerControl extends Control {
     }
 
     @Override
-    public SoundEvent getSound() {
+    public SoundEvent getFallbackSound() {
         return AITSounds.ENGINE_REFUEL_CRANK;
     }
 

@@ -36,7 +36,7 @@ public class PowerControl extends Control {
     }
 
     @Override
-    public SoundEvent getSound() {
+    public SoundEvent getFallbackSound() {
         return this.soundEvent;
     }
 

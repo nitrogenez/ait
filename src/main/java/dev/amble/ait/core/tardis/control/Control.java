@@ -1,5 +1,7 @@
 package dev.amble.ait.core.tardis.control;
 
+import dev.amble.lib.api.Identifiable;
+
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
@@ -13,9 +15,11 @@ import dev.amble.ait.core.AITSounds;
 import dev.amble.ait.core.engine.SubSystem;
 import dev.amble.ait.core.tardis.Tardis;
 import dev.amble.ait.core.tardis.control.impl.SecurityControl;
+import dev.amble.ait.core.tardis.control.sound.ControlSoundRegistry;
 import dev.amble.ait.core.util.WorldUtil;
+import dev.amble.ait.data.schema.console.ConsoleTypeSchema;
 
-public class Control {
+public class Control implements Identifiable {
 
     private final Identifier id;
 
@@ -23,7 +27,8 @@ public class Control {
         this.id = id;
     }
 
-    public Identifier getId() {
+    @Override
+    public Identifier id() {
         return id;
     }
 
@@ -61,8 +66,25 @@ public class Control {
         }
     }
 
-    public SoundEvent getSound() {
-        return AITSounds.XYZ;
+
+    public SoundEvent getFallbackSound() {
+        return null;
+    }
+
+    /**
+     * Get the sound to play when this control is used
+     * @param console The console variant this control is being used on
+     * @param success Whether the control was successful
+     * @return The sound to play
+     */
+    public SoundEvent getSound(ConsoleTypeSchema console, boolean success) {
+        SoundEvent sound = ControlSoundRegistry.getInstance().get(console, this).sound(success);
+
+        if (this.getFallbackSound() != null && (sound == null || sound == AITSounds.ERROR)) {
+            return this.getFallbackSound();
+        }
+
+        return sound;
     }
 
     public boolean requiresPower() {
@@ -130,7 +152,7 @@ public class Control {
             return false;
 
         Control control = (Control) o;
-        return this.id.equals(control.getId());
+        return this.id.equals(control.id());
     }
 
     @Override

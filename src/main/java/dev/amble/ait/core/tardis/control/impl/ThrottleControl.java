@@ -56,7 +56,7 @@ public class ThrottleControl extends Control {
     }
 
     @Override
-    public SoundEvent getSound() {
+    public SoundEvent getFallbackSound() {
         return AITSounds.DEMAT_LEVER_PULL;
     }
 

@@ -39,7 +39,7 @@ public class HailMaryControl extends Control {
     }
 
     @Override
-    public SoundEvent getSound() {
+    public SoundEvent getFallbackSound() {
         return AITSounds.HAIL_MARY;
     }
 }

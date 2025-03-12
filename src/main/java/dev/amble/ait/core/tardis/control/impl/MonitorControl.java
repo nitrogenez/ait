@@ -60,7 +60,7 @@ public class MonitorControl extends Control {
     }
 
     @Override
-    public SoundEvent getSound() {
+    public SoundEvent getFallbackSound() {
         return this.soundEvent;
     }
 

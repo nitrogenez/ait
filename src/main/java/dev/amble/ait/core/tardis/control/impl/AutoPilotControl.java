@@ -37,7 +37,7 @@ public class AutoPilotControl extends Control {
     }
 
     @Override
-    public SoundEvent getSound() {
+    public SoundEvent getFallbackSound() {
         return AITSounds.PROTOCOL_116_ON;
     }
 }

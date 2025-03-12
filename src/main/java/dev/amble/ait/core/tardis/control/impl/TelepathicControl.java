@@ -234,7 +234,7 @@ public class TelepathicControl extends Control {
     }
 
     @Override
-    public SoundEvent getSound() {
+    public SoundEvent getFallbackSound() {
         return AITSounds.TELEPATHIC_CIRCUITS;
     }
 

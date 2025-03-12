@@ -86,7 +86,7 @@ public class SecurityControl extends Control {
     }
 
     @Override
-    public SoundEvent getSound() {
+    public SoundEvent getFallbackSound() {
         return AITSounds.PROTOCOL_19;
     }
 

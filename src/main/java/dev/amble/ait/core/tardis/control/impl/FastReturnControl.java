@@ -44,7 +44,7 @@ public class FastReturnControl extends Control {
     }
 
     @Override
-    public SoundEvent getSound() {
+    public SoundEvent getFallbackSound() {
         return AITSounds.FAST_RETURN;
     }
 }

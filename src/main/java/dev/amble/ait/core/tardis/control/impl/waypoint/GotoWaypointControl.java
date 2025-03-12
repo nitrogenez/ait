@@ -23,7 +23,7 @@ public class GotoWaypointControl extends Control {
     }
 
     @Override
-    public SoundEvent getSound() {
+    public SoundEvent getFallbackSound() {
         return AITSounds.SET_WAYPOINT;
     }
 }

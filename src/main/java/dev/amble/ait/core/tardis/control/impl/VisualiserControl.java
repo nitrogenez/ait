@@ -53,7 +53,7 @@ public class VisualiserControl extends Control {
     }
 
     @Override
-    public SoundEvent getSound() {
+    public SoundEvent getFallbackSound() {
         return AITSounds.RENAISSANCE_ANTI_GRAV_ALT;
     }
 }

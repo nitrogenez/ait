@@ -92,7 +92,7 @@ public class DirectionControl extends Control {
     }
 
     @Override
-    public SoundEvent getSound() {
+    public SoundEvent getFallbackSound() {
         return AITSounds.DIRECTION;
     }
 }

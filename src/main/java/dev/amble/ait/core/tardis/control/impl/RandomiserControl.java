@@ -52,7 +52,7 @@ public class RandomiserControl extends Control {
         player.sendMessage(text, true);
     }
     @Override
-    public SoundEvent getSound() {
+    public SoundEvent getFallbackSound() {
         return AITSounds.RANDOMIZE;
     }
 }

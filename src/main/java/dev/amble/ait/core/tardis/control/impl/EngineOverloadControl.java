@@ -153,7 +153,7 @@ public class EngineOverloadControl extends Control {
     }
 
     @Override
-    public SoundEvent getSound() {
+    public SoundEvent getFallbackSound() {
         return AITSounds.BWEEP;
     }
 }

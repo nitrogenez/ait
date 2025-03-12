@@ -41,7 +41,7 @@ public class CloakControl extends Control {
     }
 
     @Override
-    public SoundEvent getSound() {
+    public SoundEvent getFallbackSound() {
         return SoundEvents.INTENTIONALLY_EMPTY;
     }
 

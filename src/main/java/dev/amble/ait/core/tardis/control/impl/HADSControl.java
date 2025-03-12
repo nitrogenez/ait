@@ -31,7 +31,7 @@ public class HADSControl extends Control {
     }
 
     @Override
-    public SoundEvent getSound() {
+    public SoundEvent getFallbackSound() {
         return AITSounds.ALARM;
     }
 }

@@ -66,6 +66,7 @@ import dev.amble.ait.core.lock.LockedDimensionRegistry;
 import dev.amble.ait.core.loot.SetBlueprintLootFunction;
 import dev.amble.ait.core.sounds.flight.FlightSoundRegistry;
 import dev.amble.ait.core.sounds.travel.TravelSoundRegistry;
+import dev.amble.ait.core.tardis.control.sound.ControlSoundRegistry;
 import dev.amble.ait.core.tardis.handler.SeatHandler;
 import dev.amble.ait.core.tardis.manager.ServerTardisManager;
 import dev.amble.ait.core.tardis.util.AsyncLocatorUtil;
@@ -162,7 +163,8 @@ public class AITMod implements ModInitializer {
                 HumRegistry.getInstance(),
                 SubSystemRegistry.getInstance(),
                 ItemOpinionRegistry.getInstance(),
-                DrinkRegistry.getInstance()
+                DrinkRegistry.getInstance(),
+                ControlSoundRegistry.getInstance()
         );
 
         registerParticles();

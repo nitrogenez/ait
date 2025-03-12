@@ -15,6 +15,7 @@ import net.minecraft.util.math.BlockPos;
 
 import dev.amble.ait.api.link.v2.TardisRef;
 import dev.amble.ait.api.link.v2.block.InteriorLinkableBlockEntity;
+import dev.amble.ait.core.blockentities.ConsoleBlockEntity;
 import dev.amble.ait.core.blocks.control.RedstoneControlBlock;
 import dev.amble.ait.core.item.control.ControlBlockItem;
 import dev.amble.ait.core.tardis.ServerTardis;
@@ -35,7 +36,7 @@ public abstract class ControlBlockEntity extends InteriorLinkableBlockEntity {
         super.writeNbt(nbt);
 
         if (this.getControl() != null)
-            nbt.putString(ControlBlockItem.CONTROL_ID_KEY, this.getControl().getId().toString());
+            nbt.putString(ControlBlockItem.CONTROL_ID_KEY, this.getControl().id().toString());
     }
 
     @Override
@@ -82,8 +83,35 @@ public abstract class ControlBlockEntity extends InteriorLinkableBlockEntity {
         if (this.control.shouldHaveDelay(tardis) && !this.onDelay)
             this.createDelay(this.control.getDelayLength());
 
-        this.getWorld().playSound(null, pos, this.control.getSound(), SoundCategory.BLOCKS, 0.7f, 1f);
-        return this.control.handleRun(tardis, user, user.getServerWorld(), this.pos, isMine);
+        boolean success = this.control.handleRun(tardis, user, user.getServerWorld(), this.pos, isMine);
+
+        this.getConsole().ifPresent(console -> this.getWorld().playSound(null, pos, this.control.getSound(console.getTypeSchema(), success), SoundCategory.BLOCKS, 0.7f, 1f));
+
+        return success;
+    }
+
+    /**
+     * Finds the nearest console to this block
+     * @return The console block entity
+     */
+    public Optional<ConsoleBlockEntity> getConsole() {
+        if (!(this.isLinked()) || !this.hasWorld()) return Optional.empty();
+
+        BlockPos closest = this.getPos();
+        double closestDistance = 0;
+
+        for (BlockPos pos : this.tardis().get().getDesktop().getConsolePos()) {
+            double distance = this.getPos().getSquaredDistance(pos);
+            if (closestDistance == 0 || distance < closestDistance) {
+                closest = pos;
+                closestDistance = distance;
+            }
+        }
+
+        if (!(this.getWorld().getBlockEntity(closest) instanceof ConsoleBlockEntity console))
+            return Optional.empty();
+
+        return Optional.of(console);
     }
 
     public boolean run(ServerPlayerEntity user, RedstoneControlBlock.Mode mode) {

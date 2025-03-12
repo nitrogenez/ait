@@ -31,7 +31,7 @@ public abstract class ControlBlockItem extends BlockItem {
     @Override
     public ActionResult useOnEntity(ItemStack stack, PlayerEntity user, LivingEntity entity, Hand hand) {
         if (!user.getWorld().isClient() && entity instanceof ConsoleControlEntity ce) {
-            stack.getOrCreateNbt().putString(CONTROL_ID_KEY, ce.getControl().getId().toString());
+            stack.getOrCreateNbt().putString(CONTROL_ID_KEY, ce.getControl().id().toString());
             return ActionResult.SUCCESS;
         }
 

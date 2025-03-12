@@ -31,6 +31,7 @@ public class AITConfig implements ConfigData {
         public boolean GHOST_MONUMENT = true;
         public boolean LOCK_DIMENSIONS = true;
         public boolean RWF_ENABLED = true;
+        public boolean TNT_CAN_TELEPORT_THROUGH_DOOR = true;
 
         @ConfigEntry.Gui.RequiresRestart
         public List<String> WORLDS_BLACKLIST = List.of(

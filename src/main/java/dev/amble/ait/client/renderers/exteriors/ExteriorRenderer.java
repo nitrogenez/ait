@@ -1,5 +1,6 @@
 package dev.amble.ait.client.renderers.exteriors;
 
+import com.mojang.blaze3d.systems.RenderSystem;
 import dev.amble.lib.data.CachedDirectedGlobalPos;
 
 import net.minecraft.block.BlockState;
@@ -79,6 +80,9 @@ public class ExteriorRenderer<T extends ExteriorBlockEntity> implements BlockEnt
     private void renderExterior(Profiler profiler, Tardis tardis, T entity, float tickDelta, MatrixStack matrices,
             VertexConsumerProvider vertexConsumers, int light, int overlay) {
         final float alpha = entity.getAlpha();
+        RenderSystem.enableCull();
+        RenderSystem.enableBlend();
+        RenderSystem.defaultBlendFunc();
         if (tardis.areVisualShieldsActive()) {
             profiler.push("shields");
 
@@ -95,6 +99,8 @@ public class ExteriorRenderer<T extends ExteriorBlockEntity> implements BlockEnt
             matrices.pop();
             profiler.pop();
         }
+        RenderSystem.disableBlend();
+        RenderSystem.enableCull();
 
         if (tardis.siege().isActive()) {
             profiler.push("siege");

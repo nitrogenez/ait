@@ -39,6 +39,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldEvents;
 
 import dev.amble.ait.AITMod;
+import dev.amble.ait.client.util.ClientTardisUtil;
 import dev.amble.ait.core.AITDimensions;
 import dev.amble.ait.core.tardis.handler.travel.TravelHandlerBase;
 import dev.amble.ait.core.world.TardisServerWorld;
@@ -311,6 +312,19 @@ public class WorldUtil {
     }
 
     public static Text worldText(RegistryKey<World> key) {
+        if (ClientTardisUtil.getCurrentTardis() != null && ClientTardisUtil.getCurrentTardis().travel().inFlight()) {
+            RegistryKey<World> timeVortex = AITDimensions.TIME_VORTEX_WORLD;
+            return
+                    Text.translatableWithFallback(
+                            timeVortex.getValue().toTranslationKey("dimension"),
+                            fakeTranslate(timeVortex)).append(" [").append(Text.translatableWithFallback(
+                                    key.getValue().toTranslationKey("dimension"), fakeTranslate(key))).append( "]");
+        }
+
+        return Text.translatableWithFallback(key.getValue().toTranslationKey("dimension"), fakeTranslate(key));
+    }
+
+    public static Text worldText(RegistryKey<World> key, boolean justToSeperate) {
         return Text.translatableWithFallback(key.getValue().toTranslationKey("dimension"), fakeTranslate(key));
     }
 

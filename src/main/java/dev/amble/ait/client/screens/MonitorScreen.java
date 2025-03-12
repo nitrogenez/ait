@@ -436,7 +436,7 @@ public class MonitorScreen extends ConsoleScreen {
         BlockPos dabpdPos = dabpd.getPos();
 
         String destinationText = dabpdPos.getX() + ", " + dabpdPos.getY() + ", " + dabpdPos.getZ();
-        Text dDimensionText = WorldUtil.worldText(dabpd.getDimension());
+        Text dDimensionText = WorldUtil.worldText(dabpd.getDimension(), false);
 
         // position
         context.drawText(this.textRenderer, Text.literal(positionText), (width / 2 - 119), (height / 2 - 48), 0xFFFFFF,

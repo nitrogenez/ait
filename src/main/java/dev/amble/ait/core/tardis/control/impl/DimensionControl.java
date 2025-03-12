@@ -67,7 +67,7 @@ public class DimensionControl extends Control {
 
     private void messagePlayer(ServerPlayerEntity player, ServerWorld world, boolean unlocked) {
         MutableText message = Text.translatable("message.ait.tardis.control.dimension.info")
-                .append(WorldUtil.worldText(world.getRegistryKey())).formatted(unlocked ? Formatting.WHITE : Formatting.GRAY);
+                .append(WorldUtil.worldText(world.getRegistryKey(), false)).formatted(unlocked ? Formatting.WHITE : Formatting.GRAY);
 
         if (!(unlocked)) message.append(Text.literal(" \uD83D\uDD12"));
 

@@ -106,7 +106,7 @@ public class MonitorRenderer<T extends MonitorBlockEntity> implements BlockEntit
                 matrices.peek().getPositionMatrix(), vertexConsumers, 0xF000F0);
 
         String destinationPosText = " " + abpdPos.getX() + ", " + abpdPos.getY() + ", " + abpdPos.getZ();
-        Text destinationDimensionText = Text.of(truncateDimensionName(WorldUtil.worldText(abpd.getDimension()).getString(), 20));
+        Text destinationDimensionText = Text.of(truncateDimensionName(WorldUtil.worldText(abpd.getDimension(), false).getString(), 20));
 
 
         this.textRenderer.drawWithOutline(Text.of("✛").asOrderedText(), 0, 40, 0x00F0FF, 0x000000,

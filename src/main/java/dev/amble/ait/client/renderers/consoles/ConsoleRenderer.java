@@ -108,6 +108,7 @@ public class ConsoleRenderer<T extends ConsoleBlockEntity> implements BlockEntit
         profiler.push("model");
 
         this.updateModel(entity);
+        if (tardis.fuel() == null) return;
         boolean hasPower = tardis.fuel().hasPower();
 
         matrices.push();

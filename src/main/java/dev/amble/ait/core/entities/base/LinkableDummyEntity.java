@@ -4,6 +4,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.data.DataTracker;
 import net.minecraft.entity.data.TrackedData;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.world.World;
@@ -20,6 +21,22 @@ public class LinkableDummyEntity extends DummyEntity implements AbstractLinkable
 
     public LinkableDummyEntity(EntityType<?> type, World world) {
         super(type, world);
+    }
+
+    /**
+     * Used by {@link AbstractLinkableEntity}, do not remove.
+     */
+    @Override
+    public World getWorld() {
+        return super.getWorld();
+    }
+
+    /**
+     * Used by {@link AbstractLinkableEntity}, do not remove.
+     */
+    @Override
+    public DataTracker getDataTracker() {
+        return super.getDataTracker();
     }
 
     @Override

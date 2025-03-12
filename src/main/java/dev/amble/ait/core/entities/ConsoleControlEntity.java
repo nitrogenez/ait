@@ -156,11 +156,6 @@ public class ConsoleControlEntity extends LinkableDummyLivingEntity {
     }
 
     @Override
-    public DataTracker getDataTracker() {
-        return super.getDataTracker();
-    }
-
-    @Override
     public ActionResult interact(PlayerEntity player, Hand hand) {
         ItemStack handStack = player.getStackInHand(hand);
 

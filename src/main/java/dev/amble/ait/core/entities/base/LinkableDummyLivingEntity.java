@@ -5,6 +5,7 @@ import java.util.UUID;
 
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.data.DataTracker;
 import net.minecraft.entity.data.TrackedData;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.world.World;
@@ -24,6 +25,22 @@ public abstract class LinkableDummyLivingEntity extends DummyLivingEntity implem
         super(type, world);
 
         this.writeNbt = writeNbt;
+    }
+
+    /**
+     * Used by {@link AbstractLinkableEntity}, do not remove.
+     */
+    @Override
+    public World getWorld() {
+        return super.getWorld();
+    }
+
+    /**
+     * Used by {@link AbstractLinkableEntity}, do not remove.
+     */
+    @Override
+    public DataTracker getDataTracker() {
+        return super.getDataTracker();
     }
 
     @Override

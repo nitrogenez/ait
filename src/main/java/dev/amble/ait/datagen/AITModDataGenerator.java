@@ -285,10 +285,10 @@ public class AITModDataGenerator implements DataGeneratorEntrypoint {
                     .pattern("IBI")
                     .input('I', Items.IRON_INGOT)
                     .input('B', Items.IRON_BARS)
-                    .input('S', Items.GHAST_TEAR)
+                    .input('S', AITItems.ORTHOGONAL_ENGINE_FILTER)
                     .criterion(hasItem(Items.IRON_BLOCK), conditionsFromItem(Items.IRON_BLOCK))
                     .criterion(hasItem(Items.IRON_BARS), conditionsFromItem(Items.IRON_BARS))
-                    .criterion(hasItem(Items.GHAST_TEAR), conditionsFromItem(Items.GHAST_TEAR)));
+                    .criterion(hasItem(AITItems.ORTHOGONAL_ENGINE_FILTER), conditionsFromItem(AITItems.ORTHOGONAL_ENGINE_FILTER)));
 
             provider.addShapedRecipe(
                     ShapedRecipeJsonBuilder.create(RecipeCategory.DECORATIONS, AITBlocks.PLAQUE_BLOCK, 1).pattern("GSG")

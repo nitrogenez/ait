@@ -53,8 +53,10 @@ public class RiftEntity extends AmbientEntity implements ISpaceImmune {
 
     @Override
     public void onPlayerCollision(PlayerEntity player) {
-        if (WorldUtil.getTimeVortex() == null) return;
-        TeleportUtil.teleport(player, WorldUtil.getTimeVortex(), player.getPos(), player.bodyYaw);
+        if (player.getBoundingBox().intersects(this.getBoundingBox().shrink(0.5f, 0.5f, 0.5f))) {
+            if (WorldUtil.getTimeVortex() == null) return;
+            TeleportUtil.teleport(player, WorldUtil.getTimeVortex(), player.getPos(), player.bodyYaw);
+        }
     }
 
     @Override
@@ -177,6 +179,10 @@ public class RiftEntity extends AmbientEntity implements ISpaceImmune {
                                    ServerWorldAccess serverWorldAccess, SpawnReason spawnReason,
                                    BlockPos pos, net.minecraft.util.math.random.Random random) {
         if (!(serverWorldAccess instanceof StructureWorldAccess worldAccess))
+            return false;
+
+        if (serverWorldAccess.toServerWorld().getRegistryKey().equals(AITDimensions.SPACE) ||
+                serverWorldAccess.toServerWorld().getRegistryKey().equals(AITDimensions.TIME_VORTEX_WORLD))
             return false;
 
         Chunk chunk = worldAccess.getChunk(pos);

@@ -35,7 +35,6 @@ public class RiftEntity extends AmbientEntity implements ISpaceImmune {
     private int interactAmount = 0;
     private int ambientSoundCooldown = 0;
     private int currentSoundIndex = 0;
-    private static final Random RANDOM = new Random();
 
     private static final SoundEvent[] RIFT_SOUNDS = {
             AITSounds.RIFT1_AMBIENT,

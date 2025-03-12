@@ -5,6 +5,8 @@ import java.util.Collections;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.mojang.serialization.Dynamic;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.effect.StatusEffectInstance;
 import org.jetbrains.annotations.Nullable;
 
 import net.minecraft.entity.EntityType;
@@ -120,6 +122,11 @@ public abstract class DummyLivingEntity extends LivingEntity {
     @Override
     public Brain<?> getBrain() {
         return BRAIN;
+    }
+
+    @Override
+    public boolean addStatusEffect(StatusEffectInstance effect, @Nullable Entity source) {
+        return false;
     }
 
     public static DefaultAttributeContainer.Builder createDummyAttributes() {

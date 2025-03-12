@@ -1,6 +1,8 @@
 package dev.amble.ait.core.entities.base;
 
 import com.mojang.serialization.Dynamic;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.effect.StatusEffectInstance;
 import org.jetbrains.annotations.Nullable;
 
 import net.minecraft.entity.EntityType;
@@ -101,5 +103,10 @@ public class DummyAmbientEntity extends AmbientEntity {
     @Override
     public Brain<?> getBrain() {
         return DummyLivingEntity.BRAIN;
+    }
+
+    @Override
+    public boolean addStatusEffect(StatusEffectInstance effect, @Nullable Entity source) {
+        return false;
     }
 }

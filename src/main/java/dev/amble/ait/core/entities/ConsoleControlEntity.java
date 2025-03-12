@@ -72,11 +72,6 @@ public class ConsoleControlEntity extends LinkableDummyLivingEntity {
         this.link(tardis);
     }
 
-    @Override
-    public boolean addStatusEffect(StatusEffectInstance effect, @Nullable Entity source) {
-        return false;
-    }
-
     public static ConsoleControlEntity create(World world, Tardis tardis) {
         return new ConsoleControlEntity(world, tardis);
     }
@@ -85,8 +80,6 @@ public class ConsoleControlEntity extends LinkableDummyLivingEntity {
     public void remove(RemovalReason reason) {
         this.setRemoved(reason);
     }
-
-
 
     @Override
     public void onRemoved() {

@@ -15,7 +15,7 @@ import dev.amble.ait.api.link.v2.entity.AbstractLinkableEntity;
 
 public abstract class LinkableDummyLivingEntity extends DummyLivingEntity implements AbstractLinkableEntity {
 
-    private static final TrackedData<Optional<UUID>> TARDIS = AbstractLinkableEntity
+    public static final TrackedData<Optional<UUID>> TARDIS = AbstractLinkableEntity
             .register(LinkableDummyLivingEntity.class);
 
     private TardisRef tardis;
@@ -25,16 +25,6 @@ public abstract class LinkableDummyLivingEntity extends DummyLivingEntity implem
         super(type, world);
 
         this.writeNbt = writeNbt;
-    }
-
-    @Override
-    public World getWorld() {
-        return super.getWorld();
-    }
-
-    @Override
-    public DataTracker getDataTracker() {
-        return super.getDataTracker();
     }
 
     @Override

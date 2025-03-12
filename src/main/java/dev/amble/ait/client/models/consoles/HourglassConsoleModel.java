@@ -1719,8 +1719,8 @@ public class HourglassConsoleModel extends ConsoleModel {
     @Override
     public Animation getAnimationForState(TravelHandlerBase.State state) {
         return switch (state) {
-            default -> RenaissanceAnimation.RENAISSANCE_FLIGHT;
-            case LANDED -> RenaissanceAnimation.RENAISSANCE_IDLE;
+            default -> RenaissanceAnimation.FLIGHT;
+            case LANDED -> RenaissanceAnimation.IDLE;
         };
     }
 

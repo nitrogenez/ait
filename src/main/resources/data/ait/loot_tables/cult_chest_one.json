@@ -146,7 +146,7 @@
         },
         {
           "type": "minecraft:item",
-          "name": "ait:condenser",
+          "name": "ait:orthogonal_engine_filter",
           "weight": 5
         },
         {
@@ -166,7 +166,7 @@
         },
         {
           "type": "minecraft:item",
-          "name": "ait:bulb",
+          "name": "ait:photon_accelerator",
           "weight": 5
         }
       ],

@@ -2,8 +2,8 @@
   "credit": "Made by Loqor",
   "texture_size": [128, 128],
   "textures": {
-    "0": "ait:blockentities/machines/subsystem",
-    "particle": "ait:blockentities/machines/subsystem"
+    "0": "ait:item/subsystem",
+    "particle": "ait:item/subsystem"
   },
   "elements": [
     {

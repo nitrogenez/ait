@@ -15,6 +15,8 @@ body:
     description: Also tell us, what did you expect to happen?
     placeholder: Tell us what you see!
     value: |
+      This happened!
+      
       Steps to reproduce the behavior:
       1. Go to '...'
       2. Click on '....'

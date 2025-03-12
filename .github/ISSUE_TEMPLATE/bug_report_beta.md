@@ -1,8 +1,11 @@
 ---
-name: [RELEASE] Bug report
-about: Create a report to help us fix oversights of the previous releases.
+name: [BETA] Bug report
+about: Create a report to help us improve the **BETA** versions of the mod.
 title: ''
-labels: bug
+labels:
+  - bug
+  - for release
+milestone: 1.2.0
 type: Bug
 assignees: ''
 ---
@@ -24,7 +27,9 @@ A clear and concise description of what you expected to happen.
 If applicable, add screenshots to help explain your problem.
 
 **Details (please complete the following information):**
- - Mod version: [e.g. 1.2.0]
+<!-- Make sure to add the build number like in the example too! -->
+<!-- (This message will not be displayed when you post the issue. -->
+ - Mod version: [e.g. 1.2.0.2224] 
  - OS: [e.g. MacOS]
  - Video card: [e.g. Nvidia]
 

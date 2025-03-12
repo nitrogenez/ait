@@ -69,6 +69,7 @@ public class RiftEntity extends AmbientEntity implements ISpaceImmune {
             if (!this.getWorld().isClient()) {
                 sonic.addFuel(1000, stack);
                 this.getWorld().playSound(null, this.getBlockPos(), AITSounds.RIFT_SONIC, SoundCategory.AMBIENT, 1f, 1f);
+                StackUtil.spawn(this.getWorld(), this.getBlockPos(), new ItemStack(AITItems.CORAL_FRAGMENT));
                 this.discard();
             }
             return ActionResult.SUCCESS;

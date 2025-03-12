@@ -7,6 +7,8 @@ import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
 
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.sound.SoundCategory;
@@ -18,6 +20,7 @@ import dev.amble.ait.AITMod;
 import dev.amble.ait.api.KeyedTardisComponent;
 import dev.amble.ait.api.TardisEvents;
 import dev.amble.ait.api.TardisTickable;
+import dev.amble.ait.core.AITItems;
 import dev.amble.ait.core.AITSounds;
 import dev.amble.ait.core.item.SiegeTardisItem;
 import dev.amble.ait.core.tardis.TardisDesktop;
@@ -69,6 +72,13 @@ public class SiegeHandler extends KeyedTardisComponent implements TardisTickable
                 if (!Objects.equals(tardis.siege().getHeldPlayerUUID(), player.getUuid()))
                     return;
 
+                for (ItemStack itemStack : player.getInventory().main) {
+                    if (itemStack.isOf(AITItems.SIEGE_ITEM)) {
+                        if (tardis.getUuid().equals(SiegeTardisItem.getTardisIdStatic(itemStack))) {
+                            player.getInventory().setStack(player.getInventory().getSlotWithStack(itemStack), Items.AIR.getDefaultStack());
+                        }
+                    }
+                }
                 SiegeTardisItem.placeTardis(tardis, SiegeTardisItem.fromEntity(player));
             });
         });

@@ -312,7 +312,8 @@ public class WorldUtil {
     }
 
     public static Text worldText(RegistryKey<World> key) {
-        if (ClientTardisUtil.getCurrentTardis() != null && ClientTardisUtil.getCurrentTardis().travel().inFlight()) {
+        if (ClientTardisUtil.getCurrentTardis() != null &&
+                !ClientTardisUtil.getCurrentTardis().flight().isFlying() && ClientTardisUtil.getCurrentTardis().travel().inFlight()) {
             RegistryKey<World> timeVortex = AITDimensions.TIME_VORTEX_WORLD;
             return
                     Text.translatableWithFallback(

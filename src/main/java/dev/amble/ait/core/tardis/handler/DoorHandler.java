@@ -15,7 +15,6 @@ import net.minecraft.text.Text;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 
-import dev.amble.ait.AITMod;
 import dev.amble.ait.api.KeyedTardisComponent;
 import dev.amble.ait.api.TardisEvents;
 import dev.amble.ait.api.TardisTickable;
@@ -435,7 +434,7 @@ public class DoorHandler extends KeyedTardisComponent implements TardisTickable 
                 animState = AnimationDoorState.FIRST;
 
             if (animState == null) {
-                AITMod.LOGGER.info("Couldn't predict door animation state for {}->{}", oldState, newState);
+                //AITMod.LOGGER.info("Couldn't predict door animation state for {}->{}", oldState, newState);
                 animState = CLOSED;
             }
 

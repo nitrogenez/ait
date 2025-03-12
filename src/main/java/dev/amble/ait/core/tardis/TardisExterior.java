@@ -97,7 +97,7 @@ public class TardisExterior extends TardisComponent {
         this.category = exterior;
 
         if (exterior != this.getVariant().category()) {
-            AITMod.LOGGER.error("Force changing exterior variant to a random one to ensure it matches!");
+            //AITMod.LOGGER.error("Force changing exterior variant to a random one to ensure it matches!");
             this.setVariant(ExteriorVariantRegistry.getInstance().pickRandomWithParent(exterior));
         }
 

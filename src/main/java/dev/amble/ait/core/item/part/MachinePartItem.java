@@ -13,8 +13,8 @@ public class MachinePartItem extends AbstractMachinePartItem<MachinePartItem.Typ
     }
 
     public enum Type {
-        CONDENSER(() -> AITItems.CONDENSER), MANIPULATOR(() -> AITItems.MANIPULATOR), BULB(
-                () -> AITItems.BULB), INDUCTOR(() -> AITItems.INDUCTOR);
+        ORTHOGONAL_ENGINE_FILTER(() -> AITItems.ORTHOGONAL_ENGINE_FILTER), MANIPULATOR(() -> AITItems.MANIPULATOR), PHOTON_ACCELERATOR(
+                () -> AITItems.PHOTON_ACCELERATOR), INDUCTOR(() -> AITItems.INDUCTOR);
 
         private final Supplier<Item> toItem;
 

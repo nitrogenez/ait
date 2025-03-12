@@ -146,11 +146,11 @@ public class AITItems extends ItemContainer {
     public static final Item VORTEX_MERCURIAL_LINK = new MercurialLinkItem(AbstractLinkItem.Type.VORTEX,
             new AItemSettings().group(AITItemGroups.FABRICATOR));
 
-    public static final Item CONDENSER = new MachinePartItem(MachinePartItem.Type.CONDENSER,
+    public static final Item ORTHOGONAL_ENGINE_FILTER = new MachinePartItem(MachinePartItem.Type.ORTHOGONAL_ENGINE_FILTER,
             new AItemSettings().group(AITItemGroups.FABRICATOR));
     public static final Item MANIPULATOR = new MachinePartItem(MachinePartItem.Type.MANIPULATOR,
             new AItemSettings().group(AITItemGroups.FABRICATOR));
-    public static final Item BULB = new MachinePartItem(MachinePartItem.Type.BULB,
+    public static final Item PHOTON_ACCELERATOR = new MachinePartItem(MachinePartItem.Type.PHOTON_ACCELERATOR,
             new AItemSettings() .group(AITItemGroups.FABRICATOR));
     public static final Item INDUCTOR = new MachinePartItem(MachinePartItem.Type.INDUCTOR,
             new AItemSettings().group(AITItemGroups.FABRICATOR));

@@ -228,7 +228,7 @@ public class AITModDataGenerator implements DataGeneratorEntrypoint {
                     .criterion(hasItem(AITBlocks.ARTRON_COLLECTOR_BLOCK), conditionsFromItem(AITBlocks.ARTRON_COLLECTOR_BLOCK))
                     .criterion(hasItem(AITItems.SUPERHEATED_ZEITON), conditionsFromItem(AITItems.SUPERHEATED_ZEITON)));
 
-            provider.addShapedRecipe(ShapedRecipeJsonBuilder.create(RecipeCategory.TOOLS, AITItems.BULB, 1)
+            provider.addShapedRecipe(ShapedRecipeJsonBuilder.create(RecipeCategory.TOOLS, AITItems.PHOTON_ACCELERATOR, 1)
                     .pattern("GGG")
                     .pattern("G G")
                     .pattern(" I ")
@@ -237,7 +237,7 @@ public class AITModDataGenerator implements DataGeneratorEntrypoint {
                     .criterion(hasItem(Items.IRON_INGOT), conditionsFromItem(Items.IRON_INGOT))
                     .criterion(hasItem(Blocks.GLASS_PANE), conditionsFromItem(Blocks.GLASS_PANE)));
 
-            provider.addShapedRecipe(ShapedRecipeJsonBuilder.create(RecipeCategory.TOOLS, AITItems.CONDENSER, 1)
+            provider.addShapedRecipe(ShapedRecipeJsonBuilder.create(RecipeCategory.TOOLS, AITItems.ORTHOGONAL_ENGINE_FILTER, 1)
                     .pattern("III")
                     .pattern("IBI")
                     .pattern("III")

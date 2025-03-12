@@ -17,7 +17,7 @@ public class CustomTrades {
                 factories -> {
                     factories.add((entity, random) -> new TradeOffer(
                             new ItemStack(Items.EMERALD, 4),
-                            new ItemStack(AITItems.BULB, 3),
+                            new ItemStack(AITItems.PHOTON_ACCELERATOR, 3),
                             6, 5, 0.075f));
                 });
 
@@ -26,7 +26,7 @@ public class CustomTrades {
                 factories -> {
                     factories.add((entity, random) -> new TradeOffer(
                             new ItemStack(Items.IRON_INGOT, 5),
-                            new ItemStack(AITItems.CONDENSER, 2),
+                            new ItemStack(AITItems.ORTHOGONAL_ENGINE_FILTER, 2),
                             3, 3, 0.045f));
                 });
 

@@ -246,7 +246,7 @@ public class TardisUtil {
     }
 
     private static void teleportWithDoorOffset(ServerWorld world, Entity entity, DirectedBlockPos directed) {
-        if (((ExtraPushableEntity) entity).ait$pushBehaviour() == TriState.FALSE)
+        if (entity instanceof ExtraPushableEntity pushable && pushable.ait$pushBehaviour() == TriState.FALSE)
             return;
 
         BlockPos pos = directed.getPos();
@@ -260,7 +260,8 @@ public class TardisUtil {
             if (entity.getVehicle() instanceof FlightTardisEntity)
                 return;
 
-            ((ExtraPushableEntity) entity).ait$setPushBehaviour(TriState.FALSE);
+            if (entity instanceof ExtraPushableEntity pushable)
+                pushable.ait$setPushBehaviour(TriState.FALSE);
 
             if (entity instanceof ServerPlayerEntity player) {
                 WorldUtil.teleportToWorld(player, world, vec,
@@ -284,8 +285,8 @@ public class TardisUtil {
                             entity.getPitch());
                 }
             }
-
-            Scheduler.get().runTaskLater(() -> ((ExtraPushableEntity) entity).ait$setPushBehaviour(TriState.DEFAULT), TimeUnit.SECONDS, 3);
+            if (entity instanceof ExtraPushableEntity pushable)
+                Scheduler.get().runTaskLater(() -> pushable.ait$setPushBehaviour(TriState.DEFAULT), TimeUnit.SECONDS, 3);
         });
     }
 

@@ -9,6 +9,7 @@ import net.minecraft.client.item.TooltipContext;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUsageContext;
+import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
@@ -48,7 +49,7 @@ public class SiegeTardisItem extends LinkableItem {
 
         if (!tardis.siege().isActive()) {
             tardis.setSiegeBeingHeld(null);
-            stack.setCount(0);
+            stack = ItemStack.EMPTY;
             return;
         }
 
@@ -66,26 +67,27 @@ public class SiegeTardisItem extends LinkableItem {
     @Override
     public ActionResult useOnBlock(ItemUsageContext context) {
         if (context.getHand() != Hand.MAIN_HAND || context.getPlayer() == null)
-            return ActionResult.FAIL; // bc i cba
+            return ActionResult.PASS; // bc i cba
 
-        context.getPlayer().getMainHandStack().decrement(1);
+        context.getPlayer().getInventory().setStack(context.getPlayer().getInventory().selectedSlot, Items.AIR.getDefaultStack());
+
+        context.getStack().decrement(1);
 
         if (context.getWorld().isClient())
             return ActionResult.SUCCESS;
 
-        ItemStack stack = context.getStack();
-        Tardis tardis = this.getTardis(context.getWorld(), stack);
+        Tardis tardis = this.getTardis(context.getWorld(), context.getStack());
 
         if (tardis == null)
-            return ActionResult.FAIL;
+            return ActionResult.CONSUME;
 
         if (!tardis.siege().isActive()) {
             tardis.setSiegeBeingHeld(null);
-            return ActionResult.FAIL;
+            return ActionResult.SUCCESS;
         }
 
         placeTardis(tardis, fromItemContext(context));
-        return ActionResult.SUCCESS;
+        return super.useOnBlock(context);
     }
 
     @Override

@@ -32,6 +32,7 @@ import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.WorldSavePath;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.ChunkSectionPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.Heightmap;
@@ -168,7 +169,7 @@ public class WorldUtil {
             return cached;
 
         if (hSearch) {
-            BlockPos temp = findSafeXZ(chunk, pos, SAFE_RADIUS);
+            BlockPos temp = findSafeXZ(world, pos, SAFE_RADIUS);
 
             if (temp != null)
                 return cached.pos(temp);
@@ -188,7 +189,7 @@ public class WorldUtil {
         return cached.pos(x, y, z);
     }
 
-    public static BlockPos findSafeXZ(Chunk chunk, BlockPos original, int radius) {
+    public static BlockPos findSafeXZ(World world, BlockPos original, int radius) {
         BlockPos.Mutable pos = original.mutableCopy();
 
         int minX = pos.getX() - radius;
@@ -197,9 +198,18 @@ public class WorldUtil {
         int minZ = pos.getZ() - radius;
         int maxZ = pos.getZ() + radius;
 
+        Chunk chunk = null;
+        ChunkPos chunkPos = null;
+
         for (int x = minX; x < maxX; x++) {
             for (int z = minZ; z < maxZ; z++) {
                 pos.setX(x).setZ(z);
+
+                ChunkPos tempPos = new ChunkPos(pos);
+                if (chunkPos == null || !chunkPos.equals(tempPos)) {
+                    chunkPos = tempPos;
+                    chunk = world.getChunk(chunkPos.x, chunkPos.z);
+                }
 
                 if (isSafe(chunk, pos))
                     return pos;

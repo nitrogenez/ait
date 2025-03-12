@@ -286,6 +286,7 @@ public class FlightTardisEntity extends LinkableLivingEntity implements JumpingM
 
         BlockPos consolePos = this.tardis().get().getDesktop().getConsolePos().iterator().next();
         BlockPos pos = WorldUtil.findSafeXZ(this.tardis().get().asServer().getInteriorWorld(), consolePos, 2);
+
         nbt.putLong("InteriorPos", this.interiorPos == null
                 ? pos == null
                 ? new BlockPos(0, 0, 0).asLong() :

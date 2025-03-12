@@ -513,13 +513,6 @@ public class AITModDataGenerator implements DataGeneratorEntrypoint {
                     .input('B', Items.ENDER_EYE)
                     .criterion(hasItem(Items.ENDER_EYE), conditionsFromItem(Items.ENDER_EYE)));
 
-            provider.addShapedRecipe(ShapedRecipeJsonBuilder.create(RecipeCategory.TOOLS, AITItems.ZEITON_SHARD)
-                    .pattern("XO")
-                    .input('O', Items.AMETHYST_SHARD)
-                    .criterion(hasItem(Items.AMETHYST_SHARD), conditionsFromItem(Items.AMETHYST_SHARD))
-                    .input('B', AITItems.ZEITON_SHARD)
-                    .criterion(hasItem(AITItems.ZEITON_SHARD), conditionsFromItem(AITItems.ZEITON_SHARD)));
-
 
             provider.addShapelessRecipe(ShapelessRecipeJsonBuilder.create(RecipeCategory.BUILDING_BLOCKS, AITBlocks.ZEITON_COBBLE)
                     .input(Blocks.COBBLESTONE).criterion(hasItem(Blocks.COBBLESTONE), conditionsFromItem(Blocks.COBBLESTONE))

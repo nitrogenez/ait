@@ -1,0 +1,5 @@
+{
+  "control_id": "ait:monitor",
+  "console_id": "ait:console/coral",
+  "success_sound": "ait:controls/coral_monitor_alt"
+}

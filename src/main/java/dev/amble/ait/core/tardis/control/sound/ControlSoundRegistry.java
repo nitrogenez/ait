@@ -31,7 +31,7 @@ public class ControlSoundRegistry extends SimpleDatapackRegistry<ControlSound> {
 
     @Override
     protected void defaults() {
-        EMPTY = new ControlSound(null, AITMod.id("empty"), AITMod.id("empty"), AITSounds.ERROR, AITSounds.ERROR);
+        EMPTY = new ControlSound(AITMod.id("empty"), AITMod.id("empty"), AITSounds.ERROR.getId(), AITSounds.ERROR.getId());
 
         this.register(ControlSound.forFallback(AutoPilotControl.ID, AITSounds.PROTOCOL_116_ON, AITSounds.PROTOCOL_116_OFF));
         this.register(ControlSound.forFallback(CloakControl.ID, AITSounds.PROTOCOL_3, AITSounds.PROTOCOL_3ALT));
@@ -60,6 +60,8 @@ public class ControlSoundRegistry extends SimpleDatapackRegistry<ControlSound> {
         if (possible != null) {
             return possible;
         }
+
+        System.out.println("ControlSoundRegistry.get: " + controlId + " " + consoleId);
 
         // iterate through to find matching
         for (ControlSound sound : this.REGISTRY.values()) {

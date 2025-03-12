@@ -11,6 +11,7 @@ import com.mojang.serialization.JsonOps;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import dev.amble.lib.api.Identifiable;
 
+import net.minecraft.registry.Registries;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.util.Identifier;
 
@@ -23,28 +24,26 @@ import dev.amble.ait.registry.impl.console.ConsoleRegistry;
 
 /**
  * Represents a sound that is played when a control is used
- * @param id The identifier of this sound - it's recommended to make this null in the constructor. It will be automatically generated
+ * @param id The identifier of this sound - it's a combination of the control and console identifiers
  * @param controlId The identifier of the control that this sound is for
  * @param consoleId The identifier of the console that this sound is for
- * @param successSound The sound that is played when the control is successful
- * @param altSound The sound that is played when the control fails OR a value is switched
+ * @param successId The identifier of the sound that is played when the control is successful
+ * @param altId The identifier of the sound that is played when the control fails OR a value is switched
  * @see Control
  * @see ConsoleTypeSchema
  * @author duzo
  */
-public record ControlSound(Identifier id, Identifier controlId, Identifier consoleId, SoundEvent successSound, SoundEvent altSound) implements Identifiable {
+public record ControlSound(Identifier controlId, Identifier consoleId, Identifier successId, Identifier altId) implements Identifiable {
     public static final Codec<ControlSound> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-            Identifier.CODEC.optionalFieldOf("id", null).forGetter(ControlSound::id),
             Identifier.CODEC.fieldOf("control_id").forGetter(ControlSound::controlId),
             Identifier.CODEC.fieldOf("console_id").forGetter(ControlSound::consoleId),
-            SoundEvent.CODEC.fieldOf("success_sound").forGetter(ControlSound::successSound),
-            SoundEvent.CODEC.optionalFieldOf("alt_sound", AITSounds.ERROR).forGetter(ControlSound::altSound)
+            Identifier.CODEC.fieldOf("success_sound").forGetter(ControlSound::successId),
+            Identifier.CODEC.optionalFieldOf("alt_sound", AITSounds.ERROR.getId()).forGetter(ControlSound::altId)
     ).apply(instance, ControlSound::new));
 
-    public ControlSound {
-        if (id == null) {
-            id = mergeIdentifiers(controlId, consoleId);
-        }
+    @Override
+    public Identifier id() {
+        return mergeIdentifiers(controlId, consoleId);
     }
 
     public ConsoleTypeSchema console() {
@@ -57,8 +56,29 @@ public record ControlSound(Identifier id, Identifier controlId, Identifier conso
         return !result.isAltSound() ? this.successSound() : this.altSound();
     }
 
+    public SoundEvent successSound() {
+        SoundEvent sfx = Registries.SOUND_EVENT.get(this.successId());
+
+        if (sfx == null) {
+            AITMod.LOGGER.error("Unknown success sound event: {} in control sfx {}", this.successId(), this.id());
+            sfx = AITSounds.ERROR;
+        }
+
+        return sfx;
+    }
+    public SoundEvent altSound() {
+        SoundEvent sfx = Registries.SOUND_EVENT.get(this.altId());
+
+        if (sfx == null) {
+            AITMod.LOGGER.error("Unknown alt sound event: {} in control sfx {}", this.altId(), this.id());
+            sfx = AITSounds.ERROR;
+        }
+
+        return sfx;
+    }
+
     public static ControlSound forFallback(Identifier controlId, SoundEvent success, SoundEvent alt) {
-        return new ControlSound(null, controlId, AITMod.id("fallback"), success, alt);
+        return new ControlSound(controlId, AITMod.id("fallback"), success.getId(), alt.getId());
     }
 
     public static Identifier mergeIdentifiers(Identifier controlId, Identifier consoleId) {

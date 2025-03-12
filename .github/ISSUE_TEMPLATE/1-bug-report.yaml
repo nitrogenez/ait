@@ -14,7 +14,12 @@ body:
     label: What happened?
     description: Also tell us, what did you expect to happen?
     placeholder: Tell us what you see!
-    value: "A bug happened!"
+    value: |
+      Steps to reproduce the behavior:
+      1. Go to '...'
+      2. Click on '....'
+      3. Place down '...'
+      4. See error
   validations:
     required: true
 - type: dropdown
@@ -28,9 +33,27 @@ body:
     default: 0
   validations:
     required: true
+- type: input
+  id: build
+  attributes:
+    label: Build number & branch
+    description: What build are you running? Skip this question if you're not running a **BETA** build.
+    placeholder: "2226"
 - type: textarea
   id: logs
   attributes:
     label: Relevant log output
-    description: Please copy and paste any relevant log output. This will be automatically formatted into code, so no need for backticks.
+    description: Please copy and paste any relevant log output. Skip this if you're going to upload it as a file in the next section.
     render: shell
+- type: textarea
+  attributes:
+    label: Logs & screenshots
+    description: |
+      Tip: You can attach images or log files by clicking this area to highlight it and then dragging files in.
+- type: checkboxes
+  attributes:
+    label: Check the box to continue
+    options:
+      - label: |
+          I've checked the reported issues and this issue was not reported before.
+        required: true

@@ -66,7 +66,7 @@ public class WaypointItem extends Item implements DyeableItem {
                 .formatted(Formatting.BLUE));
 
         tooltip.add(Text.translatable("waypoint.dimension.tooltip")
-                .append(Text.literal(" > ").append(WorldUtil.worldText(dimension))).formatted(Formatting.BLUE));
+                .append(Text.literal(" > ").append(WorldUtil.worldText(dimension, false))).formatted(Formatting.BLUE));
     }
 
     @Override

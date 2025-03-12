@@ -96,7 +96,7 @@ public class StatsHandler extends KeyedTardisComponent {
     @Override
     public void onCreate() {
         this.markCreationDate();
-        this.setName("Type 50 TT Capsule.");
+        this.setName("Type 50 TT Capsule");
         this.setXScale(1.0f);
         this.setYScale(1.0f);
         this.setZScale(1.0f);

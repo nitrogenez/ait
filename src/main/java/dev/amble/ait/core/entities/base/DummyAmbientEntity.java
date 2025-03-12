@@ -1,14 +1,14 @@
 package dev.amble.ait.core.entities.base;
 
 import com.mojang.serialization.Dynamic;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.effect.StatusEffectInstance;
 import org.jetbrains.annotations.Nullable;
 
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.ai.brain.Brain;
 import net.minecraft.entity.damage.DamageSource;
+import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.mob.AmbientEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.sound.SoundEvent;

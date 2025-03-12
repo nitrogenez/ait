@@ -1,6 +1,5 @@
 package dev.amble.ait.core.entities;
 
-import java.util.Random;
 
 import dev.amble.lib.util.TeleportUtil;
 

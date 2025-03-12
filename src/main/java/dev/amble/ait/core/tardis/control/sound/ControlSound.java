@@ -9,6 +9,7 @@ import com.google.gson.JsonParser;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.JsonOps;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import dev.amble.ait.core.AITSounds;
 import dev.amble.lib.api.Identifiable;
 
 import net.minecraft.sound.SoundEvent;
@@ -26,18 +27,18 @@ import dev.amble.ait.registry.impl.console.ConsoleRegistry;
  * @param controlId The identifier of the control that this sound is for
  * @param consoleId The identifier of the console that this sound is for
  * @param successSound The sound that is played when the control is successful
- * @param failSound The sound that is played when the control fails
+ * @param altSound The sound that is played when the control fails OR a value is switched
  * @see Control
  * @see ConsoleTypeSchema
  * @author duzo
  */
-public record ControlSound(Identifier id, Identifier controlId, Identifier consoleId, SoundEvent successSound, SoundEvent failSound) implements Identifiable {
+public record ControlSound(Identifier id, Identifier controlId, Identifier consoleId, SoundEvent successSound, SoundEvent altSound) implements Identifiable {
     public static final Codec<ControlSound> CODEC = RecordCodecBuilder.create(instance -> instance.group(
             Identifier.CODEC.optionalFieldOf("id", null).forGetter(ControlSound::id),
             Identifier.CODEC.fieldOf("control_id").forGetter(ControlSound::controlId),
             Identifier.CODEC.fieldOf("console_id").forGetter(ControlSound::consoleId),
             SoundEvent.CODEC.fieldOf("success_sound").forGetter(ControlSound::successSound),
-            SoundEvent.CODEC.fieldOf("fail_sound").forGetter(ControlSound::failSound)
+            SoundEvent.CODEC.optionalFieldOf("alt_sound", AITSounds.ERROR).forGetter(ControlSound::altSound)
     ).apply(instance, ControlSound::new));
 
     public ControlSound {
@@ -52,9 +53,13 @@ public record ControlSound(Identifier id, Identifier controlId, Identifier conso
     public Control control() {
         return ControlRegistry.REGISTRY.get(this.controlId());
     }
-    public SoundEvent sound(boolean success) {
-        return success ? this.successSound() : this.failSound();
+    public SoundEvent sound(Control.Result result) {
+        return !result.isAltSound() ? this.successSound() : this.altSound();
     }
+
+	public static ControlSound forFallback(Identifier controlId, SoundEvent success, SoundEvent alt) {
+		return new ControlSound(null, controlId, AITMod.id("fallback"), success, alt);
+	}
 
     public static Identifier mergeIdentifiers(Identifier controlId, Identifier consoleId) {
         return new Identifier(controlId.getNamespace(), controlId.getPath() + "_" + consoleId.getPath());

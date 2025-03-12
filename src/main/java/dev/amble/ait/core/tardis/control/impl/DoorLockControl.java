@@ -13,37 +13,20 @@ import dev.amble.ait.core.tardis.control.Control;
 import dev.amble.ait.data.schema.console.variant.renaissance.*;
 
 public class DoorLockControl extends Control {
-
-    private SoundEvent soundEvent = AITSounds.DOOR_LOCK;
-
     public DoorLockControl() {
         super(AITMod.id("door_lock"));
     }
 
     @Override
-    public boolean runServer(Tardis tardis, ServerPlayerEntity player, ServerWorld world, BlockPos console, boolean leftClick) {
+    public Result runServer(Tardis tardis, ServerPlayerEntity player, ServerWorld world, BlockPos console, boolean leftClick) {
         super.runServer(tardis, player, world, console, leftClick);
 
-        boolean isRenaissance = false;
-        if (world.getBlockEntity(console) instanceof ConsoleBlockEntity consoleBlockEntity)
-            isRenaissance = isRenaissanceVariant(consoleBlockEntity);
-
-        this.soundEvent = isRenaissance ? AITSounds.RENAISSANCE_LOCK_ALT : AITSounds.DOOR_LOCK;
-
         tardis.door().interactToggleLock(player);
-        return true;
+        return !tardis.door().locked() ? Result.SUCCESS : Result.SUCCESS_ALT;
     }
 
     @Override
     public SoundEvent getFallbackSound() {
-        return this.soundEvent;
-    }
-
-    private boolean isRenaissanceVariant(ConsoleBlockEntity consoleBlockEntity) {
-        return consoleBlockEntity.getVariant() instanceof RenaissanceTokamakVariant ||
-                consoleBlockEntity.getVariant() instanceof RenaissanceVariant ||
-                consoleBlockEntity.getVariant() instanceof RenaissanceIndustriousVariant ||
-                consoleBlockEntity.getVariant() instanceof RenaissanceIdentityVariant ||
-                consoleBlockEntity.getVariant() instanceof RenaissanceFireVariant;
+        return AITSounds.DOOR_LOCK;
     }
 }

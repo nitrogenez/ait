@@ -24,27 +24,27 @@ public class VisualiserControl extends Control {
     }
 
     @Override
-    public boolean runServer(Tardis tardis, ServerPlayerEntity player, ServerWorld world, BlockPos console, boolean rightClick) {
+    public Result runServer(Tardis tardis, ServerPlayerEntity player, ServerWorld world, BlockPos console, boolean rightClick) {
         super.runServer(tardis, player, world, console, rightClick);
 
         if (!AITMod.CONFIG.SERVER.RWF_ENABLED) {
             player.sendMessage(Text.translatable("tardis.message.control.rwf_disabled"), true);
-            return true;
+            return Result.SUCCESS;
         }
 
         if (!player.isSneaking() && tardis.travel().getState() == TravelHandlerBase.State.LANDED && tardis.subsystems().get(GRAVITATIONAL).isEnabled()) {
             if (tardis.door().isOpen()) {
                 world.playSound(null, player.getBlockPos(), SoundEvents.BLOCK_CHAIN_FALL, SoundCategory.BLOCKS, 1.0F, 1.0F);
-                return true;
+                return Result.SUCCESS;
             } else {
                 world.playSound(null, player.getBlockPos(), SoundEvents.BLOCK_AMETHYST_CLUSTER_PLACE, SoundCategory.BLOCKS, 1.0F, 1.0F);
             }
 
             tardis.flight().enterFlight(player);
-            return true;
+            return Result.SUCCESS;
         }
 
-        return false;
+        return Result.FAILURE;
     }
 
     @Override

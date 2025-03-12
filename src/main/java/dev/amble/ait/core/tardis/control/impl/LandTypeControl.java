@@ -24,7 +24,7 @@ public class LandTypeControl extends Control {
     }
 
     @Override
-    public boolean runServer(Tardis tardis, ServerPlayerEntity player, ServerWorld world, BlockPos console, boolean leftClick) {
+    public Result runServer(Tardis tardis, ServerPlayerEntity player, ServerWorld world, BlockPos console, boolean leftClick) {
         super.runServer(tardis, player, world, console, leftClick);
 
         if (leftClick) {
@@ -34,7 +34,7 @@ public class LandTypeControl extends Control {
                 return value;
             });
 
-            return false;
+            return Result.SUCCESS_ALT;
         }
 
         tardis.travel().verticalSearch().flatMap(value -> {
@@ -51,7 +51,7 @@ public class LandTypeControl extends Control {
             }
         }
 
-        return false;
+        return Result.SUCCESS;
     }
 
     @Override

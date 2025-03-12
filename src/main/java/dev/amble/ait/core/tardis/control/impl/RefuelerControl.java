@@ -4,6 +4,7 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvent;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 
 import dev.amble.ait.AITMod;
@@ -15,30 +16,26 @@ import dev.amble.ait.core.tardis.control.Control;
 import dev.amble.ait.core.tardis.handler.travel.TravelHandlerBase;
 
 public class RefuelerControl extends Control {
+    public static final Identifier ID = AITMod.id("refueler");
 
     public RefuelerControl() {
-        super(AITMod.id("refueler"));
+        super(ID);
     }
 
     @Override
-    public boolean runServer(Tardis tardis, ServerPlayerEntity player, ServerWorld world, BlockPos console, boolean leftClick) {
+    public Result runServer(Tardis tardis, ServerPlayerEntity player, ServerWorld world, BlockPos console, boolean leftClick) {
         super.runServer(tardis, player, world, console, leftClick);
 
         if (tardis.isGrowth())
-            return false;
+            return Result.FAILURE;
 
         if (tardis.travel().getState() == TravelHandlerBase.State.LANDED && tardis.travel().handbrake()) {
             tardis.setRefueling(!tardis.isRefueling());
 
-            if (tardis.isRefueling())
-                TardisDesktop.playSoundAtConsole(tardis.asServer().getInteriorWorld(), console, AITSounds.ENGINE_REFUEL, SoundCategory.BLOCKS, 10,
-                        1);
-
-
-            return true;
+            return !tardis.isRefueling() ? Result.SUCCESS : Result.SUCCESS_ALT;
         }
 
-        return false;
+        return Result.SUCCESS;
     }
 
     @Override

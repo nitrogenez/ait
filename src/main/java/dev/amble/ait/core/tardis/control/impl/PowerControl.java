@@ -14,30 +14,22 @@ import dev.amble.ait.data.schema.console.variant.renaissance.*;
 
 public class PowerControl extends Control {
 
-    private SoundEvent soundEvent = AITSounds.POWER_FLICK;
-
     public PowerControl() {
         super(AITMod.id("power"));
     }
 
     @Override
-    public boolean runServer(Tardis tardis, ServerPlayerEntity player, ServerWorld world, BlockPos console, boolean leftClick) {
+    public Result runServer(Tardis tardis, ServerPlayerEntity player, ServerWorld world, BlockPos console, boolean leftClick) {
         super.runServer(tardis, player, world, console, leftClick);
 
         tardis.fuel().togglePower();
 
-        if (world.getBlockEntity(console) instanceof ConsoleBlockEntity consoleBlockEntity) {
-            if (isRenaissanceVariant(consoleBlockEntity)) {
-                this.soundEvent = AITSounds.RENAISSANCE_POWER_SIEGE_ALT;
-            }
-        }
-
-        return false;
+        return tardis.fuel().hasPower() ? Result.SUCCESS : Result.SUCCESS_ALT;
     }
 
     @Override
     public SoundEvent getFallbackSound() {
-        return this.soundEvent;
+        return AITSounds.POWER_FLICK;
     }
 
     @Override
@@ -53,13 +45,5 @@ public class PowerControl extends Control {
     @Override
     public boolean shouldHaveDelay(Tardis tardis) {
         return !tardis.fuel().hasPower() && super.shouldHaveDelay();
-    }
-
-    private boolean isRenaissanceVariant(ConsoleBlockEntity consoleBlockEntity) {
-        return consoleBlockEntity.getVariant() instanceof RenaissanceTokamakVariant ||
-                consoleBlockEntity.getVariant() instanceof RenaissanceVariant ||
-                consoleBlockEntity.getVariant() instanceof RenaissanceIndustriousVariant ||
-                consoleBlockEntity.getVariant() instanceof RenaissanceIdentityVariant ||
-                consoleBlockEntity.getVariant() instanceof RenaissanceFireVariant;
     }
 }

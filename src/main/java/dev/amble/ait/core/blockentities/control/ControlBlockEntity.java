@@ -83,11 +83,11 @@ public abstract class ControlBlockEntity extends InteriorLinkableBlockEntity {
         if (this.control.shouldHaveDelay(tardis) && !this.onDelay)
             this.createDelay(this.control.getDelayLength());
 
-        boolean success = this.control.handleRun(tardis, user, user.getServerWorld(), this.pos, isMine);
+        Control.Result result = this.control.handleRun(tardis, user, user.getServerWorld(), this.pos, isMine);
 
-        this.getConsole().ifPresent(console -> this.getWorld().playSound(null, pos, this.control.getSound(console.getTypeSchema(), success), SoundCategory.BLOCKS, 0.7f, 1f));
+        this.getConsole().ifPresent(console -> this.getWorld().playSound(null, pos, this.control.getSound(console.getTypeSchema(), result), SoundCategory.BLOCKS, 0.7f, 1f));
 
-        return success;
+        return result.isSuccess();
     }
 
     /**

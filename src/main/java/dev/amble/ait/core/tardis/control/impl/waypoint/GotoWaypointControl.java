@@ -17,9 +17,9 @@ public class GotoWaypointControl extends Control {
     }
 
     @Override
-    public boolean runServer(Tardis tardis, ServerPlayerEntity player, ServerWorld world, BlockPos pos, boolean leftClick) {
+    public Result runServer(Tardis tardis, ServerPlayerEntity player, ServerWorld world, BlockPos pos, boolean leftClick) {
         tardis.waypoint().gotoWaypoint();
-        return true;
+        return Result.SUCCESS;
     }
 
     @Override

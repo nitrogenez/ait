@@ -32,22 +32,22 @@ public class Control implements Identifiable {
         return id;
     }
 
-    protected boolean runServer(Tardis tardis, ServerPlayerEntity player, ServerWorld world, BlockPos console,
+    protected Result runServer(Tardis tardis, ServerPlayerEntity player, ServerWorld world, BlockPos console,
                              boolean leftClick) throws ControlSequencedException {
         if (this.shouldBeAddedToSequence(tardis)) {
             this.addToControlSequence(tardis, player, console);
             throw ControlSequencedException.INSTANCE;
         }
 
-        return false;
+        return Result.FAILURE;
     }
 
-    public boolean handleRun(Tardis tardis, ServerPlayerEntity player, ServerWorld world, BlockPos console,
+    public Result handleRun(Tardis tardis, ServerPlayerEntity player, ServerWorld world, BlockPos console,
                              boolean leftClick) {
         try {
-            return this.runServer(tardis, (ServerPlayerEntity) player, (ServerWorld) world, console, leftClick);
+            return this.runServer(tardis, player, world, console, leftClick);
         } catch (Control.ControlSequencedException e) {
-            return false;
+            return Result.SEQUENCE;
         }
     }
 
@@ -74,11 +74,11 @@ public class Control implements Identifiable {
     /**
      * Get the sound to play when this control is used
      * @param console The console variant this control is being used on
-     * @param success Whether the control was successful
+     * @param result Result of the control
      * @return The sound to play
      */
-    public SoundEvent getSound(ConsoleTypeSchema console, boolean success) {
-        SoundEvent sound = ControlSoundRegistry.getInstance().get(console, this).sound(success);
+    public SoundEvent getSound(ConsoleTypeSchema console, Result result) {
+        SoundEvent sound = ControlSoundRegistry.getInstance().get(console, this).sound(result);
 
         if (this.getFallbackSound() != null && (sound == null || sound == AITSounds.ERROR)) {
             return this.getFallbackSound();
@@ -158,6 +158,17 @@ public class Control implements Identifiable {
     @Override
     public int hashCode() {
         return this.id.hashCode();
+    }
+
+    public enum Result {
+        SUCCESS, FAILURE, SEQUENCE, SUCCESS_ALT;
+
+        public boolean isSuccess() {
+            return this == SUCCESS || this == SUCCESS_ALT;
+        }
+        public boolean isAltSound() {
+            return this == SUCCESS_ALT || this == FAILURE;
+        }
     }
 
     public static class ControlSequencedException extends RuntimeException {

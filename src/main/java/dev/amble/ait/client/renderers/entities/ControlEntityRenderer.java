@@ -66,6 +66,9 @@ public class ControlEntityRenderer extends LivingEntityRenderer<ConsoleControlEn
         float h = (float) -textRenderer.getWidth(name) / 2;
         float f = entity.getNameLabelHeight() - 0.3f;
 
+        if (entity.tardis() == null)
+            return;
+
         Tardis tardis = entity.tardis().get();
 
         if (tardis == null)

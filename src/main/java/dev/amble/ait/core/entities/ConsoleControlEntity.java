@@ -14,6 +14,7 @@ import net.minecraft.entity.data.TrackedData;
 import net.minecraft.entity.data.TrackedDataHandlerRegistry;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.projectile.ProjectileEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtCompound;
@@ -85,6 +86,8 @@ public class ConsoleControlEntity extends LinkableDummyLivingEntity {
         this.setRemoved(reason);
     }
 
+
+
     @Override
     public void onRemoved() {
         if (this.consoleBlockPos == null) {
@@ -138,7 +141,7 @@ public class ConsoleControlEntity extends LinkableDummyLivingEntity {
 
         if (nbt.contains("width") && nbt.contains("height")) {
             this.setControlWidth(nbt.getFloat("width"));
-            this.setControlWidth(nbt.getFloat("height"));
+            this.setControlHeight(nbt.getFloat("height"));
             this.calculateDimensions();
         }
 
@@ -182,7 +185,12 @@ public class ConsoleControlEntity extends LinkableDummyLivingEntity {
 
     @Override
     public boolean damage(DamageSource source, float amount) {
+        if (source.getSource() instanceof TntEntity)
+            return false;
         if (source.getAttacker() instanceof PlayerEntity player) {
+            if (source.getSource() instanceof ProjectileEntity) {
+                source.getSource().discard();
+            }
             if (player.getOffHandStack().getItem() == Items.COMMAND_BLOCK) {
                 controlEditorHandler(player);
             } else
@@ -296,7 +304,7 @@ public class ConsoleControlEntity extends LinkableDummyLivingEntity {
             return false;
 
         if (player.getMainHandStack().getItem() == AITItems.TARDIS_ITEM)
-            this.remove(RemovalReason.DISCARDED);
+            this.discard();
 
         Tardis tardis = this.tardis().get();
 

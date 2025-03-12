@@ -127,6 +127,8 @@ public class KeyItem extends LinkableItem {
         if (player.getItemCooldownManager().isCoolingDown(stack.getItem()))
             return;
 
+        if (tardis == null) return;
+
         if (!tardis.stats().hailMary().get())
             return;
 

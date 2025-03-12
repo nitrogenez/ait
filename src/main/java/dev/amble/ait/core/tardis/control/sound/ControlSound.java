@@ -9,13 +9,13 @@ import com.google.gson.JsonParser;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.JsonOps;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import dev.amble.ait.core.AITSounds;
 import dev.amble.lib.api.Identifiable;
 
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.util.Identifier;
 
 import dev.amble.ait.AITMod;
+import dev.amble.ait.core.AITSounds;
 import dev.amble.ait.core.tardis.control.Control;
 import dev.amble.ait.data.schema.console.ConsoleTypeSchema;
 import dev.amble.ait.registry.impl.ControlRegistry;
@@ -57,9 +57,9 @@ public record ControlSound(Identifier id, Identifier controlId, Identifier conso
         return !result.isAltSound() ? this.successSound() : this.altSound();
     }
 
-	public static ControlSound forFallback(Identifier controlId, SoundEvent success, SoundEvent alt) {
-		return new ControlSound(null, controlId, AITMod.id("fallback"), success, alt);
-	}
+    public static ControlSound forFallback(Identifier controlId, SoundEvent success, SoundEvent alt) {
+        return new ControlSound(null, controlId, AITMod.id("fallback"), success, alt);
+    }
 
     public static Identifier mergeIdentifiers(Identifier controlId, Identifier consoleId) {
         return new Identifier(controlId.getNamespace(), controlId.getPath() + "_" + consoleId.getPath());

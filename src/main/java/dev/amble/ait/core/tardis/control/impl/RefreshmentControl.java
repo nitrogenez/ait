@@ -1,9 +1,6 @@
 package dev.amble.ait.core.tardis.control.impl;
 
-import java.util.ArrayList;
-import java.util.List;
 
-import dev.amble.ait.core.tardis.control.Control;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
@@ -17,6 +14,7 @@ import dev.amble.ait.core.AITSounds;
 import dev.amble.ait.core.drinks.DrinkRegistry;
 import dev.amble.ait.core.drinks.DrinkUtil;
 import dev.amble.ait.core.tardis.Tardis;
+import dev.amble.ait.core.tardis.control.Control;
 
 public class RefreshmentControl extends Control {
     private int currentIndex = 0;

@@ -1,7 +1,5 @@
 package dev.amble.ait.core.tardis.control.sound;
 
-import dev.amble.ait.core.tardis.control.impl.*;
-import dev.amble.ait.registry.impl.ControlRegistry;
 import dev.amble.lib.register.datapack.SimpleDatapackRegistry;
 
 import net.minecraft.sound.SoundEvent;
@@ -10,6 +8,7 @@ import net.minecraft.util.Identifier;
 import dev.amble.ait.AITMod;
 import dev.amble.ait.core.AITSounds;
 import dev.amble.ait.core.tardis.control.Control;
+import dev.amble.ait.core.tardis.control.impl.*;
 import dev.amble.ait.data.schema.console.ConsoleTypeSchema;
 
 public class ControlSoundRegistry extends SimpleDatapackRegistry<ControlSound> {
@@ -69,12 +68,12 @@ public class ControlSoundRegistry extends SimpleDatapackRegistry<ControlSound> {
             }
         }
 
-		// double iteration - wow
-	    for (ControlSound sound : this.REGISTRY.values()) {
-			if (sound.controlId().equals(controlId) && sound.consoleId().equals(AITMod.id("fallback"))) {
-				return sound;
-			}
-		}
+        // double iteration - wow
+        for (ControlSound sound : this.REGISTRY.values()) {
+            if (sound.controlId().equals(controlId) && sound.consoleId().equals(AITMod.id("fallback"))) {
+                return sound;
+            }
+        }
 
         return this.fallback();
     }

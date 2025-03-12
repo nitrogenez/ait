@@ -16,7 +16,6 @@ import dev.amble.ait.core.AITSounds;
 import dev.amble.ait.core.item.HandlesItem;
 import dev.amble.ait.core.item.SonicItem;
 import dev.amble.ait.core.tardis.Tardis;
-import dev.amble.ait.core.tardis.TardisDesktop;
 import dev.amble.ait.core.tardis.control.Control;
 import dev.amble.ait.core.tardis.control.sequences.SequenceHandler;
 import dev.amble.ait.core.tardis.handler.ButlerHandler;

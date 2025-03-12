@@ -15,7 +15,7 @@ public class ControlSoundRegistry extends SimpleDatapackRegistry<ControlSound> {
     private static final ControlSoundRegistry instance = new ControlSoundRegistry();
 
     public ControlSoundRegistry() {
-        super(ControlSound::fromInputStream, ControlSound.CODEC, "console_sounds", true, AITMod.MOD_ID);
+        super(ControlSound::fromInputStream, ControlSound.CODEC, "control_sounds", true, AITMod.MOD_ID);
     }
 
     public static ControlSoundRegistry getInstance() {

@@ -49,6 +49,7 @@ public class RandomiserControl extends Control {
 
         Text text = Text.translatable("tardis.message.control.randomiser.destination")
                 .append(Text.literal(pos.getX() + " | " + pos.getY() + " | " + pos.getZ()));
+
         player.sendMessage(text, true);
     }
     @Override

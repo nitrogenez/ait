@@ -56,6 +56,7 @@ public abstract class ControlBlockItem extends BlockItem {
 
         return Optional.of(new Identifier(stack.getOrCreateNbt().getString(CONTROL_ID_KEY)));
     }
+
     public static Optional<Identifier> findConsoleTypeId(ItemStack stack) {
         NbtCompound nbt = stack.getOrCreateNbt();
 

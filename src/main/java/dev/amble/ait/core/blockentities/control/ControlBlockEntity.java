@@ -39,6 +39,7 @@ public abstract class ControlBlockEntity extends InteriorLinkableBlockEntity {
 
         if (this.getControl() != null)
             nbt.putString(ControlBlockItem.CONTROL_ID_KEY, this.getControl().id().toString());
+
         if (this.getConsoleType() != null)
             nbt.putString(ControlBlockItem.CONSOLE_TYPE_ID_KEY, this.getConsoleType().id().toString());
     }
@@ -49,6 +50,7 @@ public abstract class ControlBlockEntity extends InteriorLinkableBlockEntity {
 
         if (nbt.contains(ControlBlockItem.CONTROL_ID_KEY))
             this.setControlId(new Identifier(nbt.getString(ControlBlockItem.CONTROL_ID_KEY)));
+
         if (nbt.contains(ControlBlockItem.CONSOLE_TYPE_ID_KEY))
             this.setConsoleId(new Identifier(nbt.getString(ControlBlockItem.CONSOLE_TYPE_ID_KEY)));
     }
@@ -61,6 +63,7 @@ public abstract class ControlBlockEntity extends InteriorLinkableBlockEntity {
     public Control getControl() {
         return this.control;
     }
+
     public ConsoleTypeSchema getConsoleType() {
         if (this.consoleType == null) {
             // default
@@ -78,6 +81,7 @@ public abstract class ControlBlockEntity extends InteriorLinkableBlockEntity {
 
         this.control = found.get();
     }
+
     public void setConsoleId(Identifier id) {
         Optional<ConsoleTypeSchema> found = ConsoleRegistry.REGISTRY.getOrEmpty(id);
 

@@ -56,7 +56,7 @@ public class HandBrakeControl extends Control {
             }
         }
 
-        return !handbrake ? Result.SUCCESS : Result.SUCCESS_ALT;
+        return handbrake ? Result.SUCCESS_ALT : Result.SUCCESS;
     }
 
     @Override

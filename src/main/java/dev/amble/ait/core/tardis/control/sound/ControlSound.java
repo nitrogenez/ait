@@ -98,6 +98,7 @@ public record ControlSound(Identifier controlId, Identifier consoleId, Identifie
     public static ControlSound fromInputStream(InputStream stream) {
         return fromJson(JsonParser.parseReader(new InputStreamReader(stream)).getAsJsonObject());
     }
+
     public static ControlSound fromJson(JsonObject json) {
         AtomicReference<ControlSound> created = new AtomicReference<>();
 

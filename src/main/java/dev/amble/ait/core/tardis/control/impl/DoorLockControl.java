@@ -21,7 +21,7 @@ public class DoorLockControl extends Control {
         super.runServer(tardis, player, world, console, leftClick);
 
         tardis.door().interactToggleLock(player);
-        return !tardis.door().locked() ? Result.SUCCESS : Result.SUCCESS_ALT;
+        return tardis.door().locked() ? Result.SUCCESS_ALT : Result.SUCCESS;
     }
 
     @Override

@@ -25,6 +25,7 @@ public class SetWaypointControl extends Control {
 
         waypoints.setDestination();
         waypoints.spawnItem(console);
+
         return Result.SUCCESS;
     }
     @Override

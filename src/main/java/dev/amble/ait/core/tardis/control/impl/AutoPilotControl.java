@@ -26,7 +26,7 @@ public class AutoPilotControl extends Control {
         boolean autopilot = tardis.travel().autopilot();
         tardis.travel().autopilot(!autopilot);
 
-        return !autopilot ? Result.SUCCESS : Result.SUCCESS_ALT;
+        return autopilot ? Result.SUCCESS_ALT : Result.SUCCESS;
     }
 
     @Override

@@ -32,7 +32,7 @@ public class HailMaryControl extends Control {
                 ? Text.translatable("tardis.message.control.hail_mary.engaged")
                 : Text.translatable("tardis.message.control.hail_mary.disengaged"), true);
 
-        return !tardis.stats().hailMary().get() ? Result.SUCCESS : Result.SUCCESS_ALT;
+        return tardis.stats().hailMary().get() ? Result.SUCCESS_ALT : Result.SUCCESS;
     }
 
     @Override

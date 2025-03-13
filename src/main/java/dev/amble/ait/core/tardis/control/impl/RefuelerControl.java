@@ -30,7 +30,7 @@ public class RefuelerControl extends Control {
         if (tardis.travel().getState() == TravelHandlerBase.State.LANDED && tardis.travel().handbrake()) {
             tardis.setRefueling(!tardis.isRefueling());
 
-            return !tardis.isRefueling() ? Result.SUCCESS : Result.SUCCESS_ALT;
+            return tardis.isRefueling() ? Result.SUCCESS_ALT : Result.SUCCESS;
         }
 
         return Result.SUCCESS;

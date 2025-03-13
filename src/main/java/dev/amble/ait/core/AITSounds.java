@@ -86,7 +86,7 @@ public class AITSounds {
     public static final SoundEvent TARDIS_REJECTION_SFX = register("tardis/tardis_rejection_sfx");
 
     // Controls
-    public static final SoundEvent DEMAT_LEVER_PULL = register("controls/demat_lever_pull");
+    public static final SoundEvent THROTTLE_PULL = register("controls/demat_lever_pull");
     public static final SoundEvent HANDBRAKE_LEVER_PULL = register("controls/handbrake_lever_pull");
     public static final SoundEvent HANDBRAKE_UP = register("controls/handbrake_up");
     public static final SoundEvent HANDBRAKE_DOWN = register("controls/handbrake_down");

@@ -30,6 +30,7 @@ public class RefreshmentControl extends Control {
 
         tardis.extra().setRefreshmentItem(selectedItem);
         player.sendMessage(Text.literal("Refreshment set to: " + selectedItem.getName().getString() + "!"), true);
+
         return Result.SUCCESS;
     }
 

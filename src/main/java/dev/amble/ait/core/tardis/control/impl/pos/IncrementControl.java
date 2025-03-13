@@ -29,7 +29,8 @@ public class IncrementControl extends Control {
         }
 
         messagePlayerIncrement(player, tardis);
-        return !leftClick ? Result.SUCCESS : Result.SUCCESS_ALT;
+
+        return leftClick ? Result.SUCCESS_ALT : Result.SUCCESS;
     }
 
     @Override

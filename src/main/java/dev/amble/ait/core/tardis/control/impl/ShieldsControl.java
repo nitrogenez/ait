@@ -37,7 +37,7 @@ public class ShieldsControl extends Control {
             if (shields.visuallyShielded().get())
                 shields.disableVisuals();
         }
-        return !leftClick ? Result.SUCCESS :  Result.SUCCESS_ALT;
+        return leftClick ? Result.SUCCESS_ALT :  Result.SUCCESS;
     }
 
     @Override
@@ -47,6 +47,6 @@ public class ShieldsControl extends Control {
 
     @Override
     public SoundEvent getFallbackSound() {
-        return AITSounds.HANDBRAKE_LEVER_PULL;
+        return AITSounds.SHIELDS;
     }
 }

@@ -19,6 +19,7 @@ public class EjectWaypointControl extends Control {
     @Override
     public Result runServer(Tardis tardis, ServerPlayerEntity player, ServerWorld world, BlockPos console, boolean leftClick) {
         tardis.waypoint().spawnItem(console);
+
         return Result.SUCCESS;
     }
     @Override

@@ -52,12 +52,12 @@ public class ThrottleControl extends Control {
         if (travel.getState() == TravelHandler.State.DEMAT)
             tardis.sequence().setActivePlayer(player);
 
-        return !player.isSneaking() ? Result.SUCCESS : Result.SUCCESS_ALT;
+        return player.isSneaking() ? Result.SUCCESS_ALT : Result.SUCCESS;
     }
 
     @Override
     public SoundEvent getFallbackSound() {
-        return AITSounds.DEMAT_LEVER_PULL;
+        return AITSounds.THROTTLE_PULL;
     }
 
     @Override

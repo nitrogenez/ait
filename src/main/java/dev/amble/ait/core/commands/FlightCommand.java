@@ -9,6 +9,7 @@ import com.mojang.brigadier.context.CommandContext;
 
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.text.Text;
 
 import dev.amble.ait.AITMod;
 import dev.amble.ait.core.commands.argument.TardisArgumentType;
@@ -26,6 +27,18 @@ public class FlightCommand {
     private static int execute(CommandContext<ServerCommandSource> context) {
         ServerPlayerEntity player = context.getSource().getPlayer();
         ServerTardis tardis = TardisArgumentType.getTardis(context, "tardis");
+
+        if (player == null) return 0;
+
+        if (!AITMod.CONFIG.SERVER.RWF_ENABLED) {
+            player.sendMessage(Text.translatable("tardis.message.control.rwf_disabled"), true);
+            return Command.SINGLE_SUCCESS;
+        }
+
+        if (!player.isCreative()) {
+            player.sendMessage(Text.translatable("tardis.message.control.rwf_creative_only"), true);
+            return Command.SINGLE_SUCCESS;
+        }
 
         context.getSource().getServer().executeSync(()
                 -> tardis.flight().enterFlight(player));

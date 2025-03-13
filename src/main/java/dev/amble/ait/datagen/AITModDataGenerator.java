@@ -1344,6 +1344,7 @@ public class AITModDataGenerator implements DataGeneratorEntrypoint {
         // Rift Chunk Tracking
         provider.addTranslation("riftchunk.ait.tracking", "Rift Tracking");
         provider.addTranslation("riftchunk.ait.cooldown", "Rift tracking is on cooldown");
+        provider.addTranslation("riftchunk.ait.found", "Rift located at this position!");
         provider.addTranslation("waypoint.position.tooltip", "Position");
         provider.addTranslation("waypoint.dimension.tooltip", "Dimension");
         provider.addTranslation("waypoint.direction.tooltip", "Direction");

@@ -163,9 +163,9 @@ public class AITMod implements ModInitializer {
                 HumRegistry.getInstance(),
                 SubSystemRegistry.getInstance(),
                 ItemOpinionRegistry.getInstance(),
-                DrinkRegistry.getInstance(),
-                ControlSoundRegistry.getInstance()
+                DrinkRegistry.getInstance()
         );
+        ControlSoundRegistry.init();
 
         registerParticles();
 

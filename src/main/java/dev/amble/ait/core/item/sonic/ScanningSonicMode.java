@@ -9,10 +9,13 @@ import dev.amble.ait.core.world.TardisServerWorld;
 import dev.amble.ait.data.landing.LandingPadRegion;
 import dev.amble.ait.data.landing.LandingPadSpot;
 import dev.amble.ait.data.schema.sonic.SonicSchema;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.registry.tag.BlockTags;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.text.Text;
@@ -56,14 +59,45 @@ public class ScanningSonicMode extends SonicMode {
     public boolean process(ItemStack stack, World world, PlayerEntity user) {
         HitResult hitResult = SonicMode.getHitResult(user);
 
-        if (hitResult instanceof BlockHitResult blockHit)
-            return this.scanRegion(stack, world, user, blockHit.getBlockPos());
-
-        if (hitResult instanceof EntityHitResult entityHit)
+        if (hitResult instanceof BlockHitResult blockHit) {
+            return this.scanBlocks(stack, world, user, blockHit.getBlockPos());
+        } else if (hitResult instanceof EntityHitResult entityHit) {
             return this.scanEntities(stack, world, user, entityHit.getEntity());
-
-        return false;
+        } else {
+            return this.scanRegion(stack, world, user, BlockPos.ofFloored(hitResult.getPos()));
+        }
     }
+
+
+
+    public boolean scanBlocks(ItemStack stack, World world, PlayerEntity user, BlockPos pos) {
+        if (world.isClient() || user == null)
+            return true;
+
+        BlockState state = world.getBlockState(pos);
+        Block block = state.getBlock();
+
+        String blastRes = String.format("%.2f", block.getBlastResistance());
+
+        String toolRequirement = "Any Tool";
+        if (state.isIn(BlockTags.NEEDS_DIAMOND_TOOL)) {
+            toolRequirement = "Diamond Tool";
+        } else if (state.isIn(BlockTags.NEEDS_IRON_TOOL)) {
+            toolRequirement = "Iron Tool";
+        } else if (state.isIn(BlockTags.NEEDS_STONE_TOOL)) {
+            toolRequirement = "Stone Tool";
+        } else if (!block.getDefaultState().isToolRequired()) {
+            toolRequirement = "Hand (No Tool)";
+        }
+
+        Text message = Text.literal("\uD83D\uDD25: " + blastRes + " ⛏: " + toolRequirement).formatted(Formatting.YELLOW)
+                .formatted(Formatting.GOLD);
+        user.sendMessage(message, true);
+
+        return true;
+    }
+
+
 
     public boolean scanRegion(ItemStack stack, World world, PlayerEntity user, BlockPos pos) {
         if (world.isClient())

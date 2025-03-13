@@ -1,17 +1,5 @@
 package dev.amble.ait.core.item.sonic;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.sound.SoundCategory;
-import net.minecraft.text.Text;
-import net.minecraft.util.*;
-import net.minecraft.util.hit.BlockHitResult;
-import net.minecraft.util.hit.HitResult;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.ChunkPos;
-import net.minecraft.world.World;
-
 import dev.amble.ait.core.AITSounds;
 import dev.amble.ait.core.item.SonicItem;
 import dev.amble.ait.core.tardis.Tardis;
@@ -21,6 +9,22 @@ import dev.amble.ait.core.world.TardisServerWorld;
 import dev.amble.ait.data.landing.LandingPadRegion;
 import dev.amble.ait.data.landing.LandingPadSpot;
 import dev.amble.ait.data.schema.sonic.SonicSchema;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.ItemStack;
+import net.minecraft.server.world.ServerWorld;
+import net.minecraft.sound.SoundCategory;
+import net.minecraft.text.Text;
+import net.minecraft.util.Formatting;
+import net.minecraft.util.Hand;
+import net.minecraft.util.Identifier;
+import net.minecraft.util.hit.BlockHitResult;
+import net.minecraft.util.hit.EntityHitResult;
+import net.minecraft.util.hit.HitResult;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.ChunkPos;
+import net.minecraft.world.World;
 
 public class ScanningSonicMode extends SonicMode {
     private static final Text RIFT_FOUND = Text.translatable("message.ait.sonic.riftfound").formatted(Formatting.AQUA)
@@ -54,6 +58,9 @@ public class ScanningSonicMode extends SonicMode {
 
         if (hitResult instanceof BlockHitResult blockHit)
             return this.scanRegion(stack, world, user, blockHit.getBlockPos());
+
+        if (hitResult instanceof EntityHitResult entityHit)
+            return this.scanEntities(stack, world, user, entityHit.getEntity());
 
         return false;
     }
@@ -90,6 +97,22 @@ public class ScanningSonicMode extends SonicMode {
         if (TardisServerWorld.isTardisDimension(world)) {
             sendTardisInfo(tardis, (ServerWorld) world, pos, user, stack);
             return true;
+        }
+
+        return false;
+    }
+
+    public boolean scanEntities(ItemStack stack, World world, PlayerEntity user, Entity entity) {
+        if (world.isClient())
+            return true;
+
+        if (user == null)
+            return false;
+
+        if (entity instanceof LivingEntity) {
+            String health = String.valueOf(((LivingEntity) entity).getHealth());
+            String maxhealth = String.valueOf(((LivingEntity) entity).getMaxHealth());
+            user.sendMessage(Text.literal("♥:").append(health).append("/").append(maxhealth).formatted(Formatting.YELLOW), true);
         }
 
         return false;

@@ -1,9 +1,13 @@
 package dev.amble.ait.core.item.sonic;
 
+import dev.amble.ait.core.AITSounds;
+import dev.amble.ait.core.AITTags;
+import dev.amble.ait.data.schema.sonic.SonicSchema;
 import net.minecraft.block.*;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.particle.BlockStateParticleEffect;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
@@ -16,10 +20,6 @@ import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.event.GameEvent;
-
-import dev.amble.ait.core.AITSounds;
-import dev.amble.ait.core.AITTags;
-import dev.amble.ait.data.schema.sonic.SonicSchema;
 
 public class OverloadSonicMode extends SonicMode {
 
@@ -83,6 +83,12 @@ public class OverloadSonicMode extends SonicMode {
             return;
         }
 
+        if (block instanceof GlassBlock
+                || block instanceof StainedGlassPaneBlock) {
+            breakBlock(world, pos, user, state, blockHit);
+            return;
+        }
+
         if (block instanceof ButtonBlock) {
             activateBlock(world, pos, user, state, blockHit);
             return;
@@ -100,6 +106,19 @@ public class OverloadSonicMode extends SonicMode {
 
     private void activateBlock(ServerWorld world, BlockPos pos, LivingEntity user, BlockState state, BlockHitResult blockHitResult) {
         state.onUse(world, (PlayerEntity) user, user.getActiveHand(), blockHitResult);
+        this.playFx(world, pos);
+    }
+
+    private void breakBlock(ServerWorld world, BlockPos pos, LivingEntity user, BlockState state, BlockHitResult blockHitResult) {
+        world.playSound(null, pos, state.getSoundGroup().getBreakSound(), SoundCategory.BLOCKS, 1.0F, 1.0F);
+
+        // Spawn block break particles
+        ((ServerWorld) world).spawnParticles(
+                new BlockStateParticleEffect(ParticleTypes.BLOCK, state),
+                pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5,
+                10, 0.5, 0.5, 0.5, 0.1
+        );
+        world.breakBlock(pos, false);
         this.playFx(world, pos);
     }
 

@@ -35,8 +35,8 @@ import dev.amble.ait.registry.impl.console.ConsoleRegistry;
  */
 public record ControlSound(Identifier controlId, Identifier consoleId, Identifier successId, Identifier altId) implements Identifiable {
     public static final Codec<ControlSound> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-            Identifier.CODEC.fieldOf("control_id").forGetter(ControlSound::controlId),
-            Identifier.CODEC.fieldOf("console_id").forGetter(ControlSound::consoleId),
+            Identifier.CODEC.fieldOf("control").forGetter(ControlSound::controlId),
+            Identifier.CODEC.fieldOf("console").forGetter(ControlSound::consoleId),
             Identifier.CODEC.fieldOf("success_sound").forGetter(ControlSound::successId),
             Identifier.CODEC.optionalFieldOf("alt_sound", AITSounds.ERROR.getId()).forGetter(ControlSound::altId)
     ).apply(instance, ControlSound::new));

@@ -36,16 +36,6 @@
         },
         {
           "type": "minecraft:item",
-          "name": "ait:martian_stone",
-          "weight": 25
-        },
-        {
-          "type": "minecraft:item",
-          "name": "ait:moon_sandstone",
-          "weight": 25
-        },
-        {
-          "type": "minecraft:item",
           "name": "minecraft:redstone",
           "weight": 15
         },
@@ -168,5 +158,5 @@
       "rolls": 15
     }
   ],
-  "random_sequence": "minecraft:archaeology/ocean_ruin_cold"
+  "random_sequence": "minecraft:chests/ancient_city"
 }

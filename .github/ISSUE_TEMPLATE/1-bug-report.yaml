@@ -1,7 +1,6 @@
 name: Bug Report
 description: File a bug report.
-title: ""
-labels: ["T: Bugfix", "S: Untriaged"]
+labels: ["T: Bugfix", "Issue: Needs Replicating", "S: Untriaged"]
 type: "Bug"
 body:
 - type: markdown

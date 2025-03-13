@@ -15,16 +15,18 @@ import net.minecraft.util.math.BlockPos;
 
 import dev.amble.ait.api.link.v2.TardisRef;
 import dev.amble.ait.api.link.v2.block.InteriorLinkableBlockEntity;
-import dev.amble.ait.core.blockentities.ConsoleBlockEntity;
 import dev.amble.ait.core.blocks.control.RedstoneControlBlock;
 import dev.amble.ait.core.item.control.ControlBlockItem;
 import dev.amble.ait.core.tardis.ServerTardis;
 import dev.amble.ait.core.tardis.control.Control;
+import dev.amble.ait.data.schema.console.ConsoleTypeSchema;
 import dev.amble.ait.registry.impl.ControlRegistry;
+import dev.amble.ait.registry.impl.console.ConsoleRegistry;
 
 public abstract class ControlBlockEntity extends InteriorLinkableBlockEntity {
 
     private Control control;
+    private ConsoleTypeSchema consoleType;
     private boolean onDelay = false;
 
     protected ControlBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
@@ -37,6 +39,8 @@ public abstract class ControlBlockEntity extends InteriorLinkableBlockEntity {
 
         if (this.getControl() != null)
             nbt.putString(ControlBlockItem.CONTROL_ID_KEY, this.getControl().id().toString());
+        if (this.getConsoleType() != null)
+            nbt.putString(ControlBlockItem.CONSOLE_TYPE_ID_KEY, this.getConsoleType().id().toString());
     }
 
     @Override
@@ -45,6 +49,8 @@ public abstract class ControlBlockEntity extends InteriorLinkableBlockEntity {
 
         if (nbt.contains(ControlBlockItem.CONTROL_ID_KEY))
             this.setControlId(new Identifier(nbt.getString(ControlBlockItem.CONTROL_ID_KEY)));
+        if (nbt.contains(ControlBlockItem.CONSOLE_TYPE_ID_KEY))
+            this.setConsoleId(new Identifier(nbt.getString(ControlBlockItem.CONSOLE_TYPE_ID_KEY)));
     }
 
     /**
@@ -55,6 +61,14 @@ public abstract class ControlBlockEntity extends InteriorLinkableBlockEntity {
     public Control getControl() {
         return this.control;
     }
+    public ConsoleTypeSchema getConsoleType() {
+        if (this.consoleType == null) {
+            // default
+            this.consoleType = ConsoleRegistry.HARTNELL;
+        }
+
+        return this.consoleType;
+    }
 
     public void setControlId(Identifier id) {
         Optional<Control> found = ControlRegistry.fromId(id);
@@ -63,6 +77,14 @@ public abstract class ControlBlockEntity extends InteriorLinkableBlockEntity {
             return;
 
         this.control = found.get();
+    }
+    public void setConsoleId(Identifier id) {
+        Optional<ConsoleTypeSchema> found = ConsoleRegistry.REGISTRY.getOrEmpty(id);
+
+        if (found.isEmpty())
+            return;
+
+        this.consoleType = found.get();
     }
 
     public boolean run(ServerPlayerEntity user, boolean isMine) {
@@ -85,33 +107,9 @@ public abstract class ControlBlockEntity extends InteriorLinkableBlockEntity {
 
         Control.Result result = this.control.handleRun(tardis, user, user.getServerWorld(), this.pos, isMine);
 
-        this.getConsole().ifPresent(console -> this.getWorld().playSound(null, pos, this.control.getSound(console.getTypeSchema(), result), SoundCategory.BLOCKS, 0.7f, 1f));
+        this.getWorld().playSound(null, pos, this.control.getSound(this.getConsoleType(), result), SoundCategory.BLOCKS, 0.7f, 1f);
 
         return result.isSuccess();
-    }
-
-    /**
-     * Finds the nearest console to this block
-     * @return The console block entity
-     */
-    public Optional<ConsoleBlockEntity> getConsole() {
-        if (!(this.isLinked()) || !this.hasWorld()) return Optional.empty();
-
-        BlockPos closest = this.getPos();
-        double closestDistance = 0;
-
-        for (BlockPos pos : this.tardis().get().getDesktop().getConsolePos()) {
-            double distance = this.getPos().getSquaredDistance(pos);
-            if (closestDistance == 0 || distance < closestDistance) {
-                closest = pos;
-                closestDistance = distance;
-            }
-        }
-
-        if (!(this.getWorld().getBlockEntity(closest) instanceof ConsoleBlockEntity console))
-            return Optional.empty();
-
-        return Optional.of(console);
     }
 
     public boolean run(ServerPlayerEntity user, RedstoneControlBlock.Mode mode) {

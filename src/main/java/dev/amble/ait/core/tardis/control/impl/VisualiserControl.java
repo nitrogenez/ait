@@ -29,13 +29,12 @@ public class VisualiserControl extends Control {
 
         if (!AITMod.CONFIG.SERVER.RWF_ENABLED) {
             player.sendMessage(Text.translatable("tardis.message.control.rwf_disabled"), true);
-            return false;
+            return Result.FAILURE;
         }
 
         if (!player.isCreative()) {
             player.sendMessage(Text.translatable("tardis.message.control.rwf_creative_only"), true);
-            return false;
-            return Result.SUCCESS;
+            return Result.FAILURE;
         }
 
         if (!player.isSneaking() && tardis.travel().getState() == TravelHandlerBase.State.LANDED && tardis.subsystems().get(GRAVITATIONAL).isEnabled()) {
@@ -59,7 +58,7 @@ public class VisualiserControl extends Control {
     }
 
     @Override
-    public SoundEvent getSound() {
+    public SoundEvent getFallbackSound() {
         return AITSounds.RENAISSANCE_ANTI_GRAV_ALT;
     }
 }

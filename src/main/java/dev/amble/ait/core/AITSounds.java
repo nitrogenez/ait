@@ -123,6 +123,7 @@ public class AITSounds {
     public static final SoundEvent INCREMENT = register("controls/increment");
     public static final SoundEvent DIMENSION = register("controls/dimension");
     public static final SoundEvent ENGINE_OVERLOAD = register("controls/engine_overload");
+    public static final SoundEvent ZAP = register("controls/zap");
     public static final SoundEvent ML = register("tardis/ml");
 
     //Alt console sounds for renaissance

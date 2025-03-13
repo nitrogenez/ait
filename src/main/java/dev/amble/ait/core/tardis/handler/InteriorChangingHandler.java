@@ -45,8 +45,8 @@ import dev.amble.ait.data.properties.bool.BoolValue;
 import dev.amble.ait.data.properties.integer.IntProperty;
 import dev.amble.ait.data.properties.integer.IntValue;
 import dev.amble.ait.data.schema.desktop.TardisDesktopSchema;
-import dev.amble.ait.registry.impl.CategoryRegistry;
 import dev.amble.ait.registry.impl.DesktopRegistry;
+import dev.amble.ait.registry.impl.exterior.ExteriorVariantRegistry;
 
 public class InteriorChangingHandler extends KeyedTardisComponent implements TardisTickable {
     public static final Identifier CHANGE_DESKTOP = AITMod.id("change_desktop");
@@ -91,7 +91,7 @@ public class InteriorChangingHandler extends KeyedTardisComponent implements Tar
             if (!tardis.isGrowth())
                 return TardisEvents.Interaction.PASS;
 
-            tardis.getExterior().setType(CategoryRegistry.CAPSULE);
+            tardis.getExterior().setVariant(ExteriorVariantRegistry.CAPSULE_DEFAULT);
             return TardisEvents.Interaction.SUCCESS; // force mat even if checks fail
         });
 
@@ -317,7 +317,7 @@ public class InteriorChangingHandler extends KeyedTardisComponent implements Tar
                     entity.getWorld().playSound(null, position.getPos(), SoundEvents.BLOCK_BEACON_POWER_SELECT,
                             SoundCategory.BLOCKS, 10.0F, 0.75F);
 
-                    this.queueInteriorChange(DesktopRegistry.getInstance().getRandom(this.tardis));
+                    this.queueInteriorChange(DesktopRegistry.getInstance().get(AITMod.id("cave")));
                     if (stack.isOf(AITItems.PERSONALITY_MATRIX)) {
                         NbtCompound nbt = stack.getOrCreateNbt();
                         if (nbt.contains("name")) {

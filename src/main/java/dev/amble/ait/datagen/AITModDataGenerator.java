@@ -229,22 +229,24 @@ public class AITModDataGenerator implements DataGeneratorEntrypoint {
                     .criterion(hasItem(AITItems.SUPERHEATED_ZEITON), conditionsFromItem(AITItems.SUPERHEATED_ZEITON)));
 
             provider.addShapedRecipe(ShapedRecipeJsonBuilder.create(RecipeCategory.TOOLS, AITItems.PHOTON_ACCELERATOR, 1)
-                    .pattern("GGG")
-                    .pattern("G G")
+                    .pattern(" I ")
+                    .pattern("IXI")
                     .pattern(" I ")
                     .input('I', Items.IRON_INGOT)
-                    .input('G', Blocks.GLASS_PANE)
+                    .input('X', Items.BLAZE_POWDER)
                     .criterion(hasItem(Items.IRON_INGOT), conditionsFromItem(Items.IRON_INGOT))
-                    .criterion(hasItem(Blocks.GLASS_PANE), conditionsFromItem(Blocks.GLASS_PANE)));
+                    .criterion(hasItem(Items.BLAZE_POWDER), conditionsFromItem(Items.BLAZE_POWDER)));
 
             provider.addShapedRecipe(ShapedRecipeJsonBuilder.create(RecipeCategory.TOOLS, AITItems.ORTHOGONAL_ENGINE_FILTER, 1)
                     .pattern("III")
                     .pattern("IBI")
-                    .pattern("III")
+                    .pattern("IXI")
                     .input('I', Items.IRON_INGOT)
-                    .input('B', Blocks.IRON_BARS)
+                    .input('X', AITItems.SUPERHEATED_ZEITON)
+                    .input('B', AITItems.ARTRON_COLLECTOR)
                     .criterion(hasItem(Items.IRON_INGOT), conditionsFromItem(Items.IRON_INGOT))
-                    .criterion(hasItem(Blocks.IRON_BARS), conditionsFromItem(Blocks.IRON_BARS)));
+                    .criterion(hasItem(AITItems.SUPERHEATED_ZEITON), conditionsFromItem(AITItems.SUPERHEATED_ZEITON))
+                    .criterion(hasItem(AITItems.ARTRON_COLLECTOR), conditionsFromItem(AITItems.ARTRON_COLLECTOR)));
 
 
             /*provider.addShapedRecipe(ShapedRecipeJsonBuilder.create(RecipeCategory.TOOLS, AITItems.IRON_GOAT_HORN, 1)
@@ -272,23 +274,23 @@ public class AITModDataGenerator implements DataGeneratorEntrypoint {
                     .pattern("IWI")
                     .input('I', Items.BLACKSTONE)
                     .input('B', Items.IRON_BARS)
-                    .input('T', Items.GHAST_TEAR)
+                    .input('T', AITItems.SUPERHEATED_ZEITON)
                     .input('W', Items.WATER_BUCKET)
                     .criterion(hasItem(Items.BLACKSTONE), conditionsFromItem(Items.BLACKSTONE))
                     .criterion(hasItem(Items.IRON_BARS), conditionsFromItem(Items.IRON_BARS))
                     .criterion(hasItem(Items.WATER_BUCKET), conditionsFromItem(Items.WATER_BUCKET))
-                    .criterion(hasItem(Items.GHAST_TEAR), conditionsFromItem(Items.GHAST_TEAR)));
+                    .criterion(hasItem(AITItems.SUPERHEATED_ZEITON), conditionsFromItem(AITItems.SUPERHEATED_ZEITON)));
 
             provider.addShapedRecipe(ShapedRecipeJsonBuilder.create(RecipeCategory.TOOLS, AITBlocks.GENERIC_SUBSYSTEM, 1)
                     .pattern("IBI")
                     .pattern("BSB")
                     .pattern("IBI")
                     .input('I', Items.IRON_INGOT)
-                    .input('B', Items.IRON_BARS)
-                    .input('S', Items.GHAST_TEAR)
+                    .input('B', AITItems.SUPERHEATED_ZEITON)
+                    .input('S', AITItems.ORTHOGONAL_ENGINE_FILTER)
                     .criterion(hasItem(Items.IRON_BLOCK), conditionsFromItem(Items.IRON_BLOCK))
-                    .criterion(hasItem(Items.IRON_BARS), conditionsFromItem(Items.IRON_BARS))
-                    .criterion(hasItem(Items.GHAST_TEAR), conditionsFromItem(Items.GHAST_TEAR)));
+                    .criterion(hasItem(AITItems.SUPERHEATED_ZEITON), conditionsFromItem(AITItems.SUPERHEATED_ZEITON))
+                    .criterion(hasItem(AITItems.ORTHOGONAL_ENGINE_FILTER), conditionsFromItem(AITItems.ORTHOGONAL_ENGINE_FILTER)));
 
             provider.addShapedRecipe(
                     ShapedRecipeJsonBuilder.create(RecipeCategory.DECORATIONS, AITBlocks.PLAQUE_BLOCK, 1).pattern("GSG")
@@ -469,10 +471,11 @@ public class AITModDataGenerator implements DataGeneratorEntrypoint {
                     .input('C', Items.COPPER_INGOT).criterion(hasItem(Items.COPPER_INGOT), conditionsFromItem(Items.COPPER_INGOT))
                     .input('Z', AITItems.ZEITON_SHARD).criterion(hasItem(AITItems.ZEITON_SHARD), conditionsFromItem(AITItems.ZEITON_SHARD)));
 
-            provider.addShapedRecipe(ShapedRecipeJsonBuilder.create(RecipeCategory.REDSTONE, AITItems.INDUCTOR)
-                    .pattern("BCB")
-                    .input('B', Items.BLACKSTONE).criterion(hasItem(Items.BLACKSTONE), conditionsFromItem(Items.BLACKSTONE))
-                    .input('C', Items.COPPER_INGOT).criterion(hasItem(Items.COPPER_INGOT), conditionsFromItem(Items.COPPER_INGOT)));
+            provider.addShapedRecipe(ShapedRecipeJsonBuilder.create(RecipeCategory.REDSTONE, AITItems.HYPERION_CORE_SHAFT)
+                    .pattern("ACB")
+                    .input('B', AITItems.SUPERHEATED_ZEITON).criterion(hasItem(AITItems.SUPERHEATED_ZEITON), conditionsFromItem(AITItems.SUPERHEATED_ZEITON))
+                    .input('A', AITItems.PHOTON_ACCELERATOR).criterion(hasItem(AITItems.PHOTON_ACCELERATOR), conditionsFromItem(AITItems.PHOTON_ACCELERATOR))
+                    .input('C', Items.IRON_INGOT).criterion(hasItem(Items.IRON_INGOT), conditionsFromItem(Items.IRON_INGOT)));
 
             provider.addShapedRecipe(ShapedRecipeJsonBuilder.create(RecipeCategory.REDSTONE, AITItems.MANIPULATOR)
                     .pattern("III").pattern("IZI").pattern("III")

@@ -20,6 +20,7 @@ import dev.amble.ait.api.TardisEvents;
 import dev.amble.ait.api.TardisTickable;
 import dev.amble.ait.core.AITDimensions;
 import dev.amble.ait.core.AITSounds;
+import dev.amble.ait.core.blockentities.DoorBlockEntity;
 import dev.amble.ait.core.entities.ConsoleControlEntity;
 import dev.amble.ait.core.tardis.handler.travel.TravelHandlerBase;
 import dev.amble.ait.core.tardis.util.TardisUtil;
@@ -137,6 +138,9 @@ public class DoorHandler extends KeyedTardisComponent implements TardisTickable 
                 .forEach(entity -> {
 
                     DirectedBlockPos directed = tardis.getDesktop().getDoorPos();
+                    if (!(tardis.asServer().getInteriorWorld().getBlockEntity(directed.getPos()) instanceof DoorBlockEntity)) {
+                        return;
+                    }
                     Vec3d pos = new Vec3d(directed.getPos().getX(), directed.getPos().getY(),
                             directed.getPos().getZ()).offset(directed.toMinecraftDirection(), -0.5f);
 

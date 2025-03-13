@@ -33,11 +33,11 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.WorldSavePath;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
-import net.minecraft.util.math.ChunkSectionPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.Heightmap;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldEvents;
+import net.minecraft.world.chunk.Chunk;
 
 import dev.amble.ait.AITMod;
 import dev.amble.ait.client.util.ClientTardisUtil;
@@ -45,7 +45,6 @@ import dev.amble.ait.core.AITDimensions;
 import dev.amble.ait.core.tardis.handler.travel.TravelHandlerBase;
 import dev.amble.ait.core.world.TardisServerWorld;
 import dev.amble.ait.mixin.server.EnderDragonFightAccessor;
-import net.minecraft.world.chunk.Chunk;
 
 @SuppressWarnings("deprecation")
 public class WorldUtil {

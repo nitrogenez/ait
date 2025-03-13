@@ -274,12 +274,12 @@ public class AITModDataGenerator implements DataGeneratorEntrypoint {
                     .pattern("IWI")
                     .input('I', Items.BLACKSTONE)
                     .input('B', Items.IRON_BARS)
-                    .input('T', Items.GHAST_TEAR)
+                    .input('T', AITItems.SUPERHEATED_ZEITON)
                     .input('W', Items.WATER_BUCKET)
                     .criterion(hasItem(Items.BLACKSTONE), conditionsFromItem(Items.BLACKSTONE))
                     .criterion(hasItem(Items.IRON_BARS), conditionsFromItem(Items.IRON_BARS))
                     .criterion(hasItem(Items.WATER_BUCKET), conditionsFromItem(Items.WATER_BUCKET))
-                    .criterion(hasItem(Items.GHAST_TEAR), conditionsFromItem(Items.GHAST_TEAR)));
+                    .criterion(hasItem(AITItems.SUPERHEATED_ZEITON), conditionsFromItem(AITItems.SUPERHEATED_ZEITON)));
 
             provider.addShapedRecipe(ShapedRecipeJsonBuilder.create(RecipeCategory.TOOLS, AITBlocks.GENERIC_SUBSYSTEM, 1)
                     .pattern("IBI")

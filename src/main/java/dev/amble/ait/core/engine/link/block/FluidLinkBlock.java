@@ -13,6 +13,7 @@ import net.minecraft.world.World;
 
 import dev.amble.ait.core.engine.link.IFluidLink;
 import dev.amble.ait.core.engine.link.IFluidSource;
+import dev.amble.ait.core.world.TardisServerWorld;
 
 public class FluidLinkBlock extends BlockWithEntity implements IFluidLink {
     public FluidLinkBlock(Settings settings) {
@@ -22,6 +23,8 @@ public class FluidLinkBlock extends BlockWithEntity implements IFluidLink {
     @Override
     public void onPlaced(World world, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack itemStack) {
         super.onPlaced(world, pos, state, placer, itemStack);
+
+        if (!TardisServerWorld.isTardisDimension(world)) return;
 
         if (world.getBlockEntity(pos) instanceof FluidLinkBlockEntity be) {
             be.onPlaced(world, pos, placer);

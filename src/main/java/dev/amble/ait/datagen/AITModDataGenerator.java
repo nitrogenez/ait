@@ -749,6 +749,7 @@ public class AITModDataGenerator implements DataGeneratorEntrypoint {
         provider.addTranslation("control.ait.shields", "Shields");
         provider.addTranslation("control.ait.engine_overload", "Protocol 515");
         provider.addTranslation("control.ait.electrical_discharge", "Protocol 54");
+        provider.addTranslation("control.ait.hammer_hanger", "Hammer Hanger");
 
         // Tabs
         provider.addTranslation(AITItemGroups.MAIN, "Adventures In Time");

@@ -89,6 +89,6 @@ public class ElectricalDischargeControl extends Control {
 
     @Override
     public SoundEvent getFallbackSound() {
-        return AITSounds.SHIELDS;
+        return AITSounds.ZAP;
     }
 }

@@ -152,7 +152,7 @@ public class AITItems extends ItemContainer {
             new AItemSettings().group(AITItemGroups.FABRICATOR));
     public static final Item PHOTON_ACCELERATOR = new MachinePartItem(MachinePartItem.Type.PHOTON_ACCELERATOR,
             new AItemSettings() .group(AITItemGroups.FABRICATOR));
-    public static final Item INDUCTOR = new MachinePartItem(MachinePartItem.Type.INDUCTOR,
+    public static final Item HYPERION_CORE_SHAFT = new MachinePartItem(MachinePartItem.Type.HYPERION_CORE_SHAFT,
             new AItemSettings().group(AITItemGroups.FABRICATOR));
 
     // Components

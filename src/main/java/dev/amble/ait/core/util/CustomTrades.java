@@ -35,7 +35,7 @@ public class CustomTrades {
                     factories.add((entity, random) -> new TradeOffer(
                             new ItemStack(Items.COPPER_INGOT, 5),
                             new ItemStack(Items.IRON_INGOT, 3),
-                            new ItemStack(AITItems.INDUCTOR, 1),
+                            new ItemStack(AITItems.HYPERION_CORE_SHAFT, 1),
                             2, 4, 3, 0.105f));
                 });
 
@@ -87,7 +87,7 @@ public class CustomTrades {
         TradeOfferHelper.registerVillagerOffers(AITVillagers.FABRICATOR_ENGINEER, 3,
                 factories -> {
                     factories.add((entity, random) -> new TradeOffer(
-                            new ItemStack(AITItems.INDUCTOR, 8),
+                            new ItemStack(AITItems.HYPERION_CORE_SHAFT, 8),
                             new ItemStack(AITItems.BLUEPRINT, 1),
                             4, 2, 0.075f));
                 });

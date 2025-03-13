@@ -146,6 +146,8 @@ public class AITSounds {
     public static final SoundEvent CORAL_LAND_TYPE_ALT = register("controls/coral_land_type_alt");
     public static final SoundEvent CORAL_TELEPATHIC_CIRCUITS_ALT = register("controls/coral_telepathic_circuits_alt");
     public static final SoundEvent CORAL_THROTTLE_ALT = register("controls/coral_throttle_alt");
+    public static final SoundEvent CORAL_DIMENSION_ALT = register("controls/coral_dimension_alt");
+    public static final SoundEvent CORAL_XYZ_ALT = register("controls/coral_xyz_alt");
 
     // Console
     public static final SoundEvent CONSOLE_AMBIENT = register("tardis/console_ambient");

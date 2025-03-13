@@ -10,10 +10,18 @@ name: Automated donator builds
 on:
   workflow_dispatch:
   push:
+    paths:
+      - src/**
+      - build.gradle
+      - gradle.properties
+      - settings.gradle
+      - gradle/**
+      - gradlew
+      - gradlew.bat
+      - versioning.gradle
     branches:
       - 'feat/**'
       - 'main'
-      - 'DrTheodor/rwf'
 
 jobs:
   build:

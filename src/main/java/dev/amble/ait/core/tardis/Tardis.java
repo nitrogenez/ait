@@ -222,9 +222,9 @@ public abstract class Tardis extends Initializable<TardisComponent.InitContext> 
         return this.handler(TardisComponent.Id.PERMISSIONS);
     }
 
-    public OvergrownHandler overgrown() {
+    /*public OvergrownHandler overgrown() {
         return this.handler(TardisComponent.Id.OVERGROWN);
-    }
+    }*/
 
 
     public CloakHandler cloak() {

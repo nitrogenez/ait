@@ -43,7 +43,6 @@ import dev.amble.ait.core.entities.FlightTardisEntity;
 import dev.amble.ait.core.tardis.ServerTardis;
 import dev.amble.ait.core.tardis.Tardis;
 import dev.amble.ait.core.tardis.TardisDesktop;
-import dev.amble.ait.core.tardis.handler.OvergrownHandler;
 import dev.amble.ait.core.tardis.handler.permissions.PermissionHandler;
 import dev.amble.ait.core.tardis.manager.ServerTardisManager;
 import dev.amble.ait.core.util.WorldUtil;
@@ -80,8 +79,8 @@ public class TardisUtil {
 
                 if (!tardis.loyalty().get(player).isOf(Loyalty.Type.PILOT))
                     return;
-                if (tardis.<OvergrownHandler>handler(TardisComponent.Id.OVERGROWN).overgrown().get())
-                    return;
+                /*if (tardis.<OvergrownHandler>handler(TardisComponent.Id.OVERGROWN).overgrown().get())
+                    return;*/
 
                 player.getWorld().playSound(null, player.getBlockPos(), AITSounds.SNAP, SoundCategory.PLAYERS, 4f, 1f);
 

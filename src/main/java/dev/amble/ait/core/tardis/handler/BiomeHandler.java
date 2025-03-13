@@ -42,6 +42,7 @@ public class BiomeHandler extends KeyedTardisComponent {
 
     static {
         TardisEvents.LANDED.register(tardis -> tardis.<BiomeHandler>handler(Id.BIOME).update());
+        TardisEvents.ENTER_FLIGHT.register(tardis -> tardis.<BiomeHandler>handler(Id.BIOME).forceTypeDefault());
     }
 
     public BiomeHandler() {

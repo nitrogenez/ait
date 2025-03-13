@@ -81,8 +81,18 @@ public record ControlSound(Identifier controlId, Identifier consoleId, Identifie
         return new ControlSound(controlId, AITMod.id("fallback"), success.getId(), alt.getId());
     }
 
+    /**
+     * Merges the two identifiers into one
+     * Example
+     * controlId - ait:monitor
+     * consoleId - ait:hartnell
+     * return - ait:hartnell/ait/monitor
+     * @param controlId Id of the control
+     * @param consoleId Id of the console
+     * @return Merged identifier
+     */
     public static Identifier mergeIdentifiers(Identifier controlId, Identifier consoleId) {
-        return new Identifier(controlId.getNamespace(), controlId.getPath() + "_" + consoleId.getPath());
+        return Identifier.of(consoleId.getNamespace(), consoleId.getPath() + "/" + controlId.getNamespace() + "/" + controlId.getPath());
     }
 
     public static ControlSound fromInputStream(InputStream stream) {

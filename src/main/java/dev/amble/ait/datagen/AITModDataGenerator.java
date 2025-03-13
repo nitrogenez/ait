@@ -749,6 +749,7 @@ public class AITModDataGenerator implements DataGeneratorEntrypoint {
         provider.addTranslation("control.ait.shields", "Shields");
         provider.addTranslation("control.ait.engine_overload", "Protocol 515");
         provider.addTranslation("control.ait.electrical_discharge", "Protocol 54");
+        provider.addTranslation("control.ait.hammer_hanger", "Hammer Hanger");
 
         // Tabs
         provider.addTranslation(AITItemGroups.MAIN, "Adventures In Time");
@@ -977,6 +978,7 @@ public class AITModDataGenerator implements DataGeneratorEntrypoint {
         provider.addTranslation("tardis.message.control.antigravs.active", "Antigravs: ENGAGED");
         provider.addTranslation("tardis.message.control.antigravs.inactive", "Antigravs: DISENGAGED");
         provider.addTranslation("tardis.message.control.rwf_disabled", "RWF is disabled in SERVER config.");
+        provider.addTranslation("tardis.message.control.rwf_creative_only", "RWF is CREATIVE only");
         provider.addTranslation("tardis.message.control.fast_return.destination_nonexistent",
                 "Fast Return: Last Position Nonexistent!");
         provider.addTranslation("tardis.message.control.fast_return.last_position", "Fast Return: LAST POSITION SET");
@@ -1342,6 +1344,7 @@ public class AITModDataGenerator implements DataGeneratorEntrypoint {
         // Rift Chunk Tracking
         provider.addTranslation("riftchunk.ait.tracking", "Rift Tracking");
         provider.addTranslation("riftchunk.ait.cooldown", "Rift tracking is on cooldown");
+        provider.addTranslation("riftchunk.ait.found", "Rift located at this position!");
         provider.addTranslation("waypoint.position.tooltip", "Position");
         provider.addTranslation("waypoint.dimension.tooltip", "Dimension");
         provider.addTranslation("waypoint.direction.tooltip", "Direction");

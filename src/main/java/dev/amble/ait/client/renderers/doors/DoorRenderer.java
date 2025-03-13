@@ -74,11 +74,11 @@ public class DoorRenderer<T extends DoorBlockEntity> implements BlockEntityRende
                 vertexConsumers.getBuffer(AITRenderLayers.getEntityTranslucentCull(texture)), light, overlay, 1, 1,
                 1, 1);
 
-        if (tardis.overgrown().overgrown().get())
+        /*if (tardis.overgrown().overgrown().get())
             model.renderWithAnimations(entity, model.getPart(), matrices,
                     vertexConsumers.getBuffer(AITRenderLayers.getEntityTranslucentCull(
                             tardis.overgrown().getOvergrownTexture())),
-                    light, overlay, 1, 1, 1, 1);
+                    light, overlay, 1, 1, 1, 1);*/
 
         profiler.push("emission");
 

@@ -186,7 +186,7 @@ public class FuelHandler extends KeyedTardisComponent implements ArtronHolder, T
             this.addFuel(20 * toAdd);
         }
 
-        if (!this.refueling().get() && tardis.fuel().hasPower())
+        if (!this.refueling().get() && tardis.fuel().hasPower() && !tardis.isGrowth())
             this.removeFuel(20 * 0.25 * tardis.travel().instability());
     }
 

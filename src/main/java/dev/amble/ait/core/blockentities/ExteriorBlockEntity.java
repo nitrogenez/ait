@@ -15,6 +15,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.decoration.ArmorStandEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.BrushItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.particle.BlockStateParticleEffect;
 import net.minecraft.particle.ParticleTypes;
@@ -30,6 +31,7 @@ import net.minecraft.util.math.*;
 import net.minecraft.world.World;
 
 import dev.amble.ait.AITMod;
+import dev.amble.ait.api.TardisComponent;
 import dev.amble.ait.api.link.v2.TardisRef;
 import dev.amble.ait.api.link.v2.block.AbstractLinkableBlockEntity;
 import dev.amble.ait.compat.DependencyChecker;
@@ -45,6 +47,7 @@ import dev.amble.ait.core.item.SonicItem;
 import dev.amble.ait.core.tardis.ServerTardis;
 import dev.amble.ait.core.tardis.Tardis;
 import dev.amble.ait.core.tardis.animation.ExteriorAnimation;
+import dev.amble.ait.core.tardis.handler.BiomeHandler;
 import dev.amble.ait.core.tardis.handler.SonicHandler;
 import dev.amble.ait.core.tardis.handler.travel.TravelHandler;
 import dev.amble.ait.core.tardis.handler.travel.TravelHandlerBase;
@@ -101,6 +104,12 @@ public class ExteriorBlockEntity extends AbstractLinkableBlockEntity implements 
 
         boolean hasSonic = handler.getExteriorSonic() != null;
         boolean shouldEject = player.isSneaking();
+
+        if (hand.getItem() instanceof BrushItem && tardis.<BiomeHandler>handler(TardisComponent.Id.BIOME).getBiomeKey()
+                != BiomeHandler.BiomeType.DEFAULT) {
+            tardis.<BiomeHandler>handler(TardisComponent.Id.BIOME).forceTypeDefault();
+            return;
+        }
 
         if (hand.getItem() instanceof KeyItem key && !tardis.siege().isActive()
                 && !tardis.interiorChangingHandler().queued().get()) {

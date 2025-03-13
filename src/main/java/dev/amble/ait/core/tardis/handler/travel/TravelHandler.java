@@ -10,6 +10,8 @@ import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvent;
+import net.minecraft.text.Text;
+import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -32,6 +34,7 @@ import dev.amble.ait.core.tardis.util.NetworkUtil;
 import dev.amble.ait.core.tardis.util.TardisUtil;
 import dev.amble.ait.core.util.ForcedChunkUtil;
 import dev.amble.ait.core.util.WorldUtil;
+import dev.amble.ait.core.world.RiftChunkManager;
 
 public final class TravelHandler extends AnimatedTravelHandler implements CrashableTardisTravel {
 
@@ -78,6 +81,12 @@ public final class TravelHandler extends AnimatedTravelHandler implements Crasha
             }
             if (tardis.travel().autopilot())
                 tardis.getDesktop().playSoundAtEveryConsole(AITSounds.NAV_NOTIFICATION, SoundCategory.BLOCKS, 2f, 1f);
+            if (RiftChunkManager.isRiftChunk(tardis.travel().position())) {
+                TardisUtil.sendMessageToInterior(tardis.asServer(), Text.translatable("riftchunk.ait.found").formatted(Formatting.YELLOW, Formatting.ITALIC));
+                tardis.getDesktop().playSoundAtEveryConsole(AITSounds.RIFT_SUCCESS, SoundCategory.BLOCKS, 2f, 1f);
+            }
+            if (tardis.travel().isCrashing())
+                tardis.travel().setCrashing(false);
         });
     }
 

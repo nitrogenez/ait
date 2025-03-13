@@ -1405,6 +1405,9 @@ public class RenaissanceConsoleModel extends ConsoleModel {
         refuel.roll = tardis.isRefueling() ? refuel.roll + 0.6f : refuel.roll;
         refuel.yaw = tardis.isRefueling() ? refuel.yaw + 0.1f : refuel.yaw;
 
+        ModelPart direction = this.console.getChild("panelf").getChild("rotation");
+        direction.pitch = direction.pitch + tardis.travel().destination().getRotation();
+
 //
 //        // Ground Search Control
 //        ModelPart groundSearch = this.console.getChild("panel1").getChild("controls").getChild("smallswitch");

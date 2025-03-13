@@ -29,6 +29,12 @@ public class VisualiserControl extends Control {
 
         if (!AITMod.CONFIG.SERVER.RWF_ENABLED) {
             player.sendMessage(Text.translatable("tardis.message.control.rwf_disabled"), true);
+            return false;
+        }
+
+        if (!player.isCreative()) {
+            player.sendMessage(Text.translatable("tardis.message.control.rwf_creative_only"), true);
+            return false;
             return Result.SUCCESS;
         }
 
@@ -53,7 +59,7 @@ public class VisualiserControl extends Control {
     }
 
     @Override
-    public SoundEvent getFallbackSound() {
+    public SoundEvent getSound() {
         return AITSounds.RENAISSANCE_ANTI_GRAV_ALT;
     }
 }

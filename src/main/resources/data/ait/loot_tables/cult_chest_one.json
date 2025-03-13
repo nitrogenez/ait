@@ -161,11 +161,6 @@
         },
         {
           "type": "minecraft:item",
-          "name": "ait:inductor",
-          "weight": 5
-        },
-        {
-          "type": "minecraft:item",
           "name": "ait:photon_accelerator",
           "weight": 5
         }

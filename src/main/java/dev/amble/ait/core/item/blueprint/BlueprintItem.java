@@ -50,6 +50,12 @@ public class BlueprintItem extends Item {
 
         tooltip.add(Text.translatable("ait.blueprint.tooltip").formatted(Formatting.BLUE)
                 .append(blueprint.text().copy().formatted(Formatting.GRAY)));
+        for (int i = blueprint.inputs().size() - 1; i >= 0; i--) {
+            ItemStack stack1 = blueprint.inputs().get(i).toStack();
+            tooltip.add(Text.literal("Item: " + stack1.getItem() + " x" + stack1.getCount())
+                    .formatted(Formatting.DARK_GRAY));
+        }
+
     }
 
     public static BlueprintSchema getSchema(ItemStack stack) {

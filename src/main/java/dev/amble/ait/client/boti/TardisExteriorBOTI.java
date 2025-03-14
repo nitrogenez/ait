@@ -44,7 +44,10 @@ public class TardisExteriorBOTI extends BOTI {
         BOTI_HANDLER.setupFramebuffer();
 
         Vec3d skyColor = MinecraftClient.getInstance().world.getSkyColor(MinecraftClient.getInstance().player.getPos(), MinecraftClient.getInstance().getTickDelta());
-        BOTI.setFramebufferColor(BOTI_HANDLER.afbo, (float) skyColor.x, (float) skyColor.y, (float) skyColor.z, 1);
+        if (AITMod.CONFIG.CLIENT.GREEN_SCREEN_BOTI)
+            BOTI.setFramebufferColor(BOTI_HANDLER.afbo, 0, 1, 0, 1);
+        else
+            BOTI.setFramebufferColor(BOTI_HANDLER.afbo, (float) skyColor.x, (float) skyColor.y, (float) skyColor.z, 1);
 
         BOTI.copyFramebuffer(MinecraftClient.getInstance().getFramebuffer(), BOTI_HANDLER.afbo);
 
@@ -62,7 +65,10 @@ public class TardisExteriorBOTI extends BOTI {
         stack.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(180));
         stack.translate(vec.x, vec.y, vec.z);
         stack.scale((float) variant.parent().portalWidth(), (float) variant.parent().portalHeight(), 1f);
-        mask.render(stack, botiProvider.getBuffer(AITMod.CONFIG.CLIENT.SHOULD_RENDER_BOTI_INTERIOR ? RenderLayer.getDebugFilledBox() : RenderLayer.getEndGateway()), light, OverlayTexture.DEFAULT_UV, (float) skyColor.x, (float) skyColor.y, (float) skyColor.z, 1);
+        RenderLayer whichOne = AITMod.CONFIG.CLIENT.SHOULD_RENDER_BOTI_INTERIOR || AITMod.CONFIG.CLIENT.GREEN_SCREEN_BOTI ?
+                RenderLayer.getDebugFilledBox() : RenderLayer.getEndGateway();
+        float[] colorsForGreenScreen = AITMod.CONFIG.CLIENT.GREEN_SCREEN_BOTI ? new float[]{0, 1, 0, 1} : new float[] {(float) skyColor.x, (float) skyColor.y, (float) skyColor.z};
+        mask.render(stack, botiProvider.getBuffer(whichOne), light, OverlayTexture.DEFAULT_UV, colorsForGreenScreen[0], colorsForGreenScreen[1], colorsForGreenScreen[2], 1);
         botiProvider.draw();
         stack.pop();
 

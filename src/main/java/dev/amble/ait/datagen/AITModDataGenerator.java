@@ -714,6 +714,8 @@ public class AITModDataGenerator implements DataGeneratorEntrypoint {
             module.getItemRegistry().ifPresent(provider::translateItems);
         });
 
+        provider.addTranslation("ait.tardis.likes_item", "The TARDIS may like this item...");
+
         // Control entities
         provider.addTranslation("control.ait.antigravs", "Antigravs");
         provider.addTranslation("control.ait.refreshment_control", "Refreshment Selector");

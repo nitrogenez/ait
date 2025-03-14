@@ -18,6 +18,8 @@ import dev.amble.ait.api.TardisComponent;
 import dev.amble.ait.api.TardisTickable;
 import dev.amble.ait.core.AITSounds;
 import dev.amble.ait.core.advancement.TardisCriterions;
+import dev.amble.ait.core.likes.ItemOpinion;
+import dev.amble.ait.core.likes.ItemOpinionRegistry;
 import dev.amble.ait.core.tardis.ServerTardis;
 import dev.amble.ait.core.tardis.util.TardisUtil;
 import dev.amble.ait.data.Loyalty;
@@ -77,6 +79,12 @@ public class LoyaltyHandler extends TardisComponent implements TardisTickable {
 
             if (!loyalty.isOf(Loyalty.Type.NEUTRAL))
                 continue;
+
+            if (ItemOpinionRegistry.getInstance().get(player.getMainHandStack()).isPresent()) {
+                ItemOpinion opinion = ItemOpinionRegistry.getInstance().get(player.getMainHandStack()).get();
+                tardis.opinions().contains(opinion);
+                player.sendMessage(Text.translatable("ait.tardis.likes_item", true));
+            }
 
             if (AITMod.RANDOM.nextInt(0, 20) != 14)
                 continue;

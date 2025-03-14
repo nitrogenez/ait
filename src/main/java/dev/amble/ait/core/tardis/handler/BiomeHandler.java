@@ -31,7 +31,8 @@ import dev.amble.ait.data.properties.Property;
 import dev.amble.ait.data.properties.Value;
 
 /**
- * @author Loqor TODO reminder to work on this more, making it so you have to
+ * @author Loqor
+ * TODO reminder to work on this more, making it so you have to
  *         brush off different biomes if you don't just demat/remat + having to
  *         land on the respective blocks / has to snow for it to take effect.
  */
@@ -41,6 +42,10 @@ public class BiomeHandler extends KeyedTardisComponent {
     private final Value<BiomeType> type = TYPE.create(this);
 
     static {
+        TardisEvents.DEMAT.register(tardis -> {
+            tardis.<BiomeHandler>handler(Id.BIOME).forceTypeDefault();
+            return TardisEvents.Interaction.PASS;
+        });
         TardisEvents.LANDED.register(tardis -> tardis.<BiomeHandler>handler(Id.BIOME).update());
         TardisEvents.ENTER_FLIGHT.register(tardis -> tardis.<BiomeHandler>handler(Id.BIOME).forceTypeDefault());
     }
@@ -66,6 +71,7 @@ public class BiomeHandler extends KeyedTardisComponent {
         BiomeType biome = getTagForBiome(entry);
 
         this.type.set(biome);
+        this.sync();
     }
 
     public void forceTypeDefault() {
@@ -87,13 +93,6 @@ public class BiomeHandler extends KeyedTardisComponent {
 
         tree.generate(access, world.getChunkManager().getChunkGenerator(), world.random, pos);
         return gaslighter;
-    }
-
-    static {
-        TardisEvents.DEMAT.register(tardis -> {
-            tardis.<BiomeHandler>handler(Id.BIOME).forceTypeDefault();
-            return TardisEvents.Interaction.PASS;
-        });
     }
 
     private static final Set<Class<? extends Feature<?>>> TREES = Set.of(

@@ -25,7 +25,7 @@ public class HammerHangerControl extends Control {
     public Result runServer(Tardis tardis, ServerPlayerEntity player, ServerWorld world, BlockPos console,
                              boolean leftClick) {
         super.runServer(tardis, player, world, console, leftClick);
-        
+
         ExtraHandler handler = tardis.extra();
 
         if ((leftClick || player.isSneaking()) && (handler.getConsoleHammer() != null)) {

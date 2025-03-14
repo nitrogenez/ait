@@ -71,7 +71,7 @@ public class ScanningSonicMode extends SonicMode {
     public boolean process(ItemStack stack, World world, PlayerEntity user) {
         HitResult hitResult = SonicMode.getHitResult(user);
 
-        if (hitResult instanceof BlockHitResult blockHit) {
+        if (hitResult instanceof BlockHitResult blockHit && !world.getBlockState(blockHit.getBlockPos()).isAir()) {
             return this.scanBlocks(stack, world, user, blockHit.getBlockPos());
         }
 

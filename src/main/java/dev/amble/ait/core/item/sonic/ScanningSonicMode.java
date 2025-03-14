@@ -1,14 +1,5 @@
 package dev.amble.ait.core.item.sonic;
 
-import dev.amble.ait.core.AITSounds;
-import dev.amble.ait.core.item.SonicItem;
-import dev.amble.ait.core.tardis.Tardis;
-import dev.amble.ait.core.world.LandingPadManager;
-import dev.amble.ait.core.world.RiftChunkManager;
-import dev.amble.ait.core.world.TardisServerWorld;
-import dev.amble.ait.data.landing.LandingPadRegion;
-import dev.amble.ait.data.landing.LandingPadSpot;
-import dev.amble.ait.data.schema.sonic.SonicSchema;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
@@ -28,6 +19,16 @@ import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
+
+import dev.amble.ait.core.AITSounds;
+import dev.amble.ait.core.item.SonicItem;
+import dev.amble.ait.core.tardis.Tardis;
+import dev.amble.ait.core.world.LandingPadManager;
+import dev.amble.ait.core.world.RiftChunkManager;
+import dev.amble.ait.core.world.TardisServerWorld;
+import dev.amble.ait.data.landing.LandingPadRegion;
+import dev.amble.ait.data.landing.LandingPadSpot;
+import dev.amble.ait.data.schema.sonic.SonicSchema;
 
 public class ScanningSonicMode extends SonicMode {
     private static final Text RIFT_FOUND = Text.translatable("message.ait.sonic.riftfound").formatted(Formatting.AQUA)

@@ -5,7 +5,6 @@ import dev.amble.lib.util.TeleportUtil;
 
 import net.minecraft.block.*;
 import net.minecraft.entity.*;
-import net.minecraft.entity.mob.AmbientEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
@@ -24,13 +23,14 @@ import net.minecraft.world.chunk.Chunk;
 
 import dev.amble.ait.AITMod;
 import dev.amble.ait.core.*;
+import dev.amble.ait.core.entities.base.DummyAmbientEntity;
 import dev.amble.ait.core.item.SonicItem;
 import dev.amble.ait.core.util.StackUtil;
 import dev.amble.ait.core.util.WorldUtil;
 import dev.amble.ait.core.world.RiftChunkManager;
 import dev.amble.ait.module.planet.core.util.ISpaceImmune;
 
-public class RiftEntity extends AmbientEntity implements ISpaceImmune {
+public class RiftEntity extends DummyAmbientEntity implements ISpaceImmune {
     private int interactAmount = 0;
     private int ambientSoundCooldown = 0;
     private int currentSoundIndex = 0;
@@ -196,7 +196,7 @@ public class RiftEntity extends AmbientEntity implements ISpaceImmune {
                 predicate -> true).isEmpty())
             return worldAccess.getBlockState(pos).isAir() && worldAccess.getBlockState(pos.down()).isAir();
 
-        if (random.nextInt(10) == 0 && serverWorldAccess.getEntitiesByType(rift, box,
+        if (random.nextBoolean() && serverWorldAccess.getEntitiesByType(rift, box,
                 predicate -> true).isEmpty() && RiftChunkManager.isRiftChunk(worldAccess, pos))
             return worldAccess.getBlockState(pos).isAir() && worldAccess.getBlockState(pos.down()).isAir();
 

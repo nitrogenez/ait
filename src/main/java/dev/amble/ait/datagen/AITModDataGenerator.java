@@ -2,7 +2,6 @@ package dev.amble.ait.datagen;
 
 import static dev.amble.ait.core.AITItems.isUnlockedOnThisDay;
 import static net.minecraft.data.server.recipe.RecipeProvider.*;
-import static net.minecraft.data.server.recipe.RecipeProvider.createSlabRecipe;
 
 import java.util.Calendar;
 import java.util.concurrent.CompletableFuture;
@@ -15,7 +14,10 @@ import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 
 import net.minecraft.block.Blocks;
-import net.minecraft.data.server.recipe.*;
+import net.minecraft.data.server.recipe.CookingRecipeJsonBuilder;
+import net.minecraft.data.server.recipe.ShapedRecipeJsonBuilder;
+import net.minecraft.data.server.recipe.ShapelessRecipeJsonBuilder;
+import net.minecraft.data.server.recipe.SmithingTransformRecipeJsonBuilder;
 import net.minecraft.item.Items;
 import net.minecraft.recipe.Ingredient;
 import net.minecraft.recipe.book.RecipeCategory;
@@ -968,6 +970,14 @@ public class AITModDataGenerator implements DataGeneratorEntrypoint {
         // Death
         provider.addTranslation("death.attack.tardis_squash", "%1$s got squashed by a TARDIS!");
         provider.addTranslation("death.attack.space_suffocation", "%1$s got blown up due to lack of Oxygen!");
+
+        // Sonic Scanning Mode
+        provider.addTranslation("item.sonic.scanning.any_tool", "Any Tool");
+        provider.addTranslation("item.sonic.scanning.diamond_tool", "Diamond Tool");
+        provider.addTranslation("item.sonic.scanning.iron_tool", "Iron Tool");
+        provider.addTranslation("item.sonic.scanning.stone_tool", "Stone Tool");
+        provider.addTranslation("item.sonic.scanning.no_tool", "Hand (No Tool)");
+
 
         // TARDIS Control Actionbar Title
         provider.addTranslation("tardis.message.protocol_813.travel", "Hail Mary: Protocol 813 is active, please prepare for departure.");

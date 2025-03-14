@@ -1,12 +1,20 @@
 package dev.amble.ait.core.item.sonic;
 
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.registry.tag.BlockTags;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.text.Text;
-import net.minecraft.util.*;
+import net.minecraft.util.Formatting;
+import net.minecraft.util.Hand;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.hit.BlockHitResult;
+import net.minecraft.util.hit.EntityHitResult;
 import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
@@ -49,14 +57,60 @@ public class ScanningSonicMode extends SonicMode {
         return this.process(stack, world, user);
     }
 
+    @Override
+    public void tick(ItemStack stack, World world, LivingEntity user, int ticks, int ticksLeft) {
+        if (!(world instanceof ServerWorld serverWorld) || !(user instanceof PlayerEntity player) || ticks % 10 != 0)
+            return;
+
+        this.process(stack, world, player);
+    }
+
+
+
     public boolean process(ItemStack stack, World world, PlayerEntity user) {
         HitResult hitResult = SonicMode.getHitResult(user);
 
-        if (hitResult instanceof BlockHitResult blockHit)
-            return this.scanRegion(stack, world, user, blockHit.getBlockPos());
+        if (hitResult instanceof BlockHitResult blockHit) {
+            return this.scanBlocks(stack, world, user, blockHit.getBlockPos());
+        }
 
-        return false;
+        if (hitResult instanceof EntityHitResult entityHit) {
+            return this.scanEntities(stack, world, user, entityHit.getEntity());
+        }
+
+        return this.scanRegion(stack, world, user, BlockPos.ofFloored(hitResult.getPos()));
     }
+
+
+
+    public boolean scanBlocks(ItemStack stack, World world, PlayerEntity user, BlockPos pos) {
+        if (world.isClient() || user == null)
+            return true;
+
+        BlockState state = world.getBlockState(pos);
+        Block block = state.getBlock();
+
+        String blastRes = String.format("%.2f", block.getBlastResistance());
+
+        String toolRequirement = "item.sonic.scanning.any_tool";
+        if (state.isIn(BlockTags.NEEDS_DIAMOND_TOOL)) {
+            toolRequirement = "item.sonic.scanning.diamond_tool";
+        } else if (state.isIn(BlockTags.NEEDS_IRON_TOOL)) {
+            toolRequirement = "item.sonic.scanning.iron_tool";
+        } else if (state.isIn(BlockTags.NEEDS_STONE_TOOL)) {
+            toolRequirement = "item.sonic.scanning.stone_tool";
+        } else if (!block.getDefaultState().isToolRequired()) {
+            toolRequirement = "item.sonic.scanning.no_tool";
+        }
+
+        Text message = Text.literal("\uD83D\uDD25: " + blastRes + " ⛏: ").append(Text.translatable(toolRequirement)).formatted(Formatting.YELLOW)
+                .formatted(Formatting.GOLD);
+        user.sendMessage(message, true);
+
+        return true;
+    }
+
+
 
     public boolean scanRegion(ItemStack stack, World world, PlayerEntity user, BlockPos pos) {
         if (world.isClient())
@@ -90,6 +144,22 @@ public class ScanningSonicMode extends SonicMode {
         if (TardisServerWorld.isTardisDimension(world)) {
             sendTardisInfo(tardis, (ServerWorld) world, pos, user, stack);
             return true;
+        }
+
+        return false;
+    }
+
+    public boolean scanEntities(ItemStack stack, World world, PlayerEntity user, Entity entity) {
+        if (world.isClient())
+            return true;
+
+        if (user == null)
+            return false;
+
+        if (entity instanceof LivingEntity) {
+            String health = String.valueOf(((LivingEntity) entity).getHealth());
+            String maxhealth = String.valueOf(((LivingEntity) entity).getMaxHealth());
+            user.sendMessage(Text.literal("♥:").append(health).append("/").append(maxhealth).formatted(Formatting.YELLOW), true);
         }
 
         return false;

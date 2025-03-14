@@ -110,6 +110,7 @@ public class DoorRenderer<T extends DoorBlockEntity> implements BlockEntityRende
     }
 
     private void updateModel(Tardis tardis) {
+        if (tardis.getExterior().getVariant() == null) return;
         ClientExteriorVariantSchema variant = tardis.getExterior().getVariant().getClient();
 
         if (this.variant != variant) {

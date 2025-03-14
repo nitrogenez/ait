@@ -905,6 +905,7 @@ public class AITModDataGenerator implements DataGeneratorEntrypoint {
         provider.addTranslation("console.ait.steam_steel", "Steel Steam");
         provider.addTranslation("console.ait.toyota", "Toyota");
         provider.addTranslation("console.ait.hartnell_wooden", "Wooden Hartnell");
+        provider.addTranslation("console.ait.coral", "Coral");
         provider.addTranslation("console.ait.coral_blue", "Blue Coral");
         provider.addTranslation("console.ait.coral_decayed", "Decayed Coral");
         provider.addTranslation("console.ait.steam", "Steam");

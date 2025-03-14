@@ -43,6 +43,7 @@ public class FabricatorBlockEntity extends InteriorLinkableBlockEntity {
             return;
 
         ItemStack hand = player.getMainHandStack();
+
         // accept new blueprint
         if (!this.hasBlueprint() && hand.getItem() instanceof BlueprintItem) {
             BlueprintSchema schema = BlueprintItem.getSchema(hand);
@@ -57,6 +58,12 @@ public class FabricatorBlockEntity extends InteriorLinkableBlockEntity {
 
         // try to insert items into the fabricator
         if (this.hasBlueprint()) {
+            // TODO for duzo (kys (keep yourself safe))
+            /*if (hand.isEmpty() && player.isSneaking()) {
+                this.setBlueprint(null, true);
+                this.sync();
+                this.markDirty();
+            }*/
             Blueprint blueprint = this.getBlueprint().get();
             if (blueprint.tryAdd(hand)) {
                 this.syncChanges();
@@ -74,6 +81,8 @@ public class FabricatorBlockEntity extends InteriorLinkableBlockEntity {
                 player.getInventory().offerOrDrop(stack);
 
                 this.setBlueprint(null, true);
+                this.sync();
+                this.markDirty();
             }
         }
     }

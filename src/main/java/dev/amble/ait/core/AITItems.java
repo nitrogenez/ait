@@ -148,7 +148,7 @@ public class AITItems extends ItemContainer {
 
     public static final Item ORTHOGONAL_ENGINE_FILTER = new MachinePartItem(MachinePartItem.Type.ORTHOGONAL_ENGINE_FILTER,
             new AItemSettings().group(AITItemGroups.FABRICATOR));
-    public static final Item MANIPULATOR = new MachinePartItem(MachinePartItem.Type.MANIPULATOR,
+    public static final Item TRANSWARP_RESONATOR = new MachinePartItem(MachinePartItem.Type.TRANSWARP_RESONATOR,
             new AItemSettings().group(AITItemGroups.FABRICATOR));
     public static final Item PHOTON_ACCELERATOR = new MachinePartItem(MachinePartItem.Type.PHOTON_ACCELERATOR,
             new AItemSettings() .group(AITItemGroups.FABRICATOR));

@@ -52,7 +52,7 @@ public class ElectricalDischargeControl extends Control {
         }, TimeUnit.TICKS, INITIAL_DELAY);
 
         Scheduler.get().runTaskLater(() -> {
-            world.playSound(null, console, AITSounds.DING, SoundCategory.BLOCKS, 1.0F, 1.0F);
+            world.playSound(null, console, AITSounds.ZAP, SoundCategory.BLOCKS, 1.0F, 1.0F);
         }, TimeUnit.TICKS, TOTAL_DURATION);
 
         return true;
@@ -89,6 +89,6 @@ public class ElectricalDischargeControl extends Control {
 
     @Override
     public SoundEvent getSound() {
-        return AITSounds.ZAP;
+        return AITSounds.BWEEP;
     }
 }

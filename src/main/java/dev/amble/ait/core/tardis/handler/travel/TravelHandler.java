@@ -49,7 +49,7 @@ public final class TravelHandler extends AnimatedTravelHandler implements Crasha
 
             TravelHandler travel = tardis.travel();
 
-            return (TardisUtil.isInteriorEmpty(tardis) && !travel.leaveBehind().get()) || travel.autopilot()
+            return (TardisUtil.isInteriorEmpty(tardis) && !travel.leaveBehind().get()) || travel.autopilot() || travel.speed() == 0
                     ? TardisEvents.Interaction.SUCCESS : TardisEvents.Interaction.PASS;
         });
 

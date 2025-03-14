@@ -83,7 +83,7 @@ public class FlightTardisEntity extends LinkableLivingEntity implements JumpingM
 
     @Override
     protected float getOffGroundSpeed() {
-        if (this.tardis() != null) {
+        if (this.tardis() != null  && this.tardis().get().travel() != null) {
             float spaceSpeed = this.getWorld().getRegistryKey().equals(AITDimensions.SPACE) ? 0.1f : 0.05f;
             return this.getMovementSpeed() * (this.tardis().get().travel().speed() * spaceSpeed);
         }

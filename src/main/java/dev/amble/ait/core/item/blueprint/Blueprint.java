@@ -1,5 +1,6 @@
 package dev.amble.ait.core.item.blueprint;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -8,13 +9,18 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtList;
 import net.minecraft.util.Identifier;
 
+import dev.amble.ait.core.util.StackUtil;
+
 public class Blueprint {
     private final BlueprintSchema source;
     private final List<ItemStack> requirements;
+    private final List<ItemStack> initialRequirements;
 
     public Blueprint(BlueprintSchema source) {
         this.source = source;
-        this.requirements = source.inputs().toStacks();
+
+        this.initialRequirements = source.inputs().toStacks();
+        this.requirements = StackUtil.cloneList(initialRequirements);
     }
 
     public Blueprint(NbtCompound nbt) {
@@ -75,6 +81,22 @@ public class Blueprint {
 
     public List<ItemStack> getRequirements() {
         return requirements;
+    }
+
+    /**
+     * @return All the items that were inserted into the fabricator
+     */
+    public List<ItemStack> getInsertedItems() {
+        // all the items missing from the initial requirements
+        List<ItemStack> inserted = new ArrayList<>(initialRequirements);
+
+        for (ItemStack j : requirements) {
+            inserted.stream()
+                    .filter(i -> ItemStack.areItemsEqual(i, j))
+                    .forEach(i -> i.decrement(j.getCount()));
+        }
+
+        return inserted;
     }
 
     public NbtCompound toNbt() {

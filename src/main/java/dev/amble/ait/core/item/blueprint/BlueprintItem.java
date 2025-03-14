@@ -53,7 +53,7 @@ public class BlueprintItem extends Item {
                 .append(blueprint.text().copy().formatted(Formatting.GRAY)));
         for (int i = blueprint.inputs().size() - 1; i >= 0; i--) {
             ItemStack stack1 = blueprint.inputs().get(i).toStack();
-            tooltip.add(Texts.bracketed(Text.of(stack1.getTranslationKey() + " x" + stack1.getCount())).formatted(Formatting.DARK_GRAY));
+            tooltip.add(Texts.bracketed(Text.translatable(stack1.getTranslationKey())).append(" x").append(Text.of(String.valueOf(stack1.getCount()))).formatted(Formatting.DARK_GRAY));
         }
 
     }

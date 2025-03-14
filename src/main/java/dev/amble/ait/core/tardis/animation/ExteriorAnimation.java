@@ -44,6 +44,8 @@ public abstract class ExteriorAnimation {
         if (this.exterior.tardis().isEmpty())
             return 1f;
 
+        if (this.exterior.tardis() == null || this.exterior.tardis().get().travel() == null) return 1f;
+
         if (this.exterior.tardis().get().travel().getState() == TravelHandlerBase.State.LANDED) {
             if (!isHigh() && this.exterior.tardis().get().<CloakHandler>handler(TardisComponent.Id.CLOAK).cloaked().get()) {
                 return 0.105f;
@@ -103,10 +105,8 @@ public abstract class ExteriorAnimation {
             case DEMAT, LANDED -> 1f;
             case MAT -> 0f;
 
-            default -> {
-                AITMod.LOGGER.error("Can't get alpha for a TARDIS in FLIGHT state! Using default!");
-                yield 0;
-            }
+            default -> //AITMod.LOGGER.error("Can't get alpha for a TARDIS in FLIGHT state! Using default!");
+                    0;
         };
 
         this.tellClientsToSetup(state);

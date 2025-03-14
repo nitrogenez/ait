@@ -18,7 +18,7 @@ public class GetInsideTardisCommand {
 
     // TODO: add BlockPosition argument type
     public static void register(CommandDispatcher<ServerCommandSource> dispatcher) {
-        dispatcher.register(literal(AITMod.MOD_ID).then(literal("this").requires(source -> source.hasPermissionLevel(2))
+        dispatcher.register(literal(AITMod.MOD_ID).then(literal("this")
                 .executes(GetInsideTardisCommand::runCommand)));
     }
 

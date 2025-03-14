@@ -979,6 +979,7 @@ public class AITModDataGenerator implements DataGeneratorEntrypoint {
         provider.addTranslation("item.sonic.scanning.iron_tool", "Iron Tool");
         provider.addTranslation("item.sonic.scanning.stone_tool", "Stone Tool");
         provider.addTranslation("item.sonic.scanning.no_tool", "Hand (No Tool)");
+        provider.addTranslation("item.sonic.scanning.cant_break", "Can't Break Block!");
 
 
         // TARDIS Control Actionbar Title

@@ -1,17 +1,20 @@
 package dev.amble.ait.core.engine.impl;
 
+import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
 import dev.amble.lib.util.ServerLifecycleHooks;
 import org.joml.Vector3f;
 
+import net.minecraft.item.ItemStack;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 
 import dev.amble.ait.AITMod;
 import dev.amble.ait.api.TardisEvents;
+import dev.amble.ait.core.AITBlocks;
 import dev.amble.ait.core.AITSounds;
 import dev.amble.ait.core.engine.DurableSubSystem;
 import dev.amble.ait.core.sounds.travel.TravelSoundRegistry;
@@ -87,6 +90,16 @@ public class EngineSystem extends DurableSubSystem {
             this.tardis.alarm().enabled().set(true);
         }
     }
+
+    @Override
+    public List<ItemStack> toStacks() {
+        List<ItemStack> stacks = super.toStacks();
+
+        stacks.add(AITBlocks.ENGINE_BLOCK.asItem().getDefaultStack());
+
+        return stacks;
+    }
+
     public Phaser phaser() {
         if (this.phaser == null) this.phaser = Phaser.create(this);
 

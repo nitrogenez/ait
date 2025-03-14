@@ -141,7 +141,7 @@
         },
         {
           "type": "minecraft:item",
-          "name": "ait:manipulator",
+          "name": "ait:transwarp_resonator",
           "weight": 3
         },
         {

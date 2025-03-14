@@ -91,10 +91,18 @@ public abstract class SubSystemBlock extends FluidLinkBlock {
                 pos.getZ() + 0.5f, 0.15, 0, 0);
         world.addParticle(ParticleTypes.CLOUD, pos.getX() + 0.5f, pos.getY() + 1, pos.getZ() + 0.5f, 0.1,
                 0, 0.05f);
+        world.addParticle(ParticleTypes.LAVA, pos.getX() + 0.5f, pos.getY() + 1, pos.getZ() + 0.5f, 0.1,
+                0, 0.05f);
+        world.addParticle(ParticleTypes.ELECTRIC_SPARK, pos.getX() + 0.5f, pos.getY() + 1, pos.getZ() + 0.5f, 0.1,
+                0, 0.05f);
 
         world.addParticle(ParticleTypes.SMOKE, true, pos.getX() + 0.5f, pos.getY() + 1,
                 pos.getZ() + 0.5f, -0.15, 0, 0);
         world.addParticle(ParticleTypes.CLOUD, pos.getX() + 0.5f, pos.getY() + 1.25, pos.getZ() + 0.5f, -0.1,
+                0, -0.05f);
+        world.addParticle(ParticleTypes.LAVA, pos.getX() + 0.5f, pos.getY() + 1.25, pos.getZ() + 0.5f, -0.1,
+                0, -0.05f);
+        world.addParticle(ParticleTypes.ELECTRIC_SPARK, pos.getX() + 0.5f, pos.getY() + 1.25, pos.getZ() + 0.5f, -0.1,
                 0, -0.05f);
     }
 }

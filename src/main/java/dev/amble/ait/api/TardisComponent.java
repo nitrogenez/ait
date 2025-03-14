@@ -116,7 +116,7 @@ public abstract class TardisComponent extends Initializable<TardisComponent.Init
         EXTRAS(ExtraHandler.class, ExtraHandler::new),
         CRASH_DATA(TardisCrashHandler.class, TardisCrashHandler::new),
         WAYPOINTS(WaypointHandler.class, WaypointHandler::new),
-        OVERGROWN(OvergrownHandler.class, OvergrownHandler::new),
+        /*OVERGROWN(OvergrownHandler.class, OvergrownHandler::new),*/
         HUM(ServerHumHandler.class, ServerHumHandler::new),
         ALARMS(ServerAlarmHandler.class, ServerAlarmHandler::new),
         ENVIRONMENT(ExteriorEnvironmentHandler.class, ExteriorEnvironmentHandler::new),

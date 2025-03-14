@@ -1,13 +1,13 @@
 package dev.amble.ait.core.blockentities;
 
 
+import java.util.List;
 import java.util.Optional;
 
 import org.jetbrains.annotations.Nullable;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
-import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
@@ -43,6 +43,7 @@ public class FabricatorBlockEntity extends InteriorLinkableBlockEntity {
             return;
 
         ItemStack hand = player.getMainHandStack();
+
         // accept new blueprint
         if (!this.hasBlueprint() && hand.getItem() instanceof BlueprintItem) {
             BlueprintSchema schema = BlueprintItem.getSchema(hand);
@@ -58,6 +59,20 @@ public class FabricatorBlockEntity extends InteriorLinkableBlockEntity {
         // try to insert items into the fabricator
         if (this.hasBlueprint()) {
             Blueprint blueprint = this.getBlueprint().get();
+
+            if (hand.isEmpty() && sneaking) {
+                List<ItemStack> inputs = blueprint.getInsertedItems();
+                for (ItemStack stack : inputs) {
+                    player.getInventory().offerOrDrop(stack);
+                }
+
+                this.setBlueprint(null, true);
+                this.sync();
+                this.markDirty();
+
+                return;
+            }
+
             if (blueprint.tryAdd(hand)) {
                 this.syncChanges();
 
@@ -74,6 +89,8 @@ public class FabricatorBlockEntity extends InteriorLinkableBlockEntity {
                 player.getInventory().offerOrDrop(stack);
 
                 this.setBlueprint(null, true);
+                this.sync();
+                this.markDirty();
             }
         }
     }
@@ -142,6 +159,8 @@ public class FabricatorBlockEntity extends InteriorLinkableBlockEntity {
 
         if (blueprint != null)
             nbt.put("Blueprint", blueprint.toNbt());
+
+        nbt.putBoolean("HasBlueprint", this.hasBlueprint());
     }
 
     @Nullable @Override
@@ -165,15 +184,10 @@ public class FabricatorBlockEntity extends InteriorLinkableBlockEntity {
                 BlueprintItem.setSchema(stack, blueprint.getSource());
 
                 StackUtil.spawn(this.getWorld(), this.getPos(), stack);
+
+                List<ItemStack> inputs = blueprint.getInsertedItems();
+                StackUtil.scatter(this.getWorld(), this.getPos(), inputs);
             });
         }
-    }
-
-    private void dropStack(ItemStack stack) {
-        if (this.getWorld() == null || stack.isEmpty()) return;
-
-        ItemEntity item = new ItemEntity(this.getWorld(), this.getPos().getX(), this.getPos().getY(), this.getPos().getZ(), stack);
-
-        this.getWorld().spawnEntity(item);
     }
 }

@@ -8,6 +8,7 @@ import net.minecraft.block.*;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
@@ -70,8 +71,16 @@ public class PowerConverterBlock extends DirectionalFluidLinkBlock {
             if (!(be.isPowered())) return ActionResult.FAIL;
             if (!stack.isIn(AITTags.Items.IS_TARDIS_FUEL)) return ActionResult.FAIL;
 
-            be.source().addLevel(175);
-            stack.decrement(1);
+            if (!player.isSneaking()) {
+                be.source().addLevel(175);
+                stack.decrement(1);
+            } else {
+                int count = stack.getCount();
+
+                be.source().addLevel(175 * count);
+                stack.decrement(count);
+            }
+
             world.playSound(null, pos, AITSounds.POWER_CONVERT, SoundCategory.BLOCKS, 1.0F, 1.0F);
 
             return ActionResult.SUCCESS;

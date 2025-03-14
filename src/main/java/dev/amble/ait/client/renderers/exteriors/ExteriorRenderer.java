@@ -33,7 +33,6 @@ import dev.amble.ait.core.blocks.ExteriorBlock;
 import dev.amble.ait.core.tardis.Tardis;
 import dev.amble.ait.core.tardis.handler.BiomeHandler;
 import dev.amble.ait.core.tardis.handler.CloakHandler;
-import dev.amble.ait.core.tardis.handler.OvergrownHandler;
 import dev.amble.ait.data.datapack.DatapackConsole;
 import dev.amble.ait.data.schema.exterior.ClientExteriorVariantSchema;
 import dev.amble.ait.registry.impl.exterior.ClientExteriorVariantRegistry;
@@ -181,12 +180,12 @@ public class ExteriorRenderer<T extends ExteriorBlockEntity> implements BlockEnt
             BOTI.EXTERIOR_RENDER_QUEUE.add(entity);
             //this.renderExteriorBoti(entity, variant, matrices, texture, model, BotiPortalModel.getTexturedModelData().createModel(), light);
 
-        if (tardis.<OvergrownHandler>handler(TardisComponent.Id.OVERGROWN).overgrown().get()) {
+        /*if (tardis.<OvergrownHandler>handler(TardisComponent.Id.OVERGROWN).overgrown().get()) {
             model.renderWithAnimations(entity, this.model.getPart(), matrices,
                     vertexConsumers.getBuffer(AITRenderLayers.getEntityTranslucentCull(
                             tardis.<OvergrownHandler>handler(TardisComponent.Id.OVERGROWN).getOvergrownTexture())),
                     light, overlay, 1, 1, 1, alpha);
-        }
+        }*/
 
         profiler.push("emission");
         boolean alarms = tardis.alarm().enabled().get();

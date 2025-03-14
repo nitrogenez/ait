@@ -42,6 +42,7 @@ public class BiomeHandler extends KeyedTardisComponent {
 
     static {
         TardisEvents.LANDED.register(tardis -> tardis.<BiomeHandler>handler(Id.BIOME).update());
+        TardisEvents.ENTER_FLIGHT.register(tardis -> tardis.<BiomeHandler>handler(Id.BIOME).forceTypeDefault());
     }
 
     public BiomeHandler() {
@@ -69,6 +70,7 @@ public class BiomeHandler extends KeyedTardisComponent {
 
     public void forceTypeDefault() {
         this.type.set(BiomeType.DEFAULT);
+        sync();
     }
 
     public Gaslighter3000 testBiome(ServerWorld world, BlockPos pos) {

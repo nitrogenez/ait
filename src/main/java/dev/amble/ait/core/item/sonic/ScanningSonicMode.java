@@ -56,16 +56,28 @@ public class ScanningSonicMode extends SonicMode {
         return this.process(stack, world, user);
     }
 
+    @Override
+    public void tick(ItemStack stack, World world, LivingEntity user, int ticks, int ticksLeft) {
+        if (!(world instanceof ServerWorld serverWorld) || !(user instanceof PlayerEntity player) || ticks % 10 != 0)
+            return;
+
+        this.process(stack, world, player);
+    }
+
+
+
     public boolean process(ItemStack stack, World world, PlayerEntity user) {
         HitResult hitResult = SonicMode.getHitResult(user);
 
         if (hitResult instanceof BlockHitResult blockHit) {
             return this.scanBlocks(stack, world, user, blockHit.getBlockPos());
-        } else if (hitResult instanceof EntityHitResult entityHit) {
-            return this.scanEntities(stack, world, user, entityHit.getEntity());
-        } else {
-            return this.scanRegion(stack, world, user, BlockPos.ofFloored(hitResult.getPos()));
         }
+
+        if (hitResult instanceof EntityHitResult entityHit) {
+            return this.scanEntities(stack, world, user, entityHit.getEntity());
+        }
+
+        return this.scanRegion(stack, world, user, BlockPos.ofFloored(hitResult.getPos()));
     }
 
 
@@ -79,18 +91,18 @@ public class ScanningSonicMode extends SonicMode {
 
         String blastRes = String.format("%.2f", block.getBlastResistance());
 
-        String toolRequirement = "Any Tool";
+        String toolRequirement = "item.sonic.scanning.any_tool";
         if (state.isIn(BlockTags.NEEDS_DIAMOND_TOOL)) {
-            toolRequirement = "Diamond Tool";
+            toolRequirement = "item.sonic.scanning.diamond_tool";
         } else if (state.isIn(BlockTags.NEEDS_IRON_TOOL)) {
-            toolRequirement = "Iron Tool";
+            toolRequirement = "item.sonic.scanning.iron_tool";
         } else if (state.isIn(BlockTags.NEEDS_STONE_TOOL)) {
-            toolRequirement = "Stone Tool";
+            toolRequirement = "item.sonic.scanning.stone_tool";
         } else if (!block.getDefaultState().isToolRequired()) {
-            toolRequirement = "Hand (No Tool)";
+            toolRequirement = "item.sonic.scanning.no_tool";
         }
 
-        Text message = Text.literal("\uD83D\uDD25: " + blastRes + " ⛏: " + toolRequirement).formatted(Formatting.YELLOW)
+        Text message = Text.literal("\uD83D\uDD25: " + blastRes + " ⛏: ").append(Text.translatable(toolRequirement)).formatted(Formatting.YELLOW)
                 .formatted(Formatting.GOLD);
         user.sendMessage(message, true);
 

@@ -21,6 +21,7 @@ import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
 
 import dev.amble.ait.core.AITSounds;
+import dev.amble.ait.core.entities.RiftEntity;
 import dev.amble.ait.core.item.SonicItem;
 import dev.amble.ait.core.tardis.Tardis;
 import dev.amble.ait.core.world.LandingPadManager;
@@ -74,7 +75,7 @@ public class ScanningSonicMode extends SonicMode {
             return this.scanBlocks(stack, world, user, blockHit.getBlockPos());
         }
 
-        if (hitResult instanceof EntityHitResult entityHit) {
+        if (hitResult instanceof EntityHitResult entityHit && !(entityHit.getEntity() instanceof RiftEntity)) {
             return this.scanEntities(stack, world, user, entityHit.getEntity());
         }
 

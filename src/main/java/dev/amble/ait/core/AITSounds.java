@@ -150,6 +150,9 @@ public class AITSounds {
     public static final SoundEvent CORAL_DIMENSION_ALT = register("controls/coral_dimension_alt");
     public static final SoundEvent CORAL_XYZ_ALT = register("controls/coral_xyz_alt");
 
+    //Alt console sounds for the copper
+    public static final SoundEvent COPPER_TELEPATHIC_CIRCUITS_ALT = register("controls/copper_telepathic_circuit_alt");
+
     // Console
     public static final SoundEvent CONSOLE_AMBIENT = register("tardis/console_ambient");
     public static final SoundEvent CONSOLE_BOOTUP = register("tardis/console_bootup");

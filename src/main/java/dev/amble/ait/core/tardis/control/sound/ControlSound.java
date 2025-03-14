@@ -38,7 +38,7 @@ public record ControlSound(Identifier controlId, Identifier consoleId, Identifie
             Identifier.CODEC.fieldOf("control").forGetter(ControlSound::controlId),
             Identifier.CODEC.fieldOf("console").forGetter(ControlSound::consoleId),
             Identifier.CODEC.fieldOf("success_sound").forGetter(ControlSound::successId),
-            Identifier.CODEC.optionalFieldOf("alt_sound", AITSounds.ERROR.getId()).forGetter(ControlSound::altId)
+            Identifier.CODEC.optionalFieldOf("alt_sound", Identifier.of("", "")).forGetter(ControlSound::altId)
     ).apply(instance, ControlSound::new));
 
     @Override
@@ -71,7 +71,7 @@ public record ControlSound(Identifier controlId, Identifier consoleId, Identifie
 
         if (sfx == null) {
             AITMod.LOGGER.error("Unknown alt sound event: {} in control sfx {}", this.altId(), this.id());
-            sfx = AITSounds.ERROR;
+            sfx = successSound();
         }
 
         return sfx;

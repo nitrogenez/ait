@@ -70,6 +70,7 @@ public class BiomeHandler extends KeyedTardisComponent {
 
     public void forceTypeDefault() {
         this.type.set(BiomeType.DEFAULT);
+        sync();
     }
 
     public Gaslighter3000 testBiome(ServerWorld world, BlockPos pos) {

@@ -79,7 +79,6 @@ public class AITBlocks extends BlockContainer {
                     .instrument(Instrument.BANJO).pistonBehavior(PistonBehavior.IGNORE));
 
     // Coral Blocks
-    @PickaxeMineable(tool = PickaxeMineable.Tool.STONE)
     @NoEnglish
     public static final Block CORAL_PLANT = new CoralPlantBlock(FabricBlockSettings.create().ticksRandomly().nonOpaque()
             .noCollision().breakInstantly().sounds(BlockSoundGroup.GRASS).pistonBehavior(PistonBehavior.DESTROY));
@@ -87,10 +86,19 @@ public class AITBlocks extends BlockContainer {
     public static final Block MATRIX_ENERGIZER = new MatrixEnergizerBlock(FabricBlockSettings.create().ticksRandomly().nonOpaque()
             .luminance(light -> 0).instrument(Instrument.COW_BELL)
             .strength(1.5F, 6.0F).requiresTool().sounds(BlockSoundGroup.ANVIL).pistonBehavior(PistonBehavior.IGNORE));
+
+    @PickaxeMineable(tool = PickaxeMineable.Tool.DIAMOND)
     public static final Block TARDIS_CORAL_BLOCK = new Block(FabricBlockSettings.create().mapColor(MapColor.GOLD).solid().instrument(Instrument.BASEDRUM).requiresTool().strength(1.5f, 6.0f));
+
+    @PickaxeMineable(tool = PickaxeMineable.Tool.DIAMOND)
     public static final Block TARDIS_CORAL_STAIRS = new StairsBlock(TARDIS_CORAL_BLOCK.getDefaultState(), FabricBlockSettings.create().mapColor(MapColor.GOLD).solid().instrument(Instrument.BASEDRUM).requiresTool().strength(1.5f, 6.0f));
+
+    @PickaxeMineable(tool = PickaxeMineable.Tool.DIAMOND)
     public static final Block TARDIS_CORAL_SLAB = new SlabBlock(FabricBlockSettings.create().mapColor(MapColor.GOLD).solid().instrument(Instrument.BASEDRUM).requiresTool().strength(1.5f, 6.0f));
+
+    @PickaxeMineable(tool = PickaxeMineable.Tool.DIAMOND)
     public static final Block TARDIS_CORAL_FAN = new TardisCoralFanBlock(FabricBlockSettings.create().mapColor(MapColor.GOLD).noCollision().breakInstantly().sounds(BlockSoundGroup.WET_GRASS).pistonBehavior(PistonBehavior.DESTROY));
+
     @NoBlockItem
     public static final Block TARDIS_CORAL_WALL_FAN = new TardisCoralWallBlock(FabricBlockSettings.create().mapColor(MapColor.GOLD).noCollision().breakInstantly().sounds(BlockSoundGroup.WET_GRASS).pistonBehavior(PistonBehavior.DESTROY));
     // TARDIS Blocks

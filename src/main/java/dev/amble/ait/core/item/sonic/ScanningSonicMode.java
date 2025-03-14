@@ -1,5 +1,7 @@
 package dev.amble.ait.core.item.sonic;
 
+import dev.amble.lib.api.ICantBreak;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
@@ -71,7 +73,7 @@ public class ScanningSonicMode extends SonicMode {
     public boolean process(ItemStack stack, World world, PlayerEntity user) {
         HitResult hitResult = SonicMode.getHitResult(user);
 
-        if (hitResult instanceof BlockHitResult blockHit) {
+        if (hitResult instanceof BlockHitResult blockHit && !world.getBlockState(blockHit.getBlockPos()).isAir()) {
             return this.scanBlocks(stack, world, user, blockHit.getBlockPos());
         }
 
@@ -94,14 +96,18 @@ public class ScanningSonicMode extends SonicMode {
         String blastRes = String.format("%.2f", block.getBlastResistance());
 
         String toolRequirement = "item.sonic.scanning.any_tool";
-        if (state.isIn(BlockTags.NEEDS_DIAMOND_TOOL)) {
-            toolRequirement = "item.sonic.scanning.diamond_tool";
-        } else if (state.isIn(BlockTags.NEEDS_IRON_TOOL)) {
-            toolRequirement = "item.sonic.scanning.iron_tool";
-        } else if (state.isIn(BlockTags.NEEDS_STONE_TOOL)) {
-            toolRequirement = "item.sonic.scanning.stone_tool";
-        } else if (!block.getDefaultState().isToolRequired()) {
-            toolRequirement = "item.sonic.scanning.no_tool";
+        if (block instanceof ICantBreak) {
+            toolRequirement = "item.sonic.scanning.cant_break";
+        } else {
+            if (state.isIn(BlockTags.NEEDS_DIAMOND_TOOL)) {
+                toolRequirement = "item.sonic.scanning.diamond_tool";
+            } else if (state.isIn(BlockTags.NEEDS_IRON_TOOL)) {
+                toolRequirement = "item.sonic.scanning.iron_tool";
+            } else if (state.isIn(BlockTags.NEEDS_STONE_TOOL)) {
+                toolRequirement = "item.sonic.scanning.stone_tool";
+            } else if (!block.getDefaultState().isToolRequired()) {
+                toolRequirement = "item.sonic.scanning.no_tool";
+            }
         }
 
         Text message = Text.literal("\uD83D\uDD25: " + blastRes + " ⛏: ").append(Text.translatable(toolRequirement)).formatted(Formatting.YELLOW)

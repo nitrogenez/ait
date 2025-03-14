@@ -10,6 +10,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.text.Text;
+import net.minecraft.text.Texts;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
 import net.minecraft.world.World;
@@ -50,6 +51,11 @@ public class BlueprintItem extends Item {
 
         tooltip.add(Text.translatable("ait.blueprint.tooltip").formatted(Formatting.BLUE)
                 .append(blueprint.text().copy().formatted(Formatting.GRAY)));
+        for (int i = blueprint.inputs().size() - 1; i >= 0; i--) {
+            ItemStack stack1 = blueprint.inputs().get(i).toStack();
+            tooltip.add(Texts.bracketed(Text.translatable(stack1.getTranslationKey())).append(" x").append(Text.of(String.valueOf(stack1.getCount()))).formatted(Formatting.DARK_GRAY));
+        }
+
     }
 
     public static BlueprintSchema getSchema(ItemStack stack) {

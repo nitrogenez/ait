@@ -34,6 +34,13 @@ public class EngineBlockEntity extends SubSystemBlockEntity implements ITardisSo
     }
 
     @Override
+    public void onBroken(World world, BlockPos pos) {
+        super.onBroken(world, pos);
+
+        this.onLoseFluid(); // always.
+    }
+
+    @Override
     public Tardis getTardisForFluid() {
         return this.tardis().get();
     }

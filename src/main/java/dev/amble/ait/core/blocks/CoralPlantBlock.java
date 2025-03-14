@@ -3,7 +3,9 @@ package dev.amble.ait.core.blocks;
 import java.util.List;
 import java.util.UUID;
 
+import dev.amble.ait.core.AITSounds;
 import dev.amble.lib.data.CachedDirectedGlobalPos;
+import net.minecraft.sound.SoundCategory;
 import org.jetbrains.annotations.Nullable;
 
 import net.minecraft.block.*;
@@ -127,6 +129,8 @@ public class CoralPlantBlock extends HorizontalDirectionalBlock implements Block
     }
 
     private void createConsole(ServerWorld world, BlockPos pos) {
+        world.playSound(null, pos, AITSounds.FABRICATOR_END, SoundCategory.BLOCKS);
+
         world.setBlockState(pos, AITBlocks.CONSOLE.getDefaultState());
     }
 
@@ -155,12 +159,7 @@ public class CoralPlantBlock extends HorizontalDirectionalBlock implements Block
         if (!(placer instanceof ServerPlayerEntity player))
             return;
 
-        if (!RiftChunkManager.isRiftChunk((ServerWorld) world, pos)) {
-            world.breakBlock(pos, !placer.isPlayer() || !player.isCreative());
-            return;
-        }
-
-        if (TardisServerWorld.isTardisDimension((ServerWorld) world)) {
+        if (!RiftChunkManager.isRiftChunk((ServerWorld) world, pos) && !TardisServerWorld.isTardisDimension((ServerWorld) world)) {
             world.breakBlock(pos, !placer.isPlayer() || !player.isCreative());
             return;
         }

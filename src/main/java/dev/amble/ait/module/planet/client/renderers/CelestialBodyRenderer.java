@@ -76,8 +76,8 @@ public class CelestialBodyRenderer {
 
         matrixStack.multiply(RotationAxis.POSITIVE_X.rotationDegrees(camera.getPitch()));
         matrixStack.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(camera.getYaw() + 180.0F));
-        matrixStack.multiply(RotationAxis.POSITIVE_Z.rotationDegrees(mc.world.getSkyAngle(mc.getTickDelta()) * 360.0f));
         if (isTardisSkybox) {
+            matrixStack.multiply(RotationAxis.POSITIVE_Z.rotationDegrees(mc.world.getSkyAngle(mc.getTickDelta()) * 360.0f));
             matrixStack.translate(0, -4000, 0);
             matrixStack.scale(0.25f, 0.25f, 0.25f);
         }

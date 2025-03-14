@@ -76,43 +76,8 @@
         },
         {
           "type": "minecraft:item",
-          "name": "ait:handles",
-          "weight": 1
-        },
-        {
-          "type": "minecraft:item",
-          "name": "ait:data_mercurial_link",
-          "weight": 5
-        },
-        {
-          "type": "minecraft:item",
-          "name": "ait:artron_mercurial_link",
-          "weight": 5
-        },
-        {
-          "type": "minecraft:item",
-          "name": "ait:vortex_fluid_link",
-          "weight": 5
-        },
-        {
-          "type": "minecraft:item",
-          "name": "ait:data_fluid_link",
-          "weight": 5
-        },
-        {
-          "type": "minecraft:item",
-          "name": "ait:artron_fluid_link",
-          "weight": 5
-        },
-        {
-          "type": "minecraft:item",
           "name": "ait:hazandra",
           "weight": 2
-        },
-        {
-          "type": "minecraft:item",
-          "name": "ait:vortex_mercurial_link",
-          "weight": 5
         },
         {
           "type": "minecraft:item",
@@ -127,7 +92,7 @@
         {
           "type": "minecraft:item",
           "name": "ait:generic_subsystem",
-          "weight": 1
+          "weight": 0.5
         },
         {
           "type": "minecraft:item",
@@ -137,7 +102,7 @@
         {
           "type": "minecraft:item",
           "name": "ait:orthogonal_engine_filter",
-          "weight": 5
+          "weight": 2
         },
         {
           "type": "minecraft:item",

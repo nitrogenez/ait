@@ -40,7 +40,10 @@ public class RealFlightHandler extends KeyedTardisComponent implements TardisTic
     private final BoolValue flying = FLYING.create(this);
 
     static {
-        TardisEvents.DEMAT.register(tardis -> tardis.flight().falling().get() ? TardisEvents.Interaction.FAIL : TardisEvents.Interaction.PASS);
+        TardisEvents.DEMAT.register(tardis -> {
+            tardis.flight().flying.set(false);
+            return tardis.flight().falling().get() ? TardisEvents.Interaction.FAIL : TardisEvents.Interaction.PASS;
+        });
     }
 
     public RealFlightHandler() {

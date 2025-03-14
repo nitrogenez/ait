@@ -43,7 +43,7 @@ public class DoorRenderer<T extends DoorBlockEntity> implements BlockEntityRende
 
         Tardis tardis = entity.tardis().get();
 
-        if (tardis.siege().isActive())
+        if (tardis.siege() != null && tardis.siege().isActive())
             return;
 
         this.renderDoor(profiler, tardis, entity, matrices, vertexConsumers, light, overlay);

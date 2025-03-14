@@ -6,6 +6,8 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicReference;
 
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
@@ -28,6 +30,7 @@ import dev.amble.ait.core.tardis.handler.SonicHandler;
 import dev.amble.ait.core.world.TardisServerWorld;
 import dev.amble.ait.data.schema.sonic.SonicSchema;
 
+@Environment(EnvType.CLIENT)
 public class ClientTardisUtil {
 
     public static final int MAX_POWER_DELTA_TICKS = 3 * 20;

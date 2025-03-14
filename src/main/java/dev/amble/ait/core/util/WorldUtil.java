@@ -13,6 +13,7 @@ import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.entity.event.v1.ServerEntityWorldChangeEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerWorldEvents;
+import net.fabricmc.loader.api.FabricLoader;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -308,17 +309,26 @@ public class WorldUtil {
     }
 
     public static Text worldText(RegistryKey<World> key) {
+        Text translated = Text.translatableWithFallback(key.getValue().toTranslationKey("dimension"), fakeTranslate(key));
+
+        if (FabricLoader.getInstance().getEnvironmentType() == EnvType.CLIENT)
+            return hackWorldText(translated);
+
+        return translated;
+    }
+
+    @Environment(EnvType.CLIENT)
+    private static Text hackWorldText(Text existing) {
         if (ClientTardisUtil.getCurrentTardis() != null &&
                 !ClientTardisUtil.getCurrentTardis().flight().isFlying() && ClientTardisUtil.getCurrentTardis().travel().inFlight()) {
             RegistryKey<World> timeVortex = AITDimensions.TIME_VORTEX_WORLD;
             return
                     Text.translatableWithFallback(
                             timeVortex.getValue().toTranslationKey("dimension"),
-                            fakeTranslate(timeVortex)).append(" [").append(Text.translatableWithFallback(
-                                    key.getValue().toTranslationKey("dimension"), fakeTranslate(key))).append( "]");
+                            fakeTranslate(timeVortex)).append(" [").append(existing).append( "]");
         }
 
-        return Text.translatableWithFallback(key.getValue().toTranslationKey("dimension"), fakeTranslate(key));
+        return existing;
     }
 
     public static Text worldText(RegistryKey<World> key, boolean justToSeperate) {

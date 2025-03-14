@@ -42,6 +42,12 @@ public class TardisDoorBOTI extends BOTI {
 
         BOTI_HANDLER.setupFramebuffer();
 
+        Vec3d skyColor = MinecraftClient.getInstance().world.getSkyColor(MinecraftClient.getInstance().player.getPos(), MinecraftClient.getInstance().getTickDelta());
+        if (AITMod.CONFIG.CLIENT.GREEN_SCREEN_BOTI)
+            BOTI.setFramebufferColor(BOTI_HANDLER.afbo, 0, 1, 0, 1);
+        else
+            BOTI.setFramebufferColor(BOTI_HANDLER.afbo, (float) skyColor.x, (float) skyColor.y, (float) skyColor.z, 1);
+
         BOTI.copyFramebuffer(MinecraftClient.getInstance().getFramebuffer(), BOTI_HANDLER.afbo);
 
         VertexConsumerProvider.Immediate botiProvider = AIT_BUF_BUILDER_STORAGE.getBotiVertexConsumer();
@@ -57,9 +63,11 @@ public class TardisDoorBOTI extends BOTI {
         Vec3d vec = variant.parent().door().adjustPortalPos(new Vec3d(0, -1.1725f, 0), Direction.NORTH);
         stack.translate(vec.x, vec.y, vec.z);
         stack.scale((float) variant.parent().portalWidth(), (float) variant.parent().portalHeight(), 1f);
-        if (tardis.travel().getState() == TravelHandlerBase.State.LANDED)
-            mask.render(stack, botiProvider.getBuffer(RenderLayer.getEndGateway()), 0xf000f0, OverlayTexture.DEFAULT_UV, 1, 1, 1, 1);
-        else {
+        if (tardis.travel().getState() == TravelHandlerBase.State.LANDED) {
+            RenderLayer whichOne = AITMod.CONFIG.CLIENT.SHOULD_RENDER_BOTI_INTERIOR || AITMod.CONFIG.CLIENT.GREEN_SCREEN_BOTI ?
+                    RenderLayer.getDebugFilledBox() : RenderLayer.getEndGateway();
+            mask.render(stack, botiProvider.getBuffer(whichOne), 0xf000f0, OverlayTexture.DEFAULT_UV, 1, 1, 1, 1);
+        } else {
             mask.render(stack, botiProvider.getBuffer(RenderLayer.getEntityTranslucentCull(frameTex)), 0xf000f0, OverlayTexture.DEFAULT_UV, 1, 1, 1, 1);
         }
         botiProvider.draw();

@@ -3,9 +3,7 @@ package dev.amble.ait.core.blocks;
 import java.util.List;
 import java.util.UUID;
 
-import dev.amble.ait.core.AITSounds;
 import dev.amble.lib.data.CachedDirectedGlobalPos;
-import net.minecraft.sound.SoundCategory;
 import org.jetbrains.annotations.Nullable;
 
 import net.minecraft.block.*;
@@ -17,6 +15,7 @@ import net.minecraft.entity.mob.RavagerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.sound.SoundCategory;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.IntProperty;
 import net.minecraft.state.property.Properties;
@@ -34,6 +33,7 @@ import net.minecraft.world.WorldView;
 import dev.amble.ait.AITMod;
 import dev.amble.ait.api.TardisComponent;
 import dev.amble.ait.core.AITBlocks;
+import dev.amble.ait.core.AITSounds;
 import dev.amble.ait.core.advancement.TardisCriterions;
 import dev.amble.ait.core.blockentities.CoralBlockEntity;
 import dev.amble.ait.core.blocks.types.HorizontalDirectionalBlock;

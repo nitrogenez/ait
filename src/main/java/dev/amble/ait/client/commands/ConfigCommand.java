@@ -16,12 +16,12 @@ import dev.amble.ait.config.AITConfig;
 
 public class ConfigCommand {
     public static void register(CommandDispatcher<FabricClientCommandSource> dispatcher) {
-        dispatcher.register(literal(AITMod.MOD_ID).then(literal("config").executes(context -> {
+        dispatcher.register(literal(AITMod.MOD_ID + "-config").executes(context -> {
             MinecraftClient client = MinecraftClient.getInstance();
 
             Screen screen = AutoConfig.getConfigScreen(AITConfig.class, client.currentScreen).get();
             client.send(() -> client.setScreen(screen));
             return Command.SINGLE_SUCCESS;
-        })));
+        }));
     }
 }

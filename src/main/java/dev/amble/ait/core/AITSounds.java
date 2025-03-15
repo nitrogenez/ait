@@ -152,6 +152,9 @@ public class AITSounds {
 
     //Alt console sounds for the copper
     public static final SoundEvent COPPER_TELEPATHIC_CIRCUITS_ALT = register("controls/copper_telepathic_circuit_alt");
+    public static final SoundEvent COPPER_ALARM_ALT = register("controls/copper_alarm_alt");
+    public static final SoundEvent COPPER_ALARM_ALTALT = register("controls/copper_alarm_altalt");
+    public static final SoundEvent COPPER_HAIL_MARY_ALT = register("controls/copper_hail_mary_alt");
 
     // Console
     public static final SoundEvent CONSOLE_AMBIENT = register("tardis/console_ambient");

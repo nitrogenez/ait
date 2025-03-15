@@ -1,5 +1,5 @@
 {
   "control": "ait:dimension",
   "console": "ait:console/coral",
-  "success_sound": "ait:controls/coral_dimension_alt"
+  "success_sound": "ait:controls/coral_dimension"
 }

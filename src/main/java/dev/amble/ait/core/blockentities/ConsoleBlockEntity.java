@@ -231,7 +231,7 @@ public class ConsoleBlockEntity extends InteriorLinkableBlockEntity implements B
         if (!TardisServerWorld.isTardisDimension((ServerWorld) this.getWorld()))
             this.markRemoved();
 
-        if (this.tardis() == null || this.tardis().isEmpty())
+        if (!this.isLinked())
             return;
 
         SequenceHandler handler = this.tardis().get().sequence();

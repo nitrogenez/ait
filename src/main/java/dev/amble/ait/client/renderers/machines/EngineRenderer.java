@@ -40,7 +40,7 @@ public class EngineRenderer<T extends EngineBlockEntity> implements BlockEntityR
     public void render(EngineBlockEntity entity, float tickDelta, MatrixStack matrices,
             VertexConsumerProvider vertexConsumers, int light, int overlay) {
 
-        if (entity.tardis() == null || entity.tardis().isEmpty())
+        if (!entity.isLinked())
             return;
 
         Tardis tardis = entity.tardis().get();

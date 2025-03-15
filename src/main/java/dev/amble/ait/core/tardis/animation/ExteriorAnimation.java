@@ -44,7 +44,7 @@ public abstract class ExteriorAnimation {
         if (this.exterior.tardis().isEmpty())
             return 1f;
 
-        if (this.exterior.tardis() == null || this.exterior.tardis().get().travel() == null) return 1f;
+        if (!this.exterior.isLinked() || this.exterior.tardis().get().travel() == null) return 1f;
 
         if (this.exterior.tardis().get().travel().getState() == TravelHandlerBase.State.LANDED) {
             if (!isHigh() && this.exterior.tardis().get().<CloakHandler>handler(TardisComponent.Id.CLOAK).cloaked().get()) {

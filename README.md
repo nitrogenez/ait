@@ -52,7 +52,7 @@ Adventures In Time adds the TARDIS from Doctor Who that you can interact with in
 - [Dr. Theo](https://theo.is-a.dev/)
 - Nitrogenesis
 - Maketendo
-- [AddieDaBaddie](https://github.com/Addi3/addie.info.io/wiki)
+- [AddieDaBaddie](https://addieastarr.carrd.co)
 - Saturn
 
 ---

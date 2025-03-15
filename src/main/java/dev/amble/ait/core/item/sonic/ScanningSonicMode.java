@@ -215,7 +215,7 @@ public class ScanningSonicMode extends SonicMode {
             return;
 
         if (tardis.crash().isUnstable() || tardis.crash().isToxic()) {
-            player.sendMessage(Text.literal("Repair time: " + tardis.crash().getRepairTicks())
+            player.sendMessage(Text.translatable("message.ait.sonic.repairtime", tardis.crash().getRepairTicks())
                     .formatted(Formatting.DARK_RED, Formatting.ITALIC), true);
             return;
         }

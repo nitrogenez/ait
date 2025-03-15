@@ -50,7 +50,7 @@ public class AITConfig implements ConfigData {
         public boolean SHOW_EXPERIMENTAL_WARNING = false;
         public boolean ENVIRONMENT_PROJECTOR = true;
         public boolean DISABLE_LOYALTY_FOG = false;
-        public boolean DISABLE_LOYALTY_SLEEPING_ACTIONBAR = false;
+        public boolean DISABLE_LOYALTY_BED_MESSAGE = false;
         public boolean ENABLE_TARDIS_BOTI = true;
         public boolean SHOULD_RENDER_BOTI_INTERIOR = false;
         public boolean GREEN_SCREEN_BOTI = false;

@@ -15,14 +15,11 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
-import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 import dev.amble.ait.AITMod;
-import dev.amble.ait.api.link.v2.TardisRef;
 import dev.amble.ait.api.link.v2.block.InteriorLinkableBlockEntity;
 import dev.amble.ait.core.AITBlockEntityTypes;
 import dev.amble.ait.core.blocks.EnvironmentProjectorBlock;
@@ -39,8 +36,7 @@ public class EnvironmentProjectorBlockEntity extends InteriorLinkableBlockEntity
         super(AITBlockEntityTypes.ENVIRONMENT_PROJECTOR_BLOCK_ENTITY_TYPE, pos, state);
     }
 
-    public void neighborUpdate(BlockState state, World world, BlockPos pos, Block sourceBlock, BlockPos sourcePos,
-            boolean notify) {
+    public void neighborUpdate(BlockState state, World world, BlockPos pos) {
         boolean powered = world.isReceivingRedstonePower(pos);
 
         if (powered != state.get(POWERED)) {
@@ -57,18 +53,11 @@ public class EnvironmentProjectorBlockEntity extends InteriorLinkableBlockEntity
                 Block.NOTIFY_LISTENERS);
     }
 
-    public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand,
-            BlockHitResult hit) {
-
+    public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player) {
         if (!this.isLinked())
             return ActionResult.FAIL;
 
-        TardisRef ref = this.tardis();
-
-        if (ref.isEmpty())
-            return ActionResult.PASS;
-
-        Tardis tardis = ref.get();
+        Tardis tardis = this.tardis().get();
 
         if (player.isSneaking()) {
             this.switchSkybox(tardis, state, player);

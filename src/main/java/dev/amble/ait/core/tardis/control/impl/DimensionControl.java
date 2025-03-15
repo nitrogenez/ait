@@ -25,7 +25,9 @@ import dev.amble.ait.core.util.WorldUtil;
 import dev.amble.ait.data.schema.console.variant.renaissance.*;
 
 public class DimensionControl extends Control {
+
     public static final Identifier ID = AITMod.id("dimension");
+
     public DimensionControl() {
         super(ID);
     }
@@ -40,14 +42,18 @@ public class DimensionControl extends Control {
         CompletableFuture<Void> future = CompletableFuture.supplyAsync(() -> {
             List<ServerWorld> dims = WorldUtil.getOpenWorlds();
 
-            int current = WorldUtil
-                    .worldIndex(dest.getWorld() == null ? world.getServer().getOverworld() : dest.getWorld());
+            int index = WorldUtil.worldIndex(WorldUtil.isBlacklisted(dest.getWorld())
+                    ? world.getServer().getOverworld() : dest.getWorld());
 
-            int next = DimensionControl.cycle(dims, current, !leftClick);
-            return dims.get(next);
+            if (leftClick) {
+                index = (dims.size() + index - 1) % dims.size();
+            } else {
+                index = (index + 1) % dims.size();
+            }
+
+            return dims.get(index);
         }).thenAccept(destWorld -> {
             travel.forceDestination(cached -> cached.world(destWorld));
-
             messagePlayer(player, destWorld, LockedDimensionRegistry.getInstance().isUnlocked(tardis, destWorld));
         });
 
@@ -59,21 +65,9 @@ public class DimensionControl extends Control {
         MutableText message = Text.translatable("message.ait.tardis.control.dimension.info")
                 .append(WorldUtil.worldText(world.getRegistryKey(), false)).formatted(unlocked ? Formatting.WHITE : Formatting.GRAY);
 
-        if (!(unlocked)) message.append(Text.literal(" \uD83D\uDD12"));
+        if (!unlocked) message.append(Text.literal(" \uD83D\uDD12"));
 
         player.sendMessage(message, true);
-    }
-
-    private static int cycle(List<ServerWorld> worlds, int current, boolean increase) {
-        final int lastIndex = worlds.size() - 1;
-
-        if (increase) {
-            current += 1;
-            return current > lastIndex ? 0 : current;
-        }
-
-        current -= 1;
-        return current < 0 ? lastIndex : current;
     }
 
     @Override

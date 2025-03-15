@@ -30,11 +30,10 @@ import dev.amble.ait.AITMod;
 import dev.amble.ait.core.AITDimensions;
 import dev.amble.ait.core.tardis.ServerTardis;
 import dev.amble.ait.core.tardis.manager.ServerTardisManager;
-import dev.amble.ait.core.util.WorldUtil;
 
 public class TardisServerWorld extends MultiDimServerWorld {
 
-    private static final String NAMESPACE = AITMod.MOD_ID + "-tardis";
+    public static final String NAMESPACE = AITMod.MOD_ID + "-tardis";
 
     private ServerTardis tardis;
 
@@ -55,13 +54,11 @@ public class TardisServerWorld extends MultiDimServerWorld {
     }
 
     public static ServerWorld create(ServerTardis tardis) {
-        AITMod.LOGGER.info("Creating Tardis Dimension for Tardis {}", tardis.getUuid());
+        AITMod.LOGGER.info("Creating a dimension for TARDIS {}", tardis.getUuid());
         TardisServerWorld created = (TardisServerWorld) MultiDim.get(ServerLifecycleHooks.get())
                 .add(AITDimensions.TARDIS_WORLD_BLUEPRINT, idForTardis(tardis));
 
         created.setTardis(tardis);
-
-        WorldUtil.blacklist(created);
         return created;
     }
 
@@ -75,6 +72,10 @@ public class TardisServerWorld extends MultiDimServerWorld {
 
     private static Identifier idForTardis(ServerTardis tardis) {
         return new Identifier(NAMESPACE, tardis.getUuid().toString());
+    }
+
+    public static boolean isTardisDimension(RegistryKey<World> key) {
+        return NAMESPACE.equals(key.getValue().getNamespace());
     }
 
     public static boolean isTardisDimension(World world) {

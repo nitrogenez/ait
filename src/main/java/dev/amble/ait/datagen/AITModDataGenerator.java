@@ -956,7 +956,7 @@ public class AITModDataGenerator implements DataGeneratorEntrypoint {
         provider.addTranslation("block.ait.artron_collector_block.tooltip.use", "(Charges inside of Rift Chunks)");
         provider.addTranslation("tooltip.ait.power_converter", "(Convert zeiton, lava, coal and wood into Artron)");
         provider.addTranslation("tooltip.ait.singularity", "(Give the TARDIS Coral this to allow the generation of the interior)");
-        provider.addTranslation("tooltip.ait.tardis_coral", "(Place the Tardis Coral on Soul Sand in a Rift Chunk to grow a TARDIS)");
+        provider.addTranslation("tooltip.ait.tardis_coral", "(Grow this on top of soul sand)");
         provider.addTranslation("tooltip.ait.matrix_energizer", "(Place on a naturally-occurring shrieker to produce a Personality Matrix)");
 
         // Painting

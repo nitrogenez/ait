@@ -179,8 +179,11 @@ public class MatrixEnergizerBlock extends Block implements BlockEntityProvider {
 
     @Override
     public void onBroken(WorldAccess world, BlockPos pos, BlockState state) {
-        if (hasPower(state)) {
-            dropStack((World) world, pos, AITItems.PERSONALITY_MATRIX.getDefaultStack());
+        if (hasPower(state) && this.getAge(state) == this.getMaxAge()) {
+            ItemStack pmStack = AITItems.PERSONALITY_MATRIX.getDefaultStack();
+            PersonalityMatrixItem pmItem = (PersonalityMatrixItem) pmStack.getItem();
+            pmStack = pmItem.randomize();
+            dropStack((World) world, pos, pmStack);
         }
         super.onBroken(world, pos, state);
     }
@@ -218,7 +221,7 @@ public class MatrixEnergizerBlock extends Block implements BlockEntityProvider {
         state.with(SILENT, true);
 
         if (!(world.getBlockState(pos.down()).getBlock() instanceof SculkShriekerBlock)) {
-            world.breakBlock(pos, !player.isCreative());
+            world.breakBlock(pos, false);
             if (!player.isCreative()) dropStack(world, pos, AITBlocks.MATRIX_ENERGIZER.asItem().getDefaultStack());
             return;
         }

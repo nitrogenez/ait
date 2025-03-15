@@ -70,7 +70,7 @@ public record ControlSound(Identifier controlId, Identifier consoleId, Identifie
     public SoundEvent altSound() {
         SoundEvent sfx = Registries.SOUND_EVENT.get(this.altId());
 
-        if (sfx == null) {
+        if (sfx == null || this.altId() == SoundEvents.INTENTIONALLY_EMPTY.getId()) {
             AITMod.LOGGER.error("Unknown alt sound event: {} in control sfx {}", this.altId(), this.id());
             sfx = successSound();
         }

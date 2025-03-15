@@ -21,7 +21,6 @@ import net.minecraft.util.profiler.Profiler;
 
 import dev.amble.ait.AITMod;
 import dev.amble.ait.api.TardisComponent;
-import dev.amble.ait.api.link.v2.TardisRef;
 import dev.amble.ait.client.boti.BOTI;
 import dev.amble.ait.client.models.exteriors.ExteriorModel;
 import dev.amble.ait.client.models.exteriors.SiegeModeModel;
@@ -59,12 +58,10 @@ public class ExteriorRenderer<T extends ExteriorBlockEntity> implements BlockEnt
         profiler.push("exterior");
 
         profiler.push("find_tardis");
-        TardisRef optionalTardis = entity.tardis();
 
-        if (optionalTardis == null || optionalTardis.isEmpty())
-            return;
+        if (!entity.isLinked()) return;
 
-        Tardis tardis = optionalTardis.get();
+        Tardis tardis = entity.tardis().get();
 
 
         profiler.swap("render");

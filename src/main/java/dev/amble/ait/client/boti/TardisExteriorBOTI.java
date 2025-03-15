@@ -19,7 +19,6 @@ import dev.amble.ait.client.models.exteriors.ExteriorModel;
 import dev.amble.ait.client.renderers.AITRenderLayers;
 import dev.amble.ait.compat.DependencyChecker;
 import dev.amble.ait.core.blockentities.ExteriorBlockEntity;
-import dev.amble.ait.core.tardis.Tardis;
 import dev.amble.ait.core.tardis.handler.BiomeHandler;
 import dev.amble.ait.data.schema.exterior.ClientExteriorVariantSchema;
 import dev.amble.ait.registry.impl.exterior.ClientExteriorVariantRegistry;
@@ -33,9 +32,10 @@ public class TardisExteriorBOTI extends BOTI {
         if (MinecraftClient.getInstance().world == null
                 || MinecraftClient.getInstance().player == null) return;
 
-        Tardis tardis = exterior.tardis().get();
 
-        if (tardis == null) return;
+
+        if (!exterior.isLinked())
+            return;
 
         stack.push();
 

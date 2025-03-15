@@ -36,7 +36,7 @@ public class ConsoleRenderer<T extends ConsoleBlockEntity> implements BlockEntit
     public void render(T entity, float tickDelta, MatrixStack matrices, VertexConsumerProvider vertexConsumers,
             int light, int overlay) {
 
-        if (entity.tardis() == null && entity.getWorld() == null) return;
+        if (!entity.isLinked() && entity.getWorld() == null) return;
 
         /*if (entity.getWorld().getRegistryKey().equals(World.OVERWORLD)) {
             matrices.push();

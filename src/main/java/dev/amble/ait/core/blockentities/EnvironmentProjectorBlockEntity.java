@@ -60,7 +60,7 @@ public class EnvironmentProjectorBlockEntity extends InteriorLinkableBlockEntity
     public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand,
             BlockHitResult hit) {
 
-        if (this.tardis() == null)
+        if (!this.isLinked())
             return ActionResult.FAIL;
 
         TardisRef ref = this.tardis();

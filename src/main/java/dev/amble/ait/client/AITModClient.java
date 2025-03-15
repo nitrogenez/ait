@@ -486,7 +486,7 @@ public class AITModClient implements ClientModInitializer {
         MatrixStack stack = context.matrixStack();
         var exteriorQueue = new ArrayList<>(BOTI.EXTERIOR_RENDER_QUEUE);
         for (ExteriorBlockEntity exterior : exteriorQueue) {
-            if (exterior == null || exterior.tardis() == null || exterior.tardis().isEmpty()) continue;
+            if (exterior == null || !exterior.isLinked() || exterior.tardis().isEmpty()) continue;
             Tardis tardis = exterior.tardis().get();
             if (tardis == null) return;
             ClientExteriorVariantSchema variant = tardis.getExterior().getVariant().getClient();

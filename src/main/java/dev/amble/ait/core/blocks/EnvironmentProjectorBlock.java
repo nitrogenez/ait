@@ -60,17 +60,17 @@ public class EnvironmentProjectorBlock extends Block implements BlockEntityProvi
 
     @Override
     public void neighborUpdate(BlockState state, World world, BlockPos pos, Block sourceBlock, BlockPos sourcePos,
-            boolean notify) {
+                               boolean notify) {
         if (world.isClient())
             return;
 
         if (world.getBlockEntity(pos) instanceof EnvironmentProjectorBlockEntity projector)
-            projector.neighborUpdate(state, world, pos, sourceBlock, sourcePos, notify);
+            projector.neighborUpdate(state, world, pos);
     }
 
     @Override
     public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand,
-            BlockHitResult hit) {
+                              BlockHitResult hit) {
         if (world.isClient())
             return ActionResult.PASS;
 
@@ -78,7 +78,7 @@ public class EnvironmentProjectorBlock extends Block implements BlockEntityProvi
             return ActionResult.PASS;
 
         if (world.getBlockEntity(pos) instanceof EnvironmentProjectorBlockEntity projector)
-            return projector.onUse(state, world, pos, player, hand, hit);
+            return projector.onUse(state, world, pos, player);
 
         return ActionResult.PASS;
     }
@@ -94,7 +94,7 @@ public class EnvironmentProjectorBlock extends Block implements BlockEntityProvi
     }
 
     public static void toggle(Tardis tardis, @Nullable PlayerEntity player, World world, BlockPos pos, BlockState state,
-            boolean active) {
+                              boolean active) {
         if (world.getBlockEntity(pos) instanceof EnvironmentProjectorBlockEntity projector)
             projector.toggle(tardis, active);
 

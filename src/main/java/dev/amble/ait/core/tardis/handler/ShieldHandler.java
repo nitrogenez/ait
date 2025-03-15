@@ -119,7 +119,6 @@ public class ShieldHandler extends KeyedTardisComponent implements TardisTickabl
                                         new StatusEffectInstance(StatusEffects.WATER_BREATHING, 15, 3, true, false, false));
                             }
                             if (entity.getWorld().getRegistryKey().equals(AITDimensions.SPACE)) {
-                                System.out.println("hello?");
                                 player.addStatusEffect(
                                         new StatusEffectInstance(AITStatusEffects.OXYGENATED, 20, 1, true, false));
                             }

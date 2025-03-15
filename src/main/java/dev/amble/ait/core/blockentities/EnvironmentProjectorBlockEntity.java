@@ -4,6 +4,7 @@ import static dev.amble.ait.core.blocks.EnvironmentProjectorBlock.*;
 
 import java.util.Iterator;
 
+import dev.amble.ait.core.util.WorldUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
@@ -121,7 +122,7 @@ public class EnvironmentProjectorBlockEntity extends InteriorLinkableBlockEntity
     }
 
     private static ServerWorld findNext(MinecraftServer server, RegistryKey<World> last) {
-        Iterator<ServerWorld> iter = server.getWorlds().iterator();
+        Iterator<ServerWorld> iter = WorldUtil.getOpenWorlds().iterator();
 
         ServerWorld first = iter.next();
         ServerWorld found = first;

@@ -86,7 +86,7 @@ public class AITSounds {
     public static final SoundEvent TARDIS_REJECTION_SFX = register("tardis/tardis_rejection_sfx");
 
     // Controls
-    public static final SoundEvent DEMAT_LEVER_PULL = register("controls/demat_lever_pull");
+    public static final SoundEvent THROTTLE_PULL = register("controls/demat_lever_pull");
     public static final SoundEvent HANDBRAKE_LEVER_PULL = register("controls/handbrake_lever_pull");
     public static final SoundEvent HANDBRAKE_UP = register("controls/handbrake_up");
     public static final SoundEvent HANDBRAKE_DOWN = register("controls/handbrake_down");
@@ -127,26 +127,34 @@ public class AITSounds {
     public static final SoundEvent ML = register("tardis/ml");
 
     //Alt console sounds for renaissance
-    public static final SoundEvent RENAISSANCE_LAND_TYPE_ALT = register("controls/renaissance_land_type_alt");
-    public static final SoundEvent RENAISSANCE_POWER_SIEGE_ALT = register("controls/renaissance_power_siege_alt");
-    public static final SoundEvent RENAISSANCE_SHIELDS_ALT = register("controls/renaissance_shieldsalt");
-    public static final SoundEvent RENAISSANCE_SHIELDS_ALTALT = register("controls/renaissance_shieldsaltalt");
-    public static final SoundEvent RENAISSANCE_DOOR_ALT = register("controls/renaissance_dooralt");
-    public static final SoundEvent RENAISSANCE_DOOR_ALTALT = register("controls/renaissance_dooraltalt");
-    public static final SoundEvent RENAISSANCE_LOCK_ALT = register("controls/renaissance_lock_alt");
-    public static final SoundEvent RENAISSANCE_ANTI_GRAV_ALT = register("controls/renaissance_anti_grav_alt");
-    public static final SoundEvent RENAISSANCE_HANDBRAKE_ALT = register("controls/renaissance_handbrakealt");
-    public static final SoundEvent RENAISSANCE_HANDBRAKE_ALTALT = register("controls/renaissance_handbrakealtalt");
-    public static final SoundEvent RENAISSANCE_DIMENSION_ALT = register("controls/renaissance_dimension_alt");
+    public static final SoundEvent RENAISSANCE_LAND_TYPE = register("controls/renaissance_land_type");
+    public static final SoundEvent RENAISSANCE_POWER_SIEGE = register("controls/renaissance_power_siege");
+    public static final SoundEvent RENAISSANCE_SHIELDS = register("controls/renaissance_shields");
+    public static final SoundEvent RENAISSANCE_SHIELDS_ALT = register("controls/renaissance_shields_alt");
+    public static final SoundEvent RENAISSANCE_DOOR = register("controls/renaissance_door");
+    public static final SoundEvent RENAISSANCE_DOOR_ALT = register("controls/renaissance_door_alt");
+    public static final SoundEvent RENAISSANCE_LOCK = register("controls/renaissance_lock");
+    public static final SoundEvent RENAISSANCE_ANTI_GRAV = register("controls/renaissance_anti_grav");
+    public static final SoundEvent RENAISSANCE_HANDBRAKE = register("controls/renaissance_handbrake");
+    public static final SoundEvent RENAISSANCE_HANDBRAKE_ALT = register("controls/renaissance_handbrake_alt");
+    public static final SoundEvent RENAISSANCE_DIMENSION = register("controls/renaissance_dimension");
 
     //Alt console sounds for coral
-    //Todo: make the telepathic circuits alt varient work cuz i cant get it to work lol
-    public static final SoundEvent CORAL_INCREMENT_ALT = register("controls/coral_increment_alt");
-    public static final SoundEvent CORAL_SHIELDS_ALT = register("controls/coral_shieldsalt");
-    public static final SoundEvent CORAL_SHIELDS_ALTALT = register("controls/coral_shieldsaltalt");
-    public static final SoundEvent CORAL_MONITOR_ALT = register("controls/coral_monitor_alt");
-    public static final SoundEvent CORAL_LAND_TYPE_ALT = register("controls/coral_land_type_alt");
-    public static final SoundEvent CORAL_TELEPATHIC_CIRCUITS_ALT = register("controls/coral_telepathic_circuits_alt");
+    public static final SoundEvent CORAL_INCREMENT = register("controls/coral_increment");
+    public static final SoundEvent CORAL_SHIELDS = register("controls/coral_shields");
+    public static final SoundEvent CORAL_SHIELDS_ALT = register("controls/coral_shields_alt");
+    public static final SoundEvent CORAL_MONITOR = register("controls/coral_monitor");
+    public static final SoundEvent CORAL_LAND_TYPE = register("controls/coral_land_type");
+    public static final SoundEvent CORAL_TELEPATHIC_CIRCUITS = register("controls/coral_telepathic_circuits");
+    public static final SoundEvent CORAL_THROTTLE = register("controls/coral_throttle");
+    public static final SoundEvent CORAL_DIMENSION = register("controls/coral_dimension");
+    public static final SoundEvent CORAL_XYZ = register("controls/coral_xyz");
+
+    //Alt console sounds for the copper
+    public static final SoundEvent COPPER_TELEPATHIC_CIRCUITS = register("controls/copper_telepathic_circuit");
+    public static final SoundEvent COPPER_ALARM = register("controls/copper_alarm");
+    public static final SoundEvent COPPER_ALARM_ALT = register("controls/copper_alarm_alt");
+    public static final SoundEvent COPPER_HAIL_MARY = register("controls/copper_hail_mary");
 
     // Console
     public static final SoundEvent CONSOLE_AMBIENT = register("tardis/console_ambient");

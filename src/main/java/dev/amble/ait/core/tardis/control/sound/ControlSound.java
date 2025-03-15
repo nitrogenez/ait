@@ -13,6 +13,7 @@ import dev.amble.lib.api.Identifiable;
 
 import net.minecraft.registry.Registries;
 import net.minecraft.sound.SoundEvent;
+import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.Identifier;
 
 import dev.amble.ait.AITMod;
@@ -38,7 +39,7 @@ public record ControlSound(Identifier controlId, Identifier consoleId, Identifie
             Identifier.CODEC.fieldOf("control").forGetter(ControlSound::controlId),
             Identifier.CODEC.fieldOf("console").forGetter(ControlSound::consoleId),
             Identifier.CODEC.fieldOf("success_sound").forGetter(ControlSound::successId),
-            Identifier.CODEC.optionalFieldOf("alt_sound", Identifier.of("", "")).forGetter(ControlSound::altId)
+            Identifier.CODEC.optionalFieldOf("alt_sound", SoundEvents.INTENTIONALLY_EMPTY.getId()).forGetter(ControlSound::altId)
     ).apply(instance, ControlSound::new));
 
     @Override
@@ -69,7 +70,7 @@ public record ControlSound(Identifier controlId, Identifier consoleId, Identifie
     public SoundEvent altSound() {
         SoundEvent sfx = Registries.SOUND_EVENT.get(this.altId());
 
-        if (sfx == null) {
+        if (sfx == null || this.altId() == SoundEvents.INTENTIONALLY_EMPTY.getId()) {
             AITMod.LOGGER.error("Unknown alt sound event: {} in control sfx {}", this.altId(), this.id());
             sfx = successSound();
         }

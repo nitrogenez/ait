@@ -19,9 +19,6 @@ on:
       - gradlew
       - gradlew.bat
       - versioning.gradle
-    branches:
-      - 'feat/**'
-      - 'main'
 
 jobs:
   build:

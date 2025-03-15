@@ -982,6 +982,13 @@ public class AITModDataGenerator implements DataGeneratorEntrypoint {
         provider.addTranslation("item.sonic.scanning.cant_break", "Can't Break Block!");
 
 
+        // Loyalty Messages In Bed
+        provider.addTranslation("tardis.loyalty.message.reject","You hear whispers all around you, you are not welcome. [REJECT]");
+        provider.addTranslation("tardis.loyalty.message.neutral", "The TARDIS hums, neither welcoming nor dismissing your presence. [NEUTRAL]");
+        provider.addTranslation("tardis.loyalty.message.companion", "The TARDIS hums you a tune, as if glad to have you on board. [COMPANION]");
+        provider.addTranslation("tardis.loyalty.message.pilot", "The TARDIS hums gently, as if to show its trust. [PILOT]");
+        provider.addTranslation("tardis.loyalty.message.owner", "The TARDIS hums you a song, as if to show it will always be here for you. [OWNER]");
+
         // TARDIS Control Actionbar Title
         provider.addTranslation("tardis.message.protocol_813.travel", "Hail Mary: Protocol 813 is active, please prepare for departure.");
         provider.addTranslation("tardis.message.control.protocol_116.active", "Protocol 116: ENGAGED");
@@ -1111,6 +1118,7 @@ public class AITModDataGenerator implements DataGeneratorEntrypoint {
         provider.addTranslation("message.ait.sonic.riftnotfound", "RIFT CHUNK NOT FOUND");
         provider.addTranslation("message.ait.sonic.handbrakedisengaged",
                 "Handbrake disengaged, destination set to current position");
+        provider.addTranslation("message.ait.sonic.repairtime", "Repair Time: %s");
         provider.addTranslation("message.sonic.not_damaged", "TARDIS is not damaged");
         provider.addTranslation("message.ait.sonic.mode", "Mode: ");
         provider.addTranslation("message.ait.sonic.none", "None");

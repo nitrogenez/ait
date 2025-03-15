@@ -21,7 +21,7 @@ import dev.amble.ait.core.engine.StructureHolder;
 import dev.amble.ait.core.engine.SubSystem;
 import dev.amble.ait.core.engine.block.generic.GenericStructureSystemBlockEntity;
 
-public class GenericSubSystemRenderer<T extends GenericStructureSystemBlockEntity> implements BlockEntityRenderer<T>, ClientLightUtil.Renderable<T> {
+public class GenericSubSystemRenderer<T extends GenericStructureSystemBlockEntity> implements BlockEntityRenderer<T> {
     private GenericSubSystemModel model;
 
     public GenericSubSystemRenderer(BlockEntityRendererFactory.Context ctx) {
@@ -67,10 +67,5 @@ public class GenericSubSystemRenderer<T extends GenericStructureSystemBlockEntit
         }
 
         matrices.pop();
-    }
-
-    @Override
-    public void render(T entity, ModelPart root, MatrixStack matrices, VertexConsumer vertices, int light, int overlay, float red, float green, float blue, float alpha) {
-        root.render(matrices, vertices, light, overlay, red, green, blue, alpha);
     }
 }

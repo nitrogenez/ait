@@ -18,7 +18,7 @@ import dev.amble.ait.client.models.machines.AstralMapModel;
 import dev.amble.ait.client.util.ClientLightUtil;
 import dev.amble.ait.core.blockentities.AstralMapBlockEntity;
 
-public class AstralMapRenderer<T extends AstralMapBlockEntity> implements BlockEntityRenderer<T>, ClientLightUtil.Renderable<AstralMapBlockEntity> {
+public class AstralMapRenderer<T extends AstralMapBlockEntity> implements BlockEntityRenderer<T> {
 
     public static final Identifier TEXTURE = new Identifier(AITMod.MOD_ID,
             "textures/blockentities/machines/astral_map.png");
@@ -56,10 +56,5 @@ public class AstralMapRenderer<T extends AstralMapBlockEntity> implements BlockE
                 vertexConsumers.getBuffer(RenderLayer.getEndGateway()),
                 light, overlay, 1.0F, 1.0F, 1.0F, 1.0F);
         matrices.pop();
-    }
-
-    @Override
-    public void render(AstralMapBlockEntity entity, ModelPart root, MatrixStack matrices, VertexConsumer vertices, int light, int overlay, float red, float green, float blue, float alpha) {
-        root.render(matrices, vertices, light, overlay, red, green, blue, alpha);
     }
 }

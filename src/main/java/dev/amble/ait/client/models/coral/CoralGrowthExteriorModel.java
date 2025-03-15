@@ -571,13 +571,8 @@ public class CoralGrowthExteriorModel extends ExteriorModel {
     }
 
     @Override
-    public void renderWithAnimations(ExteriorBlockEntity exterior, ModelPart root, MatrixStack matrices,
-            VertexConsumer vertices, int light, int overlay, float red, float green, float blue, float pAlpha) {
-        if (exterior.tardis().isEmpty())
-            return;
-
-        ClientTardis tardis = (ClientTardis) exterior.tardis().get();
-
+    public void renderWithAnimations(ExteriorBlockEntity exterior, ClientTardis tardis, ModelPart root, MatrixStack matrices,
+                                     VertexConsumer vertices, int light, int overlay, float red, float green, float blue, float pAlpha) {
         boolean isNotLanded = tardis.interiorChangingHandler().queued().get() || tardis.travel().getState() != TravelHandlerBase.State.LANDED;
         boolean hasCage = tardis.interiorChangingHandler().hasCage();
         seven.getChild("corallybits").visible = !hasCage && tardis.interiorChangingHandler().plasmicMaterialAmount() == 0;
@@ -587,9 +582,9 @@ public class CoralGrowthExteriorModel extends ExteriorModel {
 
         float alpha = ((float) tardis.interiorChangingHandler().plasmicMaterialAmount() / 8f);
 
-        super.renderWithAnimations(exterior, isNotLanded ? six : seven, matrices, vertices, light, overlay, red, green, blue, pAlpha);
-        if (hasCage) super.renderWithAnimations(exterior, cage, matrices, vertices, light, overlay, red, green, blue, pAlpha);
-        super.renderWithAnimations(exterior, perimeter, matrices, vertices, light, overlay, red, green, blue,
+        super.renderWithAnimations(exterior, tardis, isNotLanded ? six : seven, matrices, vertices, light, overlay, red, green, blue, pAlpha);
+        if (hasCage) super.renderWithAnimations(exterior, tardis, cage, matrices, vertices, light, overlay, red, green, blue, pAlpha);
+        super.renderWithAnimations(exterior, tardis, perimeter, matrices, vertices, light, overlay, red, green, blue,
                 alpha >= 1 ? pAlpha : alpha);
     }
 

@@ -1,5 +1,6 @@
 package dev.amble.ait.client.renderers.consoles;
 
+import dev.amble.ait.client.tardis.ClientTardis;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.VertexConsumerProvider;
@@ -18,7 +19,6 @@ import dev.amble.ait.client.models.items.HandlesModel;
 import dev.amble.ait.client.util.ClientLightUtil;
 import dev.amble.ait.core.blockentities.ConsoleBlockEntity;
 import dev.amble.ait.core.item.HandlesItem;
-import dev.amble.ait.core.tardis.Tardis;
 import dev.amble.ait.data.datapack.DatapackConsole;
 import dev.amble.ait.data.schema.console.ClientConsoleVariantSchema;
 import dev.amble.ait.data.schema.console.variant.crystalline.client.ClientCrystallineVariant;
@@ -35,38 +35,19 @@ public class ConsoleRenderer<T extends ConsoleBlockEntity> implements BlockEntit
     @Override
     public void render(T entity, float tickDelta, MatrixStack matrices, VertexConsumerProvider vertexConsumers,
             int light, int overlay) {
-
-        if (!entity.isLinked() && entity.getWorld() == null) return;
-
-        /*if (entity.getWorld().getRegistryKey().equals(World.OVERWORLD)) {
-            matrices.push();
-            matrices.translate(0.5, 1.5, 0.5);
-            matrices.multiply(RotationAxis.NEGATIVE_X.rotationDegrees(180f));
-            ClientConsoleVariantRegistry.HARTNELL.model().render(matrices,
-                    vertexConsumers.getBuffer(AITRenderLayers.getEntityTranslucent(
-                            ClientConsoleVariantRegistry.HARTNELL.texture())),
-                    light, overlay, 1, 1, 1, 1);
-
-            ClientLightUtil.renderEmissive(ClientConsoleVariantRegistry.HARTNELL.model()::renderWithAnimations, ClientConsoleVariantRegistry.HARTNELL.emission(),
-                    entity, ClientConsoleVariantRegistry.HARTNELL.model().getPart(),
-                    matrices, vertexConsumers, 0xf000f0, overlay, 1, 1, 1, 1);
-            matrices.pop();
-            return;
-        }*/
-
-        if (!entity.isLinked())
+        if (!entity.isLinked() || entity.getWorld() == null)
             return;
 
-        Tardis tardis = entity.tardis().get();
+        ClientTardis tardis = entity.tardis().get().asClient();
         Profiler profiler = entity.getWorld().getProfiler();
 
         this.renderConsole(profiler, tardis, entity, matrices, vertexConsumers, light, overlay);
-        if (variant instanceof ClientCrystallineVariant) {
+
+        if (variant instanceof ClientCrystallineVariant)
             this.renderPanes(tardis, entity, matrices, vertexConsumers, light, overlay);
-        }
     }
 
-    private void renderPanes(Tardis tardis, T entity, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, int overlay) {
+    private void renderPanes(ClientTardis tardis, T entity, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, int overlay) {
         if (!tardis.fuel().hasPower()) return;
         matrices.push();
         matrices.translate(1, 2 + entity.getWorld().random.nextFloat() * 0.02, 0.5);
@@ -103,12 +84,12 @@ public class ConsoleRenderer<T extends ConsoleBlockEntity> implements BlockEntit
         matrices.pop();
     }
 
-    private void renderConsole(Profiler profiler, Tardis tardis, T entity, MatrixStack matrices,
-            VertexConsumerProvider vertexConsumers, int light, int overlay) {
+    private void renderConsole(Profiler profiler, ClientTardis tardis, T entity, MatrixStack matrices,
+                               VertexConsumerProvider vertexConsumers, int light, int overlay) {
         profiler.push("model");
 
         this.updateModel(entity);
-        if (tardis.fuel() == null) return;
+
         boolean hasPower = tardis.fuel().hasPower();
 
         matrices.push();
@@ -118,10 +99,10 @@ public class ConsoleRenderer<T extends ConsoleBlockEntity> implements BlockEntit
         model.animateBlockEntity(entity, tardis.travel().getState(), hasPower);
 
         profiler.swap("render");
-        model.renderWithAnimations(entity, model.getPart(), matrices,
-                vertexConsumers.getBuffer(variant.equals(ClientConsoleVariantRegistry.COPPER) ? RenderLayer.getEntityTranslucent(variant.texture()) :
-                RenderLayer.getEntityTranslucentCull(variant.texture())), light, overlay, 1,
-                1, 1, 1);
+        model.renderWithAnimations(entity, tardis, model.getPart(),
+                matrices, vertexConsumers.getBuffer(variant.equals(ClientConsoleVariantRegistry.COPPER) ? RenderLayer.getEntityTranslucent(variant.texture()) :
+                RenderLayer.getEntityTranslucentCull(variant.texture())), light, overlay,
+                1, 1, 1, 1);
 
 
         matrices.pop();
@@ -132,9 +113,10 @@ public class ConsoleRenderer<T extends ConsoleBlockEntity> implements BlockEntit
         if (hasPower) {
             profiler.swap("emission"); // emission {
 
-            if (!(variant.emission().equals(DatapackConsole.EMPTY))) {
-                ClientLightUtil.renderEmissive(model::renderWithAnimations, variant.emission(), entity, model.getPart(),
-                        matrices, vertexConsumers, 0xf000f0, overlay, 1, 1, 1, 1);
+            if (variant.emission() != null && !variant.emission().equals(DatapackConsole.EMPTY)) {
+                ClientLightUtil.renderEmissive((vertices, l) -> model.renderWithAnimations(
+                        entity, tardis, model.getPart(), matrices, vertices, l, overlay, 1, 1, 1,
+                        1), variant.emission(), vertexConsumers);
             }
         }
 

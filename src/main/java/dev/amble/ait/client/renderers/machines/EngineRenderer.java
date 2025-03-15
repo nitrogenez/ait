@@ -24,7 +24,7 @@ import dev.amble.ait.core.tardis.Tardis;
 // Made with Blockbench 4.8.3
 // Exported for Minecraft version 1.17+ for Yarn
 // Paste this class into your mod and generate all required imports
-public class EngineRenderer<T extends EngineBlockEntity> implements BlockEntityRenderer<T>, ClientLightUtil.Renderable<EngineBlockEntity> {
+public class EngineRenderer<T extends EngineBlockEntity> implements BlockEntityRenderer<T> {
 
     public static final Identifier ENGINE_TEXTURE = new Identifier(AITMod.MOD_ID,
             ("textures/blockentities/machines/engine.png"));
@@ -62,10 +62,5 @@ public class EngineRenderer<T extends EngineBlockEntity> implements BlockEntityR
         }
 
         matrices.pop();
-    }
-
-    @Override
-    public void render(EngineBlockEntity entity, ModelPart root, MatrixStack matrices, VertexConsumer vertices, int light, int overlay, float red, float green, float blue, float alpha) {
-        root.render(matrices, vertices, light, overlay, red, green, blue, alpha);
     }
 }

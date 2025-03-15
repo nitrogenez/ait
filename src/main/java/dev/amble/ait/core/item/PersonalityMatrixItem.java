@@ -12,6 +12,7 @@ import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.minecraft.world.World;
 
+import dev.amble.ait.core.AITItems;
 import dev.amble.ait.core.tardis.handler.StatsHandler;
 
 public class PersonalityMatrixItem extends Item {
@@ -24,8 +25,8 @@ public class PersonalityMatrixItem extends Item {
         return super.getDefaultStack();
     }
 
-    public ItemStack randomize() {
-        ItemStack stack = new ItemStack(this);
+    public static ItemStack randomize() {
+        ItemStack stack = new ItemStack(AITItems.PERSONALITY_MATRIX);
         NbtCompound nbt = stack.getOrCreateNbt();
         nbt.putInt("r", (int) (Math.random() * 256));
         nbt.putInt("g", (int) (Math.random() * 256));

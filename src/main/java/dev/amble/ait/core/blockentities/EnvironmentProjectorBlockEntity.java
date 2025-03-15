@@ -4,7 +4,6 @@ import static dev.amble.ait.core.blocks.EnvironmentProjectorBlock.*;
 
 import java.util.Iterator;
 
-import dev.amble.ait.core.util.WorldUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
@@ -25,6 +24,7 @@ import dev.amble.ait.api.link.v2.block.InteriorLinkableBlockEntity;
 import dev.amble.ait.core.AITBlockEntityTypes;
 import dev.amble.ait.core.blocks.EnvironmentProjectorBlock;
 import dev.amble.ait.core.tardis.Tardis;
+import dev.amble.ait.core.util.WorldUtil;
 import dev.amble.ait.core.world.TardisServerWorld;
 import dev.amble.ait.data.properties.Value;
 
@@ -87,10 +87,10 @@ public class EnvironmentProjectorBlockEntity extends InteriorLinkableBlockEntity
     }
 
     public void switchSkybox(Tardis tardis, BlockState state, PlayerEntity player) {
-        ServerWorld next = findNext(world.getServer(), this.current);
+        ServerWorld next = findNext(this.current);
 
         while (TardisServerWorld.isTardisDimension(next)) {
-            next = findNext(world.getServer(), next.getRegistryKey());
+            next = findNext(next.getRegistryKey());
         }
 
         player.sendMessage(Text.translatable("message.ait.projector.skybox", next.getRegistryKey().getValue().toString()));
@@ -121,7 +121,7 @@ public class EnvironmentProjectorBlockEntity extends InteriorLinkableBlockEntity
             value.set(DEFAULT);
     }
 
-    private static ServerWorld findNext(MinecraftServer server, RegistryKey<World> last) {
+    private static ServerWorld findNext(RegistryKey<World> last) {
         Iterator<ServerWorld> iter = WorldUtil.getOpenWorlds().iterator();
 
         ServerWorld first = iter.next();

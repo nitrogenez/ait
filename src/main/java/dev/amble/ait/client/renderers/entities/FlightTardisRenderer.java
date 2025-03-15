@@ -130,7 +130,7 @@ public class FlightTardisRenderer extends EntityRenderer<FlightTardisEntity> {
 
     @Override
     public Identifier getTexture(FlightTardisEntity entity) {
-        if (entity.tardis() == null || entity.tardis().isEmpty())
+        if (!entity.isLinked())
             return SpriteAtlasTexture.BLOCK_ATLAS_TEXTURE; // random texture just so i dont crash
 
         return entity.tardis().get().getExterior().getVariant().getClient().texture();

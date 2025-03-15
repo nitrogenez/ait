@@ -193,26 +193,7 @@ public class ExteriorRenderer<T extends ExteriorBlockEntity> implements BlockEnt
         float t;
         float s;
 
-        if (tardis.stats().getName() != null && "partytardis".equals(tardis.stats().getName().toLowerCase())) {
-            int m = 25;
-            int n = MinecraftClient.getInstance().player.age / 25 + MinecraftClient.getInstance().player.getId();
-            int o = DyeColor.values().length;
-            int p = n % o;
-            int q = (n + 1) % o;
-            float r = ((float)(MinecraftClient.getInstance().player.age % 25) + h) / 25f;
-            float[] fs = SheepEntity.getRgbColor(DyeColor.byId(p));
-            float[] gs = SheepEntity.getRgbColor(DyeColor.byId(q));
-            s = fs[0] * (1f - r) + gs[0] * r;
-            t = fs[1] * (1f - r) + gs[1] * r;
-            u = fs[2] * (1f - r) + gs[2] * r;
-        } else {
-            float[] hs = new float[]{ 1.0f, 1.0f, 1.0f };
-            s = hs[0];
-            t = hs[1];
-            u = hs[2];
-        }
-
-        if (!tardis.extra().getInsertedDisc().isEmpty()) {
+        if (tardis.stats().getName() != null && "partytardis".equals(tardis.stats().getName().toLowerCase()) || (!tardis.extra().getInsertedDisc().isEmpty())) {
             int m = 25;
             int n = MinecraftClient.getInstance().player.age / 25 + MinecraftClient.getInstance().player.getId();
             int o = DyeColor.values().length;

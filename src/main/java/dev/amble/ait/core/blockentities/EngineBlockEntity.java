@@ -51,6 +51,8 @@ public class EngineBlockEntity extends SubSystemBlockEntity implements ITardisSo
                     player.sendMessage(Text.translatable("tardis.message.engine.no_space").formatted(Formatting.RED), true);
                 }
             }
+
+            return;
         }
     }
 

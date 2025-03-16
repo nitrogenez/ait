@@ -17,6 +17,7 @@ public class AITSounds {
     public static final SoundEvent WONDERFUL_TIME_IN_SPACE = register("music/wonderful_time_in_space");
     public static final SoundEvent EARTH_MUSIC = register("music/earth_nitrogenez");
     public static final SoundEvent VENUS_MUSIC = register("music/venus_nitrogenez");
+    public static final SoundEvent GOOD_MAN_MUSIC = register("music/good_man_dian");
     public static final SoundEvent SPACE = register("music/space");
 
     // TARDIS

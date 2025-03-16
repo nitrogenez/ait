@@ -488,7 +488,7 @@ public class AITModClient implements ClientModInitializer {
         for (ExteriorBlockEntity exterior : exteriorQueue) {
             if (exterior == null || !exterior.isLinked() || exterior.tardis().isEmpty()) continue;
             Tardis tardis = exterior.tardis().get();
-            if (tardis == null) return;
+            if (tardis == null || tardis.getExterior() == null) return;
             ClientExteriorVariantSchema variant = tardis.getExterior().getVariant().getClient();
             ExteriorModel model = variant.model();
             BlockPos pos = exterior.getPos();

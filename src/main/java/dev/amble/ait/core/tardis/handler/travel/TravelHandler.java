@@ -339,8 +339,8 @@ public final class TravelHandler extends AnimatedTravelHandler implements Crasha
     }
 
     public void rematerialize() {
-        if (!tardis.isGrowth() && (TardisEvents.MAT.invoker().onMat(tardis.asServer()) == TardisEvents.Interaction.FAIL
-                || this.travelCooldown)) {
+        if (TardisEvents.MAT.invoker().onMat(tardis.asServer()) == TardisEvents.Interaction.FAIL
+                || this.travelCooldown) {
             this.failRemat();
             return;
         }

@@ -2,6 +2,7 @@ package dev.amble.ait.client.boti;
 
 
 import com.mojang.blaze3d.systems.RenderSystem;
+import dev.amble.ait.client.tardis.ClientTardis;
 import org.lwjgl.opengl.GL11;
 
 import net.minecraft.client.MinecraftClient;
@@ -34,10 +35,10 @@ public class TardisExteriorBOTI extends BOTI {
         if (MinecraftClient.getInstance().world == null
                 || MinecraftClient.getInstance().player == null) return;
 
-
-
         if (!exterior.isLinked())
             return;
+
+        ClientTardis tardis = exterior.tardis().get().asClient();;
 
         stack.push();
 

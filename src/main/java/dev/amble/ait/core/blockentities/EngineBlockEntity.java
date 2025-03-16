@@ -148,7 +148,7 @@ public class EngineBlockEntity extends SubSystemBlockEntity implements ITardisSo
      */
     private boolean tryRemoveIfMatches(ServerWorld world, BlockPos pos, Block expected) {
         BlockState state = world.getBlockState(pos);
-        if (state.getBlock() == expected) {
+        if (state.isOf(expected)) {
             world.removeBlock(pos, false);
             return true;
         }

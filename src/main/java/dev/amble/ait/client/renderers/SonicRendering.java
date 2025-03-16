@@ -116,6 +116,7 @@ public class SonicRendering {
         worldProfiler.pop();
         worldProfiler.pop();
     }
+
     private void renderSelectedBlock(WorldRenderContext context) {
         Profiler worldProfiler = context.profiler();
         worldProfiler.push("target");
@@ -137,6 +138,7 @@ public class SonicRendering {
         worldProfiler.pop();
         worldProfiler.pop();
     }
+
     public void renderGui(DrawContext context, float delta) {
         if (client.world == null) return;
         if (!isPlayerHoldingScanningSonic()) return;
@@ -155,30 +157,34 @@ public class SonicRendering {
 
         profiler.swap("redstone");
         renderRedstone(context, state, targetPos);
-        profiler.swap("durability");
+        profiler.swap("subsystem_info");
         renderSubSystemInfo(context, targetPos);
 
         profiler.pop();
         profiler.pop();
     }
+
     private void renderRedstone(DrawContext context, BlockState state, BlockPos pos) {
         profiler.push("power");
         renderPower(context, pos);
         profiler.pop();
     }
+
     private void renderPower(DrawContext context, BlockPos pos) {
         int power = this.client.world.getReceivedRedstonePower(pos);
         if (power == 0) return;
 
         context.drawCenteredTextWithShadow(client.textRenderer, "" + power, getCentreX(), (int) (getMaxY() * 0.4), Colors.WHITE);
     }
+
     private void renderSubSystemInfo(DrawContext context, BlockPos pos) {
         if (!(client.world.getBlockEntity(pos) instanceof SubSystemBlockEntity be)) return;
 
-        Text text = Text.empty();
-
         SubSystem system = be.system();
         if (system == null) return;
+
+        Text text = Text.empty();
+
         if (system instanceof DurableSubSystem) {
             text = Text.literal((Math.round(((DurableSubSystem) be.system()).durability())) + " / 1250");
         }
@@ -189,7 +195,7 @@ public class SonicRendering {
         context.drawCenteredTextWithShadow(client.textRenderer, text, getCentreX(), (int) (getMaxY() * 0.42), Colors.WHITE);
 
         text = Text.literal(WorldUtil.fakeTranslate(system.getId().name()));
-        context.drawCenteredTextWithShadow(client.textRenderer, text, getCentreX(), (int) (getMaxY() * 0.44), Colors.WHITE);
+        context.drawCenteredTextWithShadow(client.textRenderer, text, getCentreX(), (int) (getMaxY() * 0.46), Colors.WHITE);
     }
 
     private int getMaxX() {

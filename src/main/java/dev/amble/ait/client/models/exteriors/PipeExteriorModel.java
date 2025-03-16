@@ -34,13 +34,13 @@ public class PipeExteriorModel extends ExteriorModel {
     }
 
     @Override
-    public void renderWithAnimations(ExteriorBlockEntity exterior, ClientTardis tardis, ModelPart root, MatrixStack matrices, VertexConsumer vertices, int light, int overlay, float red, float green, float blue, float alpha) {
+    public void renderWithAnimations(ClientTardis tardis, ExteriorBlockEntity exterior, ModelPart root, MatrixStack matrices, VertexConsumer vertices, int light, int overlay, float red, float green, float blue, float alpha) {
         matrices.push();
         matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees(180f));
 
-        this.renderDoors(exterior, root, matrices, vertices, light, overlay, red, green, blue, alpha, false);
+        this.renderDoors(tardis, exterior, root, matrices, vertices, light, overlay, red, green, blue, alpha, false);
 
-        super.renderWithAnimations(exterior, tardis, root, matrices, vertices, light, overlay, red, green, blue, alpha);
+        super.renderWithAnimations(tardis, exterior, root, matrices, vertices, light, overlay, red, green, blue, alpha);
         matrices.pop();
     }
 
@@ -70,15 +70,7 @@ public class PipeExteriorModel extends ExteriorModel {
     }
 
     @Override
-    public void renderDoors(ExteriorBlockEntity exterior, ModelPart root, MatrixStack matrices, VertexConsumer vertices, int light, int overlay, float red, float green, float blue, float pAlpha, boolean isBOTI) {
-        Tardis tardis = exterior.tardis().get();
-
-        if (tardis == null) return;
-
+    public void renderDoors(ClientTardis tardis, ExteriorBlockEntity exterior, ModelPart root, MatrixStack matrices, VertexConsumer vertices, int light, int overlay, float red, float green, float blue, float pAlpha, boolean isBOTI) {
         this.tardis.pivotY = !tardis.door().isOpen() ? -14F : 0;
-
-//        if (isBOTI) {
-//            this.tardis.render(matrices, vertices, light, overlay, red, green, blue, pAlpha);
-//        }
     }
 }

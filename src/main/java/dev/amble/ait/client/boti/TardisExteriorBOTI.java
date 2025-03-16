@@ -85,7 +85,7 @@ public class TardisExteriorBOTI extends BOTI {
         stack.push();
         stack.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(180));
 
-        ((ExteriorModel) frame).renderDoors(exterior, frame.getPart(), stack, botiProvider.getBuffer(AITRenderLayers.getBotiInterior(variant.texture())), light, OverlayTexture.DEFAULT_UV, 1, 1F, 1.0F, 1.0F, true);
+        ((ExteriorModel) frame).renderDoors(tardis, exterior, frame.getPart(), stack, botiProvider.getBuffer(AITRenderLayers.getBotiInterior(variant.texture())), light, OverlayTexture.DEFAULT_UV, 1, 1F, 1.0F, 1.0F, true);
         botiProvider.draw();
         stack.pop();
 
@@ -96,7 +96,7 @@ public class TardisExteriorBOTI extends BOTI {
             BiomeHandler handler = exterior.tardis().get().handler(TardisComponent.Id.BIOME);
             Identifier biomeTexture = handler.getBiomeKey().get(variant.overrides());
             if (biomeTexture != null)
-                ((ExteriorModel) frame).renderDoors(exterior, frame.getPart(), stack,
+                ((ExteriorModel) frame).renderDoors(tardis, exterior, frame.getPart(), stack,
                         botiProvider.getBuffer(AITRenderLayers.getEntityCutoutNoCullZOffset(biomeTexture)),
                         light, OverlayTexture.DEFAULT_UV, 1, 1F, 1.0F, 1.0F, true);
         }
@@ -135,7 +135,7 @@ public class TardisExteriorBOTI extends BOTI {
             float green = exterior.tardis().get().alarm().enabled().get() ? !power ? 0.01f : 0.3f : t;
             float blue = exterior.tardis().get().alarm().enabled().get() ? !power ? 0.01f : 0.3f : u ;
 
-            ((ExteriorModel) frame).renderDoors(exterior, frame.getPart(), stack, botiProvider.getBuffer(DependencyChecker.hasIris() ? AITRenderLayers.tardisEmissiveCullZOffset(variant.emission(), true) : AITRenderLayers.getBeaconBeam(variant.emission(), true)), 0xf000f0,
+            ((ExteriorModel) frame).renderDoors(tardis, exterior, frame.getPart(), stack, botiProvider.getBuffer(DependencyChecker.hasIris() ? AITRenderLayers.tardisEmissiveCullZOffset(variant.emission(), true) : AITRenderLayers.getBeaconBeam(variant.emission(), true)), 0xf000f0,
                     OverlayTexture.DEFAULT_UV, red, green, blue, 1, true);
             botiProvider.draw();
         }

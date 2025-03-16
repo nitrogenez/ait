@@ -105,7 +105,7 @@ public class ExteriorRenderer<T extends ExteriorBlockEntity> implements BlockEnt
 
             matrices.push();
             matrices.translate(0.5f, 0.5f, 0.5f);
-            SIEGE_MODEL.renderWithAnimations(entity, tardis, SIEGE_MODEL.getPart(),
+            SIEGE_MODEL.renderWithAnimations(tardis, entity, SIEGE_MODEL.getPart(),
                     matrices,
                     vertexConsumers.getBuffer(AITRenderLayers.getEntityTranslucentCull(tardis.siege().texture().get())), light, overlay, 1, 1, 1, 1);
 
@@ -169,7 +169,7 @@ public class ExteriorRenderer<T extends ExteriorBlockEntity> implements BlockEnt
         if (tardis.selfDestruct().isQueued())
             matrices.scale(0.7f, 0.7f, 0.7f);
 
-        model.renderWithAnimations(entity, tardis, this.model.getPart(),
+        model.renderWithAnimations(tardis, entity, this.model.getPart(),
                 matrices, vertexConsumers.getBuffer(AITRenderLayers.getEntityTranslucentCull(texture)), light, overlay, 1, 1,
                 1, alpha);
 
@@ -223,7 +223,7 @@ public class ExteriorRenderer<T extends ExteriorBlockEntity> implements BlockEnt
             float blue = alarms ? !power ? 0.01f : 0.3f : u - colorAlpha;
 
             ClientLightUtil.renderEmissive((v, l) -> model.renderWithAnimations(
-                    entity, tardis, this.model.getPart(), matrices, v, l, overlay, red, green, blue, alpha
+                    tardis, entity, this.model.getPart(), matrices, v, l, overlay, red, green, blue, alpha
             ), emission, vertexConsumers);
         }
 
@@ -235,7 +235,7 @@ public class ExteriorRenderer<T extends ExteriorBlockEntity> implements BlockEnt
                 Identifier biomeTexture = handler.getBiomeKey().get(this.variant.overrides());
 
                 if (alpha > 0.105f && (biomeTexture != null && !texture.equals(biomeTexture))) {
-                    model.renderWithAnimations(entity, tardis, this.model.getPart(),
+                    model.renderWithAnimations(tardis, entity, this.model.getPart(),
                             matrices,
                             vertexConsumers.getBuffer(AITRenderLayers.tardisEmissiveCullZOffset(biomeTexture, false)), light, overlay, 1, 1, 1, alpha);
                 }

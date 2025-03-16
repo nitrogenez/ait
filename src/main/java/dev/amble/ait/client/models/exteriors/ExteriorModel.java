@@ -32,14 +32,14 @@ public abstract class ExteriorModel extends SinglePartEntityModel {
         super(function);
     }
 
-    public void renderWithAnimations(ExteriorBlockEntity exterior, ClientTardis tardis, ModelPart root, MatrixStack matrices,
+    public void renderWithAnimations(ClientTardis tardis, ExteriorBlockEntity exterior, ModelPart root, MatrixStack matrices,
                                      VertexConsumer vertices, int light, int overlay, float red, float green, float blue, float alpha) {
         float newAlpha = alpha;
 
         if (tardis.cloak().cloaked().get()) {
             PlayerEntity player = MinecraftClient.getInstance().player;
 
-            if (!(tardis.loyalty().get(player).isOf(Loyalty.Type.COMPANION))) {
+            if (!tardis.loyalty().get(player).isOf(Loyalty.Type.COMPANION)) {
                 newAlpha = 0f;
 
                 root.render(matrices, vertices, light, overlay, red, green, blue, newAlpha);
@@ -71,6 +71,6 @@ public abstract class ExteriorModel extends SinglePartEntityModel {
 
     public abstract Animation getAnimationForDoorState(DoorHandler.AnimationDoorState state);
 
-    public abstract void renderDoors(ExteriorBlockEntity exterior, ModelPart root, MatrixStack matrices,
+    public abstract void renderDoors(ClientTardis tardis, ExteriorBlockEntity exterior, ModelPart root, MatrixStack matrices,
                                      VertexConsumer vertices, int light, int overlay, float red, float green, float blue, float pAlpha, boolean isBOTI);
 }

@@ -126,18 +126,15 @@ public class ClassicHudolinExteriorModel extends ExteriorModel {
     }
 
     @Override
-    public void renderWithAnimations(ExteriorBlockEntity exterior, ClientTardis tardis, ModelPart root, MatrixStack matrices,
+    public void renderWithAnimations(ClientTardis tardis, ExteriorBlockEntity exterior, ModelPart root, MatrixStack matrices,
                                      VertexConsumer vertices, int light, int overlay, float red, float green, float blue, float pAlpha) {
-        if (exterior.tardis().isEmpty())
-            return;
-
         matrices.push();
         matrices.scale(0.64F, 0.64F, 0.64F);
         matrices.translate(0, -1.5f, 0);
 
-        this.renderDoors(exterior, root, matrices, vertices, light, overlay, red, green, blue, pAlpha, false);
+        this.renderDoors(tardis, exterior, root, matrices, vertices, light, overlay, red, green, blue, pAlpha, false);
 
-        super.renderWithAnimations(exterior, tardis, root, matrices, vertices, light, overlay, red, green, blue, pAlpha);
+        super.renderWithAnimations(tardis, exterior, root, matrices, vertices, light, overlay, red, green, blue, pAlpha);
         matrices.pop();
     }
 
@@ -147,12 +144,9 @@ public class ClassicHudolinExteriorModel extends ExteriorModel {
     }
 
     @Override
-    public void renderDoors(ExteriorBlockEntity exterior, ModelPart root, MatrixStack matrices, VertexConsumer vertices, int light, int overlay, float red, float green, float blue, float pAlpha, boolean isBOTI) {
-        if (exterior.tardis().isEmpty())
-            return;
-
+    public void renderDoors(ClientTardis tardis, ExteriorBlockEntity exterior, ModelPart root, MatrixStack matrices, VertexConsumer vertices, int light, int overlay, float red, float green, float blue, float pAlpha, boolean isBOTI) {
         if (!AITMod.CONFIG.CLIENT.ANIMATE_DOORS) {
-            DoorHandler door = exterior.tardis().get().door();
+            DoorHandler door = tardis.door();
 
             this.classic.getChild("Doors").getChild("left_door").yaw = (door.isLeftOpen() || door.isOpen()) ? -5F : 0.0F;
             this.classic.getChild("Doors").getChild("right_door").yaw = (door.isRightOpen() || door.areBothOpen())
@@ -161,7 +155,7 @@ public class ClassicHudolinExteriorModel extends ExteriorModel {
         } else {
             float maxRot = 90f;
 
-            DoorHandler door = exterior.tardis().get().door();
+            DoorHandler door = tardis.door();
             this.classic.getChild("Doors").getChild("left_door").yaw = (float) Math.toRadians(maxRot * door.getLeftRot());
             this.classic.getChild("Doors").getChild("right_door").yaw = -(float) Math.toRadians(maxRot * door.getRightRot());
         }

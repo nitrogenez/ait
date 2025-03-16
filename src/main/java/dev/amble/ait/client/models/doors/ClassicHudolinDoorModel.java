@@ -1,5 +1,6 @@
 package dev.amble.ait.client.models.doors;
 
+import dev.amble.ait.client.tardis.ClientTardis;
 import net.minecraft.client.model.*;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.VertexConsumer;
@@ -75,7 +76,7 @@ public class ClassicHudolinDoorModel extends DoorModel {
     }
 
     @Override
-    public void renderWithAnimations(AbstractLinkableBlockEntity doorEntity, ModelPart root, MatrixStack matrices,
+    public void renderWithAnimations(ClientTardis tardis, AbstractLinkableBlockEntity doorEntity, ModelPart root, MatrixStack matrices,
                                      VertexConsumer vertices, int light, int overlay, float red, float green, float blue, float pAlpha) {
         matrices.push();
         matrices.scale(0.64F, 0.64F, 0.64F);
@@ -95,7 +96,7 @@ public class ClassicHudolinDoorModel extends DoorModel {
             this.hudolin.getChild("Doors").getChild("right_door").yaw = (float) -Math.toRadians(maxRot*doorEntity.tardis().get().door().getRightRot());
         }
 
-        super.renderWithAnimations(doorEntity, root, matrices, vertices, light, overlay, red, green, blue, pAlpha);
+        super.renderWithAnimations(tardis, doorEntity, root, matrices, vertices, light, overlay, red, green, blue, pAlpha);
         matrices.pop();
     }
 }

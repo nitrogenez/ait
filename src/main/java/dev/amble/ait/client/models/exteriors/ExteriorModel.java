@@ -4,6 +4,7 @@ import static dev.amble.ait.core.tardis.animation.ExteriorAnimation.*;
 
 import java.util.function.Function;
 
+import dev.amble.ait.client.tardis.ClientTardis;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.model.ModelPart;
 import net.minecraft.client.render.RenderLayer;
@@ -33,16 +34,11 @@ public abstract class ExteriorModel extends SinglePartEntityModel {
         super(function);
     }
 
-    public void renderWithAnimations(ExteriorBlockEntity exterior, ModelPart root, MatrixStack matrices,
-            VertexConsumer vertices, int light, int overlay, float red, float green, float blue, float alpha) {
-        Tardis tardis = exterior.tardis().get();
-
-        if (tardis == null)
-            return;
-
+    public void renderWithAnimations(ExteriorBlockEntity exterior, ClientTardis tardis, ModelPart root, MatrixStack matrices,
+                                     VertexConsumer vertices, int light, int overlay, float red, float green, float blue, float alpha) {
         float newAlpha = alpha;
 
-        if (tardis.cloak().cloaked().get() && !ZeitonHighEffect.isHigh(MinecraftClient.getInstance().player)) {
+        if (tardis.cloak().cloaked().get()) {
             PlayerEntity player = MinecraftClient.getInstance().player;
 
             if (!(tardis.loyalty().get(player).isOf(Loyalty.Type.COMPANION))) {

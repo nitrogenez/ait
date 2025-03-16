@@ -1,5 +1,6 @@
 package dev.amble.ait.client.models.doors;
 
+import dev.amble.ait.client.tardis.ClientTardis;
 import net.minecraft.client.model.*;
 import net.minecraft.client.render.VertexConsumer;
 import net.minecraft.client.render.entity.animation.Animation;
@@ -28,16 +29,13 @@ public class PipeDoorModel extends DoorModel {
     }
 
     @Override
-    public void renderWithAnimations(AbstractLinkableBlockEntity linkableBlockEntity, ModelPart root, MatrixStack matrices, VertexConsumer vertices, int light, int overlay, float red, float green, float blue, float pAlpha) {
+    public void renderWithAnimations(ClientTardis tardis, AbstractLinkableBlockEntity linkableBlockEntity, ModelPart root, MatrixStack matrices, VertexConsumer vertices, int light, int overlay, float red, float green, float blue, float pAlpha) {
         matrices.push();
         matrices.translate(0, -1f, 0);
         matrices.multiply(RotationAxis.NEGATIVE_X.rotationDegrees(90f));
-        Tardis tardis = linkableBlockEntity.tardis().get();
-
-        if (tardis == null) return;
 
         this.tardis.pivotY = !tardis.door().isOpen() ? -22f : -8f;
-        super.renderWithAnimations(linkableBlockEntity, root, matrices, vertices, light, overlay, red, green, blue, pAlpha);
+        super.renderWithAnimations(tardis, linkableBlockEntity, root, matrices, vertices, light, overlay, red, green, blue, pAlpha);
         matrices.pop();
     }
 

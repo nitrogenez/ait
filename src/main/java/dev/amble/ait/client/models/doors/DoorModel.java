@@ -2,6 +2,7 @@ package dev.amble.ait.client.models.doors;
 
 import java.util.function.Function;
 
+import dev.amble.ait.client.tardis.ClientTardis;
 import net.minecraft.client.model.ModelPart;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.VertexConsumer;
@@ -27,11 +28,8 @@ public abstract class DoorModel extends SinglePartEntityModel {
         super(function);
     }
 
-    public void renderWithAnimations(AbstractLinkableBlockEntity linkableBlockEntity, ModelPart root, MatrixStack matrices,
+    public void renderWithAnimations(ClientTardis tardis, AbstractLinkableBlockEntity linkableBlockEntity, ModelPart root, MatrixStack matrices,
                                      VertexConsumer vertices, int light, int overlay, float red, float green, float blue, float pAlpha) {
-        if (linkableBlockEntity.tardis().isEmpty())
-            return;
-
         root.render(matrices, vertices, light, overlay, red, green, blue, pAlpha);
     }
 

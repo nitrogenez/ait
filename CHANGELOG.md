@@ -1,4 +1,4 @@
-Last update: #1162
+Last update: #1172
 
 - add: `TRAVEL_BLACKLIST` config option to blacklist worlds from travel. (#1153)
 - fix: Rematerialization is no longer as heavy on performance as it was before (#1149)
@@ -8,3 +8,4 @@ Last update: #1162
 - add: Added Glass Blocks to be shattered (#1079)
 - add: Added Entity Health Scanning (#1079)
 - add: Added Block Tool Requirement Scanning (#1079)
+- feat: AIT discs spawn in AIT structures (#1172)

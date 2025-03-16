@@ -41,26 +41,27 @@ public abstract class ExteriorAnimation {
     }
 
     public float getAlpha() {
-        if (this.exterior.tardis().isEmpty())
+        if (!this.exterior.isLinked())
             return 1f;
 
-        if (!this.exterior.isLinked() || this.exterior.tardis().get().travel() == null) return 1f;
+        Tardis tardis = this.exterior.tardis().get();
 
-        if (this.exterior.tardis().get().travel().getState() == TravelHandlerBase.State.LANDED) {
-            if (!isHigh() && this.exterior.tardis().get().<CloakHandler>handler(TardisComponent.Id.CLOAK).cloaked().get()) {
-                return 0.105f;
-            }
-            return 1.0f;
-        }
+        if (tardis.travel().getState() != TravelHandlerBase.State.LANDED)
+            return this.alpha;
 
-        return this.alpha;
+        if (tardis.cloak().cloaked().get())
+            return isHigh() ? 0.105f : 0;
+
+        return 1f;
     }
 
     private static boolean isHigh() {
-        if (ServerLifecycleHooks.isServer()) return false;
+        if (ServerLifecycleHooks.isServer())
+            return false;
 
         return amIHigh();
     }
+
     @Environment(EnvType.CLIENT)
     private static boolean amIHigh() {
         return MinecraftClient.getInstance().player != null && ZeitonHighEffect.isHigh(MinecraftClient.getInstance().player);

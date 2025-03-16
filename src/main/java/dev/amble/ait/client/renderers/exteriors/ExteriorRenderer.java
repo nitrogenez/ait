@@ -67,7 +67,7 @@ public class ExteriorRenderer<T extends ExteriorBlockEntity> implements BlockEnt
 
         profiler.swap("render");
 
-        if (entity.getAlpha() > 0 && (!tardis.cloak().cloaked().get() || ZeitonHighEffect.isHigh(MinecraftClient.getInstance().player)))
+        if (entity.getAlpha() > 0)
             this.renderExterior(profiler, tardis, entity, tickDelta, matrices, vertexConsumers, light, overlay);
 
         profiler.pop();

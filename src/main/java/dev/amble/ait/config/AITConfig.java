@@ -34,7 +34,10 @@ public class AITConfig implements ConfigData {
         public boolean TNT_CAN_TELEPORT_THROUGH_DOOR = true;
 
         @ConfigEntry.Gui.RequiresRestart
-        public List<String> WORLDS_BLACKLIST = List.of(
+        public List<String> WORLDS_BLACKLIST = List.of();
+
+        @ConfigEntry.Gui.RequiresRestart
+        public List<String> TRAVEL_BLACKLIST = List.of(
                 AITDimensions.TIME_VORTEX_WORLD.getValue().toString());
 
         public int TRAVEL_PER_TICK = 2;

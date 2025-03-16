@@ -1,6 +1,7 @@
 package dev.amble.ait.core.util;
 
 import java.util.*;
+import java.util.function.Predicate;
 
 import dev.amble.lib.data.CachedDirectedGlobalPos;
 import dev.amble.lib.util.ServerLifecycleHooks;
@@ -49,16 +50,19 @@ import dev.amble.ait.mixin.server.EnderDragonFightAccessor;
 @SuppressWarnings("deprecation")
 public class WorldUtil {
 
-    private static final Set<Identifier> BLACKLIST = new HashSet<>();
+    private static final Set<Identifier> OPEN_BLACKLIST = new HashSet<>();
     private static final List<ServerWorld> OPEN_WORLDS = new ArrayList<>();
+
+    private static final Set<Identifier> TRAVEL_BLACKLIST = new HashSet<>();
+    private static final List<ServerWorld> TRAVEL_WORLDS = new ArrayList<>();
     private static final int SAFE_RADIUS = 3;
 
     private static ServerWorld OVERWORLD;
     private static ServerWorld TIME_VORTEX;
 
     public static void init() {
-        ServerLifecycleEvents.SERVER_STARTED.register(server -> generateWorldCache(server));
-        ServerLifecycleEvents.SERVER_STOPPING.register(server -> OPEN_WORLDS.clear());
+        ServerLifecycleEvents.SERVER_STARTED.register(WorldUtil::generateWorldCache);
+        ServerLifecycleEvents.SERVER_STOPPING.register(WorldUtil::clearWorldCache);
 
         ServerWorldEvents.UNLOAD.register((server, world) -> {
             if (world.getRegistryKey() == World.OVERWORLD)
@@ -110,30 +114,49 @@ public class WorldUtil {
     }
 
     private static void generateWorldCache(MinecraftServer server) {
-        OPEN_WORLDS.clear();
-        BLACKLIST.clear();
+        generateWorldCache(server, AITMod.CONFIG.SERVER.WORLDS_BLACKLIST, OPEN_BLACKLIST, OPEN_WORLDS, WorldUtil::isOpen);
+        generateWorldCache(server, AITMod.CONFIG.SERVER.TRAVEL_BLACKLIST, TRAVEL_BLACKLIST, TRAVEL_WORLDS, WorldUtil::isTravelValid);
+    }
 
-        for (String rawId : AITMod.CONFIG.SERVER.WORLDS_BLACKLIST) {
+    private static void generateWorldCache(MinecraftServer server, List<String> raw, Set<Identifier> blacklist, List<ServerWorld> worlds, Predicate<ServerWorld> predicate) {
+        worlds.clear();
+        blacklist.clear();
+
+        for (String rawId : raw) {
             Identifier id = Identifier.tryParse(rawId);
 
             if (id == null)
                 continue;
 
-            BLACKLIST.add(id);
+            blacklist.add(id);
         }
 
         for (ServerWorld world : server.getWorlds()) {
-            if (!isBlacklisted(world))
+            if (predicate.test(world))
                 OPEN_WORLDS.add(world);
         }
     }
 
-    public static boolean isBlacklisted(ServerWorld world) {
-        return world == null || TardisServerWorld.isTardisDimension(world)
-                || BLACKLIST.contains(world.getRegistryKey().getValue());
+    private static void clearWorldCache(MinecraftServer server) {
+        OPEN_WORLDS.clear();
+        TRAVEL_WORLDS.clear();
     }
 
-    public static int worldIndex(ServerWorld world) {
+    public static boolean isOpen(ServerWorld world) {
+        return TardisServerWorld.isTardisDimension(world)
+                && !OPEN_BLACKLIST.contains(world.getRegistryKey().getValue());
+    }
+
+    public static boolean isTravelValid(ServerWorld world) {
+        return TardisServerWorld.isTardisDimension(world)
+                && !TRAVEL_BLACKLIST.contains(world.getRegistryKey().getValue());
+    }
+
+    /**
+     * @implNote This method uses a reference check (by `==`), instead of
+     * {@link Object#equals(Object)}, as its {@link List} counterpart does.
+     */
+    public static int openWorldIndex(ServerWorld world) {
         for (int i = 0; i < OPEN_WORLDS.size(); i++) {
             if (world == OPEN_WORLDS.get(i))
                 return i;
@@ -142,8 +165,25 @@ public class WorldUtil {
         return -1;
     }
 
+    /**
+     * @implNote This method uses a reference check (by `==`), instead of
+     * {@link Object#equals(Object)}, as its {@link List} counterpart does.
+     */
+    public static int travelWorldIndex(ServerWorld world) {
+        for (int i = 0; i < TRAVEL_WORLDS.size(); i++) {
+            if (world == TRAVEL_WORLDS.get(i))
+                return i;
+        }
+
+        return -1;
+    }
+
     public static List<ServerWorld> getOpenWorlds() {
         return OPEN_WORLDS;
+    }
+
+    public static List<ServerWorld> getTravelWorlds() {
+        return TRAVEL_WORLDS;
     }
 
     public static CachedDirectedGlobalPos locateSafe(CachedDirectedGlobalPos cached,

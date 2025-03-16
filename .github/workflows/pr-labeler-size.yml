@@ -26,13 +26,13 @@ jobs:
               "1000": "L",
               "5000": "XL"
             }
-      - if: ${{ contains(github.event.pull_request.labels.*.name, 'size/XS') || contains(github.event.pull_request.labels.*.name, 'size/S') }}
+      - if: ${{ contains(steps.label.outputs.sizeLabel, 'XS') || contains(steps.label.outputs.sizeLabel, 'size/S') }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           url: ${{ github.event.pull_request.html_url }}
         run: |
           gh pr edit "$url" --add-reviewer Loqor,MaketendoDev,duzos
-      - if: ${{ contains(github.event.pull_request.labels.*.name, 'size/M') || contains(github.event.pull_request.labels.*.name, 'size/L') || contains(github.event.pull_request.labels.*.name, 'size/XL') }}
+      - if: ${{ contains(steps.label.outputs.sizeLabel, 'size/M') || contains(steps.label.outputs.sizeLabel, 'size/L') || contains(steps.label.outputs.sizeLabel, 'size/XL') }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           url: ${{ github.event.pull_request.html_url }}

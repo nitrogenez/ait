@@ -1,5 +1,7 @@
 package dev.amble.ait.core.tardis.handler.travel;
 
+import dev.amble.ait.core.tardis.util.AsyncLocatorUtil;
+import dev.amble.ait.data.Exclude;
 import dev.amble.lib.data.CachedDirectedGlobalPos;
 import dev.drtheo.scheduler.api.Scheduler;
 import dev.drtheo.scheduler.api.TimeUnit;
@@ -36,9 +38,15 @@ import dev.amble.ait.core.util.ForcedChunkUtil;
 import dev.amble.ait.core.util.WorldUtil;
 import dev.amble.ait.core.world.RiftChunkManager;
 
+import java.util.concurrent.CompletableFuture;
+
 public final class TravelHandler extends AnimatedTravelHandler implements CrashableTardisTravel {
 
+    @Exclude
     private boolean travelCooldown;
+
+    @Exclude
+    private boolean waiting;
 
     public static final Identifier CANCEL_DEMAT_SOUND = AITMod.id("cancel_demat_sound");
 
@@ -92,6 +100,11 @@ public final class TravelHandler extends AnimatedTravelHandler implements Crasha
 
     public TravelHandler() {
         super(Id.TRAVEL);
+    }
+
+    @Override
+    public boolean shouldTickAnimation() {
+        return !this.waiting && this.getState().animated();
     }
 
     @Override
@@ -254,6 +267,7 @@ public final class TravelHandler extends AnimatedTravelHandler implements Crasha
 
         this.forceDemat(sound);
     }
+
     public void dematerialize() {
         this.dematerialize(null);
     }
@@ -341,35 +355,43 @@ public final class TravelHandler extends AnimatedTravelHandler implements Crasha
         if (this.tardis.sequence().hasActiveSequence())
             this.tardis.sequence().setActiveSequence(null, true);
 
-        CachedDirectedGlobalPos pos = this.getProgress();
-        TardisEvents.Result<CachedDirectedGlobalPos> result = TardisEvents.BEFORE_LAND.invoker().onLanded(this.tardis, pos);
+        CachedDirectedGlobalPos initialPos = this.getProgress();
+        TardisEvents.Result<CachedDirectedGlobalPos> result = TardisEvents.BEFORE_LAND.invoker()
+                .onLanded(this.tardis, initialPos);
 
         if (result.type() == TardisEvents.Interaction.FAIL) {
             this.crash();
             return;
         }
 
-        pos = result.result().orElse(pos);
-
-        pos = WorldUtil.locateSafe(pos, this.vGroundSearch.get(), this.hGroundSearch.get());
-
-        this.tardis.door().closeDoors();
+        CachedDirectedGlobalPos finalPos = result.value().orElse(initialPos);
 
         this.state.set(State.MAT);
-        SoundEvent sound = tardis.stats().getTravelEffects().get(this.getState()).sound();
+        this.waiting = true;
 
-        if (this.isCrashing())
-            sound = AITSounds.EMERG_MAT;
+        CompletableFuture<?> future = CompletableFuture.supplyAsync(() -> {
+            return WorldUtil.locateSafe(finalPos, this.vGroundSearch.get(), this.hGroundSearch.get());
+        }).thenAccept(pos -> {
+            this.waiting = false;
+            this.tardis.door().closeDoors();
 
-        this.destination(pos);
-        this.forcePosition(this.destination());
+            SoundEvent sound = tardis.stats().getTravelEffects().get(this.getState()).sound();
 
-        // Play materialize sound at the destination
-        this.position().getWorld().playSound(null, this.position().getPos(), sound, SoundCategory.BLOCKS);
+            if (this.isCrashing())
+                sound = AITSounds.EMERG_MAT;
 
-        this.tardis.getDesktop().playSoundAtEveryConsole(sound, SoundCategory.BLOCKS, 2f, 1f);
-        //System.out.println(sound.getId());
-        this.placeExterior(true); // we schedule block update in #finishRemat
+            this.destination(pos);
+            this.forcePosition(this.destination());
+
+            // Play materialize sound at the destination
+            this.position().getWorld().playSound(null, this.position().getPos(), sound, SoundCategory.BLOCKS);
+
+            this.tardis.getDesktop().playSoundAtEveryConsole(sound, SoundCategory.BLOCKS, 2f, 1f);
+            //System.out.println(sound.getId());
+            this.placeExterior(true); // we schedule block update in #finishRemat
+        });
+
+        AsyncLocatorUtil.LOCATING_EXECUTOR_SERVICE.submit(() -> future);
     }
 
     public void finishRemat() {

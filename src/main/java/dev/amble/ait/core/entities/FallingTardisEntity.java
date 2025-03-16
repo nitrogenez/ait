@@ -111,10 +111,11 @@ public class FallingTardisEntity extends LinkableDummyEntity implements ISpaceIm
 
         this.move(MovementType.SELF, this.getVelocity());
 
-        Tardis tardis = this.tardis().get();
 
-        if (tardis == null)
+        if (!this.isLinked())
             return;
+
+        Tardis tardis = this.tardis().get();
 
         this.setVelocity(this.getVelocity().multiply(tardis.travel().isCrashing() ? 1.05f : 0.98f));
 

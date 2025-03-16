@@ -16,9 +16,8 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.Identifier;
 
 import dev.amble.ait.api.link.v2.Linkable;
+import dev.amble.ait.client.tardis.ClientTardis;
 import dev.amble.ait.core.blockentities.ExteriorBlockEntity;
-import dev.amble.ait.core.effects.ZeitonHighEffect;
-import dev.amble.ait.core.tardis.Tardis;
 import dev.amble.ait.core.tardis.handler.DoorHandler;
 import dev.amble.ait.data.Loyalty;
 
@@ -33,16 +32,11 @@ public abstract class ExteriorModel extends SinglePartEntityModel {
         super(function);
     }
 
-    public void renderWithAnimations(ExteriorBlockEntity exterior, ModelPart root, MatrixStack matrices,
-            VertexConsumer vertices, int light, int overlay, float red, float green, float blue, float alpha) {
-        Tardis tardis = exterior.tardis().get();
-
-        if (tardis == null)
-            return;
-
+    public void renderWithAnimations(ExteriorBlockEntity exterior, ClientTardis tardis, ModelPart root, MatrixStack matrices,
+                                     VertexConsumer vertices, int light, int overlay, float red, float green, float blue, float alpha) {
         float newAlpha = alpha;
 
-        if (tardis.cloak().cloaked().get() && !ZeitonHighEffect.isHigh(MinecraftClient.getInstance().player)) {
+        if (tardis.cloak().cloaked().get()) {
             PlayerEntity player = MinecraftClient.getInstance().player;
 
             if (!(tardis.loyalty().get(player).isOf(Loyalty.Type.COMPANION))) {

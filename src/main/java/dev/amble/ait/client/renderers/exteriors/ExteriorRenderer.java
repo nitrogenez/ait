@@ -21,18 +21,18 @@ import net.minecraft.util.profiler.Profiler;
 
 import dev.amble.ait.AITMod;
 import dev.amble.ait.api.TardisComponent;
-import dev.amble.ait.api.link.v2.TardisRef;
 import dev.amble.ait.client.boti.BOTI;
 import dev.amble.ait.client.models.exteriors.ExteriorModel;
 import dev.amble.ait.client.models.exteriors.SiegeModeModel;
 import dev.amble.ait.client.models.machines.ShieldsModel;
 import dev.amble.ait.client.renderers.AITRenderLayers;
+import dev.amble.ait.client.tardis.ClientTardis;
 import dev.amble.ait.client.util.ClientLightUtil;
 import dev.amble.ait.core.blockentities.ExteriorBlockEntity;
 import dev.amble.ait.core.blocks.ExteriorBlock;
+import dev.amble.ait.core.effects.ZeitonHighEffect;
 import dev.amble.ait.core.tardis.Tardis;
 import dev.amble.ait.core.tardis.handler.BiomeHandler;
-import dev.amble.ait.core.tardis.handler.CloakHandler;
 import dev.amble.ait.data.datapack.DatapackConsole;
 import dev.amble.ait.data.schema.exterior.ClientExteriorVariantSchema;
 import dev.amble.ait.registry.impl.exterior.ClientExteriorVariantRegistry;
@@ -59,25 +59,24 @@ public class ExteriorRenderer<T extends ExteriorBlockEntity> implements BlockEnt
         profiler.push("exterior");
 
         profiler.push("find_tardis");
-        TardisRef optionalTardis = entity.tardis();
 
-        if (optionalTardis == null || optionalTardis.isEmpty())
+        if (!entity.isLinked())
             return;
 
-        Tardis tardis = optionalTardis.get();
-
+        ClientTardis tardis = entity.tardis().get().asClient();
 
         profiler.swap("render");
 
-        if (entity.getAlpha() > 0 || !tardis.<CloakHandler>handler(TardisComponent.Id.CLOAK).cloaked().get())
+        if (entity.getAlpha() > 0 && (!tardis.cloak().cloaked().get() || ZeitonHighEffect.isHigh(MinecraftClient.getInstance().player)))
             this.renderExterior(profiler, tardis, entity, tickDelta, matrices, vertexConsumers, light, overlay);
+
         profiler.pop();
 
         profiler.pop();
     }
 
-    private void renderExterior(Profiler profiler, Tardis tardis, T entity, float tickDelta, MatrixStack matrices,
-            VertexConsumerProvider vertexConsumers, int light, int overlay) {
+    private void renderExterior(Profiler profiler, ClientTardis tardis, T entity, float tickDelta, MatrixStack matrices,
+                                VertexConsumerProvider vertexConsumers, int light, int overlay) {
         final float alpha = entity.getAlpha();
         RenderSystem.enableCull();
         RenderSystem.enableBlend();
@@ -106,9 +105,9 @@ public class ExteriorRenderer<T extends ExteriorBlockEntity> implements BlockEnt
 
             matrices.push();
             matrices.translate(0.5f, 0.5f, 0.5f);
-            SIEGE_MODEL.renderWithAnimations(entity, SIEGE_MODEL.getPart(), matrices,
-                    vertexConsumers.getBuffer(AITRenderLayers.getEntityTranslucentCull(tardis.siege().texture().get())),
-                    light, overlay, 1, 1, 1, 1);
+            SIEGE_MODEL.renderWithAnimations(entity, tardis, SIEGE_MODEL.getPart(),
+                    matrices,
+                    vertexConsumers.getBuffer(AITRenderLayers.getEntityTranslucentCull(tardis.siege().texture().get())), light, overlay, 1, 1, 1, 1);
 
             matrices.pop();
             profiler.pop();
@@ -170,9 +169,9 @@ public class ExteriorRenderer<T extends ExteriorBlockEntity> implements BlockEnt
         if (tardis.selfDestruct().isQueued())
             matrices.scale(0.7f, 0.7f, 0.7f);
 
-        model.renderWithAnimations(entity, this.model.getPart(), matrices,
-                vertexConsumers.getBuffer(AITRenderLayers.getEntityTranslucentCull(texture)), light, overlay, 1, 1, 1,
-                alpha);
+        model.renderWithAnimations(entity, tardis, this.model.getPart(),
+                matrices, vertexConsumers.getBuffer(AITRenderLayers.getEntityTranslucentCull(texture)), light, overlay, 1, 1,
+                1, alpha);
 
         //System.out.println( variant.hasTransparentDoors());
 
@@ -189,35 +188,44 @@ public class ExteriorRenderer<T extends ExteriorBlockEntity> implements BlockEnt
 
         profiler.push("emission");
         boolean alarms = tardis.alarm().enabled().get();
-        float u;
-        float t;
-        float s;
 
-        if ((tardis.stats().getName() != null && "partytardis".equals(tardis.stats().getName().toLowerCase()) ||(!tardis.extra().getInsertedDisc().isEmpty()))) {
-            int m = 25;
-            int n = MinecraftClient.getInstance().player.age / 25 + MinecraftClient.getInstance().player.getId();
-            int o = DyeColor.values().length;
-            int p = n % o;
-            int q = (n + 1) % o;
-            float r = ((float)(MinecraftClient.getInstance().player.age % 25) + h) / 25f;
-            float[] fs = SheepEntity.getRgbColor(DyeColor.byId(p));
-            float[] gs = SheepEntity.getRgbColor(DyeColor.byId(q));
-            s = fs[0] * (1f - r) + gs[0] * r;
-            t = fs[1] * (1f - r) + gs[1] * r;
-            u = fs[2] * (1f - r) + gs[2] * r;
-        } else {
-            float[] hs = new float[]{ 1.0f, 1.0f, 1.0f };
-            s = hs[0];
-            t = hs[1];
-            u = hs[2];
+
+        if (alpha > 0.105f && emission != null && !emission.equals(DatapackConsole.EMPTY)) {
+            float u;
+            float t;
+            float s;
+
+            if ((tardis.stats().getName() != null && "partytardis".equals(tardis.stats().getName().toLowerCase()) ||(!tardis.extra().getInsertedDisc().isEmpty()))) {
+                int m = 25;
+                int n = MinecraftClient.getInstance().player.age / m + MinecraftClient.getInstance().player.getId();
+                int o = DyeColor.values().length;
+                int p = n % o;
+                int q = (n + 1) % o;
+                float r = ((float)(MinecraftClient.getInstance().player.age % m)) / m;
+                float[] fs = SheepEntity.getRgbColor(DyeColor.byId(p));
+                float[] gs = SheepEntity.getRgbColor(DyeColor.byId(q));
+                s = fs[0] * (1f - r) + gs[0] * r;
+                t = fs[1] * (1f - r) + gs[1] * r;
+                u = fs[2] * (1f - r) + gs[2] * r;
+            } else {
+                float[] hs = new float[]{ 1.0f, 1.0f, 1.0f };
+                s = hs[0];
+                t = hs[1];
+                u = hs[2];
+            }
+
+            float colorAlpha = 1 - alpha;
+
+            boolean power = tardis.fuel().hasPower();
+
+            float red = alarms ? !power ? 0.25f : s - colorAlpha : s - colorAlpha;
+            float green = alarms ? !power ? 0.01f : 0.3f : t - colorAlpha;
+            float blue = alarms ? !power ? 0.01f : 0.3f : u - colorAlpha;
+
+            ClientLightUtil.renderEmissive((v, l) -> model.renderWithAnimations(
+                    entity, tardis, this.model.getPart(), matrices, v, l, overlay, red, green, blue, alpha
+            ), emission, vertexConsumers);
         }
-
-        float colorAlpha = 1 - alpha;
-
-        if (alpha > 0.105f && emission != null && !(emission.equals(DatapackConsole.EMPTY)))
-            ClientLightUtil.renderEmissivable(tardis.fuel().hasPower(), model::renderWithAnimations, emission, entity,
-                    this.model.getPart(), matrices, vertexConsumers, 0xf000f0, overlay, alarms ? !tardis.fuel().hasPower() ? 0.25f : s - colorAlpha : s - colorAlpha, alarms ? !tardis.fuel().hasPower() ? 0.01f : 0.3f : t - colorAlpha,
-                    alarms ? !tardis.fuel().hasPower() ? 0.01f : 0.3f : u - colorAlpha, alpha);
 
         profiler.swap("biome");
 
@@ -227,9 +235,9 @@ public class ExteriorRenderer<T extends ExteriorBlockEntity> implements BlockEnt
                 Identifier biomeTexture = handler.getBiomeKey().get(this.variant.overrides());
 
                 if (alpha > 0.105f && (biomeTexture != null && !texture.equals(biomeTexture))) {
-                    model.renderWithAnimations(entity, this.model.getPart(), matrices,
-                            vertexConsumers.getBuffer(AITRenderLayers.tardisEmissiveCullZOffset(biomeTexture, false)),
-                            light, overlay, 1, 1, 1, alpha);
+                    model.renderWithAnimations(entity, tardis, this.model.getPart(),
+                            matrices,
+                            vertexConsumers.getBuffer(AITRenderLayers.tardisEmissiveCullZOffset(biomeTexture, false)), light, overlay, 1, 1, 1, alpha);
                 }
 
             }

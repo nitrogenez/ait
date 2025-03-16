@@ -95,10 +95,11 @@ public class FlightTardisRenderer extends EntityRenderer<FlightTardisEntity> {
         if (variant.emission() != null && tardis.fuel().hasPower()) {
             boolean alarms = tardis.alarm().enabled().get();
 
-            ClientLightUtil.renderEmissivable(tardis.fuel().hasPower(), model::renderEntity,
-                    variant.emission(), entity, this.model.getPart(), matrices,
-                    vertexConsumers, light, OverlayTexture.DEFAULT_UV, 1, alarms ? 0.3f : 1,
-                    alarms ? 0.3f : 1, 1);
+            float color = alarms ? 0.3f : 1f;
+
+            ClientLightUtil.renderEmissivable(tardis.fuel().hasPower(), (v, l) -> model.renderEntity(
+                    entity, this.model.getPart(), matrices, v, l, OverlayTexture.DEFAULT_UV, color, color, color, 1
+            ), variant.emission(), vertexConsumers);
         }
 
         BiomeHandler biome = tardis.handler(TardisComponent.Id.BIOME);
@@ -130,7 +131,7 @@ public class FlightTardisRenderer extends EntityRenderer<FlightTardisEntity> {
 
     @Override
     public Identifier getTexture(FlightTardisEntity entity) {
-        if (entity.tardis() == null || entity.tardis().isEmpty())
+        if (!entity.isLinked())
             return SpriteAtlasTexture.BLOCK_ATLAS_TEXTURE; // random texture just so i dont crash
 
         return entity.tardis().get().getExterior().getVariant().getClient().texture();

@@ -15,6 +15,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RotationAxis;
 
 import dev.amble.ait.client.animation.console.copper.CopperAnimations;
+import dev.amble.ait.client.tardis.ClientTardis;
 import dev.amble.ait.core.blockentities.ConsoleBlockEntity;
 import dev.amble.ait.core.tardis.Tardis;
 import dev.amble.ait.core.tardis.control.impl.DirectionControl;
@@ -1749,14 +1750,8 @@ public class CopperConsoleModel extends ConsoleModel {
     }
 
     @Override
-    public void renderWithAnimations(ConsoleBlockEntity console, ModelPart root, MatrixStack matrices,
+    public void renderWithAnimations(ConsoleBlockEntity console, ClientTardis tardis, ModelPart root, MatrixStack matrices,
                                      VertexConsumer vertices, int light, int overlay, float red, float green, float blue, float pAlpha) {
-        if (!console.isLinked()) return;
-
-        Tardis tardis = console.tardis().get();
-
-        if (tardis == null)
-            return;
         matrices.push();
         matrices.translate(0.5f, -1.52f, -0.5f);
         matrices.multiply(RotationAxis.NEGATIVE_Y.rotationDegrees(150f));
@@ -1830,7 +1825,7 @@ public class CopperConsoleModel extends ConsoleModel {
         ModelPart antigravs = this.copper.getChild("controls").getChild("panel_4").getChild("rot16").getChild("lever8").getChild("bone103");
         antigravs.roll += tardis.travel().antigravs().get() ? 0f : -1f;
 
-        super.renderWithAnimations(console, root, matrices, vertices, light, overlay, red, green, blue, pAlpha);
+        super.renderWithAnimations(console, tardis, root, matrices, vertices, light, overlay, red, green, blue, pAlpha);
         matrices.pop();
     }
 

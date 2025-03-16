@@ -299,15 +299,15 @@ public class ConsoleControlEntity extends LinkableDummyLivingEntity {
         if (player.getMainHandStack().getItem() == AITItems.TARDIS_ITEM)
             this.discard();
 
-        Tardis tardis = this.tardis().get();
-
-        if (tardis == null) {
+        if (!this.isLinked()) {
             AITMod.LOGGER.warn("Discarding invalid control entity at {}; console pos: {}", this.getPos(),
                     this.consoleBlockPos);
 
             this.discard();
             return false;
         }
+
+        Tardis tardis = this.tardis().get();
 
         control.runAnimation(tardis, (ServerPlayerEntity) player, (ServerWorld) world);
 

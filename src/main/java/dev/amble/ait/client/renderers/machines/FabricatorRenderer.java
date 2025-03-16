@@ -53,9 +53,9 @@ public class FabricatorRenderer<T extends FabricatorBlockEntity> implements Bloc
                 1.0F, 1.0F, 1.0F);
 
         if (entity.isValid()) {
-            ClientLightUtil.renderEmissive(ClientLightUtil.Renderable.create(fabricatorModel::render),
-                    EMISSIVE_FABRICATOR_TEXTURE, entity, fabricatorModel.getPart(), matrices, vertexConsumers, light,
-                    overlay, 1, 1, 1, 1);
+            ClientLightUtil.renderEmissive((v, l) -> fabricatorModel.render(
+                    matrices, v, l, overlay, 1, 1, 1, 1
+            ), EMISSIVE_FABRICATOR_TEXTURE, vertexConsumers);
         }
 
         matrices.pop();

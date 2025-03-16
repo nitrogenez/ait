@@ -73,13 +73,13 @@ public final class TardisEvents {
 
     public static final Event<BeforeLand> BEFORE_LAND = EventFactory.createArrayBacked(BeforeLand.class, callbacks -> (tardis, pos) -> {
         for (BeforeLand callback : callbacks) {
-            Result<CachedDirectedGlobalPos> value = callback.onLanded(tardis, pos);
+            Result<CachedDirectedGlobalPos> result = callback.onLanded(tardis, pos);
 
-            if (value.type() != Interaction.PASS)
-                return value;
+            if (result.type() != Interaction.PASS)
+                return result;
 
-            if (value.result().isPresent())
-                pos = value.result().get();
+            if (result.value().isPresent())
+                pos = result.value().get();
         }
 
         return new Result<>(Interaction.SUCCESS, pos);
@@ -555,7 +555,7 @@ public final class TardisEvents {
             this(inter, Optional.ofNullable(t));
         }
 
-        public Optional<T> result() {
+        public Optional<T> value() {
             return t;
         }
     }

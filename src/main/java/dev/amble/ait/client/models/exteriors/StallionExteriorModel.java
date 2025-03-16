@@ -9,6 +9,7 @@ import net.minecraft.entity.Entity;
 
 import dev.amble.ait.AITMod;
 import dev.amble.ait.api.link.v2.Linkable;
+import dev.amble.ait.client.tardis.ClientTardis;
 import dev.amble.ait.core.blockentities.ExteriorBlockEntity;
 import dev.amble.ait.core.tardis.handler.DoorHandler;
 
@@ -131,14 +132,14 @@ public class StallionExteriorModel extends ExteriorModel {
     }
 
     @Override
-    public void renderWithAnimations(ExteriorBlockEntity exterior, ModelPart root, MatrixStack matrices, VertexConsumer vertices, int light, int overlay, float red, float green, float blue, float alpha) {
+    public void renderWithAnimations(ExteriorBlockEntity exterior, ClientTardis tardis, ModelPart root, MatrixStack matrices, VertexConsumer vertices, int light, int overlay, float red, float green, float blue, float alpha) {
         matrices.push();
         matrices.scale(0.95f, 0.95f, 0.95f);
         matrices.translate(0, -1.5f, 0);
 
         this.renderDoors(exterior, root, matrices, vertices, light, overlay, red, green, blue, alpha, false);
 
-        super.renderWithAnimations(exterior, root, matrices, vertices, light, overlay, red, green, blue, alpha);
+        super.renderWithAnimations(exterior, tardis, root, matrices, vertices, light, overlay, red, green, blue, alpha);
         matrices.pop();
     }
 

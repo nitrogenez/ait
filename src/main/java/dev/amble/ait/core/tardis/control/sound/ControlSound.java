@@ -25,7 +25,6 @@ import dev.amble.ait.registry.impl.console.ConsoleRegistry;
 
 /**
  * Represents a sound that is played when a control is used
- * @param id The identifier of this sound - it's a combination of the control and console identifiers
  * @param controlId The identifier of the control that this sound is for
  * @param consoleId The identifier of the console that this sound is for
  * @param successId The identifier of the sound that is played when the control is successful
@@ -88,8 +87,8 @@ public record ControlSound(Identifier controlId, Identifier consoleId, Identifie
      * controlId - ait:monitor
      * consoleId - ait:hartnell
      * return - ait:hartnell/ait/monitor
-     * @param controlId Id of the control
-     * @param consoleId Id of the console
+     * @param controlId id of the control
+     * @param consoleId id of the console
      * @return Merged identifier
      */
     public static Identifier mergeIdentifiers(Identifier controlId, Identifier consoleId) {

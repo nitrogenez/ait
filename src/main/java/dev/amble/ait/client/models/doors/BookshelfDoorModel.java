@@ -7,6 +7,7 @@ import net.minecraft.client.util.math.MatrixStack;
 
 import dev.amble.ait.AITMod;
 import dev.amble.ait.api.link.v2.block.AbstractLinkableBlockEntity;
+import dev.amble.ait.client.tardis.ClientTardis;
 import dev.amble.ait.core.tardis.handler.DoorHandler;
 
 public class BookshelfDoorModel extends DoorModel {
@@ -43,7 +44,7 @@ public class BookshelfDoorModel extends DoorModel {
     }
 
     @Override
-    public void renderWithAnimations(AbstractLinkableBlockEntity doorEntity, ModelPart root, MatrixStack matrices,
+    public void renderWithAnimations(ClientTardis tardis, AbstractLinkableBlockEntity doorEntity, ModelPart root, MatrixStack matrices,
                                      VertexConsumer vertices, int light, int overlay, float red, float green, float blue, float pAlpha) {
         if (doorEntity.tardis().isEmpty())
             return;
@@ -64,7 +65,7 @@ public class BookshelfDoorModel extends DoorModel {
         matrices.scale(1F, 1F, 1F);
         matrices.translate(0, -1.5, 0);
 
-        super.renderWithAnimations(doorEntity, root, matrices, vertices, light, overlay, red, green, blue, pAlpha);
+        super.renderWithAnimations(tardis, doorEntity, root, matrices, vertices, light, overlay, red, green, blue, pAlpha);
         matrices.pop();
     }
 

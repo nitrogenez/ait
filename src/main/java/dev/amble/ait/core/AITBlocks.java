@@ -53,6 +53,7 @@ public class AITBlocks extends BlockContainer {
             FabricBlockSettings.create().nonOpaque().noBlockBreakParticles().strength(-1.0f, 3600000.0f).dropsNothing()
                     .instrument(Instrument.COW_BELL).pistonBehavior(PistonBehavior.IGNORE));
 
+    @PickaxeMineable(tool = PickaxeMineable.Tool.IRON)
     @NoBlockDrop
     public static final Block WAYPOINT_BANK = new WaypointBankBlock(
             FabricBlockSettings.create().nonOpaque().requiresTool().instrument(Instrument.BASEDRUM).strength(0.5F, 6.0F)
@@ -75,7 +76,7 @@ public class AITBlocks extends BlockContainer {
     @PickaxeMineable
     @NoEnglish
     public static final Block ARTRON_COLLECTOR_BLOCK = new ArtronCollectorBlock(
-            FabricBlockSettings.create().nonOpaque().noBlockBreakParticles().requiresTool().strength(1.5F)
+            FabricBlockSettings.create().nonOpaque().noBlockBreakParticles().requiresTool().strength(1F)
                     .instrument(Instrument.BANJO).pistonBehavior(PistonBehavior.IGNORE));
 
     // Coral Blocks

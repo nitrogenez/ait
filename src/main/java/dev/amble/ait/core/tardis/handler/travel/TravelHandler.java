@@ -91,7 +91,7 @@ public final class TravelHandler extends AnimatedTravelHandler implements Crasha
                 tardis.getDesktop().playSoundAtEveryConsole(AITSounds.NAV_NOTIFICATION, SoundCategory.BLOCKS, 2f, 1f);
             if (RiftChunkManager.isRiftChunk(tardis.travel().position())) {
                 TardisUtil.sendMessageToInterior(tardis.asServer(), Text.translatable("riftchunk.ait.found").formatted(Formatting.YELLOW, Formatting.ITALIC));
-                tardis.getDesktop().playSoundAtEveryConsole(AITSounds.RIFT_SUCCESS, SoundCategory.BLOCKS, 2f, 1f);
+                tardis.getDesktop().playSoundAtEveryConsole(AITSounds.BWEEP, SoundCategory.BLOCKS, 2f, 1f);
             }
             if (tardis.travel().isCrashing())
                 tardis.travel().setCrashing(false);

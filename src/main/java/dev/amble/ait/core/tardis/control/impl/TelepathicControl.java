@@ -151,7 +151,7 @@ public class TelepathicControl extends Control {
         if (opinion != null && tardis.opinions().contains(opinion) && (player.experienceLevel >= opinion.cost() || player.isCreative())) {
             opinion.apply(tardis.asServer(), player);
 
-            player.getServerWorld().playSound(null, console, AITSounds.GROAN, SoundCategory.AMBIENT, 0.25f, 1f);
+            player.getServerWorld().playSound(null, console, AITSounds.TARDIS_BLING, SoundCategory.AMBIENT, 0.25f, 1f);
             player.getServerWorld().spawnParticles((opinion.likes()) ? ParticleTypes.HEART : ParticleTypes.ANGRY_VILLAGER, console.toCenterPos().getX(),
                     console.toCenterPos().getY() + 1, console.toCenterPos().getZ(), 1, 0f, 1F, 0f, 5.0F);
 

@@ -12,7 +12,8 @@ public class DematCircuit extends DurableSubSystem implements StructureHolder {
         TardisEvents.DEMAT.register(tardis -> {
             DematCircuit circuit = tardis.subsystems().demat();
 
-            return (circuit.isEnabled() && !circuit.isBroken()) ? TardisEvents.Interaction.PASS : TardisEvents.Interaction.FAIL;
+            return circuit.isEnabled() && !circuit.isBroken()
+                    ? TardisEvents.Interaction.PASS : TardisEvents.Interaction.FAIL;
         });
     }
 

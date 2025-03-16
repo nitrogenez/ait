@@ -274,9 +274,7 @@ public class AITModClient implements ClientModInitializer {
 
         AstralMapBlock.registerSyncListener();
 
-        ClientPlayConnectionEvents.JOIN.register((handler, sender, client) -> {;
-            BOTI.tryWarn();
-        });
+        ClientPlayConnectionEvents.JOIN.register((handler, sender, client) -> BOTI.tryWarn());
     }
     public static Screen screenFromId(int id) {
         return screenFromId(id, null, null);

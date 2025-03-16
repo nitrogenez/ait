@@ -1,7 +1,6 @@
 package dev.amble.ait.client.boti;
 
 
-import java.awt.*;
 import java.util.LinkedList;
 import java.util.Queue;
 
@@ -10,7 +9,6 @@ import com.mojang.blaze3d.platform.GlStateManager;
 
 import dev.amble.ait.AITMod;
 import dev.amble.ait.compat.DependencyChecker;
-import dev.amble.ait.config.AITConfig;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gl.Framebuffer;
 

@@ -1,7 +1,7 @@
 package dev.amble.ait.core.engine.impl;
 
 
-import dev.amble.ait.api.TardisEvents;
+import dev.amble.ait.api.tardis.TardisEvents;
 import dev.amble.ait.core.engine.StructureHolder;
 import dev.amble.ait.core.engine.SubSystem;
 import dev.amble.ait.core.engine.block.multi.MultiBlockStructure;

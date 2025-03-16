@@ -23,7 +23,7 @@ import net.minecraft.registry.RegistryKeys;
 import net.minecraft.util.Rarity;
 
 import dev.amble.ait.AITMod;
-import dev.amble.ait.api.link.LinkableItem;
+import dev.amble.ait.api.tardis.link.LinkableItem;
 import dev.amble.ait.core.drinks.DrinkRegistry;
 import dev.amble.ait.core.drinks.DrinkUtil;
 import dev.amble.ait.core.engine.SubSystem;

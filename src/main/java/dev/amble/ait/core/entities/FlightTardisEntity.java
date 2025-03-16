@@ -22,7 +22,7 @@ import net.minecraft.util.math.*;
 import net.minecraft.world.World;
 
 import dev.amble.ait.AITMod;
-import dev.amble.ait.api.link.LinkableLivingEntity;
+import dev.amble.ait.api.tardis.link.LinkableLivingEntity;
 import dev.amble.ait.client.util.ClientShakeUtil;
 import dev.amble.ait.core.AITDimensions;
 import dev.amble.ait.core.AITEntityTypes;

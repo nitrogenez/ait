@@ -1,4 +1,4 @@
-package dev.amble.ait.api.link.v2.block;
+package dev.amble.ait.api.tardis.link.v2.block;
 
 import java.util.UUID;
 
@@ -16,8 +16,8 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 
-import dev.amble.ait.api.link.v2.Linkable;
-import dev.amble.ait.api.link.v2.TardisRef;
+import dev.amble.ait.api.tardis.link.v2.Linkable;
+import dev.amble.ait.api.tardis.link.v2.TardisRef;
 import dev.amble.ait.core.tardis.ServerTardis;
 import dev.amble.ait.core.tardis.Tardis;
 import dev.amble.ait.core.tardis.manager.ServerTardisManager;

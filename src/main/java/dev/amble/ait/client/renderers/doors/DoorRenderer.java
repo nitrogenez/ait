@@ -12,7 +12,7 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.math.RotationAxis;
 import net.minecraft.util.profiler.Profiler;
 
-import dev.amble.ait.api.TardisComponent;
+import dev.amble.ait.api.tardis.TardisComponent;
 import dev.amble.ait.client.boti.BOTI;
 import dev.amble.ait.client.models.doors.DoomDoorModel;
 import dev.amble.ait.client.models.doors.DoorModel;

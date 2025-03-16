@@ -11,10 +11,10 @@ import org.jetbrains.annotations.Nullable;
 
 import net.minecraft.item.ItemStack;
 
-import dev.amble.ait.api.Disposable;
-import dev.amble.ait.api.Initializable;
-import dev.amble.ait.api.TardisComponent;
-import dev.amble.ait.api.TardisEvents;
+import dev.amble.ait.api.tardis.Disposable;
+import dev.amble.ait.api.tardis.Initializable;
+import dev.amble.ait.api.tardis.TardisComponent;
+import dev.amble.ait.api.tardis.TardisEvents;
 import dev.amble.ait.client.tardis.ClientTardis;
 import dev.amble.ait.core.AITBlocks;
 import dev.amble.ait.core.engine.impl.*;

@@ -26,7 +26,7 @@ import net.minecraft.util.math.BlockPos;
 
 import dev.amble.ait.AITMod;
 import dev.amble.ait.api.Nameable;
-import dev.amble.ait.api.TardisClientEvents;
+import dev.amble.ait.api.tardis.TardisClientEvents;
 import dev.amble.ait.client.screens.ConsoleScreen;
 import dev.amble.ait.client.screens.SonicSettingsScreen;
 import dev.amble.ait.client.screens.TardisSecurityScreen;

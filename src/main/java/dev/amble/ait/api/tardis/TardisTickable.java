@@ -1,4 +1,4 @@
-package dev.amble.ait.api;
+package dev.amble.ait.api.tardis;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;

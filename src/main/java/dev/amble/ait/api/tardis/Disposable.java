@@ -1,4 +1,4 @@
-package dev.amble.ait.api;
+package dev.amble.ait.api.tardis;
 
 public interface Disposable {
 

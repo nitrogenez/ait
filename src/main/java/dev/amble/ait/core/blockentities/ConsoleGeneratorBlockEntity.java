@@ -56,7 +56,7 @@ public class ConsoleGeneratorBlockEntity extends FluidLinkBlockEntity {
         if (!TardisServerWorld.isTardisDimension(world))
             return;
 
-        if (!this.isLinked() || !this.isPowered())
+        if (!this.isLinked())
             return;
 
         ItemStack stack = player.getMainHandStack();

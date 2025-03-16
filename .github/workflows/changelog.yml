@@ -1,5 +1,13 @@
 name: Generate Changelog
-on: workflow_dispatch
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - release
+      - release/*
+    paths-ignore:
+      - 'CHANGELOG.md'
+
 jobs:
   generate_changelog:
     runs-on: ubuntu-latest

@@ -3,5 +3,5 @@
     "category":"ait:exterior/geometric",
     "parent": "ait:exterior/geometric/default",
     "texture": "ait:textures/blockentities/exteriors/geometric/geometric_green.png",
-    "emission": "ait:textures/blockentities/exteriors/geometric/geometric_green_emission.png",
+    "emission": "ait:textures/blockentities/exteriors/geometric/geometric_green_emission.png"
   }

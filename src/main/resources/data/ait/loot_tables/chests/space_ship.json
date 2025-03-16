@@ -93,6 +93,36 @@
           "type": "minecraft:item",
           "name": "ait:handles",
           "weight": 1
+        },
+        {
+          "type": "minecraft:item",
+          "name": "ait:good_man_music_disc",
+          "weight": 1
+        },
+        {
+          "type": "minecraft:item",
+          "name": "ait:venus_music_disc",
+          "weight": 1
+        },
+        {
+          "type": "minecraft:item",
+          "name": "ait:earth_music_disc",
+          "weight": 1
+        },
+        {
+          "type": "minecraft:item",
+          "name": "ait:wonderful_time_in_space_music_disc",
+          "weight": 1
+        },
+        {
+          "type": "minecraft:item",
+          "name": "ait:mercury_music_disc",
+          "weight": 1
+        },
+        {
+          "type": "minecraft:item",
+          "name": "ait:drifting_music_disc",
+          "weight": 1
         }
       ],
       "rolls": 15

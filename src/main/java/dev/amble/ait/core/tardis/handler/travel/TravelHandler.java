@@ -369,9 +369,9 @@ public final class TravelHandler extends AnimatedTravelHandler implements Crasha
         this.state.set(State.MAT);
         this.waiting = true;
 
-        CompletableFuture<?> future = CompletableFuture.supplyAsync(() -> {
-            return WorldUtil.locateSafe(finalPos, this.vGroundSearch.get(), this.hGroundSearch.get());
-        }).thenAccept(pos -> {
+        CompletableFuture<?> future = CompletableFuture.supplyAsync(() ->
+                WorldUtil.locateSafe(finalPos, this.vGroundSearch.get(), this.hGroundSearch.get())
+        ).thenAccept(pos -> {
             this.waiting = false;
             this.tardis.door().closeDoors();
 

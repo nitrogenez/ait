@@ -5,6 +5,8 @@ on:
     branches:
       - release
       - release/*
+    paths-ignore:
+      - 'CHANGELOG.md'
 
 jobs:
   generate_changelog:

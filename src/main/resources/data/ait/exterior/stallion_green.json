@@ -2,5 +2,6 @@
   "id": "ait:stallion_green",
   "category": "ait:exterior/stallion",
   "parent": "ait:exterior/stallion/default",
-  "texture": "ait:textures/blockentities/exteriors/stallion/stallion_green.png"
+  "texture": "ait:textures/blockentities/exteriors/stallion/stallion_green.png",
+  "loyalty": "COMPANION"
 }

@@ -3,5 +3,6 @@
     "category":"ait:exterior/geometric",
     "parent": "ait:exterior/geometric/default",
     "texture": "ait:textures/blockentities/exteriors/geometric/geometric_blue.png",
-    "emission": "ait:textures/blockentities/exteriors/geometric/geometric_blue_emission.png"
+    "emission": "ait:textures/blockentities/exteriors/geometric/geometric_blue_emission.png",
+    "loyalty": "PILOT"
   }

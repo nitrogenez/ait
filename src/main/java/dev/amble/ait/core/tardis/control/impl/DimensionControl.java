@@ -22,7 +22,6 @@ import dev.amble.ait.core.tardis.control.Control;
 import dev.amble.ait.core.tardis.handler.travel.TravelHandler;
 import dev.amble.ait.core.tardis.util.AsyncLocatorUtil;
 import dev.amble.ait.core.util.WorldUtil;
-import dev.amble.ait.data.schema.console.variant.renaissance.*;
 
 public class DimensionControl extends Control {
 
@@ -40,10 +39,10 @@ public class DimensionControl extends Control {
         CachedDirectedGlobalPos dest = travel.destination();
 
         CompletableFuture<Void> future = CompletableFuture.supplyAsync(() -> {
-            List<ServerWorld> dims = WorldUtil.getOpenWorlds();
+            List<ServerWorld> dims = WorldUtil.getTravelWorlds();
 
-            int index = WorldUtil.worldIndex(WorldUtil.isBlacklisted(dest.getWorld())
-                    ? world.getServer().getOverworld() : dest.getWorld());
+            int index = WorldUtil.travelWorldIndex(!WorldUtil.isTravelValid(dest.getWorld())
+                    ? WorldUtil.getOverworld() : dest.getWorld());
 
             if (leftClick) {
                 index = (dims.size() + index - 1) % dims.size();

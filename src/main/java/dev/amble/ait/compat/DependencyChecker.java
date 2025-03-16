@@ -34,6 +34,7 @@ public class DependencyChecker {
     public static boolean hasGravity() {
         return HAS_GRAVITY;
     }
+
     public static boolean hasIndium() {
         return HAS_INDIUM;
     }

@@ -71,6 +71,7 @@ public class BOTI {
 
         return invalid;
     }
+    
     private static boolean isInvalidSetup() {
         return !DependencyChecker.hasNvidiaCard() && !DependencyChecker.hasIndium();
     }

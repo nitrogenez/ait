@@ -16,12 +16,10 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 
 import dev.amble.ait.AITMod;
-import dev.amble.ait.api.tardis.TardisComponent;
 import dev.amble.ait.core.blockentities.ExteriorBlockEntity;
 import dev.amble.ait.core.effects.ZeitonHighEffect;
 import dev.amble.ait.core.sounds.travel.TravelSound;
 import dev.amble.ait.core.tardis.Tardis;
-import dev.amble.ait.core.tardis.handler.CloakHandler;
 import dev.amble.ait.core.tardis.handler.travel.TravelHandlerBase;
 import dev.amble.ait.core.tardis.util.NetworkUtil;
 

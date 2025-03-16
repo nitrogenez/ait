@@ -30,9 +30,10 @@ import dev.amble.ait.client.tardis.ClientTardis;
 import dev.amble.ait.client.util.ClientLightUtil;
 import dev.amble.ait.core.blockentities.ExteriorBlockEntity;
 import dev.amble.ait.core.blocks.ExteriorBlock;
-import dev.amble.ait.core.effects.ZeitonHighEffect;
 import dev.amble.ait.core.tardis.Tardis;
 import dev.amble.ait.core.tardis.handler.BiomeHandler;
+import dev.amble.ait.core.tardis.handler.SiegeHandler;
+import dev.amble.ait.core.tardis.handler.travel.TravelHandler;
 import dev.amble.ait.data.datapack.DatapackConsole;
 import dev.amble.ait.data.schema.exterior.ClientExteriorVariantSchema;
 import dev.amble.ait.registry.impl.exterior.ClientExteriorVariantRegistry;
@@ -100,21 +101,25 @@ public class ExteriorRenderer<T extends ExteriorBlockEntity> implements BlockEnt
         RenderSystem.disableBlend();
         RenderSystem.enableCull();
 
-        if (tardis.siege().isActive()) {
+        SiegeHandler siege = tardis.siege();
+
+        if (siege.isActive()) {
             profiler.push("siege");
 
             matrices.push();
             matrices.translate(0.5f, 0.5f, 0.5f);
             SIEGE_MODEL.renderWithAnimations(tardis, entity, SIEGE_MODEL.getPart(),
                     matrices,
-                    vertexConsumers.getBuffer(AITRenderLayers.getEntityTranslucentCull(tardis.siege().texture().get())), light, overlay, 1, 1, 1, 1);
+                    vertexConsumers.getBuffer(AITRenderLayers.getEntityTranslucentCull(siege.texture().get())), light, overlay, 1, 1, 1, 1);
 
             matrices.pop();
             profiler.pop();
             return;
         }
 
-        CachedDirectedGlobalPos exteriorPos = tardis.travel().position();
+        TravelHandler travel = tardis.travel();
+
+        CachedDirectedGlobalPos exteriorPos = travel.position();
 
         if (exteriorPos == null) {
             profiler.pop();
@@ -161,7 +166,7 @@ public class ExteriorRenderer<T extends ExteriorBlockEntity> implements BlockEnt
 
         this.applyNameTransforms(tardis, matrices, tardis.stats().getName());
 
-        if (tardis.travel().antigravs().get() && tardis.flight().falling().get()) {
+        if (travel.antigravs().get() && tardis.flight().falling().get()) {
             float sinFunc = (float) Math.sin((MinecraftClient.getInstance().player.age / 400f * 220f) * 0.2f + 0.2f);
             matrices.translate(0, sinFunc, 0);
         }
@@ -175,7 +180,7 @@ public class ExteriorRenderer<T extends ExteriorBlockEntity> implements BlockEnt
 
         //System.out.println( variant.hasTransparentDoors());
 
-        if ((tardis.door().getLeftRot() > 0 || variant.hasTransparentDoors()) && !tardis.isGrowth() && tardis.travel().isLanded())
+        if ((tardis.door().getLeftRot() > 0 || variant.hasTransparentDoors()) && !tardis.isGrowth() && travel.isLanded())
             BOTI.EXTERIOR_RENDER_QUEUE.add(entity);
             //this.renderExteriorBoti(entity, variant, matrices, texture, model, BotiPortalModel.getTexturedModelData().createModel(), light);
 

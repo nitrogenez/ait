@@ -79,21 +79,21 @@ public class EngineBlockEntity extends SubSystemBlockEntity implements ITardisSo
             if (dir == Direction.UP || dir == Direction.DOWN) continue;
 
             BlockPos offset = centre.offset(dir);
-            success = tryPlace(world, offset, AITBlocks.CABLE_BLOCK.getDefaultState()) && success;
+            success = success && tryPlace(world, offset, AITBlocks.CABLE_BLOCK.getDefaultState());
         }
 
         // place barrier blocks in corners
         BlockPos corner = centre.add(1, 0, 1);
-        success = tryPlace(world, corner, Blocks.BARRIER.getDefaultState()) && success;
+        success = success && tryPlace(world, corner, Blocks.BARRIER.getDefaultState());
 
         corner = centre.add(-1, 0, 1);
-        success = tryPlace(world, corner, Blocks.BARRIER.getDefaultState()) && success;
+        success = success && tryPlace(world, corner, Blocks.BARRIER.getDefaultState());
 
         corner = centre.add(1, 0, -1);
-        success = tryPlace(world, corner, Blocks.BARRIER.getDefaultState()) && success;
+        success = success && tryPlace(world, corner, Blocks.BARRIER.getDefaultState());
 
         corner = centre.add(-1, 0, -1);
-        success = tryPlace(world, corner, Blocks.BARRIER.getDefaultState()) && success;
+        success = success && tryPlace(world, corner, Blocks.BARRIER.getDefaultState());
 
         return success;
     }
@@ -121,21 +121,21 @@ public class EngineBlockEntity extends SubSystemBlockEntity implements ITardisSo
         // place cable blocks adjacent
         for (Direction dir : Direction.values()) {
             BlockPos offset = centre.offset(dir);
-            success = tryRemoveIfMatches(world, offset, AITBlocks.CABLE_BLOCK) && success;
+            success = success && tryRemoveIfMatches(world, offset, AITBlocks.CABLE_BLOCK);
         }
 
         // place barrier blocks in corners
         BlockPos corner = centre.add(1, 0, 1);
-        success = tryRemoveIfMatches(world, corner, Blocks.BARRIER) && success;
+        success = success && tryRemoveIfMatches(world, corner, Blocks.BARRIER);
 
         corner = centre.add(-1, 0, 1);
-        success = tryRemoveIfMatches(world, corner, Blocks.BARRIER) && success;
+        success = success && tryRemoveIfMatches(world, corner, Blocks.BARRIER);
 
         corner = centre.add(1, 0, -1);
-        success = tryRemoveIfMatches(world, corner, Blocks.BARRIER) && success;
+        success = success && tryRemoveIfMatches(world, corner, Blocks.BARRIER);
 
         corner = centre.add(-1, 0, -1);
-        success = tryRemoveIfMatches(world, corner, Blocks.BARRIER) && success;
+        success = success && tryRemoveIfMatches(world, corner, Blocks.BARRIER);
 
         return success;
     }

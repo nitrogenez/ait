@@ -8,8 +8,6 @@ jobs:
   size-label:
     runs-on: ubuntu-latest
     if: ${{ github.event.pull_request.draft == false }}
-    outputs:
-      label: ${{ steps.label.outputs.sizeLabel }}
     steps:
       - name: size-label
         id: label

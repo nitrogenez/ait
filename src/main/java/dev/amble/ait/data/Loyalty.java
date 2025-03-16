@@ -4,7 +4,6 @@ import java.util.Optional;
 
 import com.mojang.datafixers.util.Either;
 import com.mojang.serialization.Codec;
-import com.mojang.serialization.codecs.RecordCodecBuilder;
 
 public record Loyalty(int level, Type type) {
 

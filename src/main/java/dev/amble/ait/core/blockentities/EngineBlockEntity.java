@@ -2,6 +2,14 @@ package dev.amble.ait.core.blockentities;
 
 
 
+import dev.amble.ait.core.AITBlocks;
+import net.minecraft.block.Block;
+import net.minecraft.block.Blocks;
+import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.server.world.ServerWorld;
+import net.minecraft.text.Text;
+import net.minecraft.util.Formatting;
+import net.minecraft.util.math.Direction;
 import org.jetbrains.annotations.Nullable;
 
 import net.minecraft.block.BlockState;
@@ -31,6 +39,19 @@ public class EngineBlockEntity extends SubSystemBlockEntity implements ITardisSo
             return;
 
         this.tardis().ifPresent(tardis -> tardis.subsystems().engine().setEnabled(true));
+
+        if (!tryPlaceFillBlocks()) {
+            this.onBroken(world, pos);
+            world.setBlockState(pos, Blocks.AIR.getDefaultState());
+
+            if (placer != null) {
+                Block.dropStack(world, pos, AITBlocks.ENGINE_BLOCK.asItem().getDefaultStack());
+
+                if (placer instanceof ServerPlayerEntity player) {
+                    player.sendMessage(Text.translatable("tardis.message.engine.no_space").formatted(Formatting.RED), true);
+                }
+            }
+        }
     }
 
     @Override
@@ -38,6 +59,98 @@ public class EngineBlockEntity extends SubSystemBlockEntity implements ITardisSo
         super.onBroken(world, pos);
 
         this.onLoseFluid(); // always.
+        this.tryRemoveFillBlocks();
+    }
+
+    /**
+     * Places cable blocks adjacent and barrier blocks in corners
+     * @return true if all blocks were placed
+     */
+    private boolean tryPlaceFillBlocks() {
+        if (this.getWorld().isClient()) return false;
+
+        boolean success = true;
+
+        BlockPos centre = this.getPos();
+        ServerWorld world = (ServerWorld) this.getWorld();
+
+        // place cable blocks adjacent
+        for (Direction dir : Direction.values()) {
+            if (dir == Direction.UP || dir == Direction.DOWN) continue;
+
+            BlockPos offset = centre.offset(dir);
+            success = tryPlace(world, offset, AITBlocks.CABLE_BLOCK.getDefaultState()) && success;
+        }
+
+        // place barrier blocks in corners
+        BlockPos corner = centre.add(1, 0, 1);
+        success = tryPlace(world, corner, Blocks.BARRIER.getDefaultState()) && success;
+
+        corner = centre.add(-1, 0, 1);
+        success = tryPlace(world, corner, Blocks.BARRIER.getDefaultState()) && success;
+
+        corner = centre.add(1, 0, -1);
+        success = tryPlace(world, corner, Blocks.BARRIER.getDefaultState()) && success;
+
+        corner = centre.add(-1, 0, -1);
+        success = tryPlace(world, corner, Blocks.BARRIER.getDefaultState()) && success;
+
+        return success;
+    }
+
+    private boolean tryPlace(ServerWorld world, BlockPos pos, BlockState state) {
+        if (world.getBlockState(pos).isReplaceable()) {
+            world.setBlockState(pos, state);
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Removes cable blocks adjacent and barrier blocks in corners
+     * @return true if all blocks were removed
+     */
+    private boolean tryRemoveFillBlocks() {
+        if (this.getWorld().isClient()) return false;
+
+        boolean success = true;
+
+        BlockPos centre = this.getPos();
+        ServerWorld world = (ServerWorld) this.getWorld();
+
+        // place cable blocks adjacent
+        for (Direction dir : Direction.values()) {
+            BlockPos offset = centre.offset(dir);
+            success = tryRemoveIfMatches(world, offset, AITBlocks.CABLE_BLOCK) && success;
+        }
+
+        // place barrier blocks in corners
+        BlockPos corner = centre.add(1, 0, 1);
+        success = tryRemoveIfMatches(world, corner, Blocks.BARRIER) && success;
+
+        corner = centre.add(-1, 0, 1);
+        success = tryRemoveIfMatches(world, corner, Blocks.BARRIER) && success;
+
+        corner = centre.add(1, 0, -1);
+        success = tryRemoveIfMatches(world, corner, Blocks.BARRIER) && success;
+
+        corner = centre.add(-1, 0, -1);
+        success = tryRemoveIfMatches(world, corner, Blocks.BARRIER) && success;
+
+        return success;
+    }
+
+    /**
+     * Removes a block if it matches the expected block
+     * @return true if the block was removed
+     */
+    private boolean tryRemoveIfMatches(ServerWorld world, BlockPos pos, Block expected) {
+        BlockState state = world.getBlockState(pos);
+        if (state.getBlock() == expected) {
+            world.removeBlock(pos, false);
+            return true;
+        }
+        return false;
     }
 
     @Override

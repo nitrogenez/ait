@@ -82,10 +82,10 @@ public class BoothDoorModel extends DoorModel {
                                      VertexConsumer vertices, int light, int overlay, float red, float green, float blue, float pAlpha) {
         matrices.push();
         if (!AITMod.CONFIG.CLIENT.ANIMATE_DOORS)
-            this.k2.getChild("Door").yaw = linkableBlockEntity.tardis().get().door().isOpen() ? 1.575F : 0.0F;
+            this.k2.getChild("Door").yaw = tardis.door().isOpen() ? 1.575F : 0.0F;
         else {
             float maxRot = 90f;
-            this.k2.getChild("Door").yaw = (float) Math.toRadians(maxRot*linkableBlockEntity.tardis().get().door().getLeftRot());
+            this.k2.getChild("Door").yaw = (float) Math.toRadians(maxRot*tardis.door().getLeftRot());
         }
 
         matrices.scale(1f, 1f, 1f);

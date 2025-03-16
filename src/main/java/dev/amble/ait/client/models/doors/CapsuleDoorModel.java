@@ -111,10 +111,9 @@ public class CapsuleDoorModel extends DoorModel {
         matrices.translate(0, -1.5f, 0);
         matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(180f));
 
-        DoorHandler door = linkableBlockEntity.tardis().get().door();
+        DoorHandler door = tardis.door();
 
         if (!AITMod.CONFIG.CLIENT.ANIMATE_DOORS) {
-
             this.body.getChild("doors").getChild("door_left").yaw = (door.isLeftOpen() || door.isOpen()) ? -5F : 0.0F;
             this.body.getChild("doors").getChild("door_right").yaw = (door.isRightOpen() || door.areBothOpen())
                     ? 5F

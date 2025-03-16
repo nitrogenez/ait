@@ -78,14 +78,14 @@ public class StallionDoorModel extends DoorModel {
         matrices.multiply(RotationAxis.NEGATIVE_Y.rotationDegrees(180f));
 
         if (!AITMod.CONFIG.CLIENT.ANIMATE_DOORS) {
-            body.getChild("door").yaw = linkableBlockEntity.tardis().get().door().isOpen() ? -1.35f : 0f;
-            body.getChild("door").getChild("door_two").yaw = linkableBlockEntity.tardis().get().door().isOpen() ? 2.65f : 0f;
+            body.getChild("door").yaw = tardis.door().isOpen() ? -1.35f : 0f;
+            body.getChild("door").getChild("door_two").yaw = tardis.door().isOpen() ? 2.65f : 0f;
         } else {
             float maxLeftRot = 87f;
             float maxRightRot = 150f;
 
-            body.getChild("door").yaw = -(float) Math.toRadians(maxLeftRot*linkableBlockEntity.tardis().get().door().getLeftRot());
-            body.getChild("door").getChild("door_two").yaw = (float) Math.toRadians(maxRightRot*linkableBlockEntity.tardis().get().door().getLeftRot());
+            body.getChild("door").yaw = -(float) Math.toRadians(maxLeftRot*tardis.door().getLeftRot());
+            body.getChild("door").getChild("door_two").yaw = (float) Math.toRadians(maxRightRot*tardis.door().getLeftRot());
         }
 
         super.renderWithAnimations(tardis, linkableBlockEntity, root, matrices, vertices, light, overlay, red, green, blue, pAlpha);

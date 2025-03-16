@@ -44,7 +44,7 @@ public class EasterHeadDoorModel extends DoorModel {
         matrices.push();
         matrices.translate(0, -1.5f, 0);
 
-        this.bottom.pivotY = linkableBlockEntity.tardis().get().door().isOpen() ? 22 : 54;
+        this.bottom.pivotY = tardis.door().isOpen() ? 22 : 54;
 
         super.renderWithAnimations(tardis, linkableBlockEntity, root, matrices, vertices, light, overlay, red, green, blue, pAlpha);
 

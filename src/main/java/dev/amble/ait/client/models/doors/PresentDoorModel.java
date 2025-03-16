@@ -41,17 +41,17 @@ public class PresentDoorModel extends DoorModel {
 
     @Override
     public void renderWithAnimations(ClientTardis tardis, AbstractLinkableBlockEntity linkableBlockEntity, ModelPart root, MatrixStack matrices, VertexConsumer vertices, int light, int overlay, float red, float green, float blue, float pAlpha) {
-        if (!AITMod.CONFIG.CLIENT.ANIMATE_DOORS) {
-            DoorHandler door = linkableBlockEntity.tardis().get().door();
+        DoorHandler door = tardis.door();
 
+        if (!AITMod.CONFIG.CLIENT.ANIMATE_DOORS) {
             this.present.getChild("left_door").yaw = (door.isLeftOpen() || door.isOpen()) ? 8F : 0.0F;
             this.present.getChild("right_door").yaw = (door.isRightOpen() || door.areBothOpen())
                     ? -8F
                     : 0.0F;
         } else {
             float maxRot = 90f;
-            this.present.getChild("left_door").yaw = (float) Math.toRadians(maxRot*linkableBlockEntity.tardis().get().door().getLeftRot());
-            this.present.getChild("right_door").yaw = (float) -Math.toRadians(maxRot*linkableBlockEntity.tardis().get().door().getRightRot());
+            this.present.getChild("left_door").yaw = (float) Math.toRadians(maxRot*door.getLeftRot());
+            this.present.getChild("right_door").yaw = (float) -Math.toRadians(maxRot*door.getRightRot());
         }
 
         matrices.push();

@@ -1,5 +1,6 @@
 package dev.amble.ait.client.models.consoles;
 
+import dev.amble.ait.client.tardis.ClientTardis;
 import net.minecraft.client.model.*;
 import net.minecraft.client.render.VertexConsumer;
 import net.minecraft.client.render.entity.animation.Animation;
@@ -1380,15 +1381,8 @@ public class HartnellConsoleModel extends ConsoleModel {
     }
 
     @Override
-    public void renderWithAnimations(ConsoleBlockEntity console, ModelPart root, MatrixStack matrices,
-            VertexConsumer vertices, int light, int overlay, float red, float green, float blue, float pAlpha) {
-        if (!console.isLinked()) return;
-
-        Tardis tardis = console.tardis().get();
-
-        if (tardis == null)
-            return;
-
+    public void renderWithAnimations(ConsoleBlockEntity console, ClientTardis tardis, ModelPart root, MatrixStack matrices,
+                                     VertexConsumer vertices, int light, int overlay, float red, float green, float blue, float pAlpha) {
         matrices.push();
         matrices.translate(0.5f, -1.5f, -0.5f);
 
@@ -1576,7 +1570,7 @@ public class HartnellConsoleModel extends ConsoleModel {
         ModelPart autoPilot = this.bone.getChild("panels").getChild("p_1").getChild("bone38").getChild("bone36")
                 .getChild("bone37").getChild("st_switch").getChild("bone26");
         autoPilot.yaw = !tardis.travel().autopilot() ? autoPilot.yaw + 1 : autoPilot.yaw;
-        super.renderWithAnimations(console, root, matrices, vertices, light, overlay, red, green, blue, pAlpha);
+        super.renderWithAnimations(console, tardis, root, matrices, vertices, light, overlay, red, green, blue, pAlpha);
         matrices.pop();
     }
 

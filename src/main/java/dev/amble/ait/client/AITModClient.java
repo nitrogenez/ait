@@ -517,7 +517,7 @@ public class AITModClient implements ClientModInitializer {
         MatrixStack stack = context.matrixStack();
         boolean bl = TardisServerWorld.isTardisDimension(world);
         if (bl) {
-            Tardis tardis = ClientTardisUtil.getCurrentTardis();
+            ClientTardis tardis = ClientTardisUtil.getCurrentTardis();
             if (tardis == null || tardis.getDesktop() == null) return;
             ClientExteriorVariantSchema variant = tardis.getExterior().getVariant().getClient();
             DoorModel model = variant.getDoor().model();

@@ -1,5 +1,6 @@
 package dev.amble.ait.client.models.consoles;
 
+import dev.amble.ait.client.tardis.ClientTardis;
 import dev.amble.lib.data.CachedDirectedGlobalPos;
 import dev.amble.lib.data.DirectedGlobalPos;
 
@@ -1209,12 +1210,7 @@ public class CrystallineConsoleModel extends ConsoleModel {
     }
 
     @Override
-    public void renderWithAnimations(ConsoleBlockEntity console, ModelPart root, MatrixStack matrices, VertexConsumer vertices, int light, int overlay, float red, float green, float blue, float pAlpha) {
-        Tardis tardis = console.tardis().get();
-
-        if (tardis == null)
-            return;
-
+    public void renderWithAnimations(ConsoleBlockEntity console, ClientTardis tardis, ModelPart root, MatrixStack matrices, VertexConsumer vertices, int light, int overlay, float red, float green, float blue, float pAlpha) {
         matrices.push();
         matrices.translate(0.5f, -1.5f, -0.5f);
 
@@ -1322,7 +1318,7 @@ public class CrystallineConsoleModel extends ConsoleModel {
 //        ModelPart fastReturnLever = this.console.getChild("panel4").getChild("controls4").getChild("tinyswitch");
 
 
-        super.renderWithAnimations(console, root, matrices, vertices, light, overlay, red, green, blue, pAlpha);
+        super.renderWithAnimations(console, tardis, root, matrices, vertices, light, overlay, red, green, blue, pAlpha);
         matrices.pop();
     }
 

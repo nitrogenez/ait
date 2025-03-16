@@ -1,5 +1,6 @@
 package dev.amble.ait.client.models.exteriors;
 
+import dev.amble.ait.client.tardis.ClientTardis;
 import net.minecraft.client.model.*;
 import net.minecraft.client.render.VertexConsumer;
 import net.minecraft.client.render.entity.animation.Animation;
@@ -33,13 +34,13 @@ public class PipeExteriorModel extends ExteriorModel {
     }
 
     @Override
-    public void renderWithAnimations(ExteriorBlockEntity exterior, ModelPart root, MatrixStack matrices, VertexConsumer vertices, int light, int overlay, float red, float green, float blue, float alpha) {
+    public void renderWithAnimations(ExteriorBlockEntity exterior, ClientTardis tardis, ModelPart root, MatrixStack matrices, VertexConsumer vertices, int light, int overlay, float red, float green, float blue, float alpha) {
         matrices.push();
         matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees(180f));
 
         this.renderDoors(exterior, root, matrices, vertices, light, overlay, red, green, blue, alpha, false);
 
-        super.renderWithAnimations(exterior, root, matrices, vertices, light, overlay, red, green, blue, alpha);
+        super.renderWithAnimations(exterior, tardis, root, matrices, vertices, light, overlay, red, green, blue, alpha);
         matrices.pop();
     }
 

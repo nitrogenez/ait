@@ -1,5 +1,6 @@
 package dev.amble.ait.client.models.doors;
 
+import dev.amble.ait.client.tardis.ClientTardis;
 import net.minecraft.client.model.*;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.VertexConsumer;
@@ -76,10 +77,10 @@ public class PoliceBoxDoorModel extends DoorModel {
     }
 
     @Override
-    public void renderWithAnimations(AbstractLinkableBlockEntity doorEntity, ModelPart root, MatrixStack matrices,
+    public void renderWithAnimations(ClientTardis tardis, AbstractLinkableBlockEntity doorEntity, ModelPart root, MatrixStack matrices,
                                      VertexConsumer vertices, int light, int overlay, float red, float green, float blue, float pAlpha) {
         if (!AITMod.CONFIG.CLIENT.ANIMATE_DOORS) {
-            DoorHandler door = doorEntity.tardis().get().door();
+            DoorHandler door = tardis.door();
 
             this.TARDIS.getChild("Doors").getChild("left_door").yaw = (door.isLeftOpen() || door.isOpen()) ? -5F : 0.0F;
             this.TARDIS.getChild("Doors").getChild("right_door").yaw = (door.isRightOpen() || door.areBothOpen())
@@ -96,7 +97,7 @@ public class PoliceBoxDoorModel extends DoorModel {
         matrices.translate(0, -1.5, 0.35);
         matrices.multiply(RotationAxis.NEGATIVE_Y.rotationDegrees(180));
 
-        super.renderWithAnimations(doorEntity, root, matrices, vertices, light, overlay, red, green, blue, pAlpha);
+        super.renderWithAnimations(tardis, doorEntity, root, matrices, vertices, light, overlay, red, green, blue, pAlpha);
         matrices.pop();
     }
 

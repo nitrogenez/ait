@@ -5,7 +5,6 @@ import org.joml.Vector3f;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.model.ModelPart;
 import net.minecraft.client.render.RenderLayer;
-import net.minecraft.client.render.VertexConsumer;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.block.entity.BlockEntityRenderer;
 import net.minecraft.client.render.block.entity.BlockEntityRendererFactory;
@@ -16,7 +15,6 @@ import net.minecraft.util.math.RotationAxis;
 
 import dev.amble.ait.client.models.machines.GenericSubSystemModel;
 import dev.amble.ait.client.renderers.MultiBlockStructureRenderer;
-import dev.amble.ait.client.util.ClientLightUtil;
 import dev.amble.ait.core.engine.StructureHolder;
 import dev.amble.ait.core.engine.SubSystem;
 import dev.amble.ait.core.engine.block.generic.GenericStructureSystemBlockEntity;

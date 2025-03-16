@@ -2,10 +2,8 @@ package dev.amble.ait.client.renderers.machines;
 
 import org.joml.Vector3f;
 
-import net.minecraft.client.model.ModelPart;
 import net.minecraft.client.render.LightmapTextureManager;
 import net.minecraft.client.render.RenderLayer;
-import net.minecraft.client.render.VertexConsumer;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.block.entity.BlockEntityRenderer;
 import net.minecraft.client.render.block.entity.BlockEntityRendererFactory;
@@ -16,7 +14,6 @@ import net.minecraft.world.LightType;
 
 import dev.amble.ait.AITMod;
 import dev.amble.ait.client.models.machines.EngineModel;
-import dev.amble.ait.client.util.ClientLightUtil;
 import dev.amble.ait.core.blockentities.EngineBlockEntity;
 import dev.amble.ait.core.engine.impl.EngineSystem;
 import dev.amble.ait.core.tardis.Tardis;

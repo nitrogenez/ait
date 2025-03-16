@@ -4,7 +4,6 @@ import static dev.amble.ait.core.tardis.animation.ExteriorAnimation.*;
 
 import java.util.function.Function;
 
-import dev.amble.ait.client.tardis.ClientTardis;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.model.ModelPart;
 import net.minecraft.client.render.RenderLayer;
@@ -17,9 +16,8 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.Identifier;
 
 import dev.amble.ait.api.link.v2.Linkable;
+import dev.amble.ait.client.tardis.ClientTardis;
 import dev.amble.ait.core.blockentities.ExteriorBlockEntity;
-import dev.amble.ait.core.effects.ZeitonHighEffect;
-import dev.amble.ait.core.tardis.Tardis;
 import dev.amble.ait.core.tardis.handler.DoorHandler;
 import dev.amble.ait.data.Loyalty;
 

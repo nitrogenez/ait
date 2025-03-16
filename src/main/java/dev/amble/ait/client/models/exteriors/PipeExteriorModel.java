@@ -1,6 +1,5 @@
 package dev.amble.ait.client.models.exteriors;
 
-import dev.amble.ait.client.tardis.ClientTardis;
 import net.minecraft.client.model.*;
 import net.minecraft.client.render.VertexConsumer;
 import net.minecraft.client.render.entity.animation.Animation;
@@ -9,6 +8,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.util.math.RotationAxis;
 
 import dev.amble.ait.api.link.v2.Linkable;
+import dev.amble.ait.client.tardis.ClientTardis;
 import dev.amble.ait.core.blockentities.ExteriorBlockEntity;
 import dev.amble.ait.core.tardis.Tardis;
 import dev.amble.ait.core.tardis.handler.DoorHandler;

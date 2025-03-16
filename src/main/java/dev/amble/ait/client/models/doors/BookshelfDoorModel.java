@@ -1,6 +1,5 @@
 package dev.amble.ait.client.models.doors;
 
-import dev.amble.ait.client.tardis.ClientTardis;
 import net.minecraft.client.model.*;
 import net.minecraft.client.render.VertexConsumer;
 import net.minecraft.client.render.entity.animation.Animation;
@@ -8,6 +7,7 @@ import net.minecraft.client.util.math.MatrixStack;
 
 import dev.amble.ait.AITMod;
 import dev.amble.ait.api.link.v2.block.AbstractLinkableBlockEntity;
+import dev.amble.ait.client.tardis.ClientTardis;
 import dev.amble.ait.core.tardis.handler.DoorHandler;
 
 public class BookshelfDoorModel extends DoorModel {

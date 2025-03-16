@@ -1,6 +1,5 @@
 package dev.amble.ait.client.models.coral;
 
-import dev.amble.ait.client.tardis.ClientTardis;
 import net.minecraft.client.model.*;
 import net.minecraft.client.render.VertexConsumer;
 import net.minecraft.client.render.entity.animation.Animation;
@@ -9,6 +8,7 @@ import net.minecraft.util.math.RotationAxis;
 
 import dev.amble.ait.api.link.v2.block.AbstractLinkableBlockEntity;
 import dev.amble.ait.client.models.doors.DoorModel;
+import dev.amble.ait.client.tardis.ClientTardis;
 import dev.amble.ait.core.tardis.handler.DoorHandler;
 
 public class CoralGrowthDoorModel extends DoorModel {

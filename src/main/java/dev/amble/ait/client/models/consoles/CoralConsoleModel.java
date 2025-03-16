@@ -1,6 +1,5 @@
 package dev.amble.ait.client.models.consoles;
 
-import dev.amble.ait.client.tardis.ClientTardis;
 import dev.amble.lib.data.CachedDirectedGlobalPos;
 import dev.amble.lib.data.DirectedGlobalPos;
 
@@ -17,6 +16,7 @@ import net.minecraft.util.math.RotationAxis;
 
 import dev.amble.ait.api.TardisComponent;
 import dev.amble.ait.client.animation.console.coral.CoralAnimations;
+import dev.amble.ait.client.tardis.ClientTardis;
 import dev.amble.ait.core.blockentities.ConsoleBlockEntity;
 import dev.amble.ait.core.tardis.Tardis;
 import dev.amble.ait.core.tardis.control.impl.DirectionControl;

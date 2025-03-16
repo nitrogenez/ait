@@ -52,16 +52,16 @@ public class EngineOverloadControl extends Control {
                 tardis.travel().decreaseFlightTime(999999999);
                 tardis.travel().handbrake(false);
                 tardis.setRefueling(false);
-                tardis.removeFuel(5000000);
+                tardis.setFuelCount(0);
 
                 if (!isInFlight) {
                     tardis.travel().finishDemat();
-                    tardis.removeFuel(5000000);
+                    tardis.setFuelCount(0);
                     tardis.travel().decreaseFlightTime(999999999);
                     tardis.setRefueling(false);
                 } else {
                     tardis.travel().decreaseFlightTime(999999999);
-                    tardis.removeFuel(5000000);
+                    tardis.setFuelCount(0);
                     tardis.setRefueling(false);
                 }
 

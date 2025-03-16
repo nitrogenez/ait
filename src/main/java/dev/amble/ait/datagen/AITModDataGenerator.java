@@ -6,6 +6,7 @@ import static net.minecraft.data.server.recipe.RecipeProvider.*;
 import java.util.Calendar;
 import java.util.concurrent.CompletableFuture;
 
+import dev.amble.ait.core.engine.SubSystem;
 import dev.amble.lib.datagen.lang.AmbleLanguageProvider;
 import dev.amble.lib.datagen.lang.LanguageType;
 import dev.amble.lib.datagen.sound.AmbleSoundProvider;
@@ -1404,6 +1405,17 @@ public class AITModDataGenerator implements DataGeneratorEntrypoint {
         provider.addTranslation("effect.ait.zeiton_high", "Zeiton High");
         provider.addTranslation("effect.ait.lunar_regolith", "Lunar Regolith Poisoned");
         provider.addTranslation("effect.ait.oxygenated", "Oxygenator Field");
+
+        // subsystems
+        provider.addTranslation(SubSystem.Id.DEMAT.toTranslationKey(), "Dematerialization Circuit");
+        provider.addTranslation(SubSystem.Id.CHAMELEON.toTranslationKey(), "Chameleon Circuit");
+        provider.addTranslation(SubSystem.Id.SHIELDS.toTranslationKey(), "Shield System");
+        provider.addTranslation(SubSystem.Id.DESPERATION.toTranslationKey(), "Desperation");
+        provider.addTranslation(SubSystem.Id.GRAVITATIONAL.toTranslationKey(), "Gravitational Modulator");
+        provider.addTranslation(SubSystem.Id.LIFE_SUPPORT.toTranslationKey(), "Life Support");
+        provider.addTranslation(SubSystem.Id.ENGINE.toTranslationKey(), "Engine");
+        provider.addTranslation(SubSystem.Id.STABILISERS.toTranslationKey(), "Blue Stabilisers");
+        provider.addTranslation(SubSystem.Id.EMERGENCY_POWER.toTranslationKey(), "Emergency Backup Power");
 
         return provider;
     }

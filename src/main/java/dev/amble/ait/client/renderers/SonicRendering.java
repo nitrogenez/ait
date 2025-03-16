@@ -194,7 +194,7 @@ public class SonicRendering {
 
         context.drawCenteredTextWithShadow(client.textRenderer, text, getCentreX(), (int) (getMaxY() * 0.42), Colors.WHITE);
 
-        text = Text.literal(WorldUtil.fakeTranslate(system.getId().name()));
+        text = system.name();
         context.drawCenteredTextWithShadow(client.textRenderer, text, getCentreX(), (int) (getMaxY() * 0.46), Colors.WHITE);
     }
 

@@ -133,7 +133,7 @@ public class WorldUtil {
 
         for (ServerWorld world : server.getWorlds()) {
             if (predicate.test(world))
-                OPEN_WORLDS.add(world);
+                worlds.add(world);
         }
     }
 
@@ -143,12 +143,12 @@ public class WorldUtil {
     }
 
     public static boolean isOpen(ServerWorld world) {
-        return TardisServerWorld.isTardisDimension(world)
+        return !TardisServerWorld.isTardisDimension(world)
                 && !OPEN_BLACKLIST.contains(world.getRegistryKey().getValue());
     }
 
     public static boolean isTravelValid(ServerWorld world) {
-        return TardisServerWorld.isTardisDimension(world)
+        return !TardisServerWorld.isTardisDimension(world)
                 && !TRAVEL_BLACKLIST.contains(world.getRegistryKey().getValue());
     }
 

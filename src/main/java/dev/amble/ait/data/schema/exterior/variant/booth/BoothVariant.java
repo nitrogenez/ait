@@ -20,7 +20,7 @@ public abstract class BoothVariant extends ExteriorVariantSchema {
 
     protected BoothVariant(String name, String modId) { // idk why i added the modid bit i dont use it later lol
         super(BoothCategory.REFERENCE, new Identifier(modId, "exterior/booth/" + name),
-                new Loyalty(Loyalty.Type.COMPANION));
+                new Loyalty(Loyalty.Type.PILOT));
     }
 
     protected BoothVariant(String name) {

@@ -2,5 +2,6 @@
   "id": "ait:stallion_pristine",
   "category": "ait:exterior/stallion",
   "parent": "ait:exterior/stallion/default",
-  "texture": "ait:textures/blockentities/exteriors/stallion/stallion_pristine.png"
+  "texture": "ait:textures/blockentities/exteriors/stallion/stallion_pristine.png",
+  "loyalty": "COMPANION"
 }

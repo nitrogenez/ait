@@ -170,9 +170,10 @@ public class CoralPlantBlock extends HorizontalDirectionalBlock implements Block
         }
 
         if (world.getBlockEntity(pos) instanceof CoralBlockEntity coral) {
-            if (player.getUuid() != null)
+            if (player.getUuid() != null) {
                 coral.creator = player.getUuid();
                 coral.markDirty();
+            }
             TardisCriterions.PLACE_CORAL.trigger(player);
         }
     }

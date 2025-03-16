@@ -386,7 +386,7 @@ public class MonitorScreen extends ConsoleScreen {
         stack.pop();
 
         stack.push();
-        stack.translate(0, 0, 50f);
+        stack.translate(0, 0, 550f);
 
         context.drawCenteredTextWithShadow(this.textRenderer, isExtUnlocked ? "" : "\uD83D\uDD12", x, y,
                 0xFFFFFF);

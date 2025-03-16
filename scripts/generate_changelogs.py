@@ -72,7 +72,6 @@ for e in j:
 
         clines.append(ls[n] + f' (#{num})')
 
-print(clines)
 last_update = max(last_update, max_pr)
 
 with open('CHANGELOG.md', 'w') as f:

@@ -222,6 +222,7 @@ public class ExteriorRenderer<T extends ExteriorBlockEntity> implements BlockEnt
             BiomeHandler handler = tardis.handler(TardisComponent.Id.BIOME);
             if (handler.getBiomeKey() != null) {
                 Identifier biomeTexture = handler.getBiomeKey().get(this.variant.overrides());
+                System.out.println(handler.getBiomeKey() + " " + biomeTexture);
 
                 if (alpha > 0.105f && (biomeTexture != null && !texture.equals(biomeTexture))) {
                     model.renderWithAnimations(entity, this.model.getPart(), matrices,

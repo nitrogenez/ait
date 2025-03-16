@@ -1,8 +1,6 @@
 package dev.amble.ait.client.renderers.exteriors;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import dev.amble.ait.client.tardis.ClientTardis;
-import dev.amble.ait.core.effects.ZeitonHighEffect;
 import dev.amble.lib.data.CachedDirectedGlobalPos;
 
 import net.minecraft.block.BlockState;
@@ -28,9 +26,11 @@ import dev.amble.ait.client.models.exteriors.ExteriorModel;
 import dev.amble.ait.client.models.exteriors.SiegeModeModel;
 import dev.amble.ait.client.models.machines.ShieldsModel;
 import dev.amble.ait.client.renderers.AITRenderLayers;
+import dev.amble.ait.client.tardis.ClientTardis;
 import dev.amble.ait.client.util.ClientLightUtil;
 import dev.amble.ait.core.blockentities.ExteriorBlockEntity;
 import dev.amble.ait.core.blocks.ExteriorBlock;
+import dev.amble.ait.core.effects.ZeitonHighEffect;
 import dev.amble.ait.core.tardis.Tardis;
 import dev.amble.ait.core.tardis.handler.BiomeHandler;
 import dev.amble.ait.data.datapack.DatapackConsole;
@@ -197,11 +197,11 @@ public class ExteriorRenderer<T extends ExteriorBlockEntity> implements BlockEnt
 
             if ((tardis.stats().getName() != null && "partytardis".equals(tardis.stats().getName().toLowerCase()) ||(!tardis.extra().getInsertedDisc().isEmpty()))) {
                 int m = 25;
-                int n = MinecraftClient.getInstance().player.age / 25 + MinecraftClient.getInstance().player.getId();
+                int n = MinecraftClient.getInstance().player.age / m + MinecraftClient.getInstance().player.getId();
                 int o = DyeColor.values().length;
                 int p = n % o;
                 int q = (n + 1) % o;
-                float r = ((float)(MinecraftClient.getInstance().player.age % 25) + h) / 25f;
+                float r = ((float)(MinecraftClient.getInstance().player.age % m)) / m;
                 float[] fs = SheepEntity.getRgbColor(DyeColor.byId(p));
                 float[] gs = SheepEntity.getRgbColor(DyeColor.byId(q));
                 s = fs[0] * (1f - r) + gs[0] * r;

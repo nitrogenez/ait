@@ -9,6 +9,8 @@ import net.minecraft.client.model.ModelPart;
 import net.minecraft.client.render.*;
 import net.minecraft.client.render.entity.model.SinglePartEntityModel;
 import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.entity.passive.SheepEntity;
+import net.minecraft.util.DyeColor;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.RotationAxis;
 import net.minecraft.util.math.Vec3d;
@@ -103,13 +105,42 @@ public class TardisExteriorBOTI extends BOTI {
 
         stack.push();
         stack.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(180));
-        if (variant.emission() != null)
+        if (variant.emission() != null) {
+            float u;
+            float t;
+            float s;
+
+            if ((exterior.tardis().get().stats().getName() != null && "partytardis".equals(exterior.tardis().get().stats().getName().toLowerCase()) || (!exterior.tardis().get().extra().getInsertedDisc().isEmpty()))) {
+                int m = 25;
+                int n = MinecraftClient.getInstance().player.age / m + MinecraftClient.getInstance().player.getId();
+                int o = DyeColor.values().length;
+                int p = n % o;
+                int q = (n + 1) % o;
+                float r = ((float) (MinecraftClient.getInstance().player.age % m)) / m;
+                float[] fs = SheepEntity.getRgbColor(DyeColor.byId(p));
+                float[] gs = SheepEntity.getRgbColor(DyeColor.byId(q));
+                s = fs[0] * (1f - r) + gs[0] * r;
+                t = fs[1] * (1f - r) + gs[1] * r;
+                u = fs[2] * (1f - r) + gs[2] * r;
+            } else {
+                float[] hs = new float[]{1.0f, 1.0f, 1.0f};
+                s = hs[0];
+                t = hs[1];
+                u = hs[2];
+            }
+
+            float colorAlpha = 1;
+
+            boolean power = exterior.tardis().get().fuel().hasPower();
+
+            float red = exterior.tardis().get().alarm().enabled().get() ? !power ? 0.25f : s - colorAlpha : s - colorAlpha;
+            float green = exterior.tardis().get().alarm().enabled().get() ? !power ? 0.01f : 0.3f : t - colorAlpha;
+            float blue = exterior.tardis().get().alarm().enabled().get() ? !power ? 0.01f : 0.3f : u - colorAlpha;
+
             ((ExteriorModel) frame).renderDoors(exterior, frame.getPart(), stack, botiProvider.getBuffer(DependencyChecker.hasIris() ? AITRenderLayers.tardisEmissiveCullZOffset(variant.emission(), true) : AITRenderLayers.getBeaconBeam(variant.emission(), true)), 0xf000f0,
-                    OverlayTexture.DEFAULT_UV, exterior.tardis().get().alarm().enabled().get() ?
-                            !exterior.tardis().get().fuel().hasPower() ? 0.25f : 1f : 1f,
-                    exterior.tardis().get().alarm().enabled().get() ? !exterior.tardis().get().fuel().hasPower() ? 0.01f : 0.3f : 1f,
-                    exterior.tardis().get().alarm().enabled().get() ? !exterior.tardis().get().fuel().hasPower() ? 0.01f : 0.3f : 1f, 1f, true);
-        botiProvider.draw();
+                    OverlayTexture.DEFAULT_UV, red, green, blue, 1, true);
+            botiProvider.draw();
+        }
         stack.pop();
 
         MinecraftClient.getInstance().getFramebuffer().beginWrite(true);

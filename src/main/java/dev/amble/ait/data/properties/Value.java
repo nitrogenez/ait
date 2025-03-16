@@ -79,7 +79,7 @@ public class Value<T> implements Disposable {
     }
 
     public void set(T value, boolean sync) {
-        if (this.value == value)
+        if (this.value == value && property.getType().isSameRef())
             return;
 
         this.value = value;

@@ -1,18 +1,25 @@
 package dev.amble.ait.client.boti;
 
 
+import java.awt.*;
 import java.util.LinkedList;
 import java.util.Queue;
 
 import com.mojang.blaze3d.platform.GlConst;
 import com.mojang.blaze3d.platform.GlStateManager;
 
+import dev.amble.ait.AITMod;
+import dev.amble.ait.compat.DependencyChecker;
+import dev.amble.ait.config.AITConfig;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gl.Framebuffer;
 
 import dev.amble.ait.core.blockentities.DoorBlockEntity;
 import dev.amble.ait.core.blockentities.ExteriorBlockEntity;
 import dev.amble.ait.core.entities.GallifreyFallsPaintingEntity;
 import dev.amble.ait.core.entities.RiftEntity;
+import net.minecraft.text.Text;
+import net.minecraft.util.Formatting;
 
 
 public class BOTI {
@@ -22,6 +29,7 @@ public class BOTI {
     public static Queue<DoorBlockEntity> DOOR_RENDER_QUEUE = new LinkedList<>();
     public static Queue<GallifreyFallsPaintingEntity> PAINTING_RENDER_QUEUE = new LinkedList<>();
     public static Queue<ExteriorBlockEntity> EXTERIOR_RENDER_QUEUE = new LinkedList<>();
+    private static boolean HAS_BEEN_WARNED = false;
 
     public static void copyFramebuffer(Framebuffer src, Framebuffer dest) {
         GlStateManager._glBindFramebuffer(GlConst.GL_READ_FRAMEBUFFER, src.fbo);
@@ -43,5 +51,27 @@ public class BOTI {
 
     public static void setFramebufferColor(Framebuffer src, float r, float g, float b, float a) {
         src.setClearColor(r, g, b, a);
+    }
+
+    /**
+     * Warns the user if they are missing Indium and have a non-Nvidia card.
+     * @return true if the user is missing Indium and have a non-Nvidia card.
+     */
+    public static boolean tryWarn() {
+        boolean invalid = isInvalidSetup();
+
+        if (!HAS_BEEN_WARNED) {
+            HAS_BEEN_WARNED = true;
+
+            if (invalid) {
+                MinecraftClient.getInstance().player.sendMessage(Text.literal("You appear to have an AMD GPU. Indium is required, but is not found. This may cause issues with the mod - BOTI has been disabled!").formatted(DependencyChecker.hasIndium() ? Formatting.GREEN : Formatting.RED), false);
+                AITMod.CONFIG.CLIENT.ENABLE_TARDIS_BOTI = false;
+            }
+        }
+
+        return invalid;
+    }
+    private static boolean isInvalidSetup() {
+        return !DependencyChecker.hasNvidiaCard() && !DependencyChecker.hasIndium();
     }
 }

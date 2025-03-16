@@ -1063,6 +1063,7 @@ public class AITModDataGenerator implements DataGeneratorEntrypoint {
         provider.addTranslation("message.ait.cage.void_hint", "(Throw this into the END void)");
         provider.addTranslation("message.ait.cage.empty", "(Place this in a rift chunk)");
         provider.addTranslation("tardis.message.engine.system_is_weakened", "This System Is Showing Signs Of Weakness, But Is Still Functional!");
+        provider.addTranslation("tardis.message.subsystem.requires_link", "LINK TO ENGINE VIA FLUID LINKS");
 
         // Achievements
         provider.addTranslation("achievement.ait.title.root", "Adventures in Time");

@@ -13,6 +13,7 @@ import net.minecraft.client.render.*;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.text.Text;
 import net.minecraft.util.Colors;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.hit.BlockHitResult;
@@ -28,6 +29,7 @@ import dev.amble.ait.core.engine.block.SubSystemBlockEntity;
 import dev.amble.ait.core.engine.impl.EngineSystem;
 import dev.amble.ait.core.item.SonicItem;
 import dev.amble.ait.core.item.sonic.SonicMode;
+import dev.amble.ait.core.util.WorldUtil;
 import dev.amble.ait.core.world.TardisServerWorld;
 
 public class SonicRendering {
@@ -154,7 +156,7 @@ public class SonicRendering {
         profiler.swap("redstone");
         renderRedstone(context, state, targetPos);
         profiler.swap("durability");
-        renderDurability(context, targetPos);
+        renderSubSystemInfo(context, targetPos);
 
         profiler.pop();
         profiler.pop();
@@ -170,21 +172,24 @@ public class SonicRendering {
 
         context.drawCenteredTextWithShadow(client.textRenderer, "" + power, getCentreX(), (int) (getMaxY() * 0.4), Colors.WHITE);
     }
-    private void renderDurability(DrawContext context, BlockPos pos) {
+    private void renderSubSystemInfo(DrawContext context, BlockPos pos) {
         if (!(client.world.getBlockEntity(pos) instanceof SubSystemBlockEntity be)) return;
 
-        String text = "";
+        Text text = Text.empty();
 
         SubSystem system = be.system();
         if (system == null) return;
         if (system instanceof DurableSubSystem) {
-            text = (Math.round(((DurableSubSystem) be.system()).durability())) + " / 1250";
+            text = Text.literal((Math.round(((DurableSubSystem) be.system()).durability())) + " / 1250");
         }
         if (!system.isEnabled() && !(system instanceof EngineSystem)) {
-            text = "LINK TO ENGINE VIA FLUID LINKS";
+            text = Text.translatable("tardis.message.subsystem.requires_link");
         }
 
         context.drawCenteredTextWithShadow(client.textRenderer, text, getCentreX(), (int) (getMaxY() * 0.42), Colors.WHITE);
+
+        text = Text.literal(WorldUtil.fakeTranslate(system.getId().name()));
+        context.drawCenteredTextWithShadow(client.textRenderer, text, getCentreX(), (int) (getMaxY() * 0.44), Colors.WHITE);
     }
 
     private int getMaxX() {

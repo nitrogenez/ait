@@ -126,6 +126,7 @@ public class AITSounds {
     public static final SoundEvent ENGINE_OVERLOAD = register("controls/engine_overload");
     public static final SoundEvent ZAP = register("controls/zap");
     public static final SoundEvent ML = register("tardis/ml");
+    public static final SoundEvent MONITOR_IDLE = register("tardis/monitor_idle");
 
     //Alt console sounds for renaissance
     public static final SoundEvent RENAISSANCE_LAND_TYPE = register("controls/renaissance_land_type");

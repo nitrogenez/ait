@@ -79,17 +79,17 @@ public class PoliceBoxDoorModel extends DoorModel {
     @Override
     public void renderWithAnimations(ClientTardis tardis, AbstractLinkableBlockEntity doorEntity, ModelPart root, MatrixStack matrices,
                                      VertexConsumer vertices, int light, int overlay, float red, float green, float blue, float pAlpha) {
-        if (!AITMod.CONFIG.CLIENT.ANIMATE_DOORS) {
-            DoorHandler door = tardis.door();
+        DoorHandler door = tardis.door();
 
+        if (!AITMod.CONFIG.CLIENT.ANIMATE_DOORS) {
             this.TARDIS.getChild("Doors").getChild("left_door").yaw = (door.isLeftOpen() || door.isOpen()) ? -5F : 0.0F;
             this.TARDIS.getChild("Doors").getChild("right_door").yaw = (door.isRightOpen() || door.areBothOpen())
                     ? 5F
                     : 0.0F;
         } else {
             float maxRot = 90f;
-            this.TARDIS.getChild("Doors").getChild("left_door").yaw = (float) Math.toRadians(maxRot*doorEntity.tardis().get().door().getLeftRot());
-            this.TARDIS.getChild("Doors").getChild("right_door").yaw = (float) -Math.toRadians(maxRot*doorEntity.tardis().get().door().getRightRot());
+            this.TARDIS.getChild("Doors").getChild("left_door").yaw = (float) Math.toRadians(maxRot*door.getLeftRot());
+            this.TARDIS.getChild("Doors").getChild("right_door").yaw = (float) -Math.toRadians(maxRot*door.getRightRot());
         }
 
         matrices.push();

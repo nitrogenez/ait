@@ -41,7 +41,7 @@ public class DalekModDoorModel extends DoorModel {
     public void renderWithAnimations(ClientTardis tardis, AbstractLinkableBlockEntity doorEntity, ModelPart root, MatrixStack matrices,
                                      VertexConsumer vertices, int light, int overlay, float red, float green, float blue, float pAlpha) {
         if (!AITMod.CONFIG.CLIENT.ANIMATE_DOORS) {
-            DoorHandler door = doorEntity.tardis().get().door();
+            DoorHandler door = tardis.door();
 
             this.dalekmod.getChild("Doors").getChild("left_door").yaw = (door.isLeftOpen() || door.isOpen()) ? -5.0f : 0.0F;
             this.dalekmod.getChild("Doors").getChild("right_door").yaw = (door.isRightOpen() || door.areBothOpen())
@@ -49,8 +49,8 @@ public class DalekModDoorModel extends DoorModel {
                     : 0.0F;
         } else {
             float maxRot = 80f;
-        this.dalekmod.getChild("Doors").getChild("left_door").yaw = (float) Math.toRadians(maxRot*doorEntity.tardis().get().door().getLeftRot());
-        this.dalekmod.getChild("Doors").getChild("right_door").yaw = (float) -Math.toRadians(maxRot*doorEntity.tardis().get().door().getRightRot());
+        this.dalekmod.getChild("Doors").getChild("left_door").yaw = (float) Math.toRadians(maxRot*tardis.door().getLeftRot());
+        this.dalekmod.getChild("Doors").getChild("right_door").yaw = (float) -Math.toRadians(maxRot*tardis.door().getRightRot());
         }
 
         matrices.push();

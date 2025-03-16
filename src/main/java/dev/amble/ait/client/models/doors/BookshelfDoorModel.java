@@ -46,13 +46,9 @@ public class BookshelfDoorModel extends DoorModel {
     @Override
     public void renderWithAnimations(ClientTardis tardis, AbstractLinkableBlockEntity doorEntity, ModelPart root, MatrixStack matrices,
                                      VertexConsumer vertices, int light, int overlay, float red, float green, float blue, float pAlpha) {
-        if (doorEntity.tardis().isEmpty())
-            return;
-
-        DoorHandler door = doorEntity.tardis().get().door();
+        DoorHandler door = tardis.door();
 
         if (!AITMod.CONFIG.CLIENT.ANIMATE_DOORS) {
-
             this.bookshelf.getChild("left_door").yaw = (door.isLeftOpen() || door.isOpen()) ? 4.75F : 0.0F;
             this.bookshelf.getChild("right_door").yaw = (door.isRightOpen() || door.areBothOpen()) ? -4.75F : 0.0F;
         } else {

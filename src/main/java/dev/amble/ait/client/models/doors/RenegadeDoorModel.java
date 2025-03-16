@@ -88,10 +88,10 @@ public class RenegadeDoorModel extends DoorModel {
         matrices.multiply(RotationAxis.NEGATIVE_Y.rotationDegrees(180f));
 
         if (!AITMod.CONFIG.CLIENT.ANIMATE_DOORS) {
-            renegade.getChild("door").yaw = linkableBlockEntity.tardis().get().door().isOpen() ? 1.75f : 0f;
+            renegade.getChild("door").yaw = tardis.door().isOpen() ? 1.75f : 0f;
         } else {
             float maxRot = 90f;
-            renegade.getChild("door").yaw = (float) Math.toRadians(maxRot*linkableBlockEntity.tardis().get().door().getLeftRot());
+            renegade.getChild("door").yaw = (float) Math.toRadians(maxRot*tardis.door().getLeftRot());
         }
         super.renderWithAnimations(tardis, linkableBlockEntity, root, matrices, vertices, light, overlay, red, green, blue, pAlpha);
 

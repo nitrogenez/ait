@@ -41,7 +41,7 @@ public class GeometricDoorModel extends DoorModel {
     @Override
     public void renderWithAnimations(ClientTardis tardis, AbstractLinkableBlockEntity doorEntity, ModelPart root, MatrixStack matrices,
                                      VertexConsumer vertices, int light, int overlay, float red, float green, float blue, float pAlpha) {
-        DoorHandler door = doorEntity.tardis().get().door();
+        DoorHandler door = tardis.door();
 
         this.geometric.getChild("door").pivotZ = door.isOpen() ? 2.05f : 1f;
 

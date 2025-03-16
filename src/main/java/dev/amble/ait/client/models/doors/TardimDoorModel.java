@@ -70,14 +70,14 @@ public class TardimDoorModel extends DoorModel {
         matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(180f));
 
         if (!AITMod.CONFIG.CLIENT.ANIMATE_DOORS) {
-            DoorHandler handler = linkableBlockEntity.tardis().get().door();
+            DoorHandler handler = tardis.door();
 
             this.tardis.getChild("left_door").yaw = (handler.isLeftOpen() || handler.isOpen()) ? -1.575f : 0.0F;
             this.tardis.getChild("right_door").yaw = (handler.isRightOpen() || handler.areBothOpen()) ? 1.575f : 0.0F;
         } else {
             float maxRot = 90f;
 
-            DoorHandler handler = linkableBlockEntity.tardis().get().door();
+            DoorHandler handler = tardis.door();
             this.tardis.getChild("left_door").yaw = (float) -Math.toRadians(maxRot*handler.getLeftRot());
             this.tardis.getChild("right_door").yaw = (float) Math.toRadians(maxRot*handler.getRightRot());
         }

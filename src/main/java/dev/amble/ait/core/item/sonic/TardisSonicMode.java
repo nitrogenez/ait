@@ -17,6 +17,7 @@ import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
+import dev.amble.ait.core.engine.SubSystem;
 import dev.amble.ait.core.item.SonicItem;
 import dev.amble.ait.core.tardis.Tardis;
 import dev.amble.ait.core.world.TardisServerWorld;
@@ -93,6 +94,11 @@ public class TardisSonicMode extends SonicMode {
 
         // get position of player
         CachedDirectedGlobalPos targetPos = CachedDirectedGlobalPos.create(player.getServerWorld().getRegistryKey(), pos, DirectedGlobalPos.getGeneralizedRotation(player.getMovementDirection()));
+
+        if (!tardis.subsystems().get(SubSystem.Id.STABILISERS).isUsable()) {
+            player.sendMessage(Text.translatable("sonic.ait.mode.tardis.does_not_have_stabilisers"), true);
+            return false;
+        }
 
         tardis.travel().destination(targetPos);
         tardis.travel().autopilot(true);

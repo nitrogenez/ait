@@ -1,21 +1,11 @@
-# AIT 1.1.0
+Last update: #1172
 
-## Main Changes
-- [MultiDim TARDIS Interior](https://github.com/pavatus/ait/pull/396)
-- [Lockable Dimensions](https://github.com/pavatus/ait/pull/381)
-- [Adaptive Exterior](https://github.com/pavatus/ait/pull/374)
-- [Hypercube](https://github.com/pavatus/ait/pull/367)
-- [Hazandra](https://github.com/pavatus/ait/pull/365)
-- [Landing Markers](https://github.com/pavatus/ait/pull/361)
-- [Redstone Controls](https://github.com/pavatus/ait/pull/366)
-- [Artron chunks refill](https://github.com/pavatus/ait/issues/310)
-- [Notification on Interior Change](https://github.com/pavatus/ait/issues/285)
-- [Rename to Block of Zeiton](https://github.com/pavatus/ait/issues/253)
-- [Text Rendering on Toyota](https://github.com/pavatus/ait/commit/80bf18d8f8d9c2d74284fa397ed3ffd622623712)
-- [Planet API](https://github.com/pavatus/ait/pull/380) ( backend for future update )
-- New TARDIS Exteriors (ty Frooploof)
-- New TARDIS Interiors
-- Fix crashes, bugs, performance (ty theo)
-- Removed Peanut
-
-[full changelog](https://github.com/pavatus/ait/compare/4ecbc8e94db34af029bf0b2226a5aa1e19a32761...main)
+- add: `TRAVEL_BLACKLIST` config option to blacklist worlds from travel. (#1153)
+- fix: Rematerialization is no longer as heavy on performance as it was before (#1149)
+- fix: use filtered world list in environment projector (#1134)
+- refactor: remove unused parameters from environment projector block entity (#1134)
+- fix: ignore tardis dimensions when generating world cache (#1133)
+- add: Added Glass Blocks to be shattered (#1079)
+- add: Added Entity Health Scanning (#1079)
+- add: Added Block Tool Requirement Scanning (#1079)
+- feat: AIT discs spawn in AIT structures (#1172)

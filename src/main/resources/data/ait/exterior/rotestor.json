@@ -1,0 +1,8 @@
+{
+  "id": "ait:rotestor",
+  "category": "ait:exterior/renegade",
+  "parent": "ait:exterior/renegade/default",
+  "texture": "ait:textures/blockentities/exteriors/renegade/rotestor.png",
+  "emission": "ait:textures/blockentities/exteriors/renegade/rotestor_emission.png",
+  "loyalty": "PILOT"
+}

@@ -5,8 +5,8 @@ import java.util.UUID;
 
 import dev.amble.lib.register.unlockable.Unlockable;
 
-import dev.amble.ait.api.Initializable;
-import dev.amble.ait.api.TardisComponent;
+import dev.amble.ait.api.tardis.Initializable;
+import dev.amble.ait.api.tardis.TardisComponent;
 import dev.amble.ait.client.tardis.ClientTardis;
 import dev.amble.ait.core.tardis.control.sequences.SequenceHandler;
 import dev.amble.ait.core.tardis.handler.*;

@@ -38,7 +38,7 @@ import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldAccess;
 
-import dev.amble.ait.api.TardisComponent;
+import dev.amble.ait.api.tardis.TardisComponent;
 import dev.amble.ait.compat.DependencyChecker;
 import dev.amble.ait.core.AITBlocks;
 import dev.amble.ait.core.AITItems;

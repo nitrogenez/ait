@@ -1,4 +1,4 @@
-package dev.amble.ait.api;
+package dev.amble.ait.api.tardis;
 
 import java.util.function.Supplier;
 

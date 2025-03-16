@@ -1,4 +1,4 @@
-package dev.amble.ait.api;
+package dev.amble.ait.api.tardis;
 
 import dev.amble.ait.data.Exclude;
 import dev.amble.ait.data.properties.PropertyMap;

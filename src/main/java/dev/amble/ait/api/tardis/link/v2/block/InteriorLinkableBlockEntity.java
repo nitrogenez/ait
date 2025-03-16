@@ -1,4 +1,4 @@
-package dev.amble.ait.api.link.v2.block;
+package dev.amble.ait.api.tardis.link.v2.block;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntityType;

@@ -27,7 +27,7 @@ import net.minecraft.util.math.GlobalPos;
 import net.minecraft.world.World;
 
 import dev.amble.ait.AITMod;
-import dev.amble.ait.api.TardisComponent;
+import dev.amble.ait.api.tardis.TardisComponent;
 import dev.amble.ait.client.tardis.manager.ClientTardisManager;
 import dev.amble.ait.core.engine.SubSystem;
 import dev.amble.ait.core.engine.registry.SubSystemRegistry;

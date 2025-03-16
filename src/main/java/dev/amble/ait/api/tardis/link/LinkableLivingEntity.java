@@ -1,4 +1,4 @@
-package dev.amble.ait.api.link;
+package dev.amble.ait.api.tardis.link;
 
 import java.util.Optional;
 import java.util.UUID;
@@ -11,8 +11,8 @@ import net.minecraft.entity.data.TrackedDataHandlerRegistry;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.world.World;
 
-import dev.amble.ait.api.link.v2.Linkable;
-import dev.amble.ait.api.link.v2.TardisRef;
+import dev.amble.ait.api.tardis.link.v2.Linkable;
+import dev.amble.ait.api.tardis.link.v2.TardisRef;
 import dev.amble.ait.core.tardis.Tardis;
 
 public abstract class LinkableLivingEntity extends LivingEntity implements Linkable {

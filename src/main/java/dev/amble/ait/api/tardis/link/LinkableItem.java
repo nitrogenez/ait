@@ -1,4 +1,4 @@
-package dev.amble.ait.api.link;
+package dev.amble.ait.api.tardis.link;
 
 import java.util.List;
 import java.util.UUID;

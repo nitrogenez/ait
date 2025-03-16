@@ -128,17 +128,14 @@ public class CapsuleExteriorModel extends ExteriorModel {
     }
 
     @Override
-    public void renderWithAnimations(ExteriorBlockEntity exterior, ClientTardis tardis, ModelPart root, MatrixStack matrices,
+    public void renderWithAnimations(ClientTardis tardis, ExteriorBlockEntity exterior, ModelPart root, MatrixStack matrices,
                                      VertexConsumer vertices, int light, int overlay, float red, float green, float blue, float pAlpha) {
-        if (exterior.tardis().isEmpty())
-            return;
-
         matrices.push();
         matrices.translate(0, -1.5f, 0);
 
-        this.renderDoors(exterior, root, matrices, vertices, light, overlay, red, green, blue, pAlpha, false);
+        this.renderDoors(tardis, exterior, root, matrices, vertices, light, overlay, red, green, blue, pAlpha, false);
 
-        super.renderWithAnimations(exterior, tardis, root, matrices, vertices, light, overlay, red, green, blue, pAlpha);
+        super.renderWithAnimations(tardis, exterior, root, matrices, vertices, light, overlay, red, green, blue, pAlpha);
         matrices.pop();
     }
 
@@ -175,12 +172,9 @@ public class CapsuleExteriorModel extends ExteriorModel {
     }
 
     @Override
-    public void renderDoors(ExteriorBlockEntity exterior, ModelPart root, MatrixStack matrices, VertexConsumer vertices, int light, int overlay, float red, float green, float blue, float pAlpha, boolean isBOTI) {
-        if (exterior.tardis().isEmpty())
-            return;
-
+    public void renderDoors(ClientTardis tardis, ExteriorBlockEntity exterior, ModelPart root, MatrixStack matrices, VertexConsumer vertices, int light, int overlay, float red, float green, float blue, float pAlpha, boolean isBOTI) {
         if (!AITMod.CONFIG.CLIENT.ANIMATE_DOORS) {
-            DoorHandler handler = exterior.tardis().get().door();
+            DoorHandler handler = tardis.door();
 
             this.body.getChild("doors").getChild("left_door").yaw = (handler.isLeftOpen() || handler.isOpen()) ? -5F : 0.0F;
             this.body.getChild("doors").getChild("right_door").yaw = (handler.isRightOpen() || handler.areBothOpen())
@@ -188,8 +182,8 @@ public class CapsuleExteriorModel extends ExteriorModel {
                     : 0.0F;
         } else {
             float maxRot = 90f;
-            this.body.getChild("doors").getChild("left_door").yaw = (float) Math.toRadians(maxRot * exterior.tardis().get().door().getLeftRot());
-            this.body.getChild("doors").getChild("right_door").yaw = -(float) Math.toRadians(maxRot * exterior.tardis().get().door().getRightRot());
+            this.body.getChild("doors").getChild("left_door").yaw = (float) Math.toRadians(maxRot * tardis.door().getLeftRot());
+            this.body.getChild("doors").getChild("right_door").yaw = -(float) Math.toRadians(maxRot * tardis.door().getRightRot());
         }
 
         if (isBOTI) {

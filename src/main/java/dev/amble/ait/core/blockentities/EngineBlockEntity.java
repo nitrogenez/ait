@@ -40,20 +40,18 @@ public class EngineBlockEntity extends SubSystemBlockEntity implements ITardisSo
 
         this.tardis().ifPresent(tardis -> tardis.subsystems().engine().setEnabled(true));
 
-        if (!tryPlaceFillBlocks()) {
-            this.onBroken(world, pos);
-            world.setBlockState(pos, Blocks.AIR.getDefaultState());
+        if (tryPlaceFillBlocks()) return;
 
-            if (placer != null) {
-                Block.dropStack(world, pos, AITBlocks.ENGINE_BLOCK.asItem().getDefaultStack());
+        this.onBroken(world, pos);
+        world.setBlockState(pos, Blocks.AIR.getDefaultState());
 
-                if (placer instanceof ServerPlayerEntity player) {
-                    player.sendMessage(Text.translatable("tardis.message.engine.no_space").formatted(Formatting.RED), true);
-                }
-            }
+        if (placer == null) return;
 
-            return;
-        }
+        Block.dropStack(world, pos, AITBlocks.ENGINE_BLOCK.asItem().getDefaultStack());
+
+        if (!(placer instanceof ServerPlayerEntity player)) return;
+
+        player.sendMessage(Text.translatable("tardis.message.engine.no_space").formatted(Formatting.RED), true);
     }
 
     @Override

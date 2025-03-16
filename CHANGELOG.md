@@ -1,4 +1,4 @@
-Last update: #1172
+Last update: #1199
 
 - add: `TRAVEL_BLACKLIST` config option to blacklist worlds from travel. (#1153)
 - fix: Rematerialization is no longer as heavy on performance as it was before (#1149)
@@ -9,3 +9,9 @@ Last update: #1172
 - add: Added Entity Health Scanning (#1079)
 - add: Added Block Tool Requirement Scanning (#1079)
 - feat: AIT discs spawn in AIT structures (#1172)
+- Updated good man disc (#1197)
+- add: show a warning for AMD GPUs without Indium (#1194)
+- feat: engine comes with cables, requires 3x3 space (#1192)
+- feat: play monitor idle sound effects (#1191)
+- feat: display subsystem name & info on sonic scan (#1188)
+- feat: sonic scan mode is now hand-dependent (main = blocks/entities, off = region) (#1187)

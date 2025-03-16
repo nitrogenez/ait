@@ -54,10 +54,10 @@ public class ConsoleGeneratorRenderer<T extends ConsoleGeneratorBlockEntity> imp
                 .texture();
         Identifier consoleEmission = ClientConsoleVariantRegistry.getInstance().get(entity.getConsoleVariant().id()).emission();
 
-        boolean powered = entity.isPowered();
+        //boolean powered = entity.isPowered();
 
         Tardis tardis = entity.tardis().get();
-        if (powered && !tardis.isUnlocked(entity.getConsoleVariant())) {
+        if (/*powered && */!tardis.isUnlocked(entity.getConsoleVariant())) {
             matrices.push();
 
             matrices.translate(0.5F, 2.75F, 0.5F);
@@ -108,7 +108,7 @@ public class ConsoleGeneratorRenderer<T extends ConsoleGeneratorBlockEntity> imp
         matrices.translate(0.5f, -1.5f + entity.getWorld().random.nextFloat() * 0.02, -0.5f);
         matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(MinecraftClient.getInstance().getTickDelta() % 180));
 
-        if (powered) {
+        //if (powered) {
             if (tardis.isUnlocked(entity.getConsoleVariant())) {
                 console.render(matrices,
                         vertexConsumers.getBuffer(entity.getConsoleVariant().getClient().equals(ClientConsoleVariantRegistry.COPPER) ? RenderLayer.getEntityTranslucent(consoleTexture) :
@@ -125,7 +125,7 @@ public class ConsoleGeneratorRenderer<T extends ConsoleGeneratorBlockEntity> imp
                         OverlayTexture.DEFAULT_UV, 0.2f, 0.2f, 0.2f,
                         entity.getWorld().random.nextInt(32) != 6 ? 0.4f : 0.05f);
             }
-        }
+        //}
         matrices.pop();
     }
 }

@@ -2,6 +2,7 @@ package dev.amble.ait.client.models.consoles;
 
 import java.util.function.Function;
 
+import dev.amble.ait.client.tardis.ClientTardis;
 import net.minecraft.client.model.ModelPart;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.VertexConsumer;
@@ -41,8 +42,8 @@ public abstract class ConsoleModel extends SinglePartEntityModel {
             this.updateAnimation(console.ANIM_STATE, this.getAnimationForState(state), console.getAge());
     }
 
-    public void renderWithAnimations(ConsoleBlockEntity console, ModelPart root, MatrixStack matrices,
-            VertexConsumer vertices, int light, int overlay, float red, float green, float blue, float pAlpha) {
+    public void renderWithAnimations(ConsoleBlockEntity console, ClientTardis tardis, ModelPart root, MatrixStack matrices,
+                                     VertexConsumer vertices, int light, int overlay, float red, float green, float blue, float pAlpha) {
         root.render(matrices, vertices, light, overlay, red, green, blue, pAlpha);
     }
 

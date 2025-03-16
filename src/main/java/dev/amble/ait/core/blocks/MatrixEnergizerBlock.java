@@ -163,7 +163,6 @@ public class MatrixEnergizerBlock extends Block implements BlockEntityProvider {
         BlockState state = world.getBlockState(pos.down());
         if (be instanceof MatrixEnergizerBlockEntity mbe) {
             if (mbe.getVibrationCallback().accepts((ServerWorld) world, pos, GameEvent.SHRIEK, GameEvent.Emitter.of(thisState))) {
-                System.out.println("SHRIEK");
                 mbe.getEventListener().forceListen((ServerWorld) world, GameEvent.SHRIEK, GameEvent.Emitter.of(state),
                         new Vec3d(pos.down().getX(), pos.down().getY(), pos.down().getZ()));
                 int i = this.getAge(thisState);

@@ -22,7 +22,8 @@ public abstract class ClientCapsuleVariant extends ClientExteriorVariantSchema {
     protected static final BiomeOverrides OVERRIDES = BiomeOverrides.builder()
             .with(type -> type.getTexture(BIOME_IDENTIFIER), BiomeHandler.BiomeType.SNOWY,
                     BiomeHandler.BiomeType.CHORUS, BiomeHandler.BiomeType.CHERRY,
-                    BiomeHandler.BiomeType.SANDY, BiomeHandler.BiomeType.RED_SANDY, BiomeHandler.BiomeType.MUDDY)
+                    BiomeHandler.BiomeType.SANDY, BiomeHandler.BiomeType.RED_SANDY, BiomeHandler.BiomeType.MUDDY,
+                    BiomeHandler.BiomeType.SCULK)
             .build();
 
     protected ClientCapsuleVariant(String name) {

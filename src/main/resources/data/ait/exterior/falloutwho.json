@@ -8,9 +8,7 @@
     {"snowy": "ait:textures/blockentities/exteriors/classic/biome/classic_definitive_snowy.png",
     "chorus": "ait:textures/blockentities/exteriors/classic/biome/classic_definitive_chorus.png",
     "cherry": "ait:textures/blockentities/exteriors/classic/biome/classic_definitive_cherry.png",
-    "sculk": "ait:textures/blockentities/exteriors/classic/biome/classic_definitive_sculk.png",
-    "sandy": "ait:textures/blockentities/exteriors/classic/biome/classic_sand.png",
-    "muddy": "ait:textures/blockentities/exteriors/classic/biome/classic_mud.png"
+    "sculk": "ait:textures/blockentities/exteriors/classic/biome/classic_definitive_sculk.png"
 },
     "loyalty": "OWNER"
 }

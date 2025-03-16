@@ -1,5 +1,6 @@
 package dev.amble.ait.client.models.coral;
 
+import dev.amble.ait.client.tardis.ClientTardis;
 import net.minecraft.client.model.*;
 import net.minecraft.client.render.VertexConsumer;
 import net.minecraft.client.render.entity.animation.Animation;
@@ -97,7 +98,7 @@ public class CoralGrowthDoorModel extends DoorModel {
     }
 
     @Override
-    public void renderWithAnimations(AbstractLinkableBlockEntity door, ModelPart root, MatrixStack matrices,
+    public void renderWithAnimations(ClientTardis tardis, AbstractLinkableBlockEntity door, ModelPart root, MatrixStack matrices,
                                      VertexConsumer vertices, int light, int overlay, float red, float green, float blue, float pAlpha) {
         if (door.tardis().get() == null)
             return;
@@ -106,7 +107,7 @@ public class CoralGrowthDoorModel extends DoorModel {
         matrices.translate(0, -1.5f, 0f);
         matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(180f));
 
-        super.renderWithAnimations(door, root, matrices, vertices, light, overlay, red, green, blue, pAlpha);
+        super.renderWithAnimations(tardis, door, root, matrices, vertices, light, overlay, red, green, blue, pAlpha);
 
         matrices.pop();
     }

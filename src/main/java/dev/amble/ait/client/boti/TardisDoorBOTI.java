@@ -1,6 +1,8 @@
 package dev.amble.ait.client.boti;
 
 import com.mojang.blaze3d.systems.RenderSystem;
+import dev.amble.ait.client.renderers.doors.DoorRenderer;
+import dev.amble.ait.client.tardis.ClientTardis;
 import org.lwjgl.opengl.GL11;
 
 import net.minecraft.client.MinecraftClient;
@@ -26,7 +28,7 @@ import dev.amble.ait.core.tardis.handler.travel.TravelHandlerBase;
 import dev.amble.ait.data.schema.exterior.ClientExteriorVariantSchema;
 
 public class TardisDoorBOTI extends BOTI {
-    public static void renderInteriorDoorBoti(Tardis tardis, DoorBlockEntity door, ClientExteriorVariantSchema variant, MatrixStack stack, Identifier frameTex, SinglePartEntityModel frame, ModelPart mask, int light) {
+    public static void renderInteriorDoorBoti(ClientTardis tardis, DoorBlockEntity door, ClientExteriorVariantSchema variant, MatrixStack stack, Identifier frameTex, SinglePartEntityModel frame, ModelPart mask, int light) {
         if (!variant.parent().hasPortals()) return;
 
         if (!AITMod.CONFIG.CLIENT.ENABLE_TARDIS_BOTI)
@@ -105,7 +107,8 @@ public class TardisDoorBOTI extends BOTI {
         stack.push();
         stack.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(180));
 
-        ((DoorModel) frame).renderWithAnimations(door, frame.getPart(), stack, botiProvider.getBuffer(AITRenderLayers.getBotiInterior(variant.texture())), light, OverlayTexture.DEFAULT_UV, 1, 1F, 1.0F, 1.0F);
+        // TODO: use DoorRenderer/ClientLightUtil instead.
+        ((DoorModel) frame).renderWithAnimations(tardis, door, frame.getPart(), stack, botiProvider.getBuffer(AITRenderLayers.getBotiInterior(variant.texture())), light, OverlayTexture.DEFAULT_UV, 1, 1F, 1.0F, 1.0F);
         //((DoorModel) frame).render(stack, botiProvider.getBuffer(AITRenderLayers.getBotiInterior(variant.texture())), light, OverlayTexture.DEFAULT_UV, 1, 1F, 1.0F, 1.0F);
         botiProvider.draw();
         stack.pop();
@@ -113,8 +116,8 @@ public class TardisDoorBOTI extends BOTI {
         stack.push();
         stack.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(180));
         if (variant.emission() != null)
-            ((DoorModel) frame).renderWithAnimations(door, frame.getPart(), stack, botiProvider.getBuffer((DependencyChecker.hasIris() ? AITRenderLayers.tardisEmissiveCullZOffset(variant.emission(), true) : AITRenderLayers.getBeaconBeam(variant.emission(), true))), 0xf000f0, OverlayTexture.DEFAULT_UV, tardis.alarm().enabled().get() ? !tardis.fuel().hasPower() ? 0.25f : 1f : 1f, tardis.alarm().enabled().get() ? !tardis.fuel().hasPower() ? 0.01f : 0.3f : 1f,
-                    tardis.alarm().enabled().get() ? !tardis.fuel().hasPower() ? 0.01f : 0.3f : 1f, 1f);
+            ((DoorModel) frame).renderWithAnimations(tardis, door, frame.getPart(), stack, botiProvider.getBuffer((DependencyChecker.hasIris() ? AITRenderLayers.tardisEmissiveCullZOffset(variant.emission(), true) : AITRenderLayers.getBeaconBeam(variant.emission(), true))), 0xf000f0, OverlayTexture.DEFAULT_UV, tardis.alarm().enabled().get() ? !tardis.fuel().hasPower() ? 0.25f : 1f : 1f,
+                    tardis.alarm().enabled().get() ? !tardis.fuel().hasPower() ? 0.01f : 0.3f : 1f, tardis.alarm().enabled().get() ? !tardis.fuel().hasPower() ? 0.01f : 0.3f : 1f, 1f);
         //((DoorModel) frame).render(stack, botiProvider.getBuffer(AITRenderLayers.getBotiInteriorEmission(variant.emission())), 0xf000f0, OverlayTexture.DEFAULT_UV, 1, 1F, 1.0F, 1.0F);
         botiProvider.draw();
         stack.pop();

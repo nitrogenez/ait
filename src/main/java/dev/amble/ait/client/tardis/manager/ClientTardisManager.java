@@ -72,6 +72,7 @@ public class ClientTardisManager extends TardisManager<ClientTardis, MinecraftCl
     }
 
     @Override
+    @Deprecated
     public void loadTardis(MinecraftClient client, UUID uuid, @Nullable Consumer<ClientTardis> consumer) {
         if (client.player == null)
             return;
@@ -91,12 +92,7 @@ public class ClientTardisManager extends TardisManager<ClientTardis, MinecraftCl
     @Override
     @Deprecated
     public @Nullable ClientTardis demandTardis(MinecraftClient client, UUID uuid) {
-        ClientTardis result = this.lookup.get(uuid);
-
-        if (result == null)
-            this.loadTardis(client, uuid, null);
-
-        return result;
+        return this.lookup.get(uuid);
     }
 
     @Deprecated
@@ -113,17 +109,13 @@ public class ClientTardisManager extends TardisManager<ClientTardis, MinecraftCl
             ClientTardis tardis = this.networkGson.fromJson(json, ClientTardis.class);
             Tardis.init(tardis, TardisComponent.InitContext.deserialize());
 
-            tardis.travel(); // get a random element. if its null it will complain
+            ClientTardis old = this.lookup.put(tardis);
 
-            synchronized (this) {
-                ClientTardis old = this.lookup.put(tardis);
+            if (old != null)
+                old.age();
 
-                if (old != null)
-                    old.age();
-
-                for (Consumer<ClientTardis> consumer : this.subscribers.removeAll(uuid)) {
-                    consumer.accept(tardis);
-                }
+            for (Consumer<ClientTardis> consumer : this.subscribers.removeAll(uuid)) {
+                consumer.accept(tardis);
             }
         } catch (Throwable t) {
             AITMod.LOGGER.error("Received malformed JSON file {}", json);

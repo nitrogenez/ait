@@ -1,7 +1,7 @@
 package dev.amble.ait.client.screens;
 
-import org.jetbrains.annotations.Nullable;
 
+import org.jetbrains.annotations.Nullable;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvent;
@@ -35,6 +35,15 @@ public abstract class ConsoleScreen extends TardisScreen {
         if (!shouldPlayIdleSfx() || hasChanged) {
             MinecraftClient.getInstance().getSoundManager().stop(idleSound);
         }
+    }
+
+    @Override
+    public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
+        if (keyCode == MinecraftClient.getInstance().options.inventoryKey.getDefaultKey().getCode()) {
+            this.close();
+            return true;
+        }
+        return super.keyPressed(keyCode, scanCode, modifiers);
     }
 
     public BlockPos getConsole() {

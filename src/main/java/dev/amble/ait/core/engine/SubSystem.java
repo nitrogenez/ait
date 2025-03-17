@@ -6,7 +6,9 @@ import java.util.List;
 import java.util.function.Supplier;
 
 import com.google.gson.*;
+import dev.amble.ait.AITMod;
 import dev.amble.lib.data.CachedDirectedGlobalPos;
+import net.minecraft.text.Text;
 import org.jetbrains.annotations.Nullable;
 
 import net.minecraft.item.ItemStack;
@@ -38,10 +40,14 @@ public abstract class SubSystem extends Initializable<SubSystem.InitContext> imp
     public IdLike getId() {
         return id;
     }
+
     public Tardis tardis() {
         return this.tardis;
     }
 
+    public Text name() {
+        return Text.translatable(this.getId().toTranslationKey());
+    }
     public void setTardis(Tardis tardis) {
         this.tardis = tardis;
     }
@@ -183,6 +189,10 @@ public abstract class SubSystem extends Initializable<SubSystem.InitContext> imp
         int index();
 
         void index(int i);
+
+        default String toTranslationKey() {
+            return "subsystem." + AITMod.MOD_ID + "." + this.name().toLowerCase();
+        }
     }
 
     public record InitContext(@Nullable CachedDirectedGlobalPos pos,

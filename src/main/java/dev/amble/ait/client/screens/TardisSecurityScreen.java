@@ -41,6 +41,22 @@ public class TardisSecurityScreen extends ConsoleScreen {
     }
 
     @Override
+    public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
+        // Check if a text field is focused to prevent closing
+        if (this.landingCodeInput.isActive()) {
+            return super.keyPressed(keyCode, scanCode, modifiers);
+        }
+
+        // Close the screen when the inventory key is pressed
+        if (keyCode == MinecraftClient.getInstance().options.inventoryKey.getDefaultKey().getCode()) {
+            this.close();
+            return true;
+        }
+
+        return super.keyPressed(keyCode, scanCode, modifiers);
+    }
+
+    @Override
     protected void init() {
         this.top = (this.height - this.bgHeight) / 2; // this means everythings centered and scaling, same for below
         this.left = (this.width - this.bgWidth) / 2;

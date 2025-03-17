@@ -1,5 +1,6 @@
 package dev.amble.ait.core.engine.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -93,7 +94,7 @@ public class EngineSystem extends DurableSubSystem {
 
     @Override
     public List<ItemStack> toStacks() {
-        List<ItemStack> stacks = super.toStacks();
+        List<ItemStack> stacks = new ArrayList<>();
 
         stacks.add(AITBlocks.ENGINE_BLOCK.asItem().getDefaultStack());
 

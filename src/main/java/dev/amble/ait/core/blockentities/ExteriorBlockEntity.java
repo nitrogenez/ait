@@ -198,6 +198,7 @@ public class ExteriorBlockEntity extends AbstractLinkableBlockEntity implements 
      * Will delete this block if the exterior is not valid
      * @return true if the exterior is valid
      */
+    @Deprecated(since = "1.3.0")
     public boolean validateExteriorPosition() {
         if (!this.isLinked()) return true;
 

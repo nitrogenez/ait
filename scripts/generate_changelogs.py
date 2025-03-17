@@ -28,7 +28,7 @@ clines = changelog_lines[len(SEP):]
 if len(clines) != 0 and changelog_lines[0].startswith(PREFIX):
     last_update = int(changelog_lines[0][len(PREFIX):])
 
-r = requests.get('https://api.github.com/repos/amblelabs/ait/pulls?state=all', headers=headers)
+r = requests.get('https://api.github.com/repos/amblelabs/ait/pulls?state=closed', headers=headers)
 j = r.json()
 
 if r.status_code in [403, 429]:

@@ -64,7 +64,8 @@ public class TardisDoorBOTI extends BOTI {
         stack.push();
         Vec3d vec = variant.parent().door().adjustPortalPos(new Vec3d(0, -1.1725f, 0), Direction.NORTH);
         stack.translate(vec.x, vec.y, vec.z);
-        stack.scale((float) variant.parent().portalWidth(), (float) variant.parent().portalHeight(), 1f);
+        stack.scale((float) variant.parent().portalWidth() * tardis.stats().getXScale(),
+                (float) variant.parent().portalHeight() * tardis.stats().getYScale(), tardis.stats().getZScale());
         if (tardis.travel().getState() == TravelHandlerBase.State.LANDED) {
             RenderLayer whichOne = AITMod.CONFIG.CLIENT.SHOULD_RENDER_BOTI_INTERIOR || AITMod.CONFIG.CLIENT.GREEN_SCREEN_BOTI ?
                     RenderLayer.getDebugFilledBox() : RenderLayer.getEndGateway();

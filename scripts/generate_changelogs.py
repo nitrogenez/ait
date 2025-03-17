@@ -49,6 +49,9 @@ for e in j:
     if not e['merged_at']:
         continue
 
+    if e['base']['ref'] != 'main':
+        continue
+
     body = COMMENTS.sub('', body)
     num = e['number']
 

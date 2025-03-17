@@ -121,21 +121,21 @@ public class EngineBlockEntity extends SubSystemBlockEntity implements ITardisSo
         // place cable blocks adjacent
         for (Direction dir : Direction.values()) {
             BlockPos offset = centre.offset(dir);
-            success = success && tryRemoveIfMatches(world, offset, AITBlocks.CABLE_BLOCK);
+            success = tryRemoveIfMatches(world, offset, AITBlocks.CABLE_BLOCK) && success;
         }
 
         // place barrier blocks in corners
         BlockPos corner = centre.add(1, 0, 1);
-        success = success && tryRemoveIfMatches(world, corner, Blocks.BARRIER);
+        success = tryRemoveIfMatches(world, corner, Blocks.BARRIER) && success;
 
         corner = centre.add(-1, 0, 1);
-        success = success && tryRemoveIfMatches(world, corner, Blocks.BARRIER);
+        success = tryRemoveIfMatches(world, corner, Blocks.BARRIER) && success;
 
         corner = centre.add(1, 0, -1);
-        success = success && tryRemoveIfMatches(world, corner, Blocks.BARRIER);
+        success = tryRemoveIfMatches(world, corner, Blocks.BARRIER) && success;
 
         corner = centre.add(-1, 0, -1);
-        success = success && tryRemoveIfMatches(world, corner, Blocks.BARRIER);
+        success = tryRemoveIfMatches(world, corner, Blocks.BARRIER) && success;
 
         return success;
     }

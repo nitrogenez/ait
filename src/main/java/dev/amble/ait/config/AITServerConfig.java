@@ -1,11 +1,12 @@
 package dev.amble.ait.config;
 
-import dev.amble.ait.core.AITDimensions;
+import java.util.List;
+
 import me.shedaniel.autoconfig.ConfigData;
 import me.shedaniel.autoconfig.annotation.Config;
 import me.shedaniel.autoconfig.annotation.ConfigEntry;
 
-import java.util.List;
+import dev.amble.ait.core.AITDimensions;
 
 @Config(name = "ait-server")
 public class AITServerConfig implements ConfigData {

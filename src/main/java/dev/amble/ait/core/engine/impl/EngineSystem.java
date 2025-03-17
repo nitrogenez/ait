@@ -1,5 +1,6 @@
 package dev.amble.ait.core.engine.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -38,12 +39,14 @@ public class EngineSystem extends DurableSubSystem {
     @Override
     protected void onEnable() {
         super.onEnable();
+
         this.tardis().fuel().enablePower(true);
     }
 
     @Override
     protected void onDisable() {
         super.onDisable();
+
         this.tardis().fuel().disablePower();
     }
 
@@ -54,7 +57,7 @@ public class EngineSystem extends DurableSubSystem {
 
     @Override
     protected int changeFrequency() {
-        return 1200;
+        return 1200; // drain 0.05 durability every minute
     }
 
     @Override
@@ -65,6 +68,7 @@ public class EngineSystem extends DurableSubSystem {
     @Override
     public void tick() {
         super.tick();
+
         this.tickForDurability();
         this.phaser().tick();
         this.tryUpdateStatus();
@@ -72,12 +76,14 @@ public class EngineSystem extends DurableSubSystem {
 
     public Status status() {
         if (this.status == null) this.status = Status.OKAY;
+
         return this.status;
     }
 
     private void tryUpdateStatus() {
         if (ServerLifecycleHooks.get() == null) return;
         if (ServerLifecycleHooks.get().getTicks() % 40 != 0) return;
+
         this.status = Status.from(this);
         this.sync();
     }
@@ -90,13 +96,16 @@ public class EngineSystem extends DurableSubSystem {
 
     @Override
     public List<ItemStack> toStacks() {
-        List<ItemStack> stacks = super.toStacks();
+        List<ItemStack> stacks = new ArrayList<>();
+
         stacks.add(AITBlocks.ENGINE_BLOCK.asItem().getDefaultStack());
+
         return stacks;
     }
 
     public Phaser phaser() {
         if (this.phaser == null) this.phaser = Phaser.create(this);
+
         return this.phaser;
     }
 

@@ -34,8 +34,8 @@ import net.minecraft.world.entity.EntityTrackingSection;
 
 import dev.amble.ait.AITMod;
 import dev.amble.ait.api.ExtraPushableEntity;
-import dev.amble.ait.api.TardisComponent;
-import dev.amble.ait.api.TardisEvents;
+import dev.amble.ait.api.tardis.TardisComponent;
+import dev.amble.ait.api.tardis.TardisEvents;
 import dev.amble.ait.core.AITSounds;
 import dev.amble.ait.core.AITTags;
 import dev.amble.ait.core.blockentities.DoorBlockEntity;

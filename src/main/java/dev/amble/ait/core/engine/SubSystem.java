@@ -6,15 +6,17 @@ import java.util.List;
 import java.util.function.Supplier;
 
 import com.google.gson.*;
+import dev.amble.ait.AITMod;
 import dev.amble.lib.data.CachedDirectedGlobalPos;
+import net.minecraft.text.Text;
 import org.jetbrains.annotations.Nullable;
 
 import net.minecraft.item.ItemStack;
 
-import dev.amble.ait.api.Disposable;
-import dev.amble.ait.api.Initializable;
-import dev.amble.ait.api.TardisComponent;
-import dev.amble.ait.api.TardisEvents;
+import dev.amble.ait.api.tardis.Disposable;
+import dev.amble.ait.api.tardis.Initializable;
+import dev.amble.ait.api.tardis.TardisComponent;
+import dev.amble.ait.api.tardis.TardisEvents;
 import dev.amble.ait.client.tardis.ClientTardis;
 import dev.amble.ait.core.AITBlocks;
 import dev.amble.ait.core.engine.impl.*;
@@ -38,10 +40,14 @@ public abstract class SubSystem extends Initializable<SubSystem.InitContext> imp
     public IdLike getId() {
         return id;
     }
+
     public Tardis tardis() {
         return this.tardis;
     }
 
+    public Text name() {
+        return Text.translatable(this.getId().toTranslationKey());
+    }
     public void setTardis(Tardis tardis) {
         this.tardis = tardis;
     }
@@ -183,6 +189,10 @@ public abstract class SubSystem extends Initializable<SubSystem.InitContext> imp
         int index();
 
         void index(int i);
+
+        default String toTranslationKey() {
+            return "subsystem." + AITMod.MOD_ID + "." + this.name().toLowerCase();
+        }
     }
 
     public record InitContext(@Nullable CachedDirectedGlobalPos pos,

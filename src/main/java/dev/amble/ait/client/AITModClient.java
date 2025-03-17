@@ -8,12 +8,15 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.UUID;
 
+import dev.amble.ait.api.ClientWorldEvents;
 import dev.amble.lib.register.AmbleRegistries;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
+import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientLifecycleEvents;
+import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.client.particle.v1.ParticleFactoryRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.*;
@@ -270,6 +273,8 @@ public class AITModClient implements ClientModInitializer {
         SonicModelLoader.init();
 
         AstralMapBlock.registerSyncListener();
+
+        ClientPlayConnectionEvents.JOIN.register((handler, sender, client) -> BOTI.tryWarn());
     }
     public static Screen screenFromId(int id) {
         return screenFromId(id, null, null);
@@ -486,9 +491,9 @@ public class AITModClient implements ClientModInitializer {
         MatrixStack stack = context.matrixStack();
         var exteriorQueue = new ArrayList<>(BOTI.EXTERIOR_RENDER_QUEUE);
         for (ExteriorBlockEntity exterior : exteriorQueue) {
-            if (exterior == null || exterior.tardis() == null || exterior.tardis().isEmpty()) continue;
+            if (exterior == null || !exterior.isLinked() || exterior.tardis().isEmpty()) continue;
             Tardis tardis = exterior.tardis().get();
-            if (tardis == null) return;
+            if (tardis == null || tardis.getExterior() == null) return;
             ClientExteriorVariantSchema variant = tardis.getExterior().getVariant().getClient();
             ExteriorModel model = variant.model();
             BlockPos pos = exterior.getPos();
@@ -517,7 +522,7 @@ public class AITModClient implements ClientModInitializer {
         MatrixStack stack = context.matrixStack();
         boolean bl = TardisServerWorld.isTardisDimension(world);
         if (bl) {
-            Tardis tardis = ClientTardisUtil.getCurrentTardis();
+            ClientTardis tardis = ClientTardisUtil.getCurrentTardis();
             if (tardis == null || tardis.getDesktop() == null) return;
             ClientExteriorVariantSchema variant = tardis.getExterior().getVariant().getClient();
             DoorModel model = variant.getDoor().model();

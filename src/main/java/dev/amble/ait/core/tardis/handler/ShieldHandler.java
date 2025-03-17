@@ -15,9 +15,9 @@ import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
-import dev.amble.ait.api.KeyedTardisComponent;
-import dev.amble.ait.api.TardisEvents;
-import dev.amble.ait.api.TardisTickable;
+import dev.amble.ait.api.tardis.KeyedTardisComponent;
+import dev.amble.ait.api.tardis.TardisEvents;
+import dev.amble.ait.api.tardis.TardisTickable;
 import dev.amble.ait.core.AITDimensions;
 import dev.amble.ait.core.AITStatusEffects;
 import dev.amble.ait.core.tardis.control.impl.SecurityControl;
@@ -119,7 +119,6 @@ public class ShieldHandler extends KeyedTardisComponent implements TardisTickabl
                                         new StatusEffectInstance(StatusEffects.WATER_BREATHING, 15, 3, true, false, false));
                             }
                             if (entity.getWorld().getRegistryKey().equals(AITDimensions.SPACE)) {
-                                System.out.println("hello?");
                                 player.addStatusEffect(
                                         new StatusEffectInstance(AITStatusEffects.OXYGENATED, 20, 1, true, false));
                             }

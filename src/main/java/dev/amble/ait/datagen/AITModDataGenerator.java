@@ -6,6 +6,7 @@ import static net.minecraft.data.server.recipe.RecipeProvider.*;
 import java.util.Calendar;
 import java.util.concurrent.CompletableFuture;
 
+import dev.amble.ait.core.engine.SubSystem;
 import dev.amble.lib.datagen.lang.AmbleLanguageProvider;
 import dev.amble.lib.datagen.lang.LanguageType;
 import dev.amble.lib.datagen.sound.AmbleSoundProvider;
@@ -744,8 +745,8 @@ public class AITModDataGenerator implements DataGeneratorEntrypoint {
         provider.addTranslation("control.ait.eject_waypoint", "Eject Waypoint");
         provider.addTranslation("control.ait.goto_waypoint", "Goto Waypoint");
         provider.addTranslation("control.ait.console_port", "Console Port");
-        provider.addTranslation("control.ait.mark_waypoint", "Mark Waypoint");
-        provider.addTranslation("control.ait.set_waypoint", "Set Waypoint");
+        provider.addTranslation("control.ait.mark_waypoint", "Save Waypoint");
+        provider.addTranslation("control.ait.set_waypoint", "Load Waypoint");
         provider.addTranslation("control.ait.increment", "Increment");
         provider.addTranslation("control.ait.x", "X");
         provider.addTranslation("control.ait.y", "Y");
@@ -769,6 +770,7 @@ public class AITModDataGenerator implements DataGeneratorEntrypoint {
         provider.addTranslation("text.autoconfig.aitconfig.option.SERVER.TRAVEL_PER_TICK", "TARDIS Travel Speed (per tick)");
         provider.addTranslation("text.autoconfig.aitconfig.option.SERVER.SEND_BULK", "Send Bulk");
         provider.addTranslation("text.autoconfig.aitconfig.option.SERVER.MAX_TARDISES", "Max TARDISES (-1 = Infinite)");
+        provider.addTranslation("text.autoconfig.aitconfig.option.SERVER.TNT_CAN_TELEPORT_THROUGH_DOOR", "Tnt Can Teleport Through Doors");
 
         provider.addTranslation("text.autoconfig.aitconfig.category.client", "Client");
         provider.addTranslation("text.autoconfig.aitconfig.option.CLIENT.SHOW_EXPERIMENTAL_WARNING", "Show Experimental Warning");
@@ -785,6 +787,8 @@ public class AITModDataGenerator implements DataGeneratorEntrypoint {
         provider.addTranslation("text.autoconfig.aitconfig.option.CLIENT.RENDER_DEMAT_PARTICLES", "Enable Dematerialization Particles");
         provider.addTranslation("text.autoconfig.aitconfig.option.CLIENT.INTERIOR_HUM_VOLUME", "Interior Hum Volume");
         provider.addTranslation("text.autoconfig.aitconfig.option.CLIENT.CUSTOM_MENU", "Enable Main Custom Menu");
+        provider.addTranslation("text.autoconfig.aitconfig.option.CLIENT.DISABLE_LOYALTY_BED_MESSAGE", "Disable Loyalty Bed Message");
+        provider.addTranslation("text.autoconfig.aitconfig.option.CLIENT.GREEN_SCREEN_BOTI", "Enable Green Screen Boti");
 
         provider.addTranslation(AITMod.TARDIS_GRIEFING.getTranslationKey(), "TARDIS Griefing");
         provider.addTranslation("entity.minecraft.villager.fabricator_engineer", "Fabricator Engineer");
@@ -812,6 +816,8 @@ public class AITModDataGenerator implements DataGeneratorEntrypoint {
         provider.addTranslation(AITItems.EARTH_MUSIC_DISC.getTranslationKey() + ".desc", "Nitrogenez - Earth");
         provider.addTranslation(AITItems.VENUS_MUSIC_DISC, "Music Disc");
         provider.addTranslation(AITItems.VENUS_MUSIC_DISC.getTranslationKey() + ".desc", "Nitrogenez - Venus");
+        provider.addTranslation(AITItems.GOOD_MAN_MUSIC_DISC, "Music Disc");
+        provider.addTranslation(AITItems.GOOD_MAN_MUSIC_DISC.getTranslationKey() + ".desc", "Dian - Good Man? [CUT EDITION]");
         provider.addTranslation(AITItems.GOLD_KEY_UPGRADE_SMITHING_TEMPLATE, "Smithing Template");
         provider.addTranslation(AITItems.NETHERITE_KEY_UPGRADE_SMITHING_TEMPLATE, "Smithing Template");
         provider.addTranslation(AITItems.CLASSIC_KEY_UPGRADE_SMITHING_TEMPLATE, "Smithing Template");
@@ -937,7 +943,7 @@ public class AITModDataGenerator implements DataGeneratorEntrypoint {
         provider.addTranslation(AITBlocks.LANDING_PAD, "Landing Marker");
         provider.addTranslation(AITBlocks.DETECTOR_BLOCK, "Interior Detector Block");
         provider.addTranslation(AITBlocks.EXTERIOR_BLOCK, "Exterior");
-        provider.addTranslation(AITBlocks.CORAL_PLANT, "TARDIS Coral");
+        provider.addTranslation(AITBlocks.CORAL_PLANT, "Coral Growth");
         provider.addTranslation(AITBlocks.MONITOR_BLOCK, "Monitor");
         provider.addTranslation(AITBlocks.ARTRON_COLLECTOR_BLOCK, "Artron Collector");
         provider.addTranslation(AITBlocks.ZEITON_BLOCK, "Block of Zeiton");
@@ -956,7 +962,7 @@ public class AITModDataGenerator implements DataGeneratorEntrypoint {
         provider.addTranslation("block.ait.artron_collector_block.tooltip.use", "(Charges inside of Rift Chunks)");
         provider.addTranslation("tooltip.ait.power_converter", "(Convert zeiton, lava, coal and wood into Artron)");
         provider.addTranslation("tooltip.ait.singularity", "(Give the TARDIS Coral this to allow the generation of the interior)");
-        provider.addTranslation("tooltip.ait.tardis_coral", "(Place the Tardis Coral on Soul Sand in a Rift Chunk to grow a TARDIS)");
+        provider.addTranslation("tooltip.ait.tardis_coral", "(Grow this on top of soul sand)");
         provider.addTranslation("tooltip.ait.matrix_energizer", "(Place on a naturally-occurring shrieker to produce a Personality Matrix)");
 
         // Painting
@@ -981,6 +987,13 @@ public class AITModDataGenerator implements DataGeneratorEntrypoint {
         provider.addTranslation("item.sonic.scanning.no_tool", "Hand (No Tool)");
         provider.addTranslation("item.sonic.scanning.cant_break", "Can't Break Block!");
 
+
+        // Loyalty Messages In Bed
+        provider.addTranslation("tardis.loyalty.message.reject","You hear whispers all around you, you are not welcome. [REJECT]");
+        provider.addTranslation("tardis.loyalty.message.neutral", "The TARDIS hums, neither welcoming nor dismissing your presence. [NEUTRAL]");
+        provider.addTranslation("tardis.loyalty.message.companion", "The TARDIS hums you a tune, as if glad to have you on board. [COMPANION]");
+        provider.addTranslation("tardis.loyalty.message.pilot", "The TARDIS hums gently, as if to show its trust. [PILOT]");
+        provider.addTranslation("tardis.loyalty.message.owner", "The TARDIS hums you a song, as if to show it will always be here for you. [OWNER]");
 
         // TARDIS Control Actionbar Title
         provider.addTranslation("tardis.message.protocol_813.travel", "Hail Mary: Protocol 813 is active, please prepare for departure.");
@@ -1039,6 +1052,7 @@ public class AITModDataGenerator implements DataGeneratorEntrypoint {
         provider.addTranslation("message.ait.all_types", "Consoles, Exteriors, Desktops & Sonic Casings");
         provider.addTranslation("screen.ait.sonic_casing", "Sonic Casing");
         provider.addTranslation("sonic.ait.mode.tardis.location_summon", "Summoned TARDIS To Your Location, Please Wait...");
+        provider.addTranslation("sonic.ait.mode.tardis.does_not_have_stabilisers",  "Remote Summoning Requires Stabilisers!");
         provider.addTranslation("sonic.ait.mode.tardis.refuel", "Engaged Handbrake, TARDIS Refueling...");
         provider.addTranslation("sonic.ait.mode.tardis.flight", "Disengaged Handbrake, TARDIS Dematerialising...");
         provider.addTranslation("screen.ait.current_au", "Current AU");
@@ -1049,7 +1063,9 @@ public class AITModDataGenerator implements DataGeneratorEntrypoint {
         provider.addTranslation("message.ait.cage.full", "It calls for the void..");
         provider.addTranslation("message.ait.cage.void_hint", "(Throw this into the END void)");
         provider.addTranslation("message.ait.cage.empty", "(Place this in a rift chunk)");
-        provider.addTranslation("tardis.message.engine.system_is_weakened", "System Is Weak!");
+        provider.addTranslation("tardis.message.engine.system_is_weakened", "This System Is Showing Signs Of Weakness, But Is Still Functional!");
+        provider.addTranslation("tardis.message.subsystem.requires_link", "LINK TO ENGINE VIA FLUID LINKS");
+        provider.addTranslation("tardis.message.engine.no_space", "Engine requires a 3x3 space to function!");
 
         // Achievements
         provider.addTranslation("achievement.ait.title.root", "Adventures in Time");
@@ -1111,6 +1127,7 @@ public class AITModDataGenerator implements DataGeneratorEntrypoint {
         provider.addTranslation("message.ait.sonic.riftnotfound", "RIFT CHUNK NOT FOUND");
         provider.addTranslation("message.ait.sonic.handbrakedisengaged",
                 "Handbrake disengaged, destination set to current position");
+        provider.addTranslation("message.ait.sonic.repairtime", "Repair Time: %s");
         provider.addTranslation("message.sonic.not_damaged", "TARDIS is not damaged");
         provider.addTranslation("message.ait.sonic.mode", "Mode: ");
         provider.addTranslation("message.ait.sonic.none", "None");
@@ -1388,6 +1405,17 @@ public class AITModDataGenerator implements DataGeneratorEntrypoint {
         provider.addTranslation("effect.ait.zeiton_high", "Zeiton High");
         provider.addTranslation("effect.ait.lunar_regolith", "Lunar Regolith Poisoned");
         provider.addTranslation("effect.ait.oxygenated", "Oxygenator Field");
+
+        // subsystems
+        provider.addTranslation(SubSystem.Id.DEMAT.toTranslationKey(), "Dematerialization Circuit");
+        provider.addTranslation(SubSystem.Id.CHAMELEON.toTranslationKey(), "Chameleon Circuit");
+        provider.addTranslation(SubSystem.Id.SHIELDS.toTranslationKey(), "Shield System");
+        provider.addTranslation(SubSystem.Id.DESPERATION.toTranslationKey(), "Desperation");
+        provider.addTranslation(SubSystem.Id.GRAVITATIONAL.toTranslationKey(), "Gravitational Modulator");
+        provider.addTranslation(SubSystem.Id.LIFE_SUPPORT.toTranslationKey(), "Life Support");
+        provider.addTranslation(SubSystem.Id.ENGINE.toTranslationKey(), "Engine");
+        provider.addTranslation(SubSystem.Id.STABILISERS.toTranslationKey(), "Blue Stabilisers");
+        provider.addTranslation(SubSystem.Id.EMERGENCY_POWER.toTranslationKey(), "Emergency Backup Power");
 
         return provider;
     }

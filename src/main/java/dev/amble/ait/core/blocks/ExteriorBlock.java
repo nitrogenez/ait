@@ -38,7 +38,7 @@ import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldAccess;
 
-import dev.amble.ait.api.TardisComponent;
+import dev.amble.ait.api.tardis.TardisComponent;
 import dev.amble.ait.compat.DependencyChecker;
 import dev.amble.ait.core.AITBlocks;
 import dev.amble.ait.core.AITItems;
@@ -163,10 +163,10 @@ public class ExteriorBlock extends Block implements BlockEntityProvider, ICantBr
         if (!(blockEntity instanceof ExteriorBlockEntity exterior))
             return normal;
 
-        Tardis tardis = exterior.tardis() != null ? exterior.tardis().get() : null;
-
-        if (tardis == null)
+        if (!exterior.isLinked())
             return normal;
+
+        Tardis tardis = exterior.tardis().get();
 
         if (tardis.siege() == null)
             return normal;
@@ -199,13 +199,15 @@ public class ExteriorBlock extends Block implements BlockEntityProvider, ICantBr
     public VoxelShape getCollisionShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
         BlockEntity blockEntity = world.getBlockEntity(pos);
 
-        if (!(blockEntity instanceof ExteriorBlockEntity exterior) || exterior.tardis() == null)
+        if (!(blockEntity instanceof ExteriorBlockEntity exterior) || !exterior.isLinked())
+            return getNormalShape(state, false);
+
+
+
+        if (!exterior.isLinked())
             return getNormalShape(state, false);
 
         Tardis tardis = exterior.tardis().get();
-
-        if (tardis == null)
-            return getNormalShape(state, false);
 
         if (tardis.siege().isActive())
             return SIEGE_SHAPE;
@@ -409,7 +411,7 @@ public class ExteriorBlock extends Block implements BlockEntityProvider, ICantBr
 
     private Tardis findTardis(ServerWorld world, BlockPos pos) {
         if (world.getBlockEntity(pos) instanceof ExteriorBlockEntity exterior) {
-            if (exterior.tardis() == null || exterior.tardis().isEmpty())
+            if (!exterior.isLinked() || exterior.tardis().isEmpty())
                 return null;
 
             return exterior.tardis().get();

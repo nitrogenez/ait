@@ -6,7 +6,7 @@ import net.minecraft.entity.ItemEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 
-import dev.amble.ait.api.KeyedTardisComponent;
+import dev.amble.ait.api.tardis.KeyedTardisComponent;
 import dev.amble.ait.core.item.WaypointItem;
 import dev.amble.ait.core.tardis.handler.travel.TravelUtil;
 import dev.amble.ait.data.Waypoint;

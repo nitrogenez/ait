@@ -14,9 +14,9 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.ChunkPos;
 
 import dev.amble.ait.AITMod;
-import dev.amble.ait.api.TardisComponent;
-import dev.amble.ait.api.TardisEvents;
-import dev.amble.ait.api.WorldWithTardis;
+import dev.amble.ait.api.tardis.TardisComponent;
+import dev.amble.ait.api.tardis.TardisEvents;
+import dev.amble.ait.api.tardis.WorldWithTardis;
 import dev.amble.ait.core.tardis.ServerTardis;
 import dev.amble.ait.core.tardis.manager.old.DeprecatedServerTardisManager;
 import dev.amble.ait.core.tardis.util.NetworkUtil;

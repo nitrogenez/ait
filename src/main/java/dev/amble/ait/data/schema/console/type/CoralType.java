@@ -8,11 +8,11 @@ import net.minecraft.util.Identifier;
 import dev.amble.ait.AITMod;
 import dev.amble.ait.core.tardis.control.ControlTypes;
 import dev.amble.ait.core.tardis.control.impl.*;
+import dev.amble.ait.core.tardis.control.impl.ConsolePortControl;
 import dev.amble.ait.core.tardis.control.impl.pos.IncrementControl;
 import dev.amble.ait.core.tardis.control.impl.pos.XControl;
 import dev.amble.ait.core.tardis.control.impl.pos.YControl;
 import dev.amble.ait.core.tardis.control.impl.pos.ZControl;
-import dev.amble.ait.core.tardis.control.impl.waypoint.ConsolePortControl;
 import dev.amble.ait.core.tardis.control.impl.waypoint.MarkWaypointControl;
 import dev.amble.ait.core.tardis.control.impl.waypoint.SetWaypointControl;
 import dev.amble.ait.data.schema.console.ConsoleTypeSchema;
@@ -46,8 +46,8 @@ public class CoralType extends ConsoleTypeSchema {
                     new Vector3f(0.7398437662050128f, 0.7150001563131809f, -0.40507811680436134f)),
             new ControlTypes(new EngineOverloadControl(), EntityDimensions.changing(0.1375f, 0.1f),
                     new Vector3f(-0.6828126898035407f, 0.6250001918524504f, 0.06328086648136377f)),
-            new ControlTypes(new VisualiserControl(), EntityDimensions.changing(0.1375f, 0.16250001f),
-                    new Vector3f(0.7140626860782504f, 0.3749999972060323f, 0.8023437531664968f)),
+            //new ControlTypes(new VisualiserControl(), EntityDimensions.changing(0.1375f, 0.16250001f),
+                   // new Vector3f(0.7140626860782504f, 0.3749999972060323f, 0.8023437531664968f)),
             new ControlTypes(new IncrementControl(), EntityDimensions.changing(0.1125f, 0.112500004f),
                     new Vector3f(-7.812399417161942E-4f, 0.5875001922249794f, 1.2890625316649675f)),
             new ControlTypes(new XControl(), EntityDimensions.changing(0.099999994f, 0.099999994f),

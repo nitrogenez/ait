@@ -32,7 +32,7 @@ import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldAccess;
 
-import dev.amble.ait.api.TardisEvents;
+import dev.amble.ait.api.tardis.TardisEvents;
 import dev.amble.ait.core.AITBlockEntityTypes;
 import dev.amble.ait.core.blockentities.DoorBlockEntity;
 import dev.amble.ait.core.blocks.types.HorizontalDirectionalBlock;

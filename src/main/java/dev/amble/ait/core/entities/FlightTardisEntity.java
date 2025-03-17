@@ -22,7 +22,7 @@ import net.minecraft.util.math.*;
 import net.minecraft.world.World;
 
 import dev.amble.ait.AITMod;
-import dev.amble.ait.api.link.LinkableLivingEntity;
+import dev.amble.ait.api.tardis.link.LinkableLivingEntity;
 import dev.amble.ait.client.util.ClientShakeUtil;
 import dev.amble.ait.core.AITDimensions;
 import dev.amble.ait.core.AITEntityTypes;
@@ -83,7 +83,7 @@ public class FlightTardisEntity extends LinkableLivingEntity implements JumpingM
 
     @Override
     protected float getOffGroundSpeed() {
-        if (this.tardis() != null  && this.tardis().get().travel() != null) {
+        if (this.isLinked()  && this.tardis().get().travel() != null) {
             float spaceSpeed = this.getWorld().getRegistryKey().equals(AITDimensions.SPACE) ? 0.1f : 0.05f;
             return this.getMovementSpeed() * (this.tardis().get().travel().speed() * spaceSpeed);
         }
@@ -223,7 +223,7 @@ public class FlightTardisEntity extends LinkableLivingEntity implements JumpingM
 
     @Override
     protected Vec3d getControlledMovementInput(PlayerEntity controllingPlayer, Vec3d movementInput) {
-        if (this.tardis() == null || this.tardis().get() == null || !this.tardis().get().fuel().hasPower()) return new Vec3d(0, 0, 0);
+        if (!this.isLinked() || !this.tardis().get().fuel().hasPower()) return new Vec3d(0, 0, 0);
         float f = controllingPlayer.sidewaysSpeed * this.tardis().get().travel().speed();
         float g = controllingPlayer.forwardSpeed * this.tardis().get().travel().speed();
 
@@ -276,13 +276,19 @@ public class FlightTardisEntity extends LinkableLivingEntity implements JumpingM
     @Override
     public void readCustomDataFromNbt(NbtCompound nbt) {
         super.readCustomDataFromNbt(nbt);
-        this.interiorPos = BlockPos.fromLong(nbt.getLong("InteriorPos"));
+
+        if (nbt.contains("InteriorPos")) {
+            this.interiorPos = BlockPos.fromLong(nbt.getLong("InteriorPos"));
+        } else {
+            this.interiorPos = BlockPos.ORIGIN;
+        }
     }
 
     @Override
     public void writeCustomDataToNbt(NbtCompound nbt) {
         super.writeCustomDataToNbt(nbt);
         if (this.getWorld().isClient()) return;
+        if (!this.isLinked()) return;
 
         BlockPos consolePos = this.tardis().get().getDesktop().getConsolePos().iterator().next();
         BlockPos pos = WorldUtil.findSafeXZ(this.tardis().get().asServer().getInteriorWorld(), consolePos, 2);

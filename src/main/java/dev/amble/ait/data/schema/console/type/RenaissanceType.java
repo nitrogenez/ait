@@ -7,13 +7,13 @@ import net.minecraft.util.Identifier;
 
 import dev.amble.ait.AITMod;
 import dev.amble.ait.core.tardis.control.ControlTypes;
-import dev.amble.ait.core.tardis.control.RefreshmentControl;
 import dev.amble.ait.core.tardis.control.impl.*;
+import dev.amble.ait.core.tardis.control.impl.ConsolePortControl;
+import dev.amble.ait.core.tardis.control.impl.RefreshmentControl;
 import dev.amble.ait.core.tardis.control.impl.pos.IncrementControl;
 import dev.amble.ait.core.tardis.control.impl.pos.XControl;
 import dev.amble.ait.core.tardis.control.impl.pos.YControl;
 import dev.amble.ait.core.tardis.control.impl.pos.ZControl;
-import dev.amble.ait.core.tardis.control.impl.waypoint.ConsolePortControl;
 import dev.amble.ait.core.tardis.control.impl.waypoint.MarkWaypointControl;
 import dev.amble.ait.core.tardis.control.impl.waypoint.SetWaypointControl;
 import dev.amble.ait.data.schema.console.ConsoleTypeSchema;
@@ -77,8 +77,8 @@ public class RenaissanceType extends ConsoleTypeSchema {
             new ControlTypes(new RandomiserControl(), EntityDimensions.changing(0.15f, 0.099999994f),
                     new Vector3f(0.6390628833323717f, 0.6625000033527613f, -0.7867185575887561f)),
 
-            new ControlTypes(new VisualiserControl(), EntityDimensions.changing(0.16250001f, 0.08749999f),
-                    new Vector3f(-1.0265632634982467f, 0.912500667385757f, -0.17460975889116526f)),
+          //  new ControlTypes(new VisualiserControl(), EntityDimensions.changing(0.16250001f, 0.08749999f),
+                //    new Vector3f(-1.0265632634982467f, 0.912500667385757f, -0.17460975889116526f)),
 
             new ControlTypes(new EngineOverloadControl(), EntityDimensions.changing(0.08750002f, 0.1125f),
                     new Vector3f(0.1874992409721017f, 0.5375003814697266f, 1.2609376907348633f)),

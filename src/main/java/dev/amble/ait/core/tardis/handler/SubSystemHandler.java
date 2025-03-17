@@ -10,9 +10,9 @@ import org.jetbrains.annotations.NotNull;
 import net.minecraft.server.MinecraftServer;
 
 import dev.amble.ait.AITMod;
-import dev.amble.ait.api.KeyedTardisComponent;
-import dev.amble.ait.api.TardisEvents;
-import dev.amble.ait.api.TardisTickable;
+import dev.amble.ait.api.tardis.KeyedTardisComponent;
+import dev.amble.ait.api.tardis.TardisEvents;
+import dev.amble.ait.api.tardis.TardisTickable;
 import dev.amble.ait.core.engine.DurableSubSystem;
 import dev.amble.ait.core.engine.SubSystem;
 import dev.amble.ait.core.engine.impl.*;

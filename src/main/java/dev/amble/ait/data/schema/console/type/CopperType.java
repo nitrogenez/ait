@@ -8,11 +8,11 @@ import net.minecraft.util.Identifier;
 import dev.amble.ait.AITMod;
 import dev.amble.ait.core.tardis.control.ControlTypes;
 import dev.amble.ait.core.tardis.control.impl.*;
+import dev.amble.ait.core.tardis.control.impl.ConsolePortControl;
 import dev.amble.ait.core.tardis.control.impl.pos.IncrementControl;
 import dev.amble.ait.core.tardis.control.impl.pos.XControl;
 import dev.amble.ait.core.tardis.control.impl.pos.YControl;
 import dev.amble.ait.core.tardis.control.impl.pos.ZControl;
-import dev.amble.ait.core.tardis.control.impl.waypoint.ConsolePortControl;
 import dev.amble.ait.core.tardis.control.impl.waypoint.MarkWaypointControl;
 import dev.amble.ait.core.tardis.control.impl.waypoint.SetWaypointControl;
 import dev.amble.ait.data.schema.console.ConsoleTypeSchema;
@@ -38,8 +38,8 @@ public class CopperType extends ConsoleTypeSchema {
                     new Vector3f(-1.2503906358033419f, 1.3125017127022147f, 0.008984364569187164f)),
             new ControlTypes(new TelepathicControl(), EntityDimensions.changing(0.34999996f, 0.20000002f),
                     new Vector3f(0.17499694786965847f, 0.46249985694885254f, 1.189068604260683f)),
-            new ControlTypes(new VisualiserControl(), EntityDimensions.changing(0.125f, 0.33749995f),
-                    new Vector3f(-0.6742191342636943f, 0.4750005714595318f, 1.1015651691704988f)),
+          //  new ControlTypes(new VisualiserControl(), EntityDimensions.changing(0.125f, 0.33749995f),
+                  //  new Vector3f(-0.6742191342636943f, 0.4750005714595318f, 1.1015651691704988f)),
             new ControlTypes(new EngineOverloadControl(), EntityDimensions.changing(0.099999994f, 0.17500001f),
                     new Vector3f(0.8148471852764487f, 0.5249999985098839f, 1.0312561066821218f)),
             new ControlTypes(new LandTypeControl(), EntityDimensions.changing(0.15f, 0.17500001f),

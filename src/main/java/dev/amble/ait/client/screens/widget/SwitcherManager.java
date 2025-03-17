@@ -5,7 +5,7 @@ import java.util.function.BiConsumer;
 import java.util.function.Function;
 
 import dev.amble.ait.api.Nameable;
-import dev.amble.ait.api.TardisComponent;
+import dev.amble.ait.api.tardis.TardisComponent;
 import dev.amble.ait.client.sounds.ClientSoundManager;
 import dev.amble.ait.client.tardis.ClientTardis;
 import dev.amble.ait.core.sounds.flight.FlightSound;

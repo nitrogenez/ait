@@ -24,8 +24,8 @@ import net.minecraft.util.math.ChunkSectionPos;
 import net.minecraft.world.World;
 
 import dev.amble.ait.AITMod;
-import dev.amble.ait.api.TardisComponent;
-import dev.amble.ait.api.TardisEvents;
+import dev.amble.ait.api.tardis.TardisComponent;
+import dev.amble.ait.api.tardis.TardisEvents;
 import dev.amble.ait.core.AITBlocks;
 import dev.amble.ait.core.AITSounds;
 import dev.amble.ait.core.blockentities.ConsoleBlockEntity;
@@ -228,7 +228,8 @@ public class TardisDesktop extends TardisComponent {
         if (dim.getBlockEntity(consolePos) instanceof ConsoleBlockEntity entity) {
             ConsoleGeneratorBlockEntity generator = new ConsoleGeneratorBlockEntity(consolePos,
                     AITBlocks.CONSOLE_GENERATOR.getDefaultState(), entity.getTypeSchema().id(), entity.getVariant().id());
-            entity.killControls();
+
+            entity.onBroken();
 
             dim.removeBlock(consolePos, false);
             dim.removeBlockEntity(consolePos);

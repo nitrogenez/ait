@@ -34,7 +34,10 @@ public class AITConfig implements ConfigData {
         public boolean TNT_CAN_TELEPORT_THROUGH_DOOR = true;
 
         @ConfigEntry.Gui.RequiresRestart
-        public List<String> WORLDS_BLACKLIST = List.of(
+        public List<String> WORLDS_BLACKLIST = List.of();
+
+        @ConfigEntry.Gui.RequiresRestart
+        public List<String> TRAVEL_BLACKLIST = List.of(
                 AITDimensions.TIME_VORTEX_WORLD.getValue().toString());
 
         public int TRAVEL_PER_TICK = 2;
@@ -50,7 +53,7 @@ public class AITConfig implements ConfigData {
         public boolean SHOW_EXPERIMENTAL_WARNING = false;
         public boolean ENVIRONMENT_PROJECTOR = true;
         public boolean DISABLE_LOYALTY_FOG = false;
-        public boolean DISABLE_LOYALTY_SLEEPING_ACTIONBAR = false;
+        public boolean DISABLE_LOYALTY_BED_MESSAGE = false;
         public boolean ENABLE_TARDIS_BOTI = true;
         public boolean SHOULD_RENDER_BOTI_INTERIOR = false;
         public boolean GREEN_SCREEN_BOTI = false;

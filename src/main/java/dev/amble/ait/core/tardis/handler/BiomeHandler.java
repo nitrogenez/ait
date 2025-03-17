@@ -23,8 +23,8 @@ import net.minecraft.world.biome.BiomeKeys;
 import net.minecraft.world.gen.feature.*;
 
 import dev.amble.ait.AITMod;
-import dev.amble.ait.api.KeyedTardisComponent;
-import dev.amble.ait.api.TardisEvents;
+import dev.amble.ait.api.tardis.KeyedTardisComponent;
+import dev.amble.ait.api.tardis.TardisEvents;
 import dev.amble.ait.data.datapack.exterior.BiomeOverrides;
 import dev.amble.ait.data.enummap.Ordered;
 import dev.amble.ait.data.properties.Property;

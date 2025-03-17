@@ -378,15 +378,15 @@ public class MonitorScreen extends ConsoleScreen {
                 LightmapTextureManager.MAX_LIGHT_COORDINATE, OverlayTexture.DEFAULT_UV, base, base, base, 1f);
 
         if (hasPower && emissive != null && !(emissive.equals(DatapackConsole.EMPTY))) {
-            ClientLightUtil.renderEmissive(ClientLightUtil.Renderable.create(model::render), emissive, null,
-                    model.getPart(), stack, context.getVertexConsumers(), LightmapTextureManager.MAX_LIGHT_COORDINATE,
-                    OverlayTexture.DEFAULT_UV, base, tinted, tinted, 1f);
+            ClientLightUtil.renderEmissive((v, l) -> model.render(
+                    stack, v, l, OverlayTexture.DEFAULT_UV, base, tinted, tinted, 1
+            ), emissive, context.getVertexConsumers());
         }
 
         stack.pop();
 
         stack.push();
-        stack.translate(0, 0, 50f);
+        stack.translate(0, 0, 550f);
 
         context.drawCenteredTextWithShadow(this.textRenderer, isExtUnlocked ? "" : "\uD83D\uDD12", x, y,
                 0xFFFFFF);
@@ -405,7 +405,6 @@ public class MonitorScreen extends ConsoleScreen {
         context.drawCenteredTextWithShadow(this.textRenderer, isExtUnlocked ? "" : "\uD83D\uDD12", x, y, 0xFFFFFF);
 
         stack.pop();
-
 
         stack.pop();
     }

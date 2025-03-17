@@ -23,7 +23,7 @@ import net.minecraft.registry.RegistryKeys;
 import net.minecraft.util.Rarity;
 
 import dev.amble.ait.AITMod;
-import dev.amble.ait.api.link.LinkableItem;
+import dev.amble.ait.api.tardis.link.LinkableItem;
 import dev.amble.ait.core.drinks.DrinkRegistry;
 import dev.amble.ait.core.drinks.DrinkUtil;
 import dev.amble.ait.core.engine.SubSystem;
@@ -203,6 +203,10 @@ public class AITItems extends ItemContainer {
             new AItemSettings().maxCount(1).rarity(Rarity.RARE), 342);
 
     @NoEnglish
+    public static final Item GOOD_MAN_MUSIC_DISC = new MusicDiscItem(1, AITSounds.GOOD_MAN_MUSIC,
+            new AItemSettings().maxCount(1).rarity(Rarity.RARE), 342);
+
+    @NoEnglish
     public static final Item EARTH_MUSIC_DISC = new MusicDiscItem(1, AITSounds.EARTH_MUSIC,
             new AItemSettings().maxCount(1).rarity(Rarity.RARE), 315);
 
@@ -257,7 +261,7 @@ public class AITItems extends ItemContainer {
             entries.addAfter(DRIFTING_MUSIC_DISC, MERCURY_MUSIC_DISC);
             entries.addAfter(MERCURY_MUSIC_DISC, WONDERFUL_TIME_IN_SPACE_MUSIC_DISC);
             entries.addAfter(WONDERFUL_TIME_IN_SPACE_MUSIC_DISC, EARTH_MUSIC_DISC);
-            entries.addAfter(EARTH_MUSIC_DISC, VENUS_MUSIC_DISC);
+            entries.addAfter(EARTH_MUSIC_DISC, VENUS_MUSIC_DISC, GOOD_MAN_MUSIC_DISC);
         });
 
         ItemGroupEvents.modifyEntriesEvent(ItemGroups.FOOD_AND_DRINK).register(entries -> {

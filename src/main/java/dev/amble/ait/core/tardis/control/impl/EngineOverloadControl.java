@@ -31,13 +31,13 @@ public class EngineOverloadControl extends Control {
     }
 
     @Override
-    public boolean runServer(Tardis tardis, ServerPlayerEntity player, ServerWorld world, BlockPos console, boolean leftClick) {
+    public Result runServer(Tardis tardis, ServerPlayerEntity player, ServerWorld world, BlockPos console, boolean leftClick) {
         super.runServer(tardis, player, world, console, leftClick);
 
         if (tardis.fuel().getCurrentFuel() < 25000) {
             player.sendMessage(Text.literal("§cERROR, TARDIS REQUIRES AT LEAST 25K ARTRON TO EXECUTE THIS ACTION."), true);
             world.playSound(null, player.getBlockPos(), AITSounds.CLOISTER, SoundCategory.BLOCKS, 1.0F, 1.0F);
-            return false;
+            return Result.FAILURE;
         }
 
         boolean isInFlight = tardis.travel().getState() == TravelHandlerBase.State.FLIGHT;
@@ -52,16 +52,16 @@ public class EngineOverloadControl extends Control {
                 tardis.travel().decreaseFlightTime(999999999);
                 tardis.travel().handbrake(false);
                 tardis.setRefueling(false);
-                tardis.removeFuel(5000000);
+                tardis.setFuelCount(0);
 
                 if (!isInFlight) {
                     tardis.travel().finishDemat();
-                    tardis.removeFuel(5000000);
+                    tardis.setFuelCount(0);
                     tardis.travel().decreaseFlightTime(999999999);
                     tardis.setRefueling(false);
                 } else {
                     tardis.travel().decreaseFlightTime(999999999);
-                    tardis.removeFuel(5000000);
+                    tardis.setFuelCount(0);
                     tardis.setRefueling(false);
                 }
 
@@ -69,7 +69,7 @@ public class EngineOverloadControl extends Control {
             });
         });
 
-        return true;
+        return Result.SUCCESS;
     }
 
     private void triggerExplosion(ServerWorld world, BlockPos console, Tardis tardis, int stage) {
@@ -153,7 +153,7 @@ public class EngineOverloadControl extends Control {
     }
 
     @Override
-    public SoundEvent getSound() {
+    public SoundEvent getFallbackSound() {
         return AITSounds.BWEEP;
     }
 }

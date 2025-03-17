@@ -16,12 +16,10 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 
 import dev.amble.ait.AITMod;
-import dev.amble.ait.api.TardisComponent;
 import dev.amble.ait.core.blockentities.ExteriorBlockEntity;
 import dev.amble.ait.core.effects.ZeitonHighEffect;
 import dev.amble.ait.core.sounds.travel.TravelSound;
 import dev.amble.ait.core.tardis.Tardis;
-import dev.amble.ait.core.tardis.handler.CloakHandler;
 import dev.amble.ait.core.tardis.handler.travel.TravelHandlerBase;
 import dev.amble.ait.core.tardis.util.NetworkUtil;
 
@@ -41,26 +39,27 @@ public abstract class ExteriorAnimation {
     }
 
     public float getAlpha() {
-        if (this.exterior.tardis().isEmpty())
+        if (!this.exterior.isLinked())
             return 1f;
 
-        if (this.exterior.tardis() == null || this.exterior.tardis().get().travel() == null) return 1f;
+        Tardis tardis = this.exterior.tardis().get();
 
-        if (this.exterior.tardis().get().travel().getState() == TravelHandlerBase.State.LANDED) {
-            if (!isHigh() && this.exterior.tardis().get().<CloakHandler>handler(TardisComponent.Id.CLOAK).cloaked().get()) {
-                return 0.105f;
-            }
-            return 1.0f;
-        }
+        if (tardis.travel().getState() != TravelHandlerBase.State.LANDED)
+            return this.alpha;
 
-        return this.alpha;
+        if (tardis.cloak().cloaked().get())
+            return isHigh() ? 0.105f : 0;
+
+        return 1f;
     }
 
     private static boolean isHigh() {
-        if (ServerLifecycleHooks.isServer()) return false;
+        if (ServerLifecycleHooks.isServer())
+            return false;
 
         return amIHigh();
     }
+
     @Environment(EnvType.CLIENT)
     private static boolean amIHigh() {
         return MinecraftClient.getInstance().player != null && ZeitonHighEffect.isHigh(MinecraftClient.getInstance().player);

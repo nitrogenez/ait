@@ -25,7 +25,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RotationPropertyHelper;
 import net.minecraft.util.math.Vec3d;
 
-import dev.amble.ait.api.link.v2.TardisRef;
+import dev.amble.ait.api.tardis.link.v2.TardisRef;
 import dev.amble.ait.core.AITSounds;
 import dev.amble.ait.core.item.HypercubeItem;
 import dev.amble.ait.core.tardis.ServerTardis;

@@ -43,7 +43,6 @@ import net.minecraft.world.event.Vibrations;
 import dev.amble.ait.AITMod;
 import dev.amble.ait.core.AITBlockEntityTypes;
 import dev.amble.ait.core.AITBlocks;
-import dev.amble.ait.core.AITItems;
 import dev.amble.ait.core.advancement.TardisCriterions;
 import dev.amble.ait.core.blockentities.MatrixEnergizerBlockEntity;
 import dev.amble.ait.core.item.PersonalityMatrixItem;
@@ -164,7 +163,6 @@ public class MatrixEnergizerBlock extends Block implements BlockEntityProvider {
         BlockState state = world.getBlockState(pos.down());
         if (be instanceof MatrixEnergizerBlockEntity mbe) {
             if (mbe.getVibrationCallback().accepts((ServerWorld) world, pos, GameEvent.SHRIEK, GameEvent.Emitter.of(thisState))) {
-                System.out.println("SHRIEK");
                 mbe.getEventListener().forceListen((ServerWorld) world, GameEvent.SHRIEK, GameEvent.Emitter.of(state),
                         new Vec3d(pos.down().getX(), pos.down().getY(), pos.down().getZ()));
                 int i = this.getAge(thisState);
@@ -179,8 +177,9 @@ public class MatrixEnergizerBlock extends Block implements BlockEntityProvider {
 
     @Override
     public void onBroken(WorldAccess world, BlockPos pos, BlockState state) {
-        if (hasPower(state)) {
-            dropStack((World) world, pos, AITItems.PERSONALITY_MATRIX.getDefaultStack());
+        if (hasPower(state) && this.getAge(state) == this.getMaxAge()) {
+            ItemStack pmStack = PersonalityMatrixItem.randomize();
+            dropStack((World) world, pos, pmStack);
         }
         super.onBroken(world, pos, state);
     }
@@ -189,9 +188,7 @@ public class MatrixEnergizerBlock extends Block implements BlockEntityProvider {
         if (world.isClient()) return false;
         if (this.isMature(state) && hasPower(state)) {
             world.playSound(null, pos, SoundEvents.BLOCK_SCULK_CATALYST_BLOOM, SoundCategory.BLOCKS, 1.0F, 1.0F);
-            ItemStack pmStack = AITItems.PERSONALITY_MATRIX.getDefaultStack();
-            PersonalityMatrixItem pmItem = (PersonalityMatrixItem) pmStack.getItem();
-            pmStack = pmItem.randomize();
+            ItemStack pmStack = PersonalityMatrixItem.randomize();
             ItemEntity matrix = new ItemEntity(world, pos.getX(), pos.getY(), pos.getZ(), pmStack);
             world.spawnEntity(matrix);
             if (world.getBlockEntity(pos.down()) instanceof SculkShriekerBlockEntity) {
@@ -218,7 +215,7 @@ public class MatrixEnergizerBlock extends Block implements BlockEntityProvider {
         state.with(SILENT, true);
 
         if (!(world.getBlockState(pos.down()).getBlock() instanceof SculkShriekerBlock)) {
-            world.breakBlock(pos, !player.isCreative());
+            world.breakBlock(pos, false);
             if (!player.isCreative()) dropStack(world, pos, AITBlocks.MATRIX_ENERGIZER.asItem().getDefaultStack());
             return;
         }

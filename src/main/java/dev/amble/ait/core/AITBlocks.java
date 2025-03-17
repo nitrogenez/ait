@@ -53,6 +53,7 @@ public class AITBlocks extends BlockContainer {
             FabricBlockSettings.create().nonOpaque().noBlockBreakParticles().strength(-1.0f, 3600000.0f).dropsNothing()
                     .instrument(Instrument.COW_BELL).pistonBehavior(PistonBehavior.IGNORE));
 
+    @PickaxeMineable(tool = PickaxeMineable.Tool.IRON)
     @NoBlockDrop
     public static final Block WAYPOINT_BANK = new WaypointBankBlock(
             FabricBlockSettings.create().nonOpaque().requiresTool().instrument(Instrument.BASEDRUM).strength(0.5F, 6.0F)
@@ -75,7 +76,7 @@ public class AITBlocks extends BlockContainer {
     @PickaxeMineable
     @NoEnglish
     public static final Block ARTRON_COLLECTOR_BLOCK = new ArtronCollectorBlock(
-            FabricBlockSettings.create().nonOpaque().noBlockBreakParticles().requiresTool().strength(1.5F)
+            FabricBlockSettings.create().nonOpaque().noBlockBreakParticles().requiresTool().strength(1F)
                     .instrument(Instrument.BANJO).pistonBehavior(PistonBehavior.IGNORE));
 
     // Coral Blocks
@@ -88,19 +89,22 @@ public class AITBlocks extends BlockContainer {
             .strength(1.5F, 6.0F).requiresTool().sounds(BlockSoundGroup.ANVIL).pistonBehavior(PistonBehavior.IGNORE));
 
     @PickaxeMineable(tool = PickaxeMineable.Tool.DIAMOND)
-    public static final Block TARDIS_CORAL_BLOCK = new Block(FabricBlockSettings.create().mapColor(MapColor.GOLD).solid().instrument(Instrument.BASEDRUM).requiresTool().strength(1.5f, 6.0f));
+    public static final Block TARDIS_CORAL_BLOCK = new Block(FabricBlockSettings.create().mapColor(MapColor.GOLD).solid().instrument(Instrument.BASEDRUM).requiresTool().strength(7f, 6.0f));
 
     @PickaxeMineable(tool = PickaxeMineable.Tool.DIAMOND)
-    public static final Block TARDIS_CORAL_STAIRS = new StairsBlock(TARDIS_CORAL_BLOCK.getDefaultState(), FabricBlockSettings.create().mapColor(MapColor.GOLD).solid().instrument(Instrument.BASEDRUM).requiresTool().strength(1.5f, 6.0f));
+    public static final Block TARDIS_CORAL_STAIRS = new StairsBlock(TARDIS_CORAL_BLOCK.getDefaultState(), FabricBlockSettings.create().mapColor(MapColor.GOLD).solid().instrument(Instrument.BASEDRUM).requiresTool().strength(7f, 6.0f));
 
     @PickaxeMineable(tool = PickaxeMineable.Tool.DIAMOND)
-    public static final Block TARDIS_CORAL_SLAB = new SlabBlock(FabricBlockSettings.create().mapColor(MapColor.GOLD).solid().instrument(Instrument.BASEDRUM).requiresTool().strength(1.5f, 6.0f));
+    public static final Block TARDIS_CORAL_SLAB = new SlabBlock(FabricBlockSettings.create().mapColor(MapColor.GOLD).solid().instrument(Instrument.BASEDRUM).requiresTool().strength(7f, 6.0f));
 
     @PickaxeMineable(tool = PickaxeMineable.Tool.DIAMOND)
-    public static final Block TARDIS_CORAL_FAN = new TardisCoralFanBlock(FabricBlockSettings.create().mapColor(MapColor.GOLD).noCollision().breakInstantly().sounds(BlockSoundGroup.WET_GRASS).pistonBehavior(PistonBehavior.DESTROY));
+    public static final Block TARDIS_CORAL_FAN = new TardisCoralFanBlock(FabricBlockSettings.create().mapColor(MapColor.GOLD).noCollision().breakInstantly().sounds(BlockSoundGroup.WET_GRASS).pistonBehavior(PistonBehavior.DESTROY).requiresTool().strength(7f, 6.0f));
 
+    @PickaxeMineable(tool = PickaxeMineable.Tool.DIAMOND)
     @NoBlockItem
-    public static final Block TARDIS_CORAL_WALL_FAN = new TardisCoralWallBlock(FabricBlockSettings.create().mapColor(MapColor.GOLD).noCollision().breakInstantly().sounds(BlockSoundGroup.WET_GRASS).pistonBehavior(PistonBehavior.DESTROY));
+    public static final Block TARDIS_CORAL_WALL_FAN = new TardisCoralWallBlock(FabricBlockSettings.create().mapColor(MapColor.GOLD).noCollision().breakInstantly().sounds(BlockSoundGroup.WET_GRASS).pistonBehavior(PistonBehavior.DESTROY).requiresTool().strength(7f, 6.0f));
+
+
     // TARDIS Blocks
 
     @PickaxeMineable(tool = PickaxeMineable.Tool.STONE)

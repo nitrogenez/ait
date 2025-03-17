@@ -8,11 +8,11 @@ import net.minecraft.util.Identifier;
 import dev.amble.ait.AITMod;
 import dev.amble.ait.core.tardis.control.ControlTypes;
 import dev.amble.ait.core.tardis.control.impl.*;
+import dev.amble.ait.core.tardis.control.impl.ConsolePortControl;
 import dev.amble.ait.core.tardis.control.impl.pos.IncrementControl;
 import dev.amble.ait.core.tardis.control.impl.pos.XControl;
 import dev.amble.ait.core.tardis.control.impl.pos.YControl;
 import dev.amble.ait.core.tardis.control.impl.pos.ZControl;
-import dev.amble.ait.core.tardis.control.impl.waypoint.ConsolePortControl;
 import dev.amble.ait.core.tardis.control.impl.waypoint.MarkWaypointControl;
 import dev.amble.ait.core.tardis.control.impl.waypoint.SetWaypointControl;
 import dev.amble.ait.data.schema.console.ConsoleTypeSchema;
@@ -74,8 +74,8 @@ public class HartnellType extends ConsoleTypeSchema {
                     new Vector3f(-0.42500000912696123f, 0.6000001896172762f, 0.24140623956918716f)),
             new ControlTypes(new MarkWaypointControl(), EntityDimensions.changing(0.074999996f, 0.0875f),
                     new Vector3f(0.18749999906867743f, 0.47500019054859877f, 0.940820312127471f)),
-            new ControlTypes(new VisualiserControl(), EntityDimensions.changing(0.17500001f, 0.0875f),
-                    new Vector3f(-0.8250000150874257f, 0.47500014305114746f, 0.5783206885680556f)),
+            //new ControlTypes(new VisualiserControl(), EntityDimensions.changing(0.17500001f, 0.0875f),
+                   // new Vector3f(-0.8250000150874257f, 0.47500014305114746f, 0.5783206885680556f)),
             new ControlTypes(new EngineOverloadControl(), EntityDimensions.changing(0.1125f, 0.1f),
                     new Vector3f(0.06484375149011612f, 0.47500014305114746f, -1.0359373092651367f)),
             new ControlTypes(new SetWaypointControl(), EntityDimensions.changing(0.07499999f, 0.1f),

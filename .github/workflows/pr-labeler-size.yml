@@ -7,8 +7,10 @@ permissions:
 jobs:
   size-label:
     runs-on: ubuntu-latest
+    if: ${{ github.event.pull_request.draft == false }}
     steps:
       - name: size-label
+        id: label
         uses: "pascalgn/size-label-action@v0.5.5"
         env:
           GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
@@ -22,3 +24,15 @@ jobs:
               "1000": "L",
               "5000": "XL"
             }
+      - if: ${{ contains(steps.label.outputs.sizeLabel, 'XS') || contains(steps.label.outputs.sizeLabel, 'size/S') }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.BOT_TOKEN }}
+          url: ${{ github.event.pull_request.html_url }}
+        run: |
+          gh pr edit "$url" --add-reviewer Loqor,MaketendoDev,duzos
+      - if: ${{ contains(steps.label.outputs.sizeLabel, 'size/M') || contains(steps.label.outputs.sizeLabel, 'size/L') || contains(steps.label.outputs.sizeLabel, 'size/XL') }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.BOT_TOKEN }}
+          url: ${{ github.event.pull_request.html_url }}
+        run: | 
+          gh pr edit "$url" --add-reviewer DrTheodor,duzos

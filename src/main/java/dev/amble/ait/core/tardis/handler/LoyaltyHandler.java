@@ -14,8 +14,8 @@ import net.minecraft.util.Formatting;
 
 import dev.amble.ait.AITMod;
 import dev.amble.ait.api.Nameable;
-import dev.amble.ait.api.TardisComponent;
-import dev.amble.ait.api.TardisTickable;
+import dev.amble.ait.api.tardis.TardisComponent;
+import dev.amble.ait.api.tardis.TardisTickable;
 import dev.amble.ait.core.AITSounds;
 import dev.amble.ait.core.advancement.TardisCriterions;
 import dev.amble.ait.core.likes.ItemOpinion;

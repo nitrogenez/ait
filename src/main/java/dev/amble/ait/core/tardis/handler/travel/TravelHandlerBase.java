@@ -16,8 +16,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.border.WorldBorder;
 
-import dev.amble.ait.api.KeyedTardisComponent;
-import dev.amble.ait.api.TardisTickable;
+import dev.amble.ait.api.tardis.KeyedTardisComponent;
+import dev.amble.ait.api.tardis.TardisTickable;
 import dev.amble.ait.core.sounds.travel.TravelSound;
 import dev.amble.ait.core.tardis.handler.TardisCrashHandler;
 import dev.amble.ait.core.util.WorldUtil;
@@ -243,7 +243,7 @@ public abstract class TravelHandlerBase extends KeyedTardisComponent implements 
     }
 
     public enum State implements Ordered {
-        LANDED, DEMAT(null, TravelHandler::finishDemat), FLIGHT(), MAT(
+        LANDED, DEMAT(null, TravelHandler::finishDemat), FLIGHT, MAT(
                 null, TravelHandler::finishRemat);
 
         public static final Codec<State> CODEC = Codecs.NON_EMPTY_STRING.flatXmap(s -> {

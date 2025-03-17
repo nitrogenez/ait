@@ -25,7 +25,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RotationPropertyHelper;
 import net.minecraft.world.World;
 
-import dev.amble.ait.api.link.LinkableItem;
+import dev.amble.ait.api.tardis.link.LinkableItem;
 import dev.amble.ait.core.AITItems;
 import dev.amble.ait.core.AITSounds;
 import dev.amble.ait.core.AITTags;

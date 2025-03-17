@@ -16,7 +16,7 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.Text;
 
 import dev.amble.ait.AITMod;
-import dev.amble.ait.api.WorldWithTardis;
+import dev.amble.ait.api.tardis.WorldWithTardis;
 import dev.amble.ait.core.commands.argument.TardisArgumentType;
 import dev.amble.ait.core.tardis.ServerTardis;
 import dev.amble.ait.core.tardis.util.NetworkUtil;

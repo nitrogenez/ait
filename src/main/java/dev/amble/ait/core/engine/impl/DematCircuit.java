@@ -1,7 +1,7 @@
 package dev.amble.ait.core.engine.impl;
 
 
-import dev.amble.ait.api.TardisEvents;
+import dev.amble.ait.api.tardis.TardisEvents;
 import dev.amble.ait.core.engine.DurableSubSystem;
 import dev.amble.ait.core.engine.StructureHolder;
 import dev.amble.ait.core.engine.block.multi.MultiBlockStructure;
@@ -12,7 +12,8 @@ public class DematCircuit extends DurableSubSystem implements StructureHolder {
         TardisEvents.DEMAT.register(tardis -> {
             DematCircuit circuit = tardis.subsystems().demat();
 
-            return (circuit.isEnabled() && !circuit.isBroken()) ? TardisEvents.Interaction.PASS : TardisEvents.Interaction.FAIL;
+            return circuit.isEnabled() && !circuit.isBroken()
+                    ? TardisEvents.Interaction.PASS : TardisEvents.Interaction.FAIL;
         });
     }
 

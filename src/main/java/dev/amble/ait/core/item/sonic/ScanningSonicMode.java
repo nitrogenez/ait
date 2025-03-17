@@ -73,12 +73,16 @@ public class ScanningSonicMode extends SonicMode {
     public boolean process(ItemStack stack, World world, PlayerEntity user) {
         HitResult hitResult = SonicMode.getHitResult(user);
 
-        if (hitResult instanceof BlockHitResult blockHit && !world.getBlockState(blockHit.getBlockPos()).isAir()) {
-            return this.scanBlocks(stack, world, user, blockHit.getBlockPos());
-        }
+        boolean isMainHand = user.getMainHandStack().getItem() == stack.getItem();
 
-        if (hitResult instanceof EntityHitResult entityHit && !(entityHit.getEntity() instanceof RiftEntity)) {
-            return this.scanEntities(stack, world, user, entityHit.getEntity());
+        if (isMainHand) {
+            if (hitResult instanceof BlockHitResult blockHit && !world.getBlockState(blockHit.getBlockPos()).isAir()) {
+                return this.scanBlocks(stack, world, user, blockHit.getBlockPos());
+            }
+
+            if (hitResult instanceof EntityHitResult entityHit && !(entityHit.getEntity() instanceof RiftEntity)) {
+                return this.scanEntities(stack, world, user, entityHit.getEntity());
+            }
         }
 
         return this.scanRegion(stack, world, user, BlockPos.ofFloored(hitResult.getPos()));
@@ -215,7 +219,7 @@ public class ScanningSonicMode extends SonicMode {
             return;
 
         if (tardis.crash().isUnstable() || tardis.crash().isToxic()) {
-            player.sendMessage(Text.literal("Repair time: " + tardis.crash().getRepairTicks())
+            player.sendMessage(Text.translatable("message.ait.sonic.repairtime", tardis.crash().getRepairTicks())
                     .formatted(Formatting.DARK_RED, Formatting.ITALIC), true);
             return;
         }

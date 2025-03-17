@@ -142,7 +142,7 @@ public class EngineSystem extends DurableSubSystem {
             }
         }
         public void start() {
-            this.initial = AITMod.RANDOM.nextInt(140, 200); // 7-10 seconds
+            this.initial = AITMod.RANDOM.nextInt(1200, 2400); // evry 30-60 seconds if i dont suck at math
             this.countdown = this.initial;
             this.start.accept(this);
         }
@@ -166,33 +166,37 @@ public class EngineSystem extends DurableSubSystem {
                         tdis.getDesktop().playSoundAtEveryConsole(AITSounds.HOP_DEMAT);
                         tdis.getExterior().playSound(AITSounds.HOP_DEMAT);
 
-                        system.tardis().subsystems().demat().removeDurability(2);
+                        system.tardis().subsystems().demat().removeDurability(5);
                     },
                     (phaser) -> {
                         Tardis tardis1 = system.tardis();
                         TravelHandler travel = tardis1.travel();
-                        TravelUtil.randomPos(tardis1, 1, 250, cached -> {
+                        TravelUtil.randomPos(tardis1, 1, 300, cached -> {
                             travel.forceDestination(cached);
                             if (travel.isLanded()) {
-                                system.tardis().subsystems().demat().removeDurability(300);
+                                system.tardis().subsystems().demat().removeDurability(15);
+                                system.tardis().travel().speed(500);
+                                system.tardis().travel().autopilot(false);
 
                                 system.tardis().getDesktop().playSoundAtEveryConsole(AITSounds.UNSTABLE_FLIGHT_LOOP);
                                 system.tardis().getExterior().playSound(AITSounds.UNSTABLE_FLIGHT_LOOP);
+                                system.tardis().getExterior().playSound(AITSounds.CLOISTER);
                                 tardis1.travel().forceDemat(TravelSoundRegistry.PHASING_DEMAT);
+                                system.tardis().travel().autopilot(false);
                             }
 
                             TardisEvents.ENGINES_PHASE.invoker().onPhase(system);
                         });
                     },
                     (phaser) -> {
-                        SoundEvent sound = (phaser.countdown < (phaser.initial - (250))) ? AITSounds.HOP_MAT : AITSounds.LAND_THUD;
+                        SoundEvent sound = (phaser.countdown < (phaser.initial - (300))) ? AITSounds.HOP_MAT : AITSounds.LAND_THUD;
 
                         system.tardis().getDesktop().playSoundAtEveryConsole(sound);
                         system.tardis().getExterior().playSound(sound);
 
                         system.tardis().alarm().enabled().set(false);
                     },
-                    (phaser) -> system.tardis().travel().isLanded() && system.tardis().subsystems().demat().durability() < 250 && !system.tardis().subsystems().demat().isBroken() && !system.tardis().travel().handbrake() && !system.tardis().isGrowth() && AITMod.RANDOM.nextInt(0, 1024) == 1
+                    (phaser) -> system.tardis().travel().isLanded() && system.tardis().subsystems().demat().durability() < 300 && !system.tardis().subsystems().demat().isBroken() && !system.tardis().travel().handbrake() && !system.tardis().isGrowth() && AITMod.RANDOM.nextInt(0, 1024) == 1
             );
         }
     }

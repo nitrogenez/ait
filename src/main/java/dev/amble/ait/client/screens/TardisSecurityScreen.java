@@ -49,7 +49,7 @@ public class TardisSecurityScreen extends ConsoleScreen {
 
         // Close the screen when the inventory key is pressed
         if (keyCode == MinecraftClient.getInstance().options.inventoryKey.getDefaultKey().getCode()) {
-            MinecraftClient.getInstance().setScreen(null);
+            this.close();
             return true;
         }
 

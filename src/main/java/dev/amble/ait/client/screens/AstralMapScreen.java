@@ -59,7 +59,7 @@ public class AstralMapScreen extends Screen {
     @Override
     public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
         if (keyCode == MinecraftClient.getInstance().options.inventoryKey.getDefaultKey().getCode()) {
-            MinecraftClient.getInstance().setScreen(null);
+            this.close();
             return true;
         }
         return super.keyPressed(keyCode, scanCode, modifiers);

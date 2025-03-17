@@ -68,12 +68,20 @@ public class LandingPadScreen extends Screen {
 
     @Override
     public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
+        // Check if a text field is focused to prevent closing
+        if (this.landingCodeInput.isActive()) {
+            return super.keyPressed(keyCode, scanCode, modifiers);
+        }
+
+        // Close the screen when the inventory key is pressed
         if (keyCode == MinecraftClient.getInstance().options.inventoryKey.getDefaultKey().getCode()) {
             MinecraftClient.getInstance().setScreen(null);
             return true;
         }
+
         return super.keyPressed(keyCode, scanCode, modifiers);
     }
+
 
     private void updateLandingCode() {
         PacketByteBuf buf = PacketByteBufs.create();

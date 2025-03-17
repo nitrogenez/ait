@@ -142,7 +142,7 @@ public class EngineSystem extends DurableSubSystem {
             }
         }
         public void start() {
-            this.initial = AITMod.RANDOM.nextInt(1200, 2400); // evry 30-60 seconds if i dont suck at math
+            this.initial = AITMod.RANDOM.nextInt(600, 1200); // evry 30-60 seconds if i dont suck at math
             this.countdown = this.initial;
             this.start.accept(this);
         }
@@ -176,11 +176,11 @@ public class EngineSystem extends DurableSubSystem {
                             if (travel.isLanded()) {
                                 system.tardis().subsystems().demat().removeDurability(15);
                                 system.tardis().travel().speed(500);
-                                system.tardis().travel().autopilot(false);
+                            
 
                                 system.tardis().getDesktop().playSoundAtEveryConsole(AITSounds.UNSTABLE_FLIGHT_LOOP);
                                 system.tardis().getExterior().playSound(AITSounds.UNSTABLE_FLIGHT_LOOP);
-                                system.tardis().getExterior().playSound(AITSounds.CLOISTER);
+                            
                                 tardis1.travel().forceDemat(TravelSoundRegistry.PHASING_DEMAT);
                                 system.tardis().travel().autopilot(false);
                             }

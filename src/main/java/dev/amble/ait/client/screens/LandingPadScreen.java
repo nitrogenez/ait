@@ -33,6 +33,8 @@ public class LandingPadScreen extends Screen {
 
     public LandingPadScreen(BlockPos pos) {
         super(Text.literal("landing_pad"));
+
+        this.client = MinecraftClient.getInstance();
         this.pos = pos;
         this.landingRegion = ClientLandingManager.getInstance().getRegion(new ChunkPos(pos));
     }
@@ -69,19 +71,17 @@ public class LandingPadScreen extends Screen {
     @Override
     public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
         // Check if a text field is focused to prevent closing
-        if (this.landingCodeInput.isActive()) {
+        if (this.landingCodeInput.isActive())
             return super.keyPressed(keyCode, scanCode, modifiers);
-        }
 
         // Close the screen when the inventory key is pressed
-        if (keyCode == MinecraftClient.getInstance().options.inventoryKey.getDefaultKey().getCode()) {
+        if (this.client.options.inventoryKey.matchesKey(keyCode, scanCode)) {
             this.close();
             return true;
         }
 
         return super.keyPressed(keyCode, scanCode, modifiers);
     }
-
 
     private void updateLandingCode() {
         PacketByteBuf buf = PacketByteBufs.create();

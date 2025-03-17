@@ -174,13 +174,13 @@ public class EngineSystem extends DurableSubSystem {
                         TravelUtil.randomPos(tardis1, 1, 300, cached -> {
                             travel.forceDestination(cached);
                             if (travel.isLanded()) {
-                                system.tardis().subsystems().demat().removeDurability(15);
+                                tardis1.subsystems().demat().removeDurability(15);
                                 system.tardis().travel().speed(500);
-                            
+
 
                                 system.tardis().getDesktop().playSoundAtEveryConsole(AITSounds.UNSTABLE_FLIGHT_LOOP);
                                 system.tardis().getExterior().playSound(AITSounds.UNSTABLE_FLIGHT_LOOP);
-                            
+
                                 tardis1.travel().forceDemat(TravelSoundRegistry.PHASING_DEMAT);
                                 system.tardis().travel().autopilot(false);
                             }

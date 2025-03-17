@@ -116,7 +116,7 @@ public record BlueprintSchema(Identifier id, Text text, InputList inputs, ItemSt
         }
 
         public Text text() {
-            Text countText = minCount == maxCount ? Text.of(String.valueOf(minCount)) : Text.of(minCount + "-" + maxCount);
+            Text countText = minCount == maxCount ? Text.literal(String.valueOf(minCount)) : Text.literal(minCount + "-" + maxCount);
 
             return Texts.bracketed(Text.translatable(item.getTranslationKey()))
                     .append(" x")

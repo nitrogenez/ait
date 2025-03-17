@@ -79,6 +79,7 @@ public class EngineSystem extends DurableSubSystem {
 
         return this.status;
     }
+
     private void tryUpdateStatus() {
         if (ServerLifecycleHooks.get() == null) return;
         if (ServerLifecycleHooks.get().getTicks() % 40 != 0) return;
@@ -86,6 +87,7 @@ public class EngineSystem extends DurableSubSystem {
         this.status = Status.from(this);
         this.sync();
     }
+
     private void tickForDurability() {
         if (this.durability() <= 5) {
             this.tardis.alarm().enabled().set(true);
@@ -137,63 +139,68 @@ public class EngineSystem extends DurableSubSystem {
                 this.attempt();
             }
         }
+
         private void attempt() {
             if (this.allowed.apply(this)) {
                 this.start();
             }
         }
+
         public void start() {
-            this.initial = AITMod.RANDOM.nextInt(140, 200); // 7-10 seconds
+            this.initial = AITMod.RANDOM.nextInt(600, 1200);
             this.countdown = this.initial;
             this.start.accept(this);
         }
+
         public boolean isPhasing() {
             return this.countdown > 0;
         }
+
         public void cancel() {
             this.cancel.accept(this);
             this.countdown = 0;
         }
 
         public static Phaser create(EngineSystem system) {
+            Tardis sTardis = system.tardis();
+            TravelHandler travel = sTardis.travel();
+
             return new Phaser(
                     (phaser) -> {
-                        ServerTardis tdis = system.tardis().asServer();
-
+                        ServerTardis tdis = sTardis.asServer();
                         TardisUtil.sendMessageToInterior(tdis, Text.translatable("tardis.message.engine.phasing").formatted(Formatting.RED));
                         TardisUtil.sendMessageToLinked(tdis, Text.translatable("tardis.message.engine.phasing").formatted(Formatting.RED));
-
                         tdis.alarm().enabled().set(true);
                         tdis.getDesktop().playSoundAtEveryConsole(AITSounds.HOP_DEMAT);
                         tdis.getExterior().playSound(AITSounds.HOP_DEMAT);
-
-                        system.tardis().subsystems().demat().removeDurability(2);
+                        sTardis.subsystems().demat().removeDurability(5);
                     },
                     (phaser) -> {
-                        Tardis tardis1 = system.tardis();
-                        TravelHandler travel = tardis1.travel();
-                        TravelUtil.randomPos(tardis1, 1, 250, cached -> {
+                        TravelUtil.randomPos(sTardis, 1, 300, cached -> {
                             travel.forceDestination(cached);
                             if (travel.isLanded()) {
-                                system.tardis().subsystems().demat().removeDurability(300);
-
-                                system.tardis().getDesktop().playSoundAtEveryConsole(AITSounds.UNSTABLE_FLIGHT_LOOP);
-                                system.tardis().getExterior().playSound(AITSounds.UNSTABLE_FLIGHT_LOOP);
-                                tardis1.travel().forceDemat(TravelSoundRegistry.PHASING_DEMAT);
+                                sTardis.subsystems().demat().removeDurability(15);
+                                sTardis.travel().speed(500);
+                                sTardis.getDesktop().playSoundAtEveryConsole(AITSounds.UNSTABLE_FLIGHT_LOOP);
+                                sTardis.getExterior().playSound(AITSounds.UNSTABLE_FLIGHT_LOOP);
+                                sTardis.travel().forceDemat(TravelSoundRegistry.PHASING_DEMAT);
+                                sTardis.travel().autopilot(false);
                             }
-
                             TardisEvents.ENGINES_PHASE.invoker().onPhase(system);
                         });
                     },
                     (phaser) -> {
-                        SoundEvent sound = (phaser.countdown < (phaser.initial - (250))) ? AITSounds.HOP_MAT : AITSounds.LAND_THUD;
-
-                        system.tardis().getDesktop().playSoundAtEveryConsole(sound);
-                        system.tardis().getExterior().playSound(sound);
-
-                        system.tardis().alarm().enabled().set(false);
+                        SoundEvent sound = (phaser.countdown < (phaser.initial - 300)) ? AITSounds.HOP_MAT : AITSounds.LAND_THUD;
+                        sTardis.getDesktop().playSoundAtEveryConsole(sound);
+                        sTardis.getExterior().playSound(sound);
+                        sTardis.alarm().enabled().set(false);
                     },
-                    (phaser) -> system.tardis().travel().isLanded() && system.tardis().subsystems().demat().durability() < 250 && !system.tardis().subsystems().demat().isBroken() && !system.tardis().travel().handbrake() && !system.tardis().isGrowth() && AITMod.RANDOM.nextInt(0, 1024) == 1
+                    (phaser) -> travel.isLanded() &&
+                            sTardis.subsystems().demat().durability() < 300 &&
+                            !sTardis.subsystems().demat().isBroken() &&
+                            !travel.handbrake() &&
+                            !sTardis.isGrowth() &&
+                            AITMod.RANDOM.nextInt(0, 1024) == 1
             );
         }
     }
@@ -201,7 +208,6 @@ public class EngineSystem extends DurableSubSystem {
     public static boolean hasEngine(Tardis t) {
         return t.subsystems().engine().isEnabled();
     }
-
 
     public enum Status {
         OKAY(132, 195, 240) {
@@ -231,11 +237,11 @@ public class EngineSystem extends DurableSubSystem {
         LEAKAGE(114, 255, 33) {
             @Override
             public boolean isViable(EngineSystem system) {
-                return false; // todo
+                return false;
             }
         };
-        public abstract boolean isViable(EngineSystem system);
 
+        public abstract boolean isViable(EngineSystem system);
         public final Vector3f colour;
 
         Status(int red, int green, int blue) {
@@ -248,7 +254,6 @@ public class EngineSystem extends DurableSubSystem {
                     return status;
                 }
             }
-
             return OKAY;
         }
     }

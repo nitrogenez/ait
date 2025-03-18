@@ -63,11 +63,11 @@ public class TardisDoorBOTI extends BOTI {
 
         RenderSystem.depthMask(true);
         stack.push();
-        Vec3d vec = variant.parent().door().adjustPortalPos(new Vec3d(0, -1.1725f, 0), Direction.NORTH);
-        stack.translate(vec.x, vec.y, vec.z);
         StatsHandler stats = tardis.stats();
         stack.scale((float) variant.parent().portalWidth() * stats.getXScale(),
                 (float) variant.parent().portalHeight() * stats.getYScale(), stats.getZScale());
+        Vec3d vec = variant.parent().door().adjustPortalPos(new Vec3d(0, -0.55f, 0), Direction.NORTH);
+        stack.translate(vec.x, vec.y, vec.z);
         if (tardis.travel().getState() == TravelHandlerBase.State.LANDED) {
             RenderLayer whichOne = AITMod.CONFIG.CLIENT.SHOULD_RENDER_BOTI_INTERIOR || AITMod.CONFIG.CLIENT.GREEN_SCREEN_BOTI ?
                     RenderLayer.getDebugFilledBox() : RenderLayer.getEndGateway();
@@ -109,6 +109,7 @@ public class TardisDoorBOTI extends BOTI {
 
         stack.push();
         stack.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(180));
+        stack.scale(stats.getXScale(), stats.getYScale(), stats.getZScale());
 
         // TODO: use DoorRenderer/ClientLightUtil instead.
         ((DoorModel) frame).renderWithAnimations(tardis, door, frame.getPart(), stack, botiProvider.getBuffer(AITRenderLayers.getBotiInterior(variant.texture())), light, OverlayTexture.DEFAULT_UV, 1, 1F, 1.0F, 1.0F);
@@ -118,6 +119,7 @@ public class TardisDoorBOTI extends BOTI {
 
         stack.push();
         stack.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(180));
+        stack.scale(stats.getXScale(), stats.getYScale(), stats.getZScale());
         if (variant.emission() != null) {
             float u;
             float t;

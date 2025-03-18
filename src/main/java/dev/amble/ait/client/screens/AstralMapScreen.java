@@ -3,7 +3,6 @@ package dev.amble.ait.client.screens;
 import java.util.List;
 import java.util.function.Consumer;
 
-import dev.amble.ait.core.util.WorldUtil;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 
@@ -18,6 +17,7 @@ import dev.amble.ait.AITMod;
 import dev.amble.ait.api.Nameable;
 import dev.amble.ait.client.screens.widget.SwitcherManager;
 import dev.amble.ait.core.blocks.AstralMapBlock;
+import dev.amble.ait.core.util.WorldUtil;
 
 public class AstralMapScreen extends Screen {
 

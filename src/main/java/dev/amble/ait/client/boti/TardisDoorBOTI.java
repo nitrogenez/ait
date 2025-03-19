@@ -27,6 +27,7 @@ import dev.amble.ait.core.blockentities.DoorBlockEntity;
 import dev.amble.ait.core.tardis.handler.StatsHandler;
 import dev.amble.ait.core.tardis.handler.travel.TravelHandlerBase;
 import dev.amble.ait.data.schema.exterior.ClientExteriorVariantSchema;
+import dev.amble.ait.registry.impl.CategoryRegistry;
 
 public class TardisDoorBOTI extends BOTI {
     public static void renderInteriorDoorBoti(ClientTardis tardis, DoorBlockEntity door, ClientExteriorVariantSchema variant, MatrixStack stack, Identifier frameTex, SinglePartEntityModel frame, ModelPart mask, int light) {
@@ -107,53 +108,55 @@ public class TardisDoorBOTI extends BOTI {
         botiProvider.draw();
         stack.pop();
 
-        stack.push();
-        stack.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(180));
-        stack.scale(stats.getXScale(), stats.getYScale(), stats.getZScale());
+        if (!tardis.getExterior().getCategory().equals(CategoryRegistry.GEOMETRIC)) {
+            stack.push();
+            stack.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(180));
+            stack.scale(stats.getXScale(), stats.getYScale(), stats.getZScale());
 
-        // TODO: use DoorRenderer/ClientLightUtil instead.
-        ((DoorModel) frame).renderWithAnimations(tardis, door, frame.getPart(), stack, botiProvider.getBuffer(AITRenderLayers.getBotiInterior(variant.texture())), light, OverlayTexture.DEFAULT_UV, 1, 1F, 1.0F, 1.0F);
-        //((DoorModel) frame).render(stack, botiProvider.getBuffer(AITRenderLayers.getBotiInterior(variant.texture())), light, OverlayTexture.DEFAULT_UV, 1, 1F, 1.0F, 1.0F);
-        botiProvider.draw();
-        stack.pop();
-
-        stack.push();
-        stack.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(180));
-        stack.scale(stats.getXScale(), stats.getYScale(), stats.getZScale());
-        if (variant.emission() != null) {
-            float u;
-            float t;
-            float s;
-
-            if ((stats.getName() != null && "partytardis".equals(stats.getName().toLowerCase()) || (!tardis.extra().getInsertedDisc().isEmpty()))) {
-                int m = 25;
-                int n = MinecraftClient.getInstance().player.age / m + MinecraftClient.getInstance().player.getId();
-                int o = DyeColor.values().length;
-                int p = n % o;
-                int q = (n + 1) % o;
-                float r = ((float) (MinecraftClient.getInstance().player.age % m)) / m;
-                float[] fs = SheepEntity.getRgbColor(DyeColor.byId(p));
-                float[] gs = SheepEntity.getRgbColor(DyeColor.byId(q));
-                s = fs[0] * (1f - r) + gs[0] * r;
-                t = fs[1] * (1f - r) + gs[1] * r;
-                u = fs[2] * (1f - r) + gs[2] * r;
-            } else {
-                float[] hs = new float[]{1.0f, 1.0f, 1.0f};
-                s = hs[0];
-                t = hs[1];
-                u = hs[2];
-            }
-
-            boolean power = tardis.fuel().hasPower();
-
-            float red = tardis.alarm().enabled().get() ? !power ? 0.25f : s : s;
-            float green = tardis.alarm().enabled().get() ? !power ? 0.01f : 0.3f : t;
-            float blue = tardis.alarm().enabled().get() ? !power ? 0.01f : 0.3f : u;
-
-            ((DoorModel) frame).renderWithAnimations(tardis, door, frame.getPart(), stack, botiProvider.getBuffer((DependencyChecker.hasIris() ? AITRenderLayers.tardisEmissiveCullZOffset(variant.emission(), true) : AITRenderLayers.getBeaconBeam(variant.emission(), true))), 0xf000f0, OverlayTexture.DEFAULT_UV, red, green, blue, 1.0F);
+            // TODO: use DoorRenderer/ClientLightUtil instead.
+            ((DoorModel) frame).renderWithAnimations(tardis, door, frame.getPart(), stack, botiProvider.getBuffer(AITRenderLayers.getBotiInterior(variant.texture())), light, OverlayTexture.DEFAULT_UV, 1, 1F, 1.0F, 1.0F);
+            //((DoorModel) frame).render(stack, botiProvider.getBuffer(AITRenderLayers.getBotiInterior(variant.texture())), light, OverlayTexture.DEFAULT_UV, 1, 1F, 1.0F, 1.0F);
             botiProvider.draw();
+            stack.pop();
+
+            stack.push();
+            stack.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(180));
+            stack.scale(stats.getXScale(), stats.getYScale(), stats.getZScale());
+            if (variant.emission() != null) {
+                float u;
+                float t;
+                float s;
+
+                if ((stats.getName() != null && "partytardis".equals(stats.getName().toLowerCase()) || (!tardis.extra().getInsertedDisc().isEmpty()))) {
+                    int m = 25;
+                    int n = MinecraftClient.getInstance().player.age / m + MinecraftClient.getInstance().player.getId();
+                    int o = DyeColor.values().length;
+                    int p = n % o;
+                    int q = (n + 1) % o;
+                    float r = ((float) (MinecraftClient.getInstance().player.age % m)) / m;
+                    float[] fs = SheepEntity.getRgbColor(DyeColor.byId(p));
+                    float[] gs = SheepEntity.getRgbColor(DyeColor.byId(q));
+                    s = fs[0] * (1f - r) + gs[0] * r;
+                    t = fs[1] * (1f - r) + gs[1] * r;
+                    u = fs[2] * (1f - r) + gs[2] * r;
+                } else {
+                    float[] hs = new float[]{1.0f, 1.0f, 1.0f};
+                    s = hs[0];
+                    t = hs[1];
+                    u = hs[2];
+                }
+
+                boolean power = tardis.fuel().hasPower();
+
+                float red = tardis.alarm().enabled().get() ? !power ? 0.25f : s : s;
+                float green = tardis.alarm().enabled().get() ? !power ? 0.01f : 0.3f : t;
+                float blue = tardis.alarm().enabled().get() ? !power ? 0.01f : 0.3f : u;
+
+                ((DoorModel) frame).renderWithAnimations(tardis, door, frame.getPart(), stack, botiProvider.getBuffer((DependencyChecker.hasIris() ? AITRenderLayers.tardisEmissiveCullZOffset(variant.emission(), true) : AITRenderLayers.getBeaconBeam(variant.emission(), true))), 0xf000f0, OverlayTexture.DEFAULT_UV, red, green, blue, 1.0F);
+                botiProvider.draw();
+            }
+            stack.pop();
         }
-        stack.pop();
 
         MinecraftClient.getInstance().getFramebuffer().beginWrite(true);
 

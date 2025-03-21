@@ -2,6 +2,7 @@ package dev.amble.ait.core.entities;
 
 import java.util.Optional;
 
+import net.minecraft.util.math.Vec3d;
 import org.apache.commons.lang3.Validate;
 import org.jetbrains.annotations.Nullable;
 
@@ -51,6 +52,19 @@ public class GallifreyFallsPaintingEntity extends AbstractDecorationEntity imple
     }
 
     @Override
+    public void writeCustomDataToNbt(NbtCompound nbt) {
+        nbt.putByte("facing", (byte) this.facing.getHorizontal());
+        super.writeCustomDataToNbt(nbt);
+    }
+
+    @Override
+    public void readCustomDataFromNbt(NbtCompound nbt) {
+        this.facing = Direction.fromHorizontal(nbt.getByte("facing"));
+        super.readCustomDataFromNbt(nbt);
+        this.setFacing(this.facing);
+    }
+
+    @Override
     public int getWidthPixels() {
         return WIDTH;
     }
@@ -75,6 +89,32 @@ public class GallifreyFallsPaintingEntity extends AbstractDecorationEntity imple
             return;
         }
         this.dropItem(AITItems.GALLIFREY_FALLS_PAINTING);
+    }
+
+    @Override
+    public void refreshPositionAndAngles(double x, double y, double z, float yaw, float pitch) {
+        this.setPosition(x, y, z);
+    }
+
+    @Override
+    public void updateTrackedPositionAndAngles(double x, double y, double z, float yaw, float pitch, int interpolationSteps, boolean interpolate) {
+        this.setPosition(x, y, z);
+    }
+
+    @Override
+    public Vec3d getSyncedPos() {
+        return Vec3d.of(this.attachmentPos);
+    }
+
+    @Override
+    public Packet<ClientPlayPacketListener> createSpawnPacket() {
+        return new EntitySpawnS2CPacket(this, this.facing.getId(), this.getDecorationBlockPos());
+    }
+
+    @Override
+    public void onSpawnPacket(EntitySpawnS2CPacket packet) {
+        super.onSpawnPacket(packet);
+        this.setFacing(Direction.byId(packet.getEntityData()));
     }
 
     @Override

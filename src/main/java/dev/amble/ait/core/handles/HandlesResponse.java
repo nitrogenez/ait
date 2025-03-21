@@ -46,6 +46,7 @@ public interface HandlesResponse extends Identifiable {
         source.playSound(successSound(), SoundCategory.PLAYERS, 1.0f, 1.0f);
         return true;
     }
+
     default boolean failure(HandlesSound source) {
         source.playSound(failureSound(), SoundCategory.PLAYERS, 1.0f, 1.0f);
         return false;
@@ -66,6 +67,13 @@ public interface HandlesResponse extends Identifiable {
      */
     default boolean isCommand(String command) {
         return getCommandWords().contains(command.toLowerCase());
+    }
+
+    /**
+     * @return Whether a non-secure person can run the command when P19 is on.
+     */
+    default boolean requiresSudo() {
+        return true;
     }
 
     /**

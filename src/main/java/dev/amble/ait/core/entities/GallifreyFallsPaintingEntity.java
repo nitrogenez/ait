@@ -92,7 +92,7 @@ public class GallifreyFallsPaintingEntity extends AbstractDecorationEntity imple
 
     @Override
     public Packet<ClientPlayPacketListener> createSpawnPacket() {
-        return new EntitySpawnS2CPacket(this, this.facing.getId(), this.getDecorationBlockPos());
+        return new EntitySpawnS2CPacket(this, this.facing.getId(), this.attachmentPos);
     }
 
     @Override

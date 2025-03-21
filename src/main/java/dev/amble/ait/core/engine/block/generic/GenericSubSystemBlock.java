@@ -1,5 +1,6 @@
 package dev.amble.ait.core.engine.block.generic;
 
+import dev.amble.ait.core.engine.link.block.FluidLinkBlockEntity;
 import org.jetbrains.annotations.Nullable;
 
 import net.minecraft.block.BlockRenderType;
@@ -19,7 +20,7 @@ public class GenericSubSystemBlock extends SubSystemBlock {
     }
 
     @Override
-    public @Nullable BlockEntity createBlockEntity(BlockPos pos, BlockState state) {
+    public @Nullable FluidLinkBlockEntity createBlockEntity(BlockPos pos, BlockState state) {
         return new GenericStructureSystemBlockEntity(pos, state);
     }
 

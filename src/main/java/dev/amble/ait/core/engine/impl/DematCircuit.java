@@ -2,9 +2,11 @@ package dev.amble.ait.core.engine.impl;
 
 
 import dev.amble.ait.api.tardis.TardisEvents;
+import dev.amble.ait.core.AITItems;
 import dev.amble.ait.core.engine.DurableSubSystem;
 import dev.amble.ait.core.engine.StructureHolder;
 import dev.amble.ait.core.engine.block.multi.MultiBlockStructure;
+import net.minecraft.item.Item;
 
 public class DematCircuit extends DurableSubSystem implements StructureHolder {
 
@@ -34,5 +36,10 @@ public class DematCircuit extends DurableSubSystem implements StructureHolder {
     @Override
     protected boolean shouldDurabilityChange() {
         return this.tardis.travel().inFlight();
+    }
+
+    @Override
+    public Item asItem() {
+        return AITItems.DEMATERIALIZATION_CIRCUIT;
     }
 }

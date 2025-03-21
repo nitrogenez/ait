@@ -13,13 +13,9 @@ import dev.amble.ait.core.engine.block.SubSystemBlock;
 import dev.amble.ait.core.engine.block.SubSystemBlockEntity;
 
 public class GenericSubSystemBlock extends SubSystemBlock {
+
     public GenericSubSystemBlock(Settings settings) {
         super(settings, null);
-    }
-
-    @Override
-    protected BlockEntityType<? extends SubSystemBlockEntity> getType() {
-        return AITBlockEntityTypes.GENERIC_SUBSYSTEM_BLOCK_TYPE;
     }
 
     @Override

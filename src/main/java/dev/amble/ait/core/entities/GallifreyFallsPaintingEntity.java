@@ -81,23 +81,16 @@ public class GallifreyFallsPaintingEntity extends AbstractDecorationEntity imple
         return HEIGHT;
     }
 
-    protected void setFacing(Direction facing) {
-        Validate.notNull(facing);
-        Validate.isTrue(facing.getAxis().isHorizontal());
-        this.facing = facing;
-        this.setYaw(this.facing.getHorizontal() * 90);
-        this.prevYaw = this.getYaw();
-        this.updateAttachmentPosition();
-    }
-
     @Override
     public Packet<ClientPlayPacketListener> createSpawnPacket() {
-        return new EntitySpawnS2CPacket(this, this.facing.getId(), this.attachmentPos);
+        return new EntitySpawnS2CPacket(this, this.facing.getId(), this.getDecorationBlockPos());
     }
 
     @Override
     public void onSpawnPacket(EntitySpawnS2CPacket packet) {
         super.onSpawnPacket(packet);
+
+        this.setPosition(packet.getX(), packet.getY(), packet.getZ());
         this.setFacing(Direction.byId(packet.getEntityData()));
     }
 

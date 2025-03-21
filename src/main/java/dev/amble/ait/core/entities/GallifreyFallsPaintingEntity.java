@@ -38,11 +38,6 @@ public class GallifreyFallsPaintingEntity extends AbstractDecorationEntity imple
         super(AITEntityTypes.GALLIFREY_FALLS_PAINTING_TYPE, world, pos);
     }
 
-    public GallifreyFallsPaintingEntity(World world, BlockPos pos, Direction direction, RegistryEntry<PaintingVariant> variant) {
-        this(world, pos);
-        this.setFacing(direction);
-    }
-
     public static Optional<GallifreyFallsPaintingEntity> placePainting(World world, BlockPos pos, Direction facing) {
         GallifreyFallsPaintingEntity paintingEntity = new GallifreyFallsPaintingEntity(world, pos);
 
@@ -55,22 +50,6 @@ public class GallifreyFallsPaintingEntity extends AbstractDecorationEntity imple
         }
     }
 
-
-
-    @Override
-    public void writeCustomDataToNbt(NbtCompound nbt) {
-        nbt.putByte("facing", (byte)this.facing.getHorizontal());
-        super.writeCustomDataToNbt(nbt);
-    }
-
-    @Override
-    public void readCustomDataFromNbt(NbtCompound nbt) {
-        this.facing = Direction.fromHorizontal(nbt.getByte("facing"));
-        super.readCustomDataFromNbt(nbt);
-        this.setFacing(this.facing);
-    }
-
-
     @Override
     public int getWidthPixels() {
         return WIDTH;
@@ -79,19 +58,6 @@ public class GallifreyFallsPaintingEntity extends AbstractDecorationEntity imple
     @Override
     public int getHeightPixels() {
         return HEIGHT;
-    }
-
-    @Override
-    public Packet<ClientPlayPacketListener> createSpawnPacket() {
-        return new EntitySpawnS2CPacket(this, this.facing.getId(), this.getDecorationBlockPos());
-    }
-
-    @Override
-    public void onSpawnPacket(EntitySpawnS2CPacket packet) {
-        super.onSpawnPacket(packet);
-
-        this.setPosition(packet.getX(), packet.getY(), packet.getZ());
-        this.setFacing(Direction.byId(packet.getEntityData()));
     }
 
     @Override
@@ -105,11 +71,8 @@ public class GallifreyFallsPaintingEntity extends AbstractDecorationEntity imple
             return;
         }
         this.playSound(SoundEvents.ENTITY_PAINTING_BREAK, 1.0f, 1.0f);
-        if (entity instanceof PlayerEntity) {
-            PlayerEntity playerEntity = (PlayerEntity) entity;
-            if (playerEntity.getAbilities().creativeMode) {
-                return;
-            }
+        if (entity instanceof PlayerEntity player && player.isCreative()) {
+            return;
         }
         this.dropItem(AITItems.GALLIFREY_FALLS_PAINTING);
     }

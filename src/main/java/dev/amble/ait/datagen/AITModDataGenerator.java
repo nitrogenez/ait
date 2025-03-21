@@ -477,8 +477,8 @@ public class AITModDataGenerator implements DataGeneratorEntrypoint {
             provider.addShapelessRecipe(ShapelessRecipeJsonBuilder.create(RecipeCategory.REDSTONE, AITBlocks.FULL_CABLE_BLOCK, 2)
                     .input(AITBlocks.CABLE_BLOCK, 4).criterion(hasItem(AITBlocks.CABLE_BLOCK), conditionsFromItem(AITBlocks.CABLE_BLOCK)));
 
-            provider.addShapelessRecipe(ShapelessRecipeJsonBuilder.create(RecipeCategory.REDSTONE, AITBlocks.CABLE_BLOCK, 2)
-                    .input(AITBlocks.FULL_CABLE_BLOCK).criterion(hasItem(AITBlocks.FULL_CABLE_BLOCK), conditionsFromItem(AITBlocks.FULL_CABLE_BLOCK)));
+            //provider.addShapelessRecipe(ShapelessRecipeJsonBuilder.create(RecipeCategory.REDSTONE, AITBlocks.CABLE_BLOCK, 2)
+            //        .input(AITBlocks.FULL_CABLE_BLOCK).criterion(hasItem(AITBlocks.FULL_CABLE_BLOCK), conditionsFromItem(AITBlocks.FULL_CABLE_BLOCK)));
 
             provider.addShapedRecipe(ShapedRecipeJsonBuilder.create(RecipeCategory.REDSTONE, AITItems.HYPERION_CORE_SHAFT)
                     .pattern("ACB")

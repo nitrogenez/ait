@@ -99,9 +99,4 @@ public class EngineBlock extends SubSystemBlock implements BlockEntityProvider {
     public BlockRenderType getRenderType(BlockState state) {
         return BlockRenderType.ENTITYBLOCK_ANIMATED;
     }
-
-    @Override
-    protected BlockEntityType<? extends SubSystemBlockEntity> getType() {
-        return AITBlockEntityTypes.ENGINE_BLOCK_ENTITY_TYPE;
-    }
 }

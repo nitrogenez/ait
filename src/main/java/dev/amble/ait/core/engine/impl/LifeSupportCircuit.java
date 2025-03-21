@@ -2,6 +2,7 @@ package dev.amble.ait.core.engine.impl;
 
 import java.util.List;
 
+import dev.amble.ait.core.AITItems;
 import dev.amble.lib.util.ServerLifecycleHooks;
 
 import net.minecraft.entity.LivingEntity;
@@ -14,6 +15,7 @@ import dev.amble.ait.core.engine.block.multi.MultiBlockStructure;
 import dev.amble.ait.core.entities.ConsoleControlEntity;
 import dev.amble.ait.core.tardis.ServerTardis;
 import dev.amble.ait.core.tardis.util.TardisUtil;
+import net.minecraft.item.Item;
 
 public class LifeSupportCircuit extends DurableSubSystem implements StructureHolder {
     private static final MultiBlockStructure STRUCTURE = createStructure();
@@ -40,6 +42,11 @@ public class LifeSupportCircuit extends DurableSubSystem implements StructureHol
     @Override
     public MultiBlockStructure getStructure() {
         return MultiBlockStructure.EMPTY;
+    }
+
+    @Override
+    public Item asItem() {
+        return AITItems.LIFE_SUPPORT;
     }
 
     @Override

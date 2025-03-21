@@ -7,6 +7,7 @@ import java.util.function.Supplier;
 
 import com.google.gson.*;
 import dev.amble.lib.data.CachedDirectedGlobalPos;
+import net.minecraft.item.Item;
 import org.jetbrains.annotations.Nullable;
 
 import net.minecraft.item.ItemStack;
@@ -37,6 +38,8 @@ public abstract class SubSystem extends Initializable<SubSystem.InitContext> imp
         this.id = id;
     }
 
+    public abstract Item asItem();
+
     public IdLike getId() {
         return id;
     }
@@ -53,7 +56,7 @@ public abstract class SubSystem extends Initializable<SubSystem.InitContext> imp
     }
 
     public boolean isClient() {
-        return this.tardis() instanceof ClientTardis;
+        return !isServer();
     }
 
     public boolean isServer() {
@@ -63,9 +66,11 @@ public abstract class SubSystem extends Initializable<SubSystem.InitContext> imp
     public boolean isEnabled() {
         return enabled;
     }
+
     public boolean isUsable() {
         return this.isEnabled();
     }
+
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
 
@@ -75,9 +80,11 @@ public abstract class SubSystem extends Initializable<SubSystem.InitContext> imp
             this.onDisable();
         }
     }
+
     protected void onEnable() {
         TardisEvents.SUBSYSTEM_ENABLE.invoker().onEnable(this);
     }
+
     protected void onDisable() {
         TardisEvents.SUBSYSTEM_DISABLE.invoker().onDisable(this);
     }
@@ -93,11 +100,10 @@ public abstract class SubSystem extends Initializable<SubSystem.InitContext> imp
     public List<ItemStack> toStacks() {
         List<ItemStack> stacks = new ArrayList<>();
 
-        if (this instanceof StructureHolder holder && !(holder.getStructure() == null || holder.getStructure().isEmpty())) {
+        if (this instanceof StructureHolder holder && holder.getStructure() != null && !holder.getStructure().isEmpty())
             stacks.addAll(holder.getStructure().toStacks());
-        }
-        stacks.add(AITBlocks.GENERIC_SUBSYSTEM.asItem().getDefaultStack());
 
+        stacks.add(this.asItem().getDefaultStack());
         return stacks;
     }
 

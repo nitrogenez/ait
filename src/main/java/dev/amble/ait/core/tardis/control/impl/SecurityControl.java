@@ -64,7 +64,8 @@ public class SecurityControl extends Control {
         if (player.hasPermissionLevel(2))
             return true;
 
-        boolean companion = tardis.loyalty().get(player).isOf(Loyalty.Type.COMPANION);
+        if (!tardis.loyalty().get(player).isOf(Loyalty.Type.COMPANION))
+            return false;
 
         if (!KeyItem.isKeyInInventory(player))
             return false;
@@ -74,12 +75,11 @@ public class SecurityControl extends Control {
         for (ItemStack stack : keys) {
             Tardis found = KeyItem.getTardisStatic(player.getWorld(), stack);
 
-            if (stack.getItem() == AITItems.SKELETON_KEY) {
+            if (stack.getItem() == AITItems.SKELETON_KEY)
                 return true;
-            }
 
             if (found == tardis)
-                return companion;
+                return true;
         }
 
         return false;

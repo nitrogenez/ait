@@ -3,6 +3,7 @@ package dev.amble.ait.registry.impl;
 import java.util.HashMap;
 import java.util.List;
 
+import dev.amble.ait.core.tardis.control.impl.SecurityControl;
 import dev.amble.lib.data.CachedDirectedGlobalPos;
 import dev.amble.lib.data.DirectedGlobalPos;
 import net.fabricmc.fabric.api.event.registry.FabricRegistryBuilder;
@@ -401,7 +402,6 @@ public class HandlesResponseRegistry {
 
     private static boolean onChatMessage(SignedMessage signedMessage, ServerPlayerEntity player, MessageType.Parameters parameters) {
         ItemStack stack;
-
         String message = signedMessage.getSignedContent();
 
         boolean bl = message.toLowerCase().startsWith("handles");
@@ -422,16 +422,24 @@ public class HandlesResponseRegistry {
                     response.run(player, HandlesSound.of(player), tardis.asServer());
                     return false;
                 }
+
                 break;
             }
         }
 
-        if (!TardisServerWorld.isTardisDimension(player.getWorld())) return true;
-        Tardis tardis = ((TardisServerWorld) player.getWorld()).getTardis();
-        if (tardis.butler().getHandles() == null) return true;
+        if (!(player.getWorld() instanceof TardisServerWorld tardisWorld))
+            return true;
+
+        Tardis tardis = tardisWorld.getTardis();
+
+        if (tardis.butler().getHandles() == null)
+            return true;
+
+        if (response.requiresSudo() && tardis.stats().security().get()
+                && !SecurityControl.hasMatchingKey(player, tardis))
+            return true;
 
         response.run(player, HandlesSound.of(tardis.asServer()), tardis.asServer());
-
         return false;
     }
 }

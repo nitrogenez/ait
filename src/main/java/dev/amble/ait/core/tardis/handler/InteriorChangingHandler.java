@@ -95,6 +95,7 @@ public class InteriorChangingHandler extends KeyedTardisComponent implements Tar
             if (!tardis.isGrowth())
                 return TardisEvents.Interaction.PASS;
 
+            tardis.travel().autopilot(false);
             tardis.getExterior().setType(CategoryRegistry.CAPSULE);
             tardis.getExterior().setVariant(ExteriorVariantRegistry.CAPSULE_DEFAULT);
             return TardisEvents.Interaction.SUCCESS; // force mat even if checks fail

@@ -66,7 +66,7 @@ public class GallifreyFallsBOTI extends BOTI {
         GL11.glStencilFunc(GL11.GL_EQUAL, 1, 0xFF);
 
         stack.push();
-        stack.translate(0, 0, -1.5f);
+        stack.translate(0, 0, -4f);
         RenderSystem.enableCull();
         GallifreyFallsModel.getTexturedModelData().createModel().render(stack, botiProvider.getBuffer(AITRenderLayers.getBotiInterior(PAINTING_TEXTURE)), 0xf000f0, OverlayTexture.DEFAULT_UV, 1.0F, 1.0F, 1.0F, 1.0F);
         RenderSystem.disableCull();

@@ -315,7 +315,7 @@ public class TardisUtil {
     }
 
     public static List<ServerPlayerEntity> getPlayersInsideInterior(ServerTardis tardis) {
-        return new ArrayList<>(tardis.getInteriorWorld().getPlayers());
+        return tardis.getInteriorWorld().getPlayers();
     }
 
     public static List<LivingEntity> getLivingInInterior(Tardis tardis, Predicate<LivingEntity> predicate) {

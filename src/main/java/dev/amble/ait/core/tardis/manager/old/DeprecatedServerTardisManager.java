@@ -121,7 +121,7 @@ public abstract class DeprecatedServerTardisManager extends TardisManager<Server
     }
 
     private ServerTardis loadTardis(MinecraftServer server, UUID uuid) {
-        return this.fileManager.loadTardis(server, this, uuid, this::readTardis, this.lookup::put);
+        return this.fileManager.loadTardis(server, this, uuid, this::readTardis);
     }
 
     public void loadAll(MinecraftServer server, @Nullable Consumer<ServerTardis> consumer) {
@@ -203,6 +203,7 @@ public abstract class DeprecatedServerTardisManager extends TardisManager<Server
         ServerTardis tardis = gson.fromJson(json, ServerTardis.class);
         Tardis.init(tardis, TardisComponent.InitContext.deserialize());
 
+        this.lookup.put(tardis);
         return tardis;
     }
 

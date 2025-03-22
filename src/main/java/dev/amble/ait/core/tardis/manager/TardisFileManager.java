@@ -3,14 +3,16 @@ package dev.amble.ait.core.tardis.manager;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 import java.util.function.Consumer;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
+import dev.amble.ait.api.tardis.TardisEvents;
+import it.unimi.dsi.fastutil.objects.Object2IntMap;
+import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.WorldSavePath;
 
@@ -21,6 +23,7 @@ import dev.amble.ait.core.tardis.TardisManager;
 
 public class TardisFileManager<T extends Tardis> {
 
+    private final Set<UUID> missing = new HashSet<>();
     private boolean locked = false;
 
     public void delete(MinecraftServer server, UUID uuid) {
@@ -46,8 +49,7 @@ public class TardisFileManager<T extends Tardis> {
         return result;
     }
 
-    public T loadTardis(MinecraftServer server, TardisManager<T, ?> manager, UUID uuid, TardisLoader<T> function,
-            Consumer<T> consumer) {
+    public T loadTardis(MinecraftServer server, TardisManager<T, ?> manager, UUID uuid, TardisLoader<T> function) {
         if (this.locked)
             return null;
 
@@ -84,13 +86,17 @@ public class TardisFileManager<T extends Tardis> {
              */
 
             T tardis = function.apply(manager.getFileGson(), object);
-            consumer.accept(tardis);
 
             AITMod.LOGGER.info("Deserialized {} in {}ms", tardis, System.currentTimeMillis() - start);
             return tardis;
         } catch (IOException e) {
+            if (missing.contains(uuid))
+                return null;
+
             AITMod.LOGGER.warn("Failed to load {}!", uuid);
             AITMod.LOGGER.warn(e.getMessage());
+
+            missing.add(uuid);
         }
 
         return null;

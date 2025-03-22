@@ -1,9 +1,13 @@
 package dev.amble.ait.core.tardis.control.impl;
 
+import dev.amble.ait.core.AITSounds;
+import dev.amble.ait.data.schema.console.ConsoleTypeSchema;
+import dev.amble.lib.item.AItemSettings;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
+import net.minecraft.sound.SoundEvent;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
@@ -44,8 +48,11 @@ public class HammerHangerControl extends Control {
             player.setStackInHand(Hand.MAIN_HAND, ItemStack.EMPTY);
         }
 
-        TardisDesktop.playSoundAtConsole(tardis.asServer().getInteriorWorld(), console, SoundEvents.BLOCK_CHAIN_STEP, SoundCategory.PLAYERS, 6f, 1);
-
         return Result.SUCCESS;
+    }
+
+    @Override
+    public SoundEvent getFallbackSound() {
+        return SoundEvents.BLOCK_CHAIN_HIT;
     }
 }

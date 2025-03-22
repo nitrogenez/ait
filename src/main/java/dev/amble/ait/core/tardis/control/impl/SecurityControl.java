@@ -64,7 +64,7 @@ public class SecurityControl extends Control {
         if (player.hasPermissionLevel(2))
             return true;
 
-        if (!tardis.loyalty().get(player).isOf(Loyalty.Type.COMPANION))
+        if (!tardis.loyalty().get(player).isOf(tardis.permissions().p19Loyalty().get()))
             return false;
 
         if (!KeyItem.isKeyInInventory(player))

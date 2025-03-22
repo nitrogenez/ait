@@ -9,9 +9,13 @@ COMMENTS = re.compile(r'<!--(.*?)-->', re.MULTILINE | re.DOTALL)
 
 headers = {
     'Accept': 'application/vnd.github+json',
-    'Authorization': f'Bearer {os.environ["GITHUB_TOKEN"]}',
     'X-GitHub-Api-Version': '2022-11-28'
 }
+
+token = os.getenv('GITHUB_TOKEN')
+
+if token:
+    headers['Authorization'] = f'Bearer {token}'
 
 changelog: str | None = '\n\n'
 last_update = 0

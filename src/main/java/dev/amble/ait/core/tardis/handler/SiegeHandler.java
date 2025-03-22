@@ -30,8 +30,6 @@ import dev.amble.ait.data.properties.Property;
 import dev.amble.ait.data.properties.Value;
 import dev.amble.ait.data.properties.bool.BoolProperty;
 import dev.amble.ait.data.properties.bool.BoolValue;
-import dev.amble.ait.data.properties.integer.IntProperty;
-import dev.amble.ait.data.properties.integer.IntValue;
 
 public class SiegeHandler extends KeyedTardisComponent implements TardisTickable {
 

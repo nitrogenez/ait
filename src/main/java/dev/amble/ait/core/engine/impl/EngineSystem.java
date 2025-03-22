@@ -5,11 +5,10 @@ import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
-import dev.amble.ait.core.AITItems;
 import dev.amble.lib.util.ServerLifecycleHooks;
-import net.minecraft.item.Item;
 import org.joml.Vector3f;
 
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.text.Text;

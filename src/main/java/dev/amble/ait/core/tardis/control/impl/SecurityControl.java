@@ -17,7 +17,6 @@ import dev.amble.ait.core.item.KeyItem;
 import dev.amble.ait.core.tardis.Tardis;
 import dev.amble.ait.core.tardis.control.Control;
 import dev.amble.ait.core.tardis.util.TardisUtil;
-import dev.amble.ait.data.Loyalty;
 
 public class SecurityControl extends Control {
 

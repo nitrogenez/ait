@@ -1,7 +1,9 @@
 package dev.amble.ait.core.engine.impl;
 
+import dev.amble.ait.core.AITItems;
 import dev.amble.lib.data.CachedDirectedGlobalPos;
 
+import net.minecraft.item.Item;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.MathHelper;
 
@@ -57,5 +59,10 @@ public class EmergencyPower extends SubSystem implements ArtronHolder, Structure
     @Override
     public MultiBlockStructure getStructure() {
         return MultiBlockStructure.EMPTY;
+    }
+
+    @Override
+    public Item asItem() {
+        return AITItems.BACKUP_CIRCUIT;
     }
 }

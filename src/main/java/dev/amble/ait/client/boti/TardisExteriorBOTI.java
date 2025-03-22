@@ -23,6 +23,7 @@ import dev.amble.ait.client.tardis.ClientTardis;
 import dev.amble.ait.compat.DependencyChecker;
 import dev.amble.ait.core.blockentities.ExteriorBlockEntity;
 import dev.amble.ait.core.tardis.handler.BiomeHandler;
+import dev.amble.ait.core.tardis.handler.StatsHandler;
 import dev.amble.ait.data.schema.exterior.ClientExteriorVariantSchema;
 import dev.amble.ait.registry.impl.exterior.ClientExteriorVariantRegistry;
 
@@ -64,10 +65,17 @@ public class TardisExteriorBOTI extends BOTI {
 
         RenderSystem.depthMask(true);
         stack.push();
-        Vec3d vec = variant.parent().adjustPortalPos(new Vec3d(0, -1.1725f, 0), (byte) 0);
+        StatsHandler stats = tardis.stats();
+        String name = stats.getName();
         stack.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(180));
+        if (name.equalsIgnoreCase("grumm") || name.equalsIgnoreCase("dinnerbone")) {
+            stack.multiply(RotationAxis.POSITIVE_X.rotationDegrees(-90f));
+            stack.translate(0, tardis.stats().getYScale() + 0.25f, tardis.stats().getZScale() - 1.7f);
+        }
+        stack.scale((float) variant.parent().portalWidth() * stats.getXScale(),
+                (float) variant.parent().portalHeight() * stats.getYScale(), stats.getZScale());
+        Vec3d vec = variant.parent().adjustPortalPos(new Vec3d(0, -0.4675f, 0), (byte) 0);
         stack.translate(vec.x, vec.y, vec.z);
-        stack.scale((float) variant.parent().portalWidth(), (float) variant.parent().portalHeight(), 1f);
         RenderLayer whichOne = AITMod.CONFIG.CLIENT.SHOULD_RENDER_BOTI_INTERIOR || AITMod.CONFIG.CLIENT.GREEN_SCREEN_BOTI ?
                 RenderLayer.getDebugFilledBox() : RenderLayer.getEndGateway();
         float[] colorsForGreenScreen = AITMod.CONFIG.CLIENT.GREEN_SCREEN_BOTI ? new float[]{0, 1, 0, 1} : new float[] {(float) skyColor.x, (float) skyColor.y, (float) skyColor.z};
@@ -85,6 +93,11 @@ public class TardisExteriorBOTI extends BOTI {
 
         stack.push();
         stack.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(180));
+        if (name.equalsIgnoreCase("grumm") || name.equalsIgnoreCase("dinnerbone")) {
+            stack.multiply(RotationAxis.POSITIVE_X.rotationDegrees(-90f));
+            stack.translate(0, tardis.stats().getYScale() + 0.25f, tardis.stats().getZScale() -1.7f);
+        }
+        stack.scale(stats.getXScale(), stats.getYScale(), stats.getZScale());
 
         ((ExteriorModel) frame).renderDoors(tardis, exterior, frame.getPart(), stack, botiProvider.getBuffer(AITRenderLayers.getBotiInterior(variant.texture())), light, OverlayTexture.DEFAULT_UV, 1, 1F, 1.0F, 1.0F, true);
         botiProvider.draw();
@@ -92,6 +105,11 @@ public class TardisExteriorBOTI extends BOTI {
 
         stack.push();
         stack.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(180));
+        if (name.equalsIgnoreCase("grumm") || name.equalsIgnoreCase("dinnerbone")) {
+            stack.multiply(RotationAxis.POSITIVE_X.rotationDegrees(-90f));
+            stack.translate(0, tardis.stats().getYScale() + 0.25f, tardis.stats().getZScale() -1.7f);
+        }
+        stack.scale(stats.getXScale(), stats.getYScale(), stats.getZScale());
 
         if (variant != ClientExteriorVariantRegistry.CORAL_GROWTH) {
             BiomeHandler handler = exterior.tardis().get().handler(TardisComponent.Id.BIOME);
@@ -106,12 +124,17 @@ public class TardisExteriorBOTI extends BOTI {
 
         stack.push();
         stack.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(180));
+        if (name.equalsIgnoreCase("grumm") || name.equalsIgnoreCase("dinnerbone")) {
+            stack.multiply(RotationAxis.POSITIVE_X.rotationDegrees(-90f));
+            stack.translate(0, tardis.stats().getYScale() + 0.25f, tardis.stats().getZScale() -1.7f);
+        }
+        stack.scale(stats.getXScale(), stats.getYScale(), stats.getZScale());
         if (variant.emission() != null) {
             float u;
             float t;
             float s;
 
-            if ((exterior.tardis().get().stats().getName() != null && "partytardis".equals(exterior.tardis().get().stats().getName().toLowerCase()) || (!exterior.tardis().get().extra().getInsertedDisc().isEmpty()))) {
+            if ((stats.getName() != null && "partytardis".equals(stats.getName().toLowerCase()) || (!exterior.tardis().get().extra().getInsertedDisc().isEmpty()))) {
                 int m = 25;
                 int n = MinecraftClient.getInstance().player.age / m + MinecraftClient.getInstance().player.getId();
                 int o = DyeColor.values().length;

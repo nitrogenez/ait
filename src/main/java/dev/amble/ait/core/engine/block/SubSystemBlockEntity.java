@@ -69,6 +69,7 @@ public class SubSystemBlockEntity extends FluidLinkBlockEntity {
     }
 
     public void tick(World world, BlockPos pos, BlockState state) {}
+
     public ActionResult useOn(BlockState state, World world, boolean sneaking, PlayerEntity player, ItemStack hand) {
         if (this.system() instanceof DurableSubSystem durable) {
             if (durable.isRepairItem(hand) && durable.durability() < 1250) {

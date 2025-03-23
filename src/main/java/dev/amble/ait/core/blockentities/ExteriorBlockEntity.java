@@ -60,9 +60,7 @@ import dev.amble.ait.data.schema.exterior.ExteriorVariantSchema;
 public class ExteriorBlockEntity extends AbstractLinkableBlockEntity implements BlockEntityTicker<ExteriorBlockEntity> {
 
     private ExteriorAnimation animation;
-    private ExteriorVariantSchema variant;
     private UUID seatEntityUUID = null;
-    public long lastRequestTime = 0;
 
     public ExteriorBlockEntity(BlockPos pos, BlockState state) {
         super(AITBlockEntityTypes.EXTERIOR_BLOCK_ENTITY_TYPE, pos, state);
@@ -192,26 +190,24 @@ public class ExteriorBlockEntity extends AbstractLinkableBlockEntity implements 
      */
     @Deprecated(since = "1.3.0")
     public boolean validateExteriorPosition() {
-        if (!this.isLinked()) return true;
+        if (!this.isLinked())
+            return true;
 
         ServerTardis tardis = this.tardis().get().asServer();
 
         CachedDirectedGlobalPos expectedPos = tardis.travel().position();
-        RegistryKey<World> expectedDim = expectedPos.getDimension();
         BlockPos expectedBlockPos = expectedPos.getPos();
 
         ServerWorld extWorld = (ServerWorld) this.getWorld();
         BlockPos extPos = this.getPos();
 
-        boolean invalid = !extWorld.getRegistryKey().equals(expectedDim) || !extPos.equals(expectedBlockPos);
-
-        if (!invalid) return true;
+        if (extPos.equals(expectedBlockPos) && expectedPos.getWorld() == extWorld)
+            return true;
 
         AITMod.LOGGER.warn("Invalid exterior at {} {}, expected {} {} for TARDIS {}. Removing..",
-                extWorld.getRegistryKey(), extPos, expectedDim, expectedBlockPos, tardis.getUuid());
+                extWorld.getRegistryKey(), extPos, expectedPos.getDimension(), expectedBlockPos, tardis.getUuid());
 
         extWorld.setBlockState(extPos, Blocks.AIR.getDefaultState());
-
         return true;
     }
 

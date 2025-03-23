@@ -51,12 +51,6 @@ public class ServerTardis extends Tardis {
 
     public void tick(MinecraftServer server) {
         this.getHandlers().tick(server);
-
-        // tell interior players how to fix growth every 10 seconds
-        if (this.isGrowth() && server.getTicks() % 200 == 0 && !this.interiorChangingHandler().queued().get()) {
-            if (this.interiorChangingHandler().hasEnoughPlasmicMaterial())
-                this.getInteriorWorld().getPlayers().forEach(player -> player.sendMessage(Text.translatable("tardis.message.growth.hint").formatted(Formatting.DARK_GRAY,Formatting.ITALIC), true));
-        }
     }
 
     public void markDirty(TardisComponent component) {

@@ -58,7 +58,10 @@ public class InteriorChangingHandler extends KeyedTardisComponent implements Tar
     private static final Property<Identifier> QUEUED_INTERIOR_PROPERTY = new Property<>(Property.Type.IDENTIFIER, "queued_interior", new Identifier(""));
     private static final BoolProperty QUEUED = new BoolProperty("queued");
     private static final BoolProperty REGENERATING = new BoolProperty("regenerating");
+
     public static final int MAX_PLASMIC_MATERIAL_AMOUNT = 8;
+    private static final Text HINT_TEXT = Text.translatable("tardis.message.growth.hint").formatted(Formatting.DARK_GRAY, Formatting.ITALIC);
+
     private final Value<Identifier> queuedInterior = QUEUED_INTERIOR_PROPERTY.create(this);
     private static final IntProperty PLASMIC_MATERIAL_AMOUNT = new IntProperty("plasmic_material_amount");
     private final IntValue plasmicMaterialAmount = PLASMIC_MATERIAL_AMOUNT.create(this);
@@ -298,6 +301,10 @@ public class InteriorChangingHandler extends KeyedTardisComponent implements Tar
             this.generateInteriorWithItem();
 
             if (!isQueued) {
+                if (server.getTicks() % 200 == 0 && this.hasEnoughPlasmicMaterial())
+                    this.tardis.asServer().getInteriorWorld().getPlayers().forEach(player ->
+                            player.sendMessage(HINT_TEXT, true));
+
                 if (this.tardis.door().isClosed()) {
                     this.tardis.door().openDoors();
                 } else {

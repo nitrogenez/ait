@@ -68,9 +68,6 @@ public class InteriorChangingHandler extends KeyedTardisComponent implements Tar
     private final BoolValue regenerating = REGENERATING.create(this);
 
     @Exclude
-    private Task<?> desktopTask;
-
-    @Exclude
     private List<ItemStack> restorationChestContents;
 
     public InteriorChangingHandler() {
@@ -328,7 +325,7 @@ public class InteriorChangingHandler extends KeyedTardisComponent implements Tar
 
         if (!this.regenerating.get()) {
             tardis.getDesktop().startQueue(true);
-            this.desktopTask = Scheduler.get().runTaskLater(this::changeInterior, TimeUnit.SECONDS, 5);
+            Scheduler.get().runTaskLater(this::changeInterior, TimeUnit.SECONDS, 5);
 
             this.regenerating.set(true);
         }

@@ -47,7 +47,7 @@ public class TardisServerWorld extends MultiDimServerWorld {
     public boolean spawnEntity(Entity entity) {
         if (entity instanceof ItemEntity && tardis.interiorChangingHandler().regenerating().get())
             return false;
-        
+
         return super.spawnEntity(entity);
     }
 

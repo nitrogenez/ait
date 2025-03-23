@@ -11,6 +11,8 @@ import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.ItemEntity;
+import net.minecraft.entity.decoration.AbstractDecorationEntity;
+import net.minecraft.entity.decoration.painting.PaintingEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvent;
@@ -184,6 +186,9 @@ public class TardisDesktop extends TardisComponent {
         ServerTardis tardis = this.tardis.asServer();
         ServerWorld world = tardis.getInteriorWorld();
         int chunkRadius = ChunkSectionPos.getSectionCoord(RADIUS);
+
+        TardisUtil.getEntitiesInBox(AbstractDecorationEntity.class, world, corners.getBox(), frame -> true)
+                .forEach(frame -> frame.remove(Entity.RemovalReason.DISCARDED));
 
         return new ChunkEraser.Builder().withFlags(Block.FORCE_STATE).build(
                 world, -chunkRadius, -chunkRadius, chunkRadius, chunkRadius

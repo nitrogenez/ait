@@ -1,11 +1,13 @@
 package dev.amble.ait.core.tardis.animation;
 
+import dev.amble.ait.data.Loyalty;
 import dev.amble.lib.util.ServerLifecycleHooks;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.fabricmc.loader.api.FabricLoader;
+import net.minecraft.client.network.ClientPlayerEntity;
 import org.joml.Math;
 
 import net.minecraft.client.MinecraftClient;
@@ -45,22 +47,43 @@ public abstract class ExteriorAnimation {
 
         Tardis tardis = this.exterior.tardis().get();
 
-        if (tardis.travel().isLanded())
-            return 1f;
+        if (!tardis.travel().isLanded())
+            return this.alpha;
 
         if (tardis.cloak().cloaked().get())
-            return isHigh() ? 0.105f : 0;
+            return cloakAlpha(tardis);
 
-        return this.alpha;
+        return 1;
     }
 
-    private static boolean isHigh() {
-        return FabricLoader.getInstance().getEnvironmentType() == EnvType.CLIENT && amIHigh();
+    private float cloakAlpha(Tardis tardis) {
+        if (FabricLoader.getInstance().getEnvironmentType() != EnvType.CLIENT)
+            return 0f;
+
+        return getCloakAlpha(tardis);
     }
 
     @Environment(EnvType.CLIENT)
-    private static boolean amIHigh() {
-        return MinecraftClient.getInstance().player != null && ZeitonHighEffect.isHigh(MinecraftClient.getInstance().player);
+    private float getCloakAlpha(Tardis tardis) {
+        ClientPlayerEntity player = MinecraftClient.getInstance().player;
+
+        if (player == null)
+            return 0f;
+
+        double distance = distanceFromTardis(player, tardis);
+
+        if (distance >= MAX_CLOAK_DISTANCE)
+            return 0f;
+
+        boolean companion = tardis.loyalty().get(player).isOf(Loyalty.Type.COMPANION);
+
+        float distanceAlpha = 1f - (float) (distance / MAX_CLOAK_DISTANCE);
+        float base = 1f;
+
+        if (!companion)
+            base = ZeitonHighEffect.isHigh(player) ? 0.105f : 0f;
+
+        return distanceAlpha * base;
     }
 
     public static boolean isNearTardis(PlayerEntity player, Tardis tardis, double radius) {

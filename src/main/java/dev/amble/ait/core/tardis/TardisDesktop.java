@@ -205,15 +205,6 @@ public class TardisDesktop extends TardisComponent {
         this.tardis.door().setLocked(false);
         this.tardis.door().setDeadlocked(false);
         this.tardis.alarm().disable();
-
-        AITMod.LOGGER.info("Removing entities in {}", CORNERS.getBox().expand(0, 300, 0));
-
-        this.tardis.asServer().getInteriorWorld().getEntitiesByClass(
-                ItemEntity.class, CORNERS.getBox().expand(0, 300, 0), i -> true
-        ).forEach(itemEntity -> {
-            AITMod.LOGGER.info("removing {}", itemEntity);
-            itemEntity.discard();;
-        });
     }
 
     public ActionQueue changeInterior(TardisDesktopSchema schema, boolean clear, boolean sendEvent) {

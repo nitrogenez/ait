@@ -277,8 +277,6 @@ public class ExteriorRenderer<T extends ExteriorBlockEntity> implements BlockEnt
 
         matrices.pop();
         profiler.pop();
-
-
     }
 
     private void updateModel(Tardis tardis) {

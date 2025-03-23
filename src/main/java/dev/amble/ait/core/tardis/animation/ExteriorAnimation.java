@@ -5,6 +5,7 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
+import net.fabricmc.loader.api.FabricLoader;
 import org.joml.Math;
 
 import net.minecraft.client.MinecraftClient;
@@ -44,20 +45,17 @@ public abstract class ExteriorAnimation {
 
         Tardis tardis = this.exterior.tardis().get();
 
-        if (tardis.travel().getState() != TravelHandlerBase.State.LANDED)
-            return this.alpha;
+        if (tardis.travel().isLanded())
+            return 1f;
 
         if (tardis.cloak().cloaked().get())
             return isHigh() ? 0.105f : 0;
 
-        return 1f;
+        return this.alpha;
     }
 
     private static boolean isHigh() {
-        if (ServerLifecycleHooks.isServer())
-            return false;
-
-        return amIHigh();
+        return FabricLoader.getInstance().getEnvironmentType() == EnvType.CLIENT && amIHigh();
     }
 
     @Environment(EnvType.CLIENT)
@@ -102,10 +100,7 @@ public abstract class ExteriorAnimation {
 
         this.alpha = switch (state) {
             case DEMAT, LANDED -> 1f;
-            case MAT -> 0f;
-
-            default -> //AITMod.LOGGER.error("Can't get alpha for a TARDIS in FLIGHT state! Using default!");
-                    0;
+            default -> 0;
         };
 
         this.tellClientsToSetup(state);

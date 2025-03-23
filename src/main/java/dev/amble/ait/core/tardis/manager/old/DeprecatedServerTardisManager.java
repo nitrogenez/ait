@@ -176,8 +176,6 @@ public abstract class DeprecatedServerTardisManager extends TardisManager<Server
                 }
 
                 tardis.door().closeDoors();
-                tardis.interiorChangingHandler().queued().set(false);
-                tardis.interiorChangingHandler().regenerating().set(false);
             }
 
             this.fileManager.saveTardis(server, this, tardis);

@@ -85,7 +85,7 @@ public class InteriorChangingHandler extends KeyedTardisComponent implements Tar
         queued.of(this, QUEUED);
         regenerating.of(this, REGENERATING);
 
-        if (this.regenerating.get()) {
+        if (this.isServer() && this.regenerating.get()) {
             this.regenerating.set(false);
 
             TardisDesktopSchema queued = this.getQueuedInterior();

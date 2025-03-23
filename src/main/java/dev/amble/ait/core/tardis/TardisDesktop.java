@@ -206,9 +206,9 @@ public class TardisDesktop extends TardisComponent {
         this.tardis.door().setDeadlocked(false);
         this.tardis.alarm().disable();
 
-        this.tardis.asServer().getInteriorWorld().getEntitiesByType(
-                TypeFilter.instanceOf(ItemEntity.class), i -> true
-        ).forEach(item -> item.remove(Entity.RemovalReason.DISCARDED));
+        this.tardis.asServer().getInteriorWorld().getEntitiesByClass(
+                ItemEntity.class, CORNERS.getBox().expand(0, 300, 0), i -> true
+        ).forEach(Entity::discard);
     }
 
     public ActionQueue changeInterior(TardisDesktopSchema schema, boolean clear, boolean sendEvent) {

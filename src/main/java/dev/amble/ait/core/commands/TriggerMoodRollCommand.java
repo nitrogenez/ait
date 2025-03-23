@@ -7,6 +7,7 @@ import com.mojang.brigadier.Command;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.context.CommandContext;
 
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import net.minecraft.server.command.ServerCommandSource;
 
 import dev.amble.ait.AITMod;
@@ -23,8 +24,7 @@ public class TriggerMoodRollCommand {
                         .executes(TriggerMoodRollCommand::triggerMoodRollCommand))));
     }
 
-    private static int triggerMoodRollCommand(CommandContext<ServerCommandSource> context) {
-
+    private static int triggerMoodRollCommand(CommandContext<ServerCommandSource> context) throws CommandSyntaxException {
         ServerTardis tardis = TardisArgumentType.getTardis(context, "tardis");
 
         tardis.<MoodHandler>handler(TardisComponent.Id.MOOD).rollForMoodDictatedEvent();

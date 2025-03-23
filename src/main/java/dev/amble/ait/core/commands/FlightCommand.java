@@ -7,6 +7,7 @@ import com.mojang.brigadier.Command;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.context.CommandContext;
 
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
@@ -24,11 +25,13 @@ public class FlightCommand {
 
     }
 
-    private static int execute(CommandContext<ServerCommandSource> context) {
+    private static int execute(CommandContext<ServerCommandSource> context) throws CommandSyntaxException {
         ServerPlayerEntity player = context.getSource().getPlayer();
-        ServerTardis tardis = TardisArgumentType.getTardis(context, "tardis");
 
-        if (player == null) return 0;
+        if (player == null)
+            return 0;
+
+        ServerTardis tardis = TardisArgumentType.getTardis(context, "tardis");
 
         if (!AITMod.CONFIG.SERVER.RWF_ENABLED) {
             player.sendMessage(Text.translatable("tardis.message.control.rwf_disabled"), true);

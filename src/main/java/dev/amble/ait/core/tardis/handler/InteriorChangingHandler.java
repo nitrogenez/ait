@@ -8,6 +8,7 @@ import dev.amble.lib.data.DirectedBlockPos;
 import dev.amble.lib.data.DirectedGlobalPos;
 import dev.drtheo.scheduler.api.Scheduler;
 import dev.drtheo.scheduler.api.TimeUnit;
+import dev.drtheo.scheduler.api.task.Task;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 
 import net.minecraft.block.Blocks;
@@ -67,6 +68,9 @@ public class InteriorChangingHandler extends KeyedTardisComponent implements Tar
     private final BoolValue regenerating = REGENERATING.create(this);
 
     @Exclude
+    private Task<?> desktopTask;
+
+    @Exclude
     private List<ItemStack> restorationChestContents;
 
     public InteriorChangingHandler() {
@@ -80,6 +84,15 @@ public class InteriorChangingHandler extends KeyedTardisComponent implements Tar
         queuedInterior.of(this, QUEUED_INTERIOR_PROPERTY);
         queued.of(this, QUEUED);
         regenerating.of(this, REGENERATING);
+
+        if (this.regenerating.get()) {
+            TardisDesktopSchema desktop = this.getQueuedInterior();
+
+            if (desktop == null)
+                return;
+
+            this.queueInteriorChange(desktop);
+        }
     }
 
     static {
@@ -315,7 +328,7 @@ public class InteriorChangingHandler extends KeyedTardisComponent implements Tar
 
         if (!this.regenerating.get()) {
             tardis.getDesktop().startQueue(true);
-            Scheduler.get().runTaskLater(this::changeInterior, TimeUnit.SECONDS, 5);
+            this.desktopTask = Scheduler.get().runTaskLater(this::changeInterior, TimeUnit.SECONDS, 5);
 
             this.regenerating.set(true);
         }

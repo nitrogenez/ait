@@ -7,6 +7,8 @@ import java.util.function.Consumer;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
+import com.mojang.datafixers.util.Either;
+import dev.amble.ait.data.TardisMap;
 import dev.amble.lib.data.CachedDirectedGlobalPos;
 import dev.drtheo.multidim.MultiDim;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
@@ -42,6 +44,7 @@ import dev.amble.ait.data.properties.Value;
 
 public abstract class DeprecatedServerTardisManager extends TardisManager<ServerTardis, MinecraftServer> {
 
+    protected final TardisMap.Optional<ServerTardis> lookup = new TardisMap.Optional<>();
     protected final TardisFileManager<ServerTardis> fileManager = new TardisFileManager<>();
 
     public DeprecatedServerTardisManager() {
@@ -52,12 +55,12 @@ public abstract class DeprecatedServerTardisManager extends TardisManager<Server
         WorldSaveEvent.EVENT.register(world -> this.save(world.getServer(), false));
 
         ServerTickEvents.END_SERVER_TICK.register(server -> {
-            for (ServerTardis tardis : this.lookup.values()) {
+            this.forEach(tardis -> {
                 if (tardis.isRemoved())
-                    continue;
+                    return;
 
                 tardis.tick(server);
-            }
+            });
         });
     }
 
@@ -106,22 +109,50 @@ public abstract class DeprecatedServerTardisManager extends TardisManager<Server
         if (uuid == null)
             return null; // ugh - ong bro
 
-        ServerTardis result = this.lookup.get(uuid);
+        Either<ServerTardis, ?> either = this.lookup.get(uuid);
 
-        if (result == null)
-            result = this.loadTardis(server, uuid);
+        if (either == null)
+            either = this.loadTardis(server, uuid);
 
-        return result;
+        return either.map(tardis -> tardis, o -> null);
     }
 
     @Override
     public void loadTardis(MinecraftServer server, UUID uuid, @Nullable Consumer<ServerTardis> consumer) {
         if (consumer != null)
-            consumer.accept(this.loadTardis(server, uuid));
+            this.loadTardis(server, uuid).ifLeft(consumer);
     }
 
-    private ServerTardis loadTardis(MinecraftServer server, UUID uuid) {
-        return this.fileManager.loadTardis(server, this, uuid, this::readTardis);
+    @Override
+    public void getTardis(MinecraftServer server, UUID uuid, Consumer<ServerTardis> consumer)  {
+        if (uuid == null)
+            return; // ugh
+
+        Either<ServerTardis, ?> either = this.lookup.get(uuid);
+
+        if (either == null) {
+            this.loadTardis(server, uuid, consumer);
+            return;
+        }
+
+        either.ifLeft(consumer);
+    }
+
+    @Override
+    protected TardisMap.Optional<ServerTardis> lookup() {
+        return lookup;
+    }
+
+    @Override
+    public void forEach(Consumer<ServerTardis> consumer) {
+        this.lookup.forEach((uuid, either) -> either.ifLeft(consumer));
+    }
+
+    private Either<ServerTardis, Exception> loadTardis(MinecraftServer server, UUID uuid) {
+        Either<ServerTardis, Exception> result = this.fileManager.loadTardis(server, this, uuid, this::readTardis);
+
+        this.lookup.put(uuid, result);
+        return result;
     }
 
     public void loadAll(MinecraftServer server, @Nullable Consumer<ServerTardis> consumer) {
@@ -160,10 +191,10 @@ public abstract class DeprecatedServerTardisManager extends TardisManager<Server
         if (clean)
             this.fileManager.setLocked(true);
 
-        for (ServerTardis tardis : this.lookup.values()) {
+        this.forEach(tardis -> {
             if (clean) {
                 if (tardis == null)
-                    continue;
+                    return;
 
                 // TODO move this into some method like #dispose
                 ForcedChunkUtil.stopForceLoading(tardis.travel().position());
@@ -179,7 +210,7 @@ public abstract class DeprecatedServerTardisManager extends TardisManager<Server
             }
 
             this.fileManager.saveTardis(server, this, tardis);
-        }
+        });
 
         if (!clean)
             return;
@@ -201,7 +232,6 @@ public abstract class DeprecatedServerTardisManager extends TardisManager<Server
         ServerTardis tardis = gson.fromJson(json, ServerTardis.class);
         Tardis.init(tardis, TardisComponent.InitContext.deserialize());
 
-        this.lookup.put(tardis);
         return tardis;
     }
 

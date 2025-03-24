@@ -35,7 +35,6 @@ import dev.amble.ait.core.tardis.handler.TardisCrashHandler;
 import dev.amble.ait.core.tardis.util.AsyncLocatorUtil;
 import dev.amble.ait.core.tardis.util.NetworkUtil;
 import dev.amble.ait.core.tardis.util.TardisUtil;
-import dev.amble.ait.core.util.ForcedChunkUtil;
 import dev.amble.ait.core.util.WorldUtil;
 import dev.amble.ait.core.world.RiftChunkManager;
 import dev.amble.ait.data.Exclude;
@@ -162,8 +161,6 @@ public final class TravelHandler extends AnimatedTravelHandler implements Crasha
         BlockPos pos = globalPos.getPos();
 
         world.removeBlock(pos, false);
-
-        ForcedChunkUtil.stopForceLoading(world, pos);
     }
 
     /**
@@ -202,7 +199,6 @@ public final class TravelHandler extends AnimatedTravelHandler implements Crasha
         if (schedule && !this.antigravs.get())
             world.scheduleBlockTick(pos, AITBlocks.EXTERIOR_BLOCK, 2);
 
-        ForcedChunkUtil.keepChunkLoaded(world, pos);
         return exterior;
     }
 

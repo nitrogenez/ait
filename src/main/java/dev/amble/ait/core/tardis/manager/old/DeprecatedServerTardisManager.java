@@ -38,7 +38,6 @@ import dev.amble.ait.core.tardis.manager.ServerTardisManager;
 import dev.amble.ait.core.tardis.manager.TardisBuilder;
 import dev.amble.ait.core.tardis.manager.TardisFileManager;
 import dev.amble.ait.core.tardis.util.TardisUtil;
-import dev.amble.ait.core.util.ForcedChunkUtil;
 import dev.amble.ait.data.Exclude;
 import dev.amble.ait.data.properties.Value;
 
@@ -54,7 +53,7 @@ public abstract class DeprecatedServerTardisManager extends TardisManager<Server
         ServerCrashEvent.EVENT.register(((server, report) -> this.reset())); // just panic and reset
         WorldSaveEvent.EVENT.register(world -> this.save(world.getServer(), false));
 
-        ServerTickEvents.END_SERVER_TICK.register(server -> {
+        ServerTickEvents.START_SERVER_TICK.register(server -> {
             this.forEach(tardis -> {
                 if (tardis.isRemoved())
                     return;
@@ -175,8 +174,6 @@ public abstract class DeprecatedServerTardisManager extends TardisManager<Server
 
             world.removeBlock(pos, false);
             world.removeBlockEntity(pos);
-
-            ForcedChunkUtil.stopForceLoading(exteriorPos);
         }
 
         MultiDim.get(server).remove(tardisWorld.getRegistryKey());
@@ -197,7 +194,6 @@ public abstract class DeprecatedServerTardisManager extends TardisManager<Server
                     return;
 
                 // TODO move this into some method like #dispose
-                ForcedChunkUtil.stopForceLoading(tardis.travel().position());
                 TravelHandlerBase.State state = tardis.travel().getState();
 
                 if (state == TravelHandlerBase.State.DEMAT) {

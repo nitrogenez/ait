@@ -64,11 +64,11 @@ public class ServerTardisManager extends DeprecatedServerTardisManager {
             }));
         }
 
-        ServerTickEvents.START_SERVER_TICK.register(server -> {
+        ServerTickEvents.END_SERVER_TICK.register(server -> {
             if (this.fileManager.isLocked())
                 return;
 
-            for (ServerTardis tardis : new HashSet<>(this.delta)) {
+            for (ServerTardis tardis : this.delta) {
                 if (isInvalid(tardis))
                     continue;
 
@@ -79,7 +79,7 @@ public class ServerTardisManager extends DeprecatedServerTardisManager {
                 tardis.consumeDelta(component -> this.writeComponent(component, buf));
 
                 NetworkUtil.getSubscribedPlayers(tardis).forEach(
-                        watching -> this.sendComponents(watching, buf)
+                        watching -> ServerPlayNetworking.send(watching, SEND_COMPONENT, buf)
                 );
             }
 
@@ -99,10 +99,6 @@ public class ServerTardisManager extends DeprecatedServerTardisManager {
 
     private void sendTardis(ServerPlayerEntity player, PacketByteBuf data) {
         ServerPlayNetworking.send(player, SEND, data);
-    }
-
-    private void sendComponents(ServerPlayerEntity player, PacketByteBuf data) {
-        ServerPlayNetworking.send(player, SEND_COMPONENT, data);
     }
 
     private void writeSend(ServerTardis tardis, PacketByteBuf buf) {
@@ -201,11 +197,15 @@ public class ServerTardisManager extends DeprecatedServerTardisManager {
         this.markComponentDirty(value.getHolder());
     }
 
+    @Override
+    public void reset() {
+        this.delta.clear();
+        super.reset();
+    }
+
     public boolean isFull() {
         int max = AITMod.CONFIG.SERVER.MAX_TARDISES;
-        if (max <= 0) return false;
-
-        return this.lookup.size() >= max;
+        return this.lookup.size() >= max && max > 0;
     }
 
     private static boolean isInvalid(ServerTardis tardis) {

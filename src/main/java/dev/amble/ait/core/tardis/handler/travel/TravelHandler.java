@@ -190,9 +190,6 @@ public final class TravelHandler extends AnimatedTravelHandler implements Crasha
         if (animate)
             this.runAnimations(exterior);
 
-        BiomeHandler biome = this.tardis.handler(Id.BIOME);
-        biome.update(globalPos);
-
         if (schedule && !this.antigravs.get())
             world.scheduleBlockTick(pos, AITBlocks.EXTERIOR_BLOCK, 2);
 

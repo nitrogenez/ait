@@ -1,9 +1,6 @@
 package dev.amble.ait.core.tardis.handler.travel;
 
-
 import dev.amble.lib.data.CachedDirectedGlobalPos;
-import dev.drtheo.queue.api.ActionQueue;
-import dev.drtheo.queue.api.util.Value;
 import dev.drtheo.scheduler.api.Scheduler;
 import dev.drtheo.scheduler.api.TimeUnit;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
@@ -363,31 +360,14 @@ public final class TravelHandler extends AnimatedTravelHandler implements Crasha
         final CachedDirectedGlobalPos finalPos = result.value().orElse(initialPos);
 
         this.state.set(State.MAT);
+        this.waiting = true;
 
-        Value<BlockPos> ref = new Value<>(null);
-
-        ActionQueue queue = SafePosSearch.findSafe(
-                finalPos, this.vGroundSearch.get(), this.hGroundSearch.get(), ref
-        );
-
-        if (queue != null) {
-            this.waiting = true;
-
-            queue.thenRun(() -> {
-                this.waiting = false;
-                CachedDirectedGlobalPos resultPos = finalPos;
-
-                if (ref.value != null)
-                    resultPos = finalPos.pos(ref.value);
-
-                this.finishForceRemat(resultPos);
-            }).execute();
-        } else {
-            this.finishForceRemat(finalPos);
-        }
+        SafePosSearch.wrapSafe(finalPos, this.vGroundSearch.get(),
+                this.hGroundSearch.get(), this::finishForceRemat);
     }
 
     private void finishForceRemat(CachedDirectedGlobalPos pos) {
+        this.waiting = false;
         this.tardis.door().closeDoors();
 
         SoundEvent sound = tardis.stats().getTravelEffects().get(this.getState()).sound();

@@ -5,6 +5,7 @@ import java.util.function.Function;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
+import dev.amble.ait.core.util.SafePosSearch;
 import dev.amble.lib.data.CachedDirectedGlobalPos;
 import dev.drtheo.scheduler.api.Scheduler;
 import dev.drtheo.scheduler.api.TimeUnit;
@@ -48,8 +49,8 @@ public abstract class TravelHandlerBase extends KeyedTardisComponent implements 
     private static final IntProperty SPEED = new IntProperty("speed", 0);
     private static final IntProperty MAX_SPEED = new IntProperty("max_speed", 7);
 
-    private static final Property<GroundSearch> VGROUND_SEARCH = Property.forEnum("vground_search", GroundSearch.class,
-            GroundSearch.CEILING);
+    private static final Property<SafePosSearch.Kind> VGROUND_SEARCH = Property.forEnum("vground_search", SafePosSearch.Kind.class,
+            SafePosSearch.Kind.CEILING);
     private static final BoolProperty HGROUND_SEARCH = new BoolProperty("hground_search", true);
 
     protected final Value<State> state = STATE.create(this);
@@ -64,7 +65,7 @@ public abstract class TravelHandlerBase extends KeyedTardisComponent implements 
     protected final IntValue speed = SPEED.create(this);
     protected final IntValue maxSpeed = MAX_SPEED.create(this);
 
-    protected final Value<GroundSearch> vGroundSearch = VGROUND_SEARCH.create(this);
+    protected final Value<SafePosSearch.Kind> vGroundSearch = VGROUND_SEARCH.create(this);
     protected final BoolValue hGroundSearch = HGROUND_SEARCH.create(this);
 
     @Exclude(strategy = Exclude.Strategy.NETWORK)
@@ -234,7 +235,7 @@ public abstract class TravelHandlerBase extends KeyedTardisComponent implements 
         return hGroundSearch;
     }
 
-    public Value<GroundSearch> verticalSearch() {
+    public Value<SafePosSearch.Kind> verticalSearch() {
         return vGroundSearch;
     }
 
@@ -295,39 +296,5 @@ public abstract class TravelHandlerBase extends KeyedTardisComponent implements 
         public int index() {
             return ordinal();
         }
-    }
-
-    public enum GroundSearch implements StringIdentifiable {
-        NONE {
-            @Override
-            public GroundSearch next() {
-                return FLOOR;
-            }
-        },
-        FLOOR {
-            @Override
-            public GroundSearch next() {
-                return CEILING;
-            }
-        },
-        CEILING {
-            @Override
-            public GroundSearch next() {
-                return MEDIAN;
-            }
-        },
-        MEDIAN {
-            @Override
-            public GroundSearch next() {
-                return NONE;
-            }
-        };
-
-        @Override
-        public String asString() {
-            return toString();
-        }
-
-        public abstract GroundSearch next();
     }
 }

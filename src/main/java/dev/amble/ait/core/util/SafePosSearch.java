@@ -4,6 +4,7 @@ import dev.amble.lib.data.CachedDirectedGlobalPos;
 import dev.drtheo.queue.api.ActionQueue;
 import dev.drtheo.queue.api.util.Value;
 import dev.drtheo.scheduler.api.TimeUnit;
+import net.minecraft.util.StringIdentifiable;
 import org.jetbrains.annotations.Nullable;
 
 import net.minecraft.block.BlockState;
@@ -14,15 +15,37 @@ import net.minecraft.world.Heightmap;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 
-import dev.amble.ait.core.tardis.handler.travel.TravelHandlerBase;
+import java.util.function.Consumer;
 
 public class SafePosSearch {
 
     private static final int SAFE_RADIUS = 3;
 
-    @Nullable public static ActionQueue findSafe(CachedDirectedGlobalPos globalPos,
-                                       TravelHandlerBase.GroundSearch vSearch,
-                                       boolean hSearch, Value<BlockPos> ref) {
+    public static void wrapSafe(CachedDirectedGlobalPos globalPos, Kind vSearch,
+                                boolean hSearch, Consumer<CachedDirectedGlobalPos> posConsumer) {
+        Value<BlockPos> ref = new Value<>(null);
+        ActionQueue queue = findSafe(globalPos, vSearch, hSearch, ref);
+
+        if (queue != null) {
+            queue.thenRun(() -> {
+                CachedDirectedGlobalPos resultPos = globalPos;
+
+                if (ref.value != null)
+                    resultPos = resultPos.pos(ref.value);
+
+                posConsumer.accept(resultPos);
+            }).execute();
+        } else {
+            posConsumer.accept(globalPos);
+        }
+    }
+
+    /**
+     * @return {@literal null} when the position is already safe, {@link ActionQueue} otherwise.
+     */
+    @Nullable
+    public static ActionQueue findSafe(CachedDirectedGlobalPos globalPos,
+                                       Kind vSearch, boolean hSearch, Value<BlockPos> ref) {
         ServerWorld world = globalPos.getWorld();
         BlockPos pos = globalPos.getPos();
 
@@ -297,5 +320,39 @@ public class SafePosSearch {
         SUCCESS_B,
         FAIL,
         CONTINUE
+    }
+
+    public enum Kind implements StringIdentifiable {
+        NONE {
+            @Override
+            public Kind next() {
+                return FLOOR;
+            }
+        },
+        FLOOR {
+            @Override
+            public Kind next() {
+                return CEILING;
+            }
+        },
+        CEILING {
+            @Override
+            public Kind next() {
+                return MEDIAN;
+            }
+        },
+        MEDIAN {
+            @Override
+            public Kind next() {
+                return NONE;
+            }
+        };
+
+        @Override
+        public String asString() {
+            return toString();
+        }
+
+        public abstract Kind next();
     }
 }

@@ -7,6 +7,7 @@ import java.util.function.Consumer;
 
 import com.mojang.datafixers.util.Pair;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
+import net.minecraft.util.Util;
 import org.jetbrains.annotations.NotNull;
 
 import net.minecraft.registry.entry.RegistryEntry;
@@ -44,7 +45,7 @@ public class AsyncLocatorUtil {
             return;
         }
 
-        LOCATING_EXECUTOR_SERVICE = Executors.newFixedThreadPool(threads, new ThreadFactory() {
+        LOCATING_EXECUTOR_SERVICE = Executors.newCachedThreadPool(new ThreadFactory() {
             private static final AtomicInteger poolNum = new AtomicInteger(1);
             private final AtomicInteger threadNum = new AtomicInteger(1);
             private final String namePrefix = AITMod.MOD_ID + "-" + poolNum.getAndIncrement() + "-thread-";

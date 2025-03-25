@@ -208,14 +208,7 @@ public final class TravelHandler extends AnimatedTravelHandler implements Crasha
 
     private void runAnimations(ExteriorBlockEntity exterior) {
         State state = this.getState();
-        ExteriorAnimation animation = exterior.getAnimation();
-
-        if (animation == null) {
-            AITMod.LOGGER.info("Null animation for exterior at {}", exterior.getPos());
-            return;
-        }
-
-        animation.setupAnimation(state);
+        exterior.getAnimations().onStateChange(state);
     }
 
     public void runAnimations() {

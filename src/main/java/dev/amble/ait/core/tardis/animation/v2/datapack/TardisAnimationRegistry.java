@@ -3,7 +3,7 @@ package dev.amble.ait.core.tardis.animation.v2.datapack;
 import dev.amble.ait.AITMod;
 import dev.amble.ait.core.tardis.animation.v2.TardisAnimation;
 import dev.amble.lib.register.datapack.SimpleDatapackRegistry;
-import org.apache.commons.lang3.NotImplementedException;
+import net.minecraft.util.Identifier;
 
 public class TardisAnimationRegistry extends SimpleDatapackRegistry<TardisAnimation> {
 	private static TardisAnimationRegistry INSTANCE;
@@ -25,8 +25,18 @@ public class TardisAnimationRegistry extends SimpleDatapackRegistry<TardisAnimat
 
 	}
 
+	public TardisAnimation instantiate(Identifier id) {
+		return this.getOrFallback(id).instantiate();
+	}
+
 	@Override
 	public TardisAnimation fallback() {
-		throw new NotImplementedException("No fallback animation for the registry.");
+		TardisAnimation fallback = this.get(AITMod.id("classic_demat"));
+
+		if (fallback == null) {
+			throw new IllegalStateException("Classic Demat Animation is null! No fallback.");
+		}
+
+		return fallback;
 	}
 }

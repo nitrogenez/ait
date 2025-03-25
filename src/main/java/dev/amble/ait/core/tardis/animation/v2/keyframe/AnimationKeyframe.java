@@ -14,7 +14,7 @@ import net.minecraft.util.math.MathHelper;
 public class AnimationKeyframe implements TardisTickable, Disposable {
 	public static final Codec<AnimationKeyframe> CODEC = RecordCodecBuilder.create(instance -> instance
 			.group(Codecs.NONNEGATIVE_INT.fieldOf("duration").forGetter(AnimationKeyframe::getDuration),
-				Codecs.POSITIVE_FLOAT.fieldOf("alpha").forGetter(AnimationKeyframe::getTargetAlpha)
+				Codec.FLOAT.fieldOf("alpha").forGetter(AnimationKeyframe::getTargetAlpha)
 			).apply(instance, AnimationKeyframe::new)
 	);
 
@@ -31,6 +31,10 @@ public class AnimationKeyframe implements TardisTickable, Disposable {
 	 * @param sAlpha The starting alpha value of the keyframe.
 	 */
 	public AnimationKeyframe(int duration, float alpha, float sAlpha) {
+		if (duration < 0 || alpha < 0 || sAlpha < 0 || sAlpha > 1) {
+			throw new IllegalArgumentException("Invalid keyframe parameters: " + duration + ", " + alpha + ", " + sAlpha);
+		}
+
 		this.duration = duration;
 		this.targetAlpha = alpha;
 		this.startingAlpha = sAlpha;
@@ -70,6 +74,10 @@ public class AnimationKeyframe implements TardisTickable, Disposable {
 		this.ticks = this.duration;
 	}
 
+	public int ticks() {
+		return this.ticks;
+	}
+
 	public float getAlpha() {
 		return this.calculateAlpha();
 	}
@@ -89,5 +97,9 @@ public class AnimationKeyframe implements TardisTickable, Disposable {
 		float progress = (float) this.ticks / this.duration;
 
 		return MathHelper.catmullRom(progress, this.startingAlpha, 0, this.targetAlpha, this.targetAlpha);
+	}
+
+	public AnimationKeyframe instantiate() {
+		return new AnimationKeyframe(this.duration, this.targetAlpha);
 	}
 }

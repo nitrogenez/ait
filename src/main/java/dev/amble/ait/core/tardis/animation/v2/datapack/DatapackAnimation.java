@@ -8,7 +8,6 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import dev.amble.ait.AITMod;
 import dev.amble.ait.core.tardis.animation.v2.TardisAnimation;
 import dev.amble.ait.core.tardis.animation.v2.keyframe.KeyframeTracker;
-import dev.amble.ait.data.datapack.DatapackCategory;
 import net.minecraft.util.Identifier;
 
 import java.io.InputStream;
@@ -24,6 +23,11 @@ public class DatapackAnimation extends TardisAnimation {
 
 	protected DatapackAnimation(Identifier id, KeyframeTracker tracker) {
 		super(id, tracker);
+	}
+
+	@Override
+	public DatapackAnimation instantiate() {
+		return new DatapackAnimation(this.id(), this.tracker.instantiate());
 	}
 
 	public static DatapackAnimation fromInputStream(InputStream stream) {

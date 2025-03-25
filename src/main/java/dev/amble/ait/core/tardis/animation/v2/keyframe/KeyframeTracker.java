@@ -31,6 +31,7 @@ public class KeyframeTracker extends ArrayList<AnimationKeyframe> implements Tar
 
 	protected final Identifier soundId;
 	protected int current; // The current keyframe we are on.
+	private int duration;
 
 	/**
 	 * A collection of keyframes that can be tracked.
@@ -44,6 +45,7 @@ public class KeyframeTracker extends ArrayList<AnimationKeyframe> implements Tar
 		this.current = 0;
 
 		this.addAll(frames);
+		this.duration = -1;
 	}
 
 	/**
@@ -78,7 +80,7 @@ public class KeyframeTracker extends ArrayList<AnimationKeyframe> implements Tar
 
 		current.tickCommon(isClient);
 
-		if (current.isDone()) {
+		if (current.isDone() && !this.isDone()) {
 			this.current++; // current is now previous
 
 			this.getCurrent().setStartingAlpha(current.getAlpha());
@@ -108,10 +110,12 @@ public class KeyframeTracker extends ArrayList<AnimationKeyframe> implements Tar
 		return this;
 	}
 
-	public void start(@Nullable CachedDirectedGlobalPos source) {
+	public void start(@Nullable CachedDirectedGlobalPos source, float alpha) {
 		this.dispose();
 
-		if (source == null) return;
+		this.getCurrent().setStartingAlpha(alpha);
+
+		if (source == null || source.getWorld() == null) return;
 
 		// Play sound at source
 		source.getWorld().playSound(null, source.getPos(), this.getSound(), SoundCategory.BLOCKS, 1.0f, 1.0f);
@@ -119,6 +123,24 @@ public class KeyframeTracker extends ArrayList<AnimationKeyframe> implements Tar
 
 	public boolean isDone() {
 		return this.getCurrent().isDone() && this.current == (this.size() - 1);
+	}
+
+	public int duration() {
+		if (this.duration == -1) {
+			return this.calculateDuration();
+		}
+
+		return this.duration;
+	}
+	private int calculateDuration() {
+		int total = 0;
+
+		for (AnimationKeyframe keyframe : this) {
+			total += keyframe.duration;
+		}
+
+		this.duration = total;
+		return total;
 	}
 
 	@Override
@@ -137,5 +159,15 @@ public class KeyframeTracker extends ArrayList<AnimationKeyframe> implements Tar
 		// dispose all keyframes
 		this.forEach(AnimationKeyframe::dispose);
 		this.current = 0;
+	}
+
+	public KeyframeTracker instantiate() {
+		Collection<AnimationKeyframe> frames = new ArrayList<>();
+
+		for (AnimationKeyframe keyframe : this) {
+			frames.add(keyframe.instantiate());
+		}
+
+		return new KeyframeTracker(this.soundId, frames);
 	}
 }

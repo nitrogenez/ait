@@ -6,6 +6,7 @@ import java.util.function.Consumer;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
 import com.google.gson.GsonBuilder;
+import dev.amble.ait.data.TardisMap;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.networking.v1.ClientLoginConnectionEvents;
@@ -32,6 +33,7 @@ public class ClientTardisManager extends TardisManager<ClientTardis, MinecraftCl
 
     private static ClientTardisManager instance;
 
+    private final TardisMap.Direct<ClientTardis> lookup = new TardisMap.Direct<>();
     private final Multimap<UUID, Consumer<ClientTardis>> subscribers = ArrayListMultimap.create();
 
     public static void init() {
@@ -72,21 +74,14 @@ public class ClientTardisManager extends TardisManager<ClientTardis, MinecraftCl
     }
 
     @Override
-    @Deprecated
+    @Deprecated(forRemoval = true)
     public void loadTardis(MinecraftClient client, UUID uuid, @Nullable Consumer<ClientTardis> consumer) {
-        if (client.player == null)
-            return;
+        // do nothing
+    }
 
-        if (uuid == null)
-            return;
-
-        PacketByteBuf data = PacketByteBufs.create();
-        data.writeUuid(uuid);
-
-        if (consumer != null)
-            this.subscribers.put(uuid, consumer);
-
-        MinecraftClient.getInstance().executeTask(() -> ClientPlayNetworking.send(ASK, data));
+    @Override
+    protected TardisMap.Direct<ClientTardis> lookup() {
+        return lookup;
     }
 
     @Override
@@ -166,11 +161,29 @@ public class ClientTardisManager extends TardisManager<ClientTardis, MinecraftCl
     }
 
     @Override
+    public void getTardis(MinecraftClient client, UUID uuid, Consumer<ClientTardis> consumer) {
+        if (uuid == null)
+            return; // ugh
+
+        ClientTardis result = this.lookup().get(uuid);
+
+        if (result == null)
+            return;
+
+        consumer.accept(result);
+    }
+
+    @Override
     public void reset() {
         this.subscribers.clear();
 
         this.forEach(ClientTardis::dispose);
         super.reset();
+    }
+
+    @Override
+    public void forEach(Consumer<ClientTardis> consumer) {
+        this.lookup.forEach((uuid, tardis) -> consumer.accept(tardis));
     }
 
     public static ClientTardisManager getInstance() {

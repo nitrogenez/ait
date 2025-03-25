@@ -1,11 +1,5 @@
-Last update: #1172
-
-- add: `TRAVEL_BLACKLIST` config option to blacklist worlds from travel. (#1153)
-- fix: Rematerialization is no longer as heavy on performance as it was before (#1149)
-- fix: use filtered world list in environment projector (#1134)
-- refactor: remove unused parameters from environment projector block entity (#1134)
-- fix: ignore tardis dimensions when generating world cache (#1133)
-- add: Added Glass Blocks to be shattered (#1079)
-- add: Added Entity Health Scanning (#1079)
-- add: Added Block Tool Requirement Scanning (#1079)
-- feat: AIT discs spawn in AIT structures (#1172)
+- perf: siege mode is no longer as performance heavy as it was (#1281)
+- fix: the painting no longer move up by one block (#1280)
+- fix: provide a fallback sound for hammer hanger control (#1279)
+- fix: disable autopilot after growth land (#1278)
+- fix: dont ignore isomophic level setting (#127

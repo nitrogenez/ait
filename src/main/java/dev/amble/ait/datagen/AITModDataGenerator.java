@@ -30,6 +30,7 @@ import dev.amble.ait.core.AITBlocks;
 import dev.amble.ait.core.AITEntityTypes;
 import dev.amble.ait.core.AITItemGroups;
 import dev.amble.ait.core.AITItems;
+import dev.amble.ait.core.engine.SubSystem;
 import dev.amble.ait.datagen.datagen_providers.*;
 import dev.amble.ait.datagen.datagen_providers.loot.AITBlockLootTables;
 import dev.amble.ait.module.ModuleRegistry;
@@ -744,8 +745,8 @@ public class AITModDataGenerator implements DataGeneratorEntrypoint {
         provider.addTranslation("control.ait.eject_waypoint", "Eject Waypoint");
         provider.addTranslation("control.ait.goto_waypoint", "Goto Waypoint");
         provider.addTranslation("control.ait.console_port", "Console Port");
-        provider.addTranslation("control.ait.mark_waypoint", "Mark Waypoint");
-        provider.addTranslation("control.ait.set_waypoint", "Set Waypoint");
+        provider.addTranslation("control.ait.mark_waypoint", "Save Waypoint");
+        provider.addTranslation("control.ait.set_waypoint", "Load Waypoint");
         provider.addTranslation("control.ait.increment", "Increment");
         provider.addTranslation("control.ait.x", "X");
         provider.addTranslation("control.ait.y", "Y");
@@ -1063,6 +1064,8 @@ public class AITModDataGenerator implements DataGeneratorEntrypoint {
         provider.addTranslation("message.ait.cage.void_hint", "(Throw this into the END void)");
         provider.addTranslation("message.ait.cage.empty", "(Place this in a rift chunk)");
         provider.addTranslation("tardis.message.engine.system_is_weakened", "This System Is Showing Signs Of Weakness, But Is Still Functional!");
+        provider.addTranslation("tardis.message.subsystem.requires_link", "LINK TO ENGINE VIA FLUID LINKS");
+        provider.addTranslation("tardis.message.engine.no_space", "Engine requires a 3x3 space to function!");
 
         // Achievements
         provider.addTranslation("achievement.ait.title.root", "Adventures in Time");
@@ -1402,6 +1405,17 @@ public class AITModDataGenerator implements DataGeneratorEntrypoint {
         provider.addTranslation("effect.ait.zeiton_high", "Zeiton High");
         provider.addTranslation("effect.ait.lunar_regolith", "Lunar Regolith Poisoned");
         provider.addTranslation("effect.ait.oxygenated", "Oxygenator Field");
+
+        // subsystems
+        provider.addTranslation(SubSystem.Id.DEMAT.toTranslationKey(), "Dematerialization Circuit");
+        provider.addTranslation(SubSystem.Id.CHAMELEON.toTranslationKey(), "Chameleon Circuit");
+        provider.addTranslation(SubSystem.Id.SHIELDS.toTranslationKey(), "Shield System");
+        provider.addTranslation(SubSystem.Id.DESPERATION.toTranslationKey(), "Desperation");
+        provider.addTranslation(SubSystem.Id.GRAVITATIONAL.toTranslationKey(), "Gravitational Modulator");
+        provider.addTranslation(SubSystem.Id.LIFE_SUPPORT.toTranslationKey(), "Life Support");
+        provider.addTranslation(SubSystem.Id.ENGINE.toTranslationKey(), "Engine");
+        provider.addTranslation(SubSystem.Id.STABILISERS.toTranslationKey(), "Blue Stabilisers");
+        provider.addTranslation(SubSystem.Id.EMERGENCY_POWER.toTranslationKey(), "Emergency Backup Power");
 
         return provider;
     }

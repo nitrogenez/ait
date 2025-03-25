@@ -43,7 +43,6 @@ public class GenericStructureSystemBlockEntity extends StructureSystemBlockEntit
 
     @Override
     public ActionResult useOn(BlockState state, World world, boolean sneaking, PlayerEntity player, ItemStack hand) {
-
         if (hand.isEmpty()) {
             if (this.system() != null && this.idSource != null) {
                 if (this.system() instanceof DurableSubSystem durable && (durable.isBroken() || durable.durability() < 1250)) {
@@ -62,8 +61,8 @@ public class GenericStructureSystemBlockEntity extends StructureSystemBlockEntit
             }
         }
 
-        if ((world.isClient())) return ActionResult.SUCCESS;
-
+        if (world.isClient())
+            return ActionResult.SUCCESS;
 
         if (hand.getItem() instanceof SubSystemItem link) {
             if (this.system() != null && this.idSource != null) {
@@ -87,16 +86,19 @@ public class GenericStructureSystemBlockEntity extends StructureSystemBlockEntit
         this.id = id;
         this.onChangeId();
     }
+
     protected StructureHolder getHolder() {
         if (!(this.system() instanceof StructureHolder holder)) return null;
 
         return holder;
     }
+
     protected void onChangeId() {
         this.processStructure();
         this.markDirty();
         this.sync();
     }
+
     public boolean hasSystem() {
         return this.id() != null;
     }
@@ -108,6 +110,7 @@ public class GenericStructureSystemBlockEntity extends StructureSystemBlockEntit
 
         return holder.getStructure();
     }
+
     @Override
     public boolean isStructureComplete(World world, BlockPos pos) {
         if (this.getStructure() == null) return false;
@@ -121,6 +124,7 @@ public class GenericStructureSystemBlockEntity extends StructureSystemBlockEntit
 
         return super.shouldRefresh(world, pos);
     }
+
     @Override
     public void onLoseFluid() {
         if (this.system() == null) return;

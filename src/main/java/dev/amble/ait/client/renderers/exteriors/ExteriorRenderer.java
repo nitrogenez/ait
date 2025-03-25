@@ -81,23 +81,8 @@ public class ExteriorRenderer<T extends ExteriorBlockEntity> implements BlockEnt
         final float alpha = entity.getAlpha();
         RenderSystem.enableCull();
         RenderSystem.enableBlend();
+        RenderSystem.enableDepthTest();
         RenderSystem.defaultBlendFunc();
-        if (tardis.areVisualShieldsActive()) {
-            profiler.push("shields");
-
-            float delta = (tickDelta + MinecraftClient.getInstance().player.age) * 0.03f;
-            VertexConsumer vertexConsumer = vertexConsumers
-                    .getBuffer(RenderLayer.getEnergySwirl(SHIELDS, delta % 1.0F, (delta * 0.1F) % 1.0F));
-
-            matrices.push();
-            matrices.translate(0.5F, 0.0F, 0.5F);
-
-            SHIELDS_MODEL.render(matrices, vertexConsumer, LightmapTextureManager.MAX_LIGHT_COORDINATE, OverlayTexture.DEFAULT_UV, 0f,
-                    0.25f, 0.5f, alpha);
-
-            matrices.pop();
-            profiler.pop();
-        }
         RenderSystem.disableBlend();
         RenderSystem.enableCull();
 
@@ -251,6 +236,23 @@ public class ExteriorRenderer<T extends ExteriorBlockEntity> implements BlockEnt
         profiler.pop();
         matrices.pop();
 
+        if (tardis.areVisualShieldsActive()) {
+            profiler.push("shields");
+
+            float delta = (tickDelta + MinecraftClient.getInstance().player.age) * 0.03f;
+            VertexConsumer vertexConsumer = vertexConsumers
+                    .getBuffer(RenderLayer.getEnergySwirl(SHIELDS, delta % 1.0F, (delta * 0.1F) % 1.0F));
+
+            matrices.push();
+            matrices.translate(0.5F, 0.0F, 0.5F);
+
+            SHIELDS_MODEL.render(matrices, vertexConsumer, LightmapTextureManager.MAX_LIGHT_COORDINATE, OverlayTexture.DEFAULT_UV, 0f,
+                    0.25f, 0.5f, alpha);
+
+            matrices.pop();
+            profiler.pop();
+        }
+
         profiler.push("sonic");
         ItemStack stack = tardis.sonic().getExteriorSonic();
 
@@ -275,6 +277,8 @@ public class ExteriorRenderer<T extends ExteriorBlockEntity> implements BlockEnt
 
         matrices.pop();
         profiler.pop();
+
+
     }
 
     private void updateModel(Tardis tardis) {
@@ -291,17 +295,9 @@ public class ExteriorRenderer<T extends ExteriorBlockEntity> implements BlockEnt
     private void applyNameTransforms(Tardis tardis, MatrixStack matrices, String name) {
         if (name.equalsIgnoreCase("grumm") || name.equalsIgnoreCase("dinnerbone")) {
             matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees(-90f));
-            matrices.translate(0, tardis.stats().getYScale() + 0.25f, -0.7f);
-        }else if (name.equalsIgnoreCase("smallboi")) {
-            matrices.scale(tardis.stats().getXScale() - 0.3f, tardis.stats().getYScale() - 0.3f, tardis.stats().getZScale() - 0.3f);
-        }else if (name.equalsIgnoreCase("toy")) {
-            matrices.scale(tardis.stats().getXScale() - 0.7f, tardis.stats().getYScale() - 0.7f, tardis.stats().getZScale() - 0.7f);
-        }else if (name.equalsIgnoreCase("bigboi")) {
-            matrices.scale(tardis.stats().getXScale() + 0.1f, tardis.stats().getYScale() + 0.1f, tardis.stats().getZScale() + 0.1f);
-        }else if (name.equalsIgnoreCase("massiveboi")) {
-            matrices.scale(tardis.stats().getXScale() + 0.2f, tardis.stats().getYScale() + 0.2f, tardis.stats().getZScale() + 0.2f);
-        }else {
-            matrices.scale(tardis.stats().getXScale(), tardis.stats().getYScale(), tardis.stats().getZScale());
+            matrices.translate(0, tardis.stats().getYScale() + 0.25f, tardis.stats().getZScale() - 1.7f);
         }
+
+        matrices.scale(tardis.stats().getXScale(), tardis.stats().getYScale(), tardis.stats().getZScale());
     }
 }

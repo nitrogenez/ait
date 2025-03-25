@@ -2,6 +2,7 @@ package dev.amble.ait.core.tardis;
 
 import java.util.*;
 
+import dev.amble.ait.core.tardis.util.TardisUtil;
 import dev.amble.lib.data.DirectedBlockPos;
 import dev.drtheo.queue.api.ActionQueue;
 import dev.drtheo.queue.api.util.block.ChunkEraser;
@@ -10,7 +11,9 @@ import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.decoration.ItemFrameEntity;
+import net.minecraft.entity.ItemEntity;
+import net.minecraft.entity.decoration.AbstractDecorationEntity;
+import net.minecraft.entity.decoration.painting.PaintingEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvent;
@@ -19,6 +22,7 @@ import net.minecraft.structure.StructurePlacementData;
 import net.minecraft.structure.StructureTemplate;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.TypeFilter;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkSectionPos;
 import net.minecraft.world.World;
@@ -32,7 +36,6 @@ import dev.amble.ait.core.blockentities.ConsoleBlockEntity;
 import dev.amble.ait.core.blockentities.ConsoleGeneratorBlockEntity;
 import dev.amble.ait.core.blockentities.DoorBlockEntity;
 import dev.amble.ait.core.tardis.manager.ServerTardisManager;
-import dev.amble.ait.core.tardis.util.TardisUtil;
 import dev.amble.ait.core.world.QueuedTardisStructureTemplate;
 import dev.amble.ait.data.Corners;
 import dev.amble.ait.data.schema.desktop.TardisDesktopSchema;
@@ -181,14 +184,14 @@ public class TardisDesktop extends TardisComponent {
     }
 
     public ActionQueue createDesktopClearQueue() {
-        ServerWorld world = this.tardis.asServer().getInteriorWorld();
+        ServerTardis tardis = this.tardis.asServer();
+        ServerWorld world = tardis.getInteriorWorld();
         int chunkRadius = ChunkSectionPos.getSectionCoord(RADIUS);
 
-        // FIXME THEO: gross
-        TardisUtil.getEntitiesInBox(ItemFrameEntity.class, world, corners.getBox(), frame -> true)
+        TardisUtil.getEntitiesInBox(AbstractDecorationEntity.class, world, corners.getBox(), frame -> true)
                 .forEach(frame -> frame.remove(Entity.RemovalReason.DISCARDED));
 
-        return new ChunkEraser.Builder().build(
+        return new ChunkEraser.Builder().withFlags(Block.FORCE_STATE).build(
                 world, -chunkRadius, -chunkRadius, chunkRadius, chunkRadius
         ).thenRun(() -> {
             this.consolePos.clear();

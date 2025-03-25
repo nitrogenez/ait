@@ -92,13 +92,10 @@ public abstract class ControlBlockEntity extends InteriorLinkableBlockEntity {
     }
 
     public boolean run(ServerPlayerEntity user, boolean isMine) {
-        if (this.getControl() == null)
+        if (this.getControl() == null || this.onDelay)
             return false;
 
         TardisRef found = this.tardis();
-
-        if (found.isEmpty())
-            return false;
 
         if (!(found.get() instanceof ServerTardis tardis))
             return false;
@@ -110,15 +107,13 @@ public abstract class ControlBlockEntity extends InteriorLinkableBlockEntity {
             this.createDelay(this.control.getDelayLength());
 
         Control.Result result = this.control.handleRun(tardis, user, user.getServerWorld(), this.pos, isMine);
-
         this.getWorld().playSound(null, pos, this.control.getSound(this.getConsoleType(), result), SoundCategory.BLOCKS, 0.7f, 1f);
 
         return result.isSuccess();
     }
 
     public boolean run(ServerPlayerEntity user, RedstoneControlBlock.Mode mode) {
-        boolean isMine = mode == RedstoneControlBlock.Mode.PUNCH;
-        return this.run(user, isMine);
+        return this.run(user, mode == RedstoneControlBlock.Mode.PUNCH);
     }
 
     public void createDelay(long ticks) {

@@ -9,12 +9,14 @@ import dev.amble.ait.client.tardis.ClientTardis;
 import dev.amble.ait.core.tardis.animation.v2.AnimationHolder;
 import dev.amble.ait.core.tardis.animation.v2.TardisAnimation;
 import dev.amble.ait.core.tardis.animation.v2.datapack.TardisAnimationRegistry;
+import dev.amble.lib.data.CachedDirectedGlobalPos;
 import dev.drtheo.scheduler.api.Scheduler;
 import dev.drtheo.scheduler.api.TimeUnit;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 
 import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
 import net.minecraft.block.entity.BlockEntityTicker;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.Entity;
@@ -25,6 +27,7 @@ import net.minecraft.item.BrushItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.particle.BlockStateParticleEffect;
 import net.minecraft.particle.ParticleTypes;
+import net.minecraft.registry.RegistryKey;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
@@ -63,9 +66,7 @@ import dev.amble.ait.data.schema.exterior.ExteriorVariantSchema;
 public class ExteriorBlockEntity extends AbstractLinkableBlockEntity implements BlockEntityTicker<ExteriorBlockEntity> {
     private AnimationHolder animations; // todo replace \/ that one
     private ExteriorAnimation animation;
-    private ExteriorVariantSchema variant;
     private UUID seatEntityUUID = null;
-    public long lastRequestTime = 0;
 
     public ExteriorBlockEntity(BlockPos pos, BlockState state) {
         super(AITBlockEntityTypes.EXTERIOR_BLOCK_ENTITY_TYPE, pos, state);
@@ -79,6 +80,8 @@ public class ExteriorBlockEntity extends AbstractLinkableBlockEntity implements 
     public void useOn(ServerWorld world, boolean sneaking, PlayerEntity player) {
         if (this.tardis().isEmpty() || player == null)
             return;
+
+        if (!this.validateExteriorPosition()) return;
 
         ServerTardis tardis = (ServerTardis) this.tardis().get();
         ItemStack hand = player.getMainHandStack();
@@ -183,14 +186,35 @@ public class ExteriorBlockEntity extends AbstractLinkableBlockEntity implements 
         if (!tardis.travel().isLanded())
             return;
 
-
-        /*if (tardis.stats().getTargetWorld() != null &&
-                !tardis.stats().getTargetWorld().equals
-                        (tardis.asServer().getInteriorWorld().getRegistryKey()))
-            tardis.stats().setTargetWorld(this,
-                tardis.asServer().getInteriorWorld().getRegistryKey(), tardis.getDesktop().getDoorPos().getPos(), true);*/
-
         tardis.door().interact((ServerWorld) this.getWorld(), this.getPos(), (ServerPlayerEntity) player);
+    }
+
+    /**
+     * Validates the exterior position of the TARDIS
+     * Will delete this block if the exterior is not valid
+     * @return true if the exterior is valid
+     */
+    @Deprecated(since = "1.3.0")
+    public boolean validateExteriorPosition() {
+        if (!this.isLinked())
+            return true;
+
+        ServerTardis tardis = this.tardis().get().asServer();
+
+        CachedDirectedGlobalPos expectedPos = tardis.travel().position();
+        BlockPos expectedBlockPos = expectedPos.getPos();
+
+        ServerWorld extWorld = (ServerWorld) this.getWorld();
+        BlockPos extPos = this.getPos();
+
+        if (extPos.equals(expectedBlockPos) && expectedPos.getWorld() == extWorld)
+            return true;
+
+        AITMod.LOGGER.warn("Invalid exterior at {} {}, expected {} {} for TARDIS {}. Removing..",
+                extWorld.getRegistryKey(), extPos, expectedPos.getDimension(), expectedBlockPos, tardis.getUuid());
+
+        extWorld.setBlockState(extPos, Blocks.AIR.getDefaultState());
+        return true;
     }
 
     public void sitOn(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
@@ -252,6 +276,8 @@ public class ExteriorBlockEntity extends AbstractLinkableBlockEntity implements 
     }
 
     public void onEntityCollision(Entity entity) {
+        if (!this.validateExteriorPosition()) return;
+
         TardisRef ref = this.tardis();
 
         if (ref == null)

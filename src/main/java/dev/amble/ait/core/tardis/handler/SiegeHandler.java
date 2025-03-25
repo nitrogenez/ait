@@ -30,8 +30,6 @@ import dev.amble.ait.data.properties.Property;
 import dev.amble.ait.data.properties.Value;
 import dev.amble.ait.data.properties.bool.BoolProperty;
 import dev.amble.ait.data.properties.bool.BoolValue;
-import dev.amble.ait.data.properties.integer.IntProperty;
-import dev.amble.ait.data.properties.integer.IntValue;
 
 public class SiegeHandler extends KeyedTardisComponent implements TardisTickable {
 
@@ -47,13 +45,13 @@ public class SiegeHandler extends KeyedTardisComponent implements TardisTickable
     private static final Property<UUID> HELD_KEY = new Property<>(Property.Type.UUID, "siege_held_uuid", new UUID(0, 0));
     private static final Property<Identifier> TEXTURE = new Property<>(Property.Type.IDENTIFIER, "texture", DEFAULT_TEXTURRE);
 
-    private static final IntProperty SIEGE_TIME = new IntProperty("siege_time", 0);
     private static final BoolProperty ACTIVE = new BoolProperty("siege_mode", false);
 
     private final Value<UUID> heldKey = HELD_KEY.create(this);
-    private final IntValue siegeTime = SIEGE_TIME.create(this);
     private final BoolValue active = ACTIVE.create(this);
     private final Value<Identifier> texture = TEXTURE.create(this);
+
+    private int siegeTime;
 
     public SiegeHandler() {
         super(Id.SIEGE);
@@ -87,7 +85,6 @@ public class SiegeHandler extends KeyedTardisComponent implements TardisTickable
     @Override
     public void onLoaded() {
         active.of(this, ACTIVE);
-        siegeTime.of(this, SIEGE_TIME);
         heldKey.of(this, HELD_KEY);
         texture.of(this, TEXTURE);
     }
@@ -108,16 +105,13 @@ public class SiegeHandler extends KeyedTardisComponent implements TardisTickable
     }
 
     public void setSiegeBeingHeld(UUID playerId) {
-        if (playerId != null)
+        if (playerId != null) {
             this.tardis.door().closeDoors();
             this.tardis.door().setLocked(true);
             this.tardis.alarm().enabled().set(true);
+        }
 
         this.heldKey.set(playerId);
-    }
-
-    public int getTimeInSiegeMode() {
-        return this.siegeTime.get();
     }
 
     public void setActive(boolean siege) {
@@ -130,6 +124,8 @@ public class SiegeHandler extends KeyedTardisComponent implements TardisTickable
             sound = AITSounds.SIEGE_ENABLE;
             this.tardis.door().closeDoors();
             this.tardis.door().setLocked(true);
+            this.tardis.door().setDeadlocked(true);
+
             this.tardis.fuel().disablePower();
 
             TardisUtil.giveEffectToInteriorPlayers(this.tardis.asServer(),
@@ -138,10 +134,13 @@ public class SiegeHandler extends KeyedTardisComponent implements TardisTickable
             sound = AITSounds.SIEGE_DISABLE;
             this.tardis.door().setDeadlocked(false);
             this.tardis.door().setLocked(false);
+
             this.tardis.alarm().enabled().set(false);
 
             if (this.tardis.getExterior().findExteriorBlock().isEmpty())
                 this.tardis.travel().placeExterior(false);
+
+            this.siegeTime = 0;
         }
 
         for (BlockPos console : this.tardis.getDesktop().getConsolePos()) {
@@ -149,10 +148,7 @@ public class SiegeHandler extends KeyedTardisComponent implements TardisTickable
         }
 
         this.tardis.removeFuel(0.01 * FuelHandler.TARDIS_MAX_FUEL * this.tardis.travel().instability());
-        this.tardis().door().closeDoors();
-        this.tardis.door().setLocked(true);
         this.active.set(siege);
-
     }
 
     @Override
@@ -160,30 +156,23 @@ public class SiegeHandler extends KeyedTardisComponent implements TardisTickable
         if (!this.active.get())
             return;
 
-        this.siegeTime.flatMap(i -> this.active.get() ? i + 1 : 0);
+        this.siegeTime += 1;
 
-        if (server.getTicks() % 20 != 0)
+        if (server.getTicks() % 10 == 0)
             return;
 
-        boolean isHeld = this.isSiegeBeingHeld();
-        this.tardis.door().setDeadlocked(true);
-
-        if (isHeld && this.tardis.getExterior().findExteriorBlock().isPresent())
-            this.setSiegeBeingHeld(null);
-        this.tardis.door().closeDoors();
-        this.tardis.door().locked();
-        boolean freeze = !isHeld && this.getTimeInSiegeMode() > 60 * 20 && !this.tardis.subsystems().lifeSupport().isEnabled();
+        boolean freeze = this.siegeTime > 60 * 20 && !this.isSiegeBeingHeld()
+                && !this.tardis.subsystems().lifeSupport().isEnabled();
 
         for (ServerPlayerEntity player : TardisUtil.getPlayersInsideInterior(this.tardis.asServer())) {
-            if (!player.isAlive())
+            if (!player.isAlive() || !player.canFreeze())
                 continue;
 
-            if (!freeze || player.canFreeze()) {
+            if (freeze) {
+                this.freeze(player);
+            } else {
                 this.unfreeze(player);
-                continue;
             }
-
-            this.freeze(player);
         }
     }
 

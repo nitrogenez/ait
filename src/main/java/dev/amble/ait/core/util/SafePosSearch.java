@@ -1,28 +1,28 @@
 package dev.amble.ait.core.util;
 
-import dev.amble.ait.core.tardis.handler.travel.TravelHandlerBase;
 import dev.amble.lib.data.CachedDirectedGlobalPos;
 import dev.drtheo.queue.api.ActionQueue;
 import dev.drtheo.queue.api.util.Value;
 import dev.drtheo.scheduler.api.TimeUnit;
+import org.jetbrains.annotations.Nullable;
+
 import net.minecraft.block.BlockState;
 import net.minecraft.server.world.ServerWorld;
-import net.minecraft.util.Pair;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.Heightmap;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
-import org.jetbrains.annotations.Nullable;
+
+import dev.amble.ait.core.tardis.handler.travel.TravelHandlerBase;
 
 public class SafePosSearch {
 
     private static final int SAFE_RADIUS = 3;
 
-    @Nullable
-    public static Pair<ActionQueue, Value<BlockPos>> findSafe(CachedDirectedGlobalPos globalPos,
-                                                              TravelHandlerBase.GroundSearch vSearch,
-                                                              boolean hSearch) {
+    @Nullable public static ActionQueue findSafe(CachedDirectedGlobalPos globalPos,
+                                       TravelHandlerBase.GroundSearch vSearch,
+                                       boolean hSearch, Value<BlockPos> ref) {
         ServerWorld world = globalPos.getWorld();
         BlockPos pos = globalPos.getPos();
 
@@ -31,28 +31,28 @@ public class SafePosSearch {
         if (isSafe(chunk, pos))
             return null;
 
-        Value<BlockPos> result = new Value<>(null);
         ActionQueue queue = new ActionQueue();
 
         if (hSearch) {
-            queue = findSafeXZ(queue, result, world, pos, SAFE_RADIUS).thenRun(() -> {
-                if (result.value != null)
-                    globalPos.pos(result.value);
+            queue = findSafeXZ(queue, ref, world, pos, SAFE_RADIUS).thenRun(() -> {
+                if (ref.value != null)
+                    globalPos.pos(ref.value);
             });
         }
 
-        queue = switch (vSearch) {
-            case CEILING -> findSafeCeiling(queue, result, world, pos);
-            case FLOOR -> findSafeFloor(queue, result, world, pos);
-            case MEDIAN -> findSafeMedian(queue, result, world, pos);
+        return switch (vSearch) {
+            case CEILING -> findSafeCeiling(queue, ref, world, pos);
+            case FLOOR -> findSafeFloor(queue, ref, world, pos);
+            case MEDIAN -> findSafeMedian(queue, ref, world, pos);
             case NONE -> queue;
         };
-
-        return new Pair<>(queue, result);
     }
 
     private static ActionQueue findSafeCeiling(ActionQueue queue, Value<BlockPos> result, World world, BlockPos original) {
         return queue.thenRun(() -> {
+            if (result.value != null)
+                return;
+
             int y = world.getChunk(original).sampleHeightmap(Heightmap.Type.MOTION_BLOCKING_NO_LEAVES,
                     original.getX() & 15, original.getZ() & 15) + 1;
 
@@ -64,6 +64,9 @@ public class SafePosSearch {
         final SafeFloorHolder holder = new SafeFloorHolder(world, original);
 
         return queue.thenRunSteps(() -> {
+            if (result.value != null)
+                return true;
+
             Iter state = holder.checkAndAdvance();
 
             if (state == Iter.SUCCESS)
@@ -77,6 +80,9 @@ public class SafePosSearch {
         final SafeMedianHolder holder = new SafeMedianHolder(world, original);
 
         return queue.thenRunSteps(() -> {
+            if (result.value != null)
+                return true;
+
             DoubleIter state = holder.checkAndAdvance();
 
             if (state == DoubleIter.SUCCESS_A) {

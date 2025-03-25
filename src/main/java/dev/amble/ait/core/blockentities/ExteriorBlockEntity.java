@@ -316,6 +316,14 @@ public class ExteriorBlockEntity extends AbstractLinkableBlockEntity implements 
         TravelHandlerBase travel = tardis.travel();
         TravelHandlerBase.State state = travel.getState();
 
+        if (this.tardis().get().travel().getState().animated()) {
+            if (world.isClient()) {
+                this.getAnimations().tick(MinecraftClient.getInstance());
+            } else {
+                this.getAnimations().tick(world.getServer());
+            }
+        }
+
         if (!world.isClient()) {
             if (tardis.travel().isLanded())
                 world.scheduleBlockTick(this.getPos(), AITBlocks.EXTERIOR_BLOCK, 2);
@@ -342,14 +350,6 @@ public class ExteriorBlockEntity extends AbstractLinkableBlockEntity implements 
                 double l = k == 0 ? vec.getZ() : 0.0;
                 world.addParticle(ParticleTypes.CLOUD, d, e, f, g, h, l);
                 world.addParticle(new BlockStateParticleEffect(ParticleTypes.BLOCK, world.getBlockState(pos.down())), d, e, f, g, h, l);
-            }
-        }
-
-        if (this.tardis().get().travel().getState().animated()) {
-            if (world.isClient()) {
-                this.getAnimations().tick(MinecraftClient.getInstance());
-            } else {
-                this.getAnimations().tick(world.getServer());
             }
         }
 

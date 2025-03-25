@@ -70,6 +70,8 @@ public class AnimationHolder implements TardisTickable, Disposable, Linkable {
 
 	@Override
 	public void tick(MinecraftServer server) {
+		if (this.current == null) return;
+
 		this.current.tick(server);
 	}
 
@@ -149,7 +151,7 @@ public class AnimationHolder implements TardisTickable, Disposable, Linkable {
 	}
 
 	private void sync(TravelHandlerBase.State state) {
-		if (!this.isServer || !this.isLinked()) return;
+		if (!ServerLifecycleHooks.isServer() || !this.isLinked()) return;
 
 		ServerTardis tardis = this.tardis().get().asServer();
 

@@ -1,7 +1,5 @@
 package dev.amble.ait.core.tardis.handler.travel;
 
-import java.util.concurrent.CompletableFuture;
-
 import dev.amble.lib.data.CachedDirectedGlobalPos;
 import dev.drtheo.scheduler.api.Scheduler;
 import dev.drtheo.scheduler.api.TimeUnit;
@@ -30,11 +28,10 @@ import dev.amble.ait.core.sounds.travel.TravelSound;
 import dev.amble.ait.core.tardis.animation.ExteriorAnimation;
 import dev.amble.ait.core.tardis.control.impl.DirectionControl;
 import dev.amble.ait.core.tardis.control.impl.SecurityControl;
-import dev.amble.ait.core.tardis.handler.BiomeHandler;
 import dev.amble.ait.core.tardis.handler.TardisCrashHandler;
-import dev.amble.ait.core.tardis.util.AsyncLocatorUtil;
 import dev.amble.ait.core.tardis.util.NetworkUtil;
 import dev.amble.ait.core.tardis.util.TardisUtil;
+import dev.amble.ait.core.util.SafePosSearch;
 import dev.amble.ait.core.util.WorldUtil;
 import dev.amble.ait.core.world.RiftChunkManager;
 import dev.amble.ait.data.Exclude;
@@ -192,9 +189,6 @@ public final class TravelHandler extends AnimatedTravelHandler implements Crasha
 
         if (animate)
             this.runAnimations(exterior);
-
-        BiomeHandler biome = this.tardis.handler(Id.BIOME);
-        biome.update(globalPos);
 
         if (schedule && !this.antigravs.get())
             world.scheduleBlockTick(pos, AITBlocks.EXTERIOR_BLOCK, 2);
@@ -360,35 +354,33 @@ public final class TravelHandler extends AnimatedTravelHandler implements Crasha
             return;
         }
 
-        CachedDirectedGlobalPos finalPos = result.value().orElse(initialPos);
+        final CachedDirectedGlobalPos finalPos = result.value().orElse(initialPos);
 
         this.state.set(State.MAT);
         this.waiting = true;
 
-        // TODO: mc-queue-ify this!
-        CompletableFuture<?> future = CompletableFuture.supplyAsync(() ->
-                WorldUtil.locateSafe(finalPos, this.vGroundSearch.get(), this.hGroundSearch.get())
-        ).thenAccept(pos -> {
-            this.waiting = false;
-            this.tardis.door().closeDoors();
+        SafePosSearch.wrapSafe(finalPos, this.vGroundSearch.get(),
+                this.hGroundSearch.get(), this::finishForceRemat);
+    }
 
-            SoundEvent sound = tardis.stats().getTravelEffects().get(this.getState()).sound();
+    private void finishForceRemat(CachedDirectedGlobalPos pos) {
+        this.waiting = false;
+        this.tardis.door().closeDoors();
 
-            if (this.isCrashing())
-                sound = AITSounds.EMERG_MAT;
+        SoundEvent sound = tardis.stats().getTravelEffects().get(this.getState()).sound();
 
-            this.destination(pos);
-            this.forcePosition(this.destination());
+        if (this.isCrashing())
+            sound = AITSounds.EMERG_MAT;
 
-            // Play materialize sound at the destination
-            this.position().getWorld().playSound(null, this.position().getPos(), sound, SoundCategory.BLOCKS);
+        this.destination(pos);
+        this.forcePosition(this.destination());
 
-            this.tardis.getDesktop().playSoundAtEveryConsole(sound, SoundCategory.BLOCKS, 2f, 1f);
-            //System.out.println(sound.getId());
-            this.placeExterior(true); // we schedule block update in #finishRemat
-        });
+        // Play materialize sound at the destination
+        this.position().getWorld().playSound(null, this.position().getPos(), sound, SoundCategory.BLOCKS);
 
-        AsyncLocatorUtil.LOCATING_EXECUTOR_SERVICE.submit(() -> future);
+        this.tardis.getDesktop().playSoundAtEveryConsole(sound, SoundCategory.BLOCKS, 2f, 1f);
+        //System.out.println(sound.getId());
+        this.placeExterior(true); // we schedule block update in #finishRemat
     }
 
     public void finishRemat() {

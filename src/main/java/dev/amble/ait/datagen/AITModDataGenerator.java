@@ -1115,7 +1115,8 @@ public class AITModDataGenerator implements DataGeneratorEntrypoint {
         provider.addTranslation("achievement.ait.description.engines_phase", "ENGINES PHASING! That doesn't sound good.");
         provider.addTranslation("achievement.ait.title.place_energizer", "Procrastination 3000");
         provider.addTranslation("achievement.ait.description.place_energizer", "Place a Matrix Energizer ontop of a naturaly generated Shrieker.");
-
+        provider.addTranslation("achievement." + AITMod.MOD_ID + ".title.brand_new", "Having a Coffee!");
+        provider.addTranslation("achievement." + AITMod.MOD_ID + ".description.brand_new", "OH MY GOD! IVE DONE IT AGAIN!");
 
         // Commands
         // Fuel

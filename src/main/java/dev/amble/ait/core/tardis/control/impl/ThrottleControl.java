@@ -31,40 +31,8 @@ public class ThrottleControl extends Control {
         TravelHandler travel = tardis.travel();
         TravelHandlerBase.State state = travel.getState();
 
-        if (player.getMainHandStack().isOf(AITItems.MUG)) {
-            /*
-            This is an example of how to use the travel queue.
-            This code enqueues a crash to be performed after dematerialization.
-             */
-
-            ActionQueue drinkAction = new ActionQueue();
-
-            drinkAction.thenRun(() -> {
-                travel.speed(travel.maxSpeed().get());
-                travel.crash();
-                TardisCriterions.BRAND_NEW.trigger(player);
-            });
-
-            if (state == TravelHandlerBase.State.LANDED) {
-                boolean hadAutopilot = travel.autopilot();
-
-                travel.autopilot(true);
-
-                travel.dematerialize().ifPresent(tr -> {
-                    tr.thenRun(drinkAction);
-                    tardis.alarm().enable();
-                });
-
-                travel.autopilot(hadAutopilot);
-
-                return Result.SUCCESS;
-            }
-
-            if (state == TravelHandlerBase.State.FLIGHT) {
-                drinkAction.execute();
-
-                return Result.SUCCESS;
-            }
+        if (TelepathicControl.isLiquid(player.getMainHandStack())) {
+            return TelepathicControl.spillLiquid(tardis, world, console, player);
         }
 
         if (!leftClick) {

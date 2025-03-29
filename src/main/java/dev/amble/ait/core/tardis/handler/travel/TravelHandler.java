@@ -418,7 +418,7 @@ public final class TravelHandler extends AnimatedTravelHandler implements Crasha
 
     /**
      * Returns the queue of actions to be ran when the TARDIS next reaches a specific state
-     * Please dont call "execute" or "finish" lol
+     * Please avoid calling "execute" or "finish" directly.
      * @param state the state to enqueue the action for
      * @return the action queue for the state
      */

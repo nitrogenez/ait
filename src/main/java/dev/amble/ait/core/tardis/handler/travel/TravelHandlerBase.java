@@ -146,6 +146,10 @@ public abstract class TravelHandlerBase extends KeyedTardisComponent implements 
         return state.get();
     }
 
+    protected void setState(State state) {
+        this.state.set(state);
+    }
+
     public CachedDirectedGlobalPos position() {
         return this.position.get();
     }

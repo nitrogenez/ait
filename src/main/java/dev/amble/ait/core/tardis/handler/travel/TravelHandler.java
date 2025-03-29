@@ -156,8 +156,6 @@ public final class TravelHandler extends AnimatedTravelHandler implements Crasha
     public void postInit(InitContext context) {
         if (this.isServer() && context.created())
             this.placeExterior(true);
-
-        this.state.addListener((this::executeQueue));
     }
 
     public void deleteExterior() {
@@ -294,7 +292,7 @@ public final class TravelHandler extends AnimatedTravelHandler implements Crasha
     }
 
     public ActionQueue forceDemat(TravelSound replacementSound) {
-        this.state.set(State.DEMAT);
+        this.setState(State.DEMAT);
 
         SoundEvent sound = tardis.stats().getTravelEffects().get(this.getState()).sound();
 
@@ -317,7 +315,7 @@ public final class TravelHandler extends AnimatedTravelHandler implements Crasha
     public void finishDemat() {
         this.crashing.set(false);
         this.previousPosition.set(this.position);
-        this.state.set(State.FLIGHT);
+        this.setState(State.FLIGHT);
 
         TardisEvents.ENTER_FLIGHT.invoker().onFlight(this.tardis);
         this.deleteExterior();
@@ -367,7 +365,7 @@ public final class TravelHandler extends AnimatedTravelHandler implements Crasha
 
         final CachedDirectedGlobalPos finalPos = result.value().orElse(initialPos);
 
-        this.state.set(State.MAT);
+        this.setState(State.MAT);
         this.waiting = true;
 
         SafePosSearch.wrapSafe(finalPos, this.vGroundSearch.get(),
@@ -400,7 +398,7 @@ public final class TravelHandler extends AnimatedTravelHandler implements Crasha
         if (this.autopilot() && this.speed.get() > 0)
             this.speed.set(0);
 
-        this.state.set(State.LANDED);
+        this.setState(State.LANDED);
         this.resetFlight();
 
         tardis.door().interactLock(tardis.door().previouslyLocked().get(), null, false);
@@ -427,6 +425,13 @@ public final class TravelHandler extends AnimatedTravelHandler implements Crasha
             this.travelQueue = new EnumMap<>(State.class);
 
         return this.travelQueue.computeIfAbsent(state, k -> new ActionQueue());
+    }
+
+    @Override
+    protected void setState(State state) {
+        super.setState(state);
+
+        this.executeQueue(state);
     }
 
     public void initPos(CachedDirectedGlobalPos cached) {

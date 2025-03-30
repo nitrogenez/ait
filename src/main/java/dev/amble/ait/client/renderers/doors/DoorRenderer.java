@@ -45,7 +45,8 @@ public class DoorRenderer<T extends DoorBlockEntity> implements BlockEntityRende
         profiler.push("door");
 
         ClientTardis tardis = entity.tardis().get().asClient();
-        this.renderDoor(profiler, tardis, entity, matrices, vertexConsumers, light, overlay);
+        if (!tardis.siege().isActive())
+            this.renderDoor(profiler, tardis, entity, matrices, vertexConsumers, light, overlay);
 
         profiler.pop();
     }

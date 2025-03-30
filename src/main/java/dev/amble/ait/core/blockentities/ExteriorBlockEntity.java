@@ -347,13 +347,11 @@ public class ExteriorBlockEntity extends AbstractLinkableBlockEntity implements 
         this.exteriorLightBlockState(blockState, pos, state);
     }
 
-    public void verifyAnimation() {
-        TardisRef ref = this.tardis();
+    public ExteriorAnimation getAnimation() {
+        if (!this.isLinked() || this.animation != null)
+            return this.animation;
 
-        if (this.animation != null || ref == null || ref.isEmpty())
-            return;
-
-        Tardis tardis = ref.get();
+        Tardis tardis = this.tardis().get();
 
         this.animation = tardis.getExterior().getVariant().animation(this);
         this.animation.setupAnimation(tardis.travel().getState());
@@ -361,10 +359,7 @@ public class ExteriorBlockEntity extends AbstractLinkableBlockEntity implements 
         if (this.getWorld() != null && !this.getWorld().isClient()) {
             this.animation.tellClientsToSetup(tardis.travel().getState());
         }
-    }
 
-    public ExteriorAnimation getAnimation() {
-        this.verifyAnimation();
         return this.animation;
     }
 

@@ -34,29 +34,7 @@ public abstract class ExteriorModel extends SinglePartEntityModel {
 
     public void renderWithAnimations(ClientTardis tardis, ExteriorBlockEntity exterior, ModelPart root, MatrixStack matrices,
                                      VertexConsumer vertices, int light, int overlay, float red, float green, float blue, float alpha) {
-        float newAlpha = alpha;
-
-        if (tardis.cloak().cloaked().get()) {
-            PlayerEntity player = MinecraftClient.getInstance().player;
-
-            if (!tardis.loyalty().get(player).isOf(Loyalty.Type.COMPANION)) {
-                newAlpha = 0f;
-
-                root.render(matrices, vertices, light, overlay, red, green, blue, newAlpha);
-                return;
-            }
-
-            if (isNearTardis(MinecraftClient.getInstance().player, tardis, MAX_CLOAK_DISTANCE)) {
-                newAlpha = 1f - (float) (distanceFromTardis(player, tardis) / MAX_CLOAK_DISTANCE);
-
-                if (alpha != 0.105f)
-                    newAlpha = newAlpha * alpha;
-            } else {
-                newAlpha = 0f;
-            }
-        }
-
-        root.render(matrices, vertices, light, overlay, red, green, blue, newAlpha);
+        root.render(matrices, vertices, light, overlay, red, green, blue, alpha);
     }
 
     public <T extends Entity & Linkable> void renderEntity(T falling, ModelPart root, MatrixStack matrices,

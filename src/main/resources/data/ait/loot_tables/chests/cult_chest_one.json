@@ -67,12 +67,12 @@
         {
           "type": "minecraft:item",
           "name": "ait:cult_staser_rifle",
-          "weight": 1
+          "weight": 0.1
         },
         {
           "type": "minecraft:item",
           "name": "ait:cult_staser",
-          "weight": 1
+          "weight": 0.1
         },
         {
           "type": "minecraft:item",
@@ -152,7 +152,7 @@
         {
           "type": "minecraft:item",
           "name": "ait:staser_bolt_magazine",
-          "weight": 1
+          "weight": 0.1
         }
       ],
       "rolls": 15

@@ -3,14 +3,15 @@ package dev.amble.ait.core.tardis.handler;
 import java.util.ArrayList;
 import java.util.List;
 
+import dev.amble.ait.core.util.SafePosSearch;
 import dev.amble.lib.data.CachedDirectedGlobalPos;
 import dev.amble.lib.data.DirectedBlockPos;
 import dev.amble.lib.data.DirectedGlobalPos;
 import dev.drtheo.scheduler.api.Scheduler;
 import dev.drtheo.scheduler.api.TimeUnit;
-import dev.drtheo.scheduler.api.task.Task;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 
+import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.ChestBlock;
 import net.minecraft.block.entity.ChestBlockEntity;
@@ -37,10 +38,8 @@ import dev.amble.ait.core.advancement.TardisCriterions;
 import dev.amble.ait.core.blockentities.ConsoleBlockEntity;
 import dev.amble.ait.core.engine.SubSystem;
 import dev.amble.ait.core.tardis.handler.travel.TravelHandler;
-import dev.amble.ait.core.tardis.handler.travel.TravelHandlerBase;
 import dev.amble.ait.core.tardis.manager.ServerTardisManager;
 import dev.amble.ait.core.tardis.util.TardisUtil;
-import dev.amble.ait.core.util.WorldUtil;
 import dev.amble.ait.data.Exclude;
 import dev.amble.ait.data.properties.Property;
 import dev.amble.ait.data.properties.Value;
@@ -52,6 +51,7 @@ import dev.amble.ait.data.schema.desktop.TardisDesktopSchema;
 import dev.amble.ait.registry.impl.CategoryRegistry;
 import dev.amble.ait.registry.impl.DesktopRegistry;
 import dev.amble.ait.registry.impl.exterior.ExteriorVariantRegistry;
+import net.minecraft.util.math.Direction;
 
 public class InteriorChangingHandler extends KeyedTardisComponent implements TardisTickable {
     public static final Identifier CHANGE_DESKTOP = AITMod.id("change_desktop");
@@ -269,15 +269,29 @@ public class InteriorChangingHandler extends KeyedTardisComponent implements Tar
         }
 
         DirectedBlockPos door = this.tardis.getDesktop().getDoorPos();
-        CachedDirectedGlobalPos safe = WorldUtil.locateSafe(CachedDirectedGlobalPos.create(this.tardis.asServer().getInteriorWorld(), door.getPos().offset(door.toMinecraftDirection(), 2), door.getRotation()), TravelHandlerBase.GroundSearch.MEDIAN, true);
 
+        CachedDirectedGlobalPos safe = CachedDirectedGlobalPos.create(
+                this.tardis.asServer().getInteriorWorld(),
+                door.getPos().offset(door.toMinecraftDirection(), 2),
+                door.getRotation()
+        );
+
+        // vars are ew, but fully qualifying the package name is worse.
+        var ref = new dev.drtheo.queue.api.util.Value<BlockPos>(null);
+
+        SafePosSearch.wrapSafe(safe, SafePosSearch.Kind.MEDIAN, true,
+                result -> this.finishCreatingChest(result, contents));
+    }
+
+    private void finishCreatingChest(CachedDirectedGlobalPos safe, List<ItemStack> contents) {
         // set block to chest
         if (!(safe.getWorld().getBlockState(safe.getPos()).isAir())) {
             AITMod.LOGGER.error("Failed to create recovery chest at {} for {}", safe, this.tardis);
             return;
         }
 
-        safe.getWorld().setBlockState(safe.getPos(), Blocks.CHEST.getDefaultState().with(ChestBlock.FACING, door.toMinecraftDirection().getOpposite()), 3);
+        Direction doorDir = tardis.getDesktop().getDoorPos().toMinecraftDirection();
+        safe.getWorld().setBlockState(safe.getPos(), Blocks.CHEST.getDefaultState().with(ChestBlock.FACING, doorDir.getOpposite()), Block.NOTIFY_ALL);
 
         // set chest contents
         ChestBlockEntity chest = (ChestBlockEntity) safe.getWorld().getBlockEntity(safe.getPos());

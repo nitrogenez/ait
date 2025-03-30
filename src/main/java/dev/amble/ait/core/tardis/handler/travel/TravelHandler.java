@@ -1,8 +1,7 @@
 package dev.amble.ait.core.tardis.handler.travel;
 
-import java.util.concurrent.CompletableFuture;
-
 import dev.amble.lib.data.CachedDirectedGlobalPos;
+import dev.drtheo.queue.api.ActionQueue;
 import dev.drtheo.scheduler.api.Scheduler;
 import dev.drtheo.scheduler.api.TimeUnit;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
@@ -31,14 +30,16 @@ import dev.amble.ait.core.sounds.travel.TravelSound;
 import dev.amble.ait.core.tardis.animation.ExteriorAnimation;
 import dev.amble.ait.core.tardis.control.impl.DirectionControl;
 import dev.amble.ait.core.tardis.control.impl.SecurityControl;
-import dev.amble.ait.core.tardis.handler.BiomeHandler;
 import dev.amble.ait.core.tardis.handler.TardisCrashHandler;
-import dev.amble.ait.core.tardis.util.AsyncLocatorUtil;
 import dev.amble.ait.core.tardis.util.NetworkUtil;
 import dev.amble.ait.core.tardis.util.TardisUtil;
+import dev.amble.ait.core.util.SafePosSearch;
 import dev.amble.ait.core.util.WorldUtil;
 import dev.amble.ait.core.world.RiftChunkManager;
 import dev.amble.ait.data.Exclude;
+
+import java.util.EnumMap;
+import java.util.Optional;
 
 public final class TravelHandler extends AnimatedTravelHandler implements CrashableTardisTravel {
 
@@ -47,6 +48,9 @@ public final class TravelHandler extends AnimatedTravelHandler implements Crasha
 
     @Exclude
     private boolean waiting;
+
+    @Exclude
+    private EnumMap<State, ActionQueue> travelQueue;
 
     public static final Identifier CANCEL_DEMAT_SOUND = AITMod.id("cancel_demat_sound");
 
@@ -194,9 +198,6 @@ public final class TravelHandler extends AnimatedTravelHandler implements Crasha
         if (animate)
             this.runAnimations(exterior);
 
-        BiomeHandler biome = this.tardis.handler(Id.BIOME);
-        biome.update(globalPos);
-
         if (schedule && !this.antigravs.get())
             world.scheduleBlockTick(pos, AITBlocks.EXTERIOR_BLOCK, 2);
 
@@ -234,12 +235,12 @@ public final class TravelHandler extends AnimatedTravelHandler implements Crasha
         Scheduler.get().runTaskLater(() -> this.travelCooldown = false, TimeUnit.SECONDS, 5);
     }
 
-    public void dematerialize(TravelSound sound) {
+    public Optional<ActionQueue> dematerialize(TravelSound sound) {
         if (this.getState() != State.LANDED)
-            return;
+            return Optional.empty();
 
         if (!this.tardis.fuel().hasPower())
-            return;
+            return Optional.empty();
 
         if (this.autopilot()) {
             // fulfill all the prerequisites
@@ -252,14 +253,14 @@ public final class TravelHandler extends AnimatedTravelHandler implements Crasha
 
         if (TardisEvents.DEMAT.invoker().onDemat(this.tardis) == TardisEvents.Interaction.FAIL || this.travelCooldown) {
             this.failDemat();
-            return;
+            return Optional.empty();
         }
 
-        this.forceDemat(sound);
+        return Optional.of(this.forceDemat(sound));
     }
 
-    public void dematerialize() {
-        this.dematerialize(null);
+    public Optional<ActionQueue> dematerialize() {
+        return this.dematerialize(null);
     }
 
     private void failDemat() {
@@ -284,8 +285,8 @@ public final class TravelHandler extends AnimatedTravelHandler implements Crasha
         this.createCooldown();
     }
 
-    public void forceDemat(TravelSound replacementSound) {
-        this.state.set(State.DEMAT);
+    public ActionQueue forceDemat(TravelSound replacementSound) {
+        this.setState(State.DEMAT);
 
         SoundEvent sound = tardis.stats().getTravelAnimations().get(this.getState()).tracker().getSound();
 
@@ -297,6 +298,8 @@ public final class TravelHandler extends AnimatedTravelHandler implements Crasha
         this.runAnimations();
 
         this.startFlight();
+
+        return this.queueFor(State.FLIGHT);
     }
 
     public void forceDemat() {
@@ -306,7 +309,7 @@ public final class TravelHandler extends AnimatedTravelHandler implements Crasha
     public void finishDemat() {
         this.crashing.set(false);
         this.previousPosition.set(this.position);
-        this.state.set(State.FLIGHT);
+        this.setState(State.FLIGHT);
 
         TardisEvents.ENTER_FLIGHT.invoker().onFlight(this.tardis);
         this.deleteExterior();
@@ -328,19 +331,19 @@ public final class TravelHandler extends AnimatedTravelHandler implements Crasha
         NetworkUtil.sendToInterior(this.tardis.asServer(), CANCEL_DEMAT_SOUND, PacketByteBufs.empty());
     }
 
-    public void rematerialize() {
+    public Optional<ActionQueue> rematerialize() {
         if (TardisEvents.MAT.invoker().onMat(tardis.asServer()) == TardisEvents.Interaction.FAIL
                 || this.travelCooldown) {
             this.failRemat();
-            return;
+            return Optional.empty();
         }
 
-        this.forceRemat();
+        return this.forceRemat();
     }
 
-    public void forceRemat() {
+    public Optional<ActionQueue> forceRemat() {
         if (this.getState() != State.FLIGHT)
-            return;
+            return Optional.empty();
 
         if (this.tardis.sequence().hasActiveSequence())
             this.tardis.sequence().setActiveSequence(null, true);
@@ -351,48 +354,78 @@ public final class TravelHandler extends AnimatedTravelHandler implements Crasha
 
         if (result.type() == TardisEvents.Interaction.FAIL) {
             this.crash();
-            return;
+            return Optional.of(this.queueFor(State.LANDED));
         }
 
-        CachedDirectedGlobalPos finalPos = result.value().orElse(initialPos);
+        final CachedDirectedGlobalPos finalPos = result.value().orElse(initialPos);
 
-        this.state.set(State.MAT);
+        this.setState(State.MAT);
         this.waiting = true;
 
-        CompletableFuture<?> future = CompletableFuture.supplyAsync(() ->
-                WorldUtil.locateSafe(finalPos, this.vGroundSearch.get(), this.hGroundSearch.get())
-        ).thenAccept(pos -> {
-            this.waiting = false;
-            this.tardis.door().closeDoors();
+        SafePosSearch.wrapSafe(finalPos, this.vGroundSearch.get(),
+                this.hGroundSearch.get(), this::finishForceRemat);
+
+        return Optional.of(this.queueFor(State.LANDED));
+    }
+
+    private void finishForceRemat(CachedDirectedGlobalPos pos) {
+        this.waiting = false;
+        this.tardis.door().closeDoors();
 
             SoundEvent sound = tardis.stats().getTravelAnimations().get(this.getState()).tracker().getSound();
 
-            if (this.isCrashing())
-                sound = AITSounds.EMERG_MAT;
+        if (this.isCrashing())
+            sound = AITSounds.EMERG_MAT;
 
-            this.destination(pos);
-            this.forcePosition(this.destination());
+        this.destination(pos);
+        this.forcePosition(this.destination());
 
-            // Play materialize sound at the destination
-            // this.position().getWorld().playSound(null, this.position().getPos(), sound, SoundCategory.BLOCKS);
+        // Play materialize sound at the destination
+        this.position().getWorld().playSound(null, this.position().getPos(), sound, SoundCategory.BLOCKS);
 
-            this.tardis.getDesktop().playSoundAtEveryConsole(sound, SoundCategory.BLOCKS, 2f, 1f);
-            //System.out.println(sound.getId());
-            this.placeExterior(true); // we schedule block update in #finishRemat
-        });
-
-        AsyncLocatorUtil.LOCATING_EXECUTOR_SERVICE.submit(() -> future);
+        this.tardis.getDesktop().playSoundAtEveryConsole(sound, SoundCategory.BLOCKS, 2f, 1f);
+        //System.out.println(sound.getId());
+        this.placeExterior(true); // we schedule block update in #finishRemat
     }
 
     public void finishRemat() {
         if (this.autopilot() && this.speed.get() > 0)
             this.speed.set(0);
 
-        this.state.set(State.LANDED);
+        this.setState(State.LANDED);
         this.resetFlight();
 
         tardis.door().interactLock(tardis.door().previouslyLocked().get(), null, false);
         TardisEvents.LANDED.invoker().onLanded(this.tardis);
+    }
+
+    private void executeQueue(State state) {
+        if (this.travelQueue == null)
+            this.travelQueue = new EnumMap<>(State.class);
+
+	    ActionQueue queue = this.travelQueue.computeIfAbsent(state, k -> new ActionQueue());
+
+	    queue.execute();
+    }
+
+    /**
+     * Returns the queue of actions to be ran when the TARDIS next reaches a specific state
+     * Please avoid calling "execute" or "finish" directly.
+     * @param state the state to enqueue the action for
+     * @return the action queue for the state
+     */
+    public ActionQueue queueFor(State state) {
+        if (this.travelQueue == null)
+            this.travelQueue = new EnumMap<>(State.class);
+
+        return this.travelQueue.computeIfAbsent(state, k -> new ActionQueue());
+    }
+
+    @Override
+    protected void setState(State state) {
+        super.setState(state);
+
+        this.executeQueue(state);
     }
 
     public void initPos(CachedDirectedGlobalPos cached) {

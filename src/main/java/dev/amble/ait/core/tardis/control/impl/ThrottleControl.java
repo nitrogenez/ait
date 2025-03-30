@@ -1,5 +1,7 @@
 package dev.amble.ait.core.tardis.control.impl;
 
+import dev.amble.ait.core.tardis.handler.travel.TravelHandlerBase;
+import dev.drtheo.queue.api.ActionQueue;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundEvent;
@@ -27,12 +29,10 @@ public class ThrottleControl extends Control {
             return Result.FAILURE;
 
         TravelHandler travel = tardis.travel();
+        TravelHandlerBase.State state = travel.getState();
 
-        if (player.getMainHandStack().isOf(AITItems.MUG)) {
-            travel.forceDemat();
-            travel.crash();
-
-            TardisCriterions.BRAND_NEW.trigger(player);
+        if (TelepathicControl.isLiquid(player.getMainHandStack())) {
+            return TelepathicControl.spillLiquid(tardis, world, console, player);
         }
 
         if (!leftClick) {

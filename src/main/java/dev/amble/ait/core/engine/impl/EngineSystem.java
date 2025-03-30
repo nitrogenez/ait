@@ -67,11 +67,6 @@ public class EngineSystem extends DurableSubSystem {
     }
 
     @Override
-    public float durability() {
-        return 2000f;
-    }
-
-    @Override
     protected boolean shouldDurabilityChange() {
         return tardis.fuel().hasPower();
     }

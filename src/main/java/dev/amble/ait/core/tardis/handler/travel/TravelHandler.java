@@ -1,5 +1,8 @@
 package dev.amble.ait.core.tardis.handler.travel;
 
+import java.util.EnumMap;
+import java.util.Optional;
+
 import dev.amble.lib.data.CachedDirectedGlobalPos;
 import dev.drtheo.queue.api.ActionQueue;
 import dev.drtheo.scheduler.api.Scheduler;
@@ -36,9 +39,6 @@ import dev.amble.ait.core.util.SafePosSearch;
 import dev.amble.ait.core.util.WorldUtil;
 import dev.amble.ait.core.world.RiftChunkManager;
 import dev.amble.ait.data.Exclude;
-
-import java.util.EnumMap;
-import java.util.Optional;
 
 public final class TravelHandler extends AnimatedTravelHandler implements CrashableTardisTravel {
 
@@ -409,9 +409,9 @@ public final class TravelHandler extends AnimatedTravelHandler implements Crasha
         if (this.travelQueue == null)
             this.travelQueue = new EnumMap<>(State.class);
 
-	    ActionQueue queue = this.travelQueue.computeIfAbsent(state, k -> new ActionQueue());
+        ActionQueue queue = this.travelQueue.computeIfAbsent(state, k -> new ActionQueue());
 
-	    queue.execute();
+        queue.execute();
     }
 
     /**

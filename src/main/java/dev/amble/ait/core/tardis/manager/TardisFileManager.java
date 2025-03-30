@@ -8,8 +8,8 @@ import java.util.*;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-
 import com.mojang.datafixers.util.Either;
+
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.WorldSavePath;
 

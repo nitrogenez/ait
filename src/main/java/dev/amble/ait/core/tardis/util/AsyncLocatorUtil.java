@@ -7,7 +7,6 @@ import java.util.function.Consumer;
 
 import com.mojang.datafixers.util.Pair;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
-import net.minecraft.util.Util;
 import org.jetbrains.annotations.NotNull;
 
 import net.minecraft.registry.entry.RegistryEntry;

@@ -96,10 +96,14 @@ public class AnimationKeyframe implements TardisTickable, Disposable {
 	protected float calculateAlpha() {
 		float progress = (float) this.ticks / this.duration;
 
-		return MathHelper.catmullRom(progress, this.startingAlpha, 0, this.targetAlpha, this.targetAlpha);
+		// float val = MathHelper.catmullRom(progress, this.startingAlpha, 0, this.targetAlpha, this.targetAlpha);
+
+		float val = MathHelper.lerp(progress, this.startingAlpha, this.targetAlpha);
+
+		return val;
 	}
 
 	public AnimationKeyframe instantiate() {
-		return new AnimationKeyframe(this.duration, this.targetAlpha);
+		return new AnimationKeyframe(this.duration, this.targetAlpha, this.startingAlpha);
 	}
 }

@@ -66,6 +66,8 @@ public class AnimationHolder implements TardisTickable, Disposable, Linkable {
 
 	public AnimationHolder(Tardis tardis) {
 		this(tardis.stats().getTravelAnimations());
+
+		this.link(tardis);
 	}
 
 	@Override
@@ -137,6 +139,10 @@ public class AnimationHolder implements TardisTickable, Disposable, Linkable {
 		animation.dispose();;
 		this.current = animation;
 
+		if (this.isLinked()) {
+			this.current.link(this.tardis().get());
+		}
+
 		this.sync(state);
 	}
 
@@ -151,7 +157,7 @@ public class AnimationHolder implements TardisTickable, Disposable, Linkable {
 	}
 
 	private void sync(TravelHandlerBase.State state) {
-		if (!ServerLifecycleHooks.isServer() || !this.isLinked()) return;
+		if (!ServerLifecycleHooks.isServer() || !this.isLinked() || !(this.tardis().get() instanceof ServerTardis)) return;
 
 		ServerTardis tardis = this.tardis().get().asServer();
 
@@ -160,8 +166,8 @@ public class AnimationHolder implements TardisTickable, Disposable, Linkable {
 		buf.writeEnumConstant(state);
 		buf.writeUuid(tardis.getUuid());
 
-		for (ServerPlayerEntity player : NetworkUtil.getLinkedPlayers(tardis)) {
+		NetworkUtil.getSubscribedPlayers(tardis).forEach(player -> {;
 			NetworkUtil.send(player, UPDATE_PACKET, buf);
-		}
+		});
 	}
 }

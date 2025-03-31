@@ -552,9 +552,9 @@ public class AITModClient implements ClientModInitializer {
 
     public void paintingBOTI(WorldRenderContext context) {
         MinecraftClient client = MinecraftClient.getInstance();
-        SinglePartEntityModel contents = new GallifreyFallsModel(GallifreyFallsModel.getTexturedModelData().createModel());
-        Identifier frameTex = BOTIPaintingEntityRenderer.GALLIFREY_FRAME_TEXTURE;
-        Identifier contentsTex = BOTIPaintingEntityRenderer.GALLIFREY_PAINTING_TEXTURE;
+        SinglePartEntityModel contents;
+        Identifier frameTex;
+        Identifier contentsTex;
         if (client.player == null || client.world == null) return;
         ClientWorld world = client.world;
         MatrixStack stack = context.matrixStack();
@@ -573,6 +573,10 @@ public class AITModClient implements ClientModInitializer {
                 contents = new TrenzalorePaintingModel(TrenzalorePaintingModel.getTexturedModelData().createModel());
                 frameTex = BOTIPaintingEntityRenderer.TRENZALORE_FRAME_TEXTURE;
                 contentsTex = BOTIPaintingEntityRenderer.TRENZALORE_PAINTING_TEXTURE;
+            } else {
+                contents = new GallifreyFallsModel(GallifreyFallsModel.getTexturedModelData().createModel());
+                frameTex = BOTIPaintingEntityRenderer.GALLIFREY_FRAME_TEXTURE;
+                contentsTex = BOTIPaintingEntityRenderer.GALLIFREY_PAINTING_TEXTURE;
             }
             PaintingBOTI.renderBOTIPainting(stack, frame,
                     LightmapTextureManager.pack(world.getLightLevel(LightType.BLOCK, blockPos),

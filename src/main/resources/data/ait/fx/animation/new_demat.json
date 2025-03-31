@@ -1,7 +1,7 @@
 {
+  "id": "ait:new_demat",
   "name": "Pulsating",
   "expected_state": "demat",
-  "id": "ait:new_demat",
   "tracker": {
     "sound": "ait:tardis/demat",
     "keyframes": [
@@ -39,7 +39,7 @@
       },
       {
         "duration": 4,
-        "alpha": 0.175
+        "alpha": 0.1
       },
       {
         "duration": 22,

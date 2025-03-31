@@ -1,16 +1,18 @@
 {
+  "id": "ait:classic_mat",
   "name": "Classic",
   "expected_state": "mat",
-  "id": "ait:classic_mat",
   "tracker": {
     "sound": "ait:tardis/mat",
     "keyframes": [
       {
-        "duration": 200,
+        "interpolation": "linear",
+        "duration": 212,
         "alpha": 0
       },
       {
-        "duration": 180,
+        "interpolation": "linear",
+        "duration": 168,
         "alpha": 1
       }
     ]

@@ -1,8 +1,10 @@
 package dev.amble.ait.core.tardis.animation.v2.keyframe;
 
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.DataResult;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 
+import dev.amble.ait.core.tardis.handler.travel.TravelHandlerBase;
 import net.minecraft.util.dynamic.Codecs;
 import net.minecraft.util.math.MathHelper;
 
@@ -16,12 +18,14 @@ import dev.amble.ait.api.tardis.TardisTickable;
 public class AnimationKeyframe implements TardisTickable, Disposable {
     public static final Codec<AnimationKeyframe> CODEC = RecordCodecBuilder.create(instance -> instance
             .group(Codecs.NONNEGATIVE_INT.fieldOf("duration").forGetter(AnimationKeyframe::getDuration),
-                Codec.FLOAT.fieldOf("alpha").forGetter(AnimationKeyframe::getTargetAlpha)
+                Codec.FLOAT.fieldOf("alpha").forGetter(AnimationKeyframe::getTargetAlpha),
+                Interpolation.CODEC.optionalFieldOf("interpolation", Interpolation.CUBIC).forGetter(AnimationKeyframe::getInterpolation)
             ).apply(instance, AnimationKeyframe::new)
     );
 
     protected final int duration;
     protected final float targetAlpha;
+    protected final Interpolation interpolation;
 
     protected int ticks;
 
@@ -32,7 +36,7 @@ public class AnimationKeyframe implements TardisTickable, Disposable {
      * @param alpha The target alpha value of the keyframe.
      * @param sAlpha The starting alpha value of the keyframe.
      */
-    public AnimationKeyframe(int duration, float alpha, float sAlpha) {
+    public AnimationKeyframe(int duration, float alpha, float sAlpha, Interpolation interpolation) {
         if (duration < 0 || alpha < 0 || sAlpha < 0 || sAlpha > 1) {
             throw new IllegalArgumentException("Invalid keyframe parameters: " + duration + ", " + alpha + ", " + sAlpha);
         }
@@ -41,11 +45,13 @@ public class AnimationKeyframe implements TardisTickable, Disposable {
         this.targetAlpha = alpha;
         this.startingAlpha = sAlpha;
 
+        this.interpolation = interpolation;
+
         this.ticks = 0;
     }
 
-    public AnimationKeyframe(int duration, float alpha) {
-        this(duration, alpha, 0);
+    public AnimationKeyframe(int duration, float alpha, Interpolation interpolation) {
+        this(duration, alpha, 0, interpolation);
     }
 
     public boolean isDone() {
@@ -87,8 +93,13 @@ public class AnimationKeyframe implements TardisTickable, Disposable {
     private int getDuration() {
         return this.duration;
     }
+
     private float getTargetAlpha() {
         return this.targetAlpha;
+    }
+
+    private Interpolation getInterpolation() {
+        return this.interpolation;
     }
 
     /**
@@ -98,14 +109,35 @@ public class AnimationKeyframe implements TardisTickable, Disposable {
     protected float calculateAlpha() {
         float progress = (float) this.ticks / this.duration;
 
-        // float val = MathHelper.catmullRom(progress, this.startingAlpha, 0, this.targetAlpha, this.targetAlpha);
-
-        float val = MathHelper.lerp(progress, this.startingAlpha, this.targetAlpha);
-
-        return val;
+        return this.getInterpolation().interpolate(progress, this.startingAlpha, this.targetAlpha);
     }
 
     public AnimationKeyframe instantiate() {
-        return new AnimationKeyframe(this.duration, this.targetAlpha, this.startingAlpha);
+        return new AnimationKeyframe(this.duration, this.targetAlpha, this.startingAlpha, this.interpolation);
+    }
+
+    public enum Interpolation {
+        LINEAR {
+            @Override
+            public float interpolate(float progress, float start, float end) {
+                return MathHelper.lerp(progress, start, end);
+            }
+        },
+        CUBIC {;
+            @Override
+            public float interpolate(float progress, float start, float end) {
+                return MathHelper.catmullRom(progress, start, start, end, end);
+            }
+        };
+
+        public abstract float interpolate(float progress, float start, float end);
+
+        public static final Codec<Interpolation> CODEC = Codecs.NON_EMPTY_STRING.flatXmap(s -> {
+            try {
+                return DataResult.success(Interpolation.valueOf(s.toUpperCase()));
+            } catch (Exception e) {
+                return DataResult.error(() -> "Invalid state: " + s + "! | " + e.getMessage());
+            }
+        }, var -> DataResult.success(var.toString()));
     }
 }

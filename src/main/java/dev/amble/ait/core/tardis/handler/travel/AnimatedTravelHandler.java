@@ -19,8 +19,11 @@ import net.minecraft.util.Identifier;
 import java.util.UUID;
 
 public abstract class AnimatedTravelHandler extends ProgressiveTravelHandler {
-    private static final Property<Identifier> DEMAT_FX = new Property<>(Property.Type.IDENTIFIER, "demat_fx", new Identifier(AITMod.MOD_ID, "classic_demat"));
-    private static final Property<Identifier> MAT_FX = new Property<>(Property.Type.IDENTIFIER, "mat_fx", new Identifier(AITMod.MOD_ID, "classic_mat"));
+    private static final Identifier DEFAULT_DEMAT = AITMod.id("new_demat");
+    private static final Identifier DEFAULT_MAT = AITMod.id("new_mat");
+
+    private static final Property<Identifier> DEMAT_FX = new Property<>(Property.Type.IDENTIFIER, "demat_fx", DEFAULT_DEMAT);
+    private static final Property<Identifier> MAT_FX = new Property<>(Property.Type.IDENTIFIER, "mat_fx", DEFAULT_MAT);
     private final Value<Identifier> dematId = DEMAT_FX.create(this);
     private final Value<Identifier> matId = MAT_FX.create(this);
 

@@ -5,6 +5,7 @@ import java.util.UUID;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
+import org.joml.Vector3f;
 
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.server.MinecraftServer;
@@ -18,7 +19,6 @@ import dev.amble.ait.core.tardis.animation.v2.datapack.TardisAnimationRegistry;
 import dev.amble.ait.data.Exclude;
 import dev.amble.ait.data.properties.Property;
 import dev.amble.ait.data.properties.Value;
-import org.joml.Vector3f;
 
 public abstract class AnimatedTravelHandler extends ProgressiveTravelHandler {
     private static final Identifier DEFAULT_DEMAT = AITMod.id("new_demat");

@@ -119,6 +119,17 @@ public class ExteriorRenderer<T extends ExteriorBlockEntity> implements BlockEnt
         float h = RotationPropertyHelper.toDegrees(k);
 
         matrices.push();
+
+        // adjust based off animation position
+        Vector3f animPositionOffset = tardis.travel().getAnimationPosition();
+        matrices.translate(animPositionOffset.x(), animPositionOffset.y(), animPositionOffset.z());
+
+        // adjust based off animation rotation
+        Vector3f animRotationOffset = tardis.travel().getAnimationRotation();
+        matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees(animRotationOffset.x()));
+        matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(animRotationOffset.y()));
+        matrices.multiply(RotationAxis.POSITIVE_Z.rotationDegrees(animRotationOffset.z()));
+
         matrices.translate(0.5f, 0.0f, 0.5f);
 
         Identifier texture = this.variant.texture();

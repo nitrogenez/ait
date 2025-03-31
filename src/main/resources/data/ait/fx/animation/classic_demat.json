@@ -1,10 +1,10 @@
 {
   "id": "ait:classic_demat",
   "tracker": {
-    "sound": "ait:error",
+    "sound": "ait:tardis/demat",
     "keyframes": [
       {
-        "duration": 60,
+        "duration": 200,
         "alpha": 0
       }
     ]

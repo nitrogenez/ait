@@ -1,12 +1,16 @@
 package dev.amble.ait.core.tardis.handler.travel;
 
 import dev.amble.ait.core.blockentities.ExteriorBlockEntity;
-import dev.amble.ait.core.blocks.ExteriorBlock;
+import dev.amble.ait.core.tardis.animation.v2.AnimationHolder;
+import dev.amble.ait.data.Exclude;
 import net.minecraft.server.MinecraftServer;
 
 public abstract class AnimatedTravelHandler extends ProgressiveTravelHandler {
 
     private int animationTicks;
+
+    @Exclude
+    private AnimationHolder animations;
 
     public AnimatedTravelHandler(Id id) {
         super(id);
@@ -40,6 +44,18 @@ public abstract class AnimatedTravelHandler extends ProgressiveTravelHandler {
 
         if (this instanceof TravelHandler handler)
             state.finish(handler);
+    }
+
+    public float getAlpha() {
+        return this.getAnimations().getAlpha();
+    }
+
+    protected AnimationHolder getAnimations() {
+        if (this.animations == null) {
+            this.animations = new AnimationHolder(this.tardis());
+        }
+
+        return this.animations;
     }
 
     public int getAnimTicks() {

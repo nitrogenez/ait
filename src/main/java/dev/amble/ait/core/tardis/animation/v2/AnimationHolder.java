@@ -27,6 +27,8 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.UUID;
 
@@ -151,7 +153,8 @@ public class AnimationHolder implements TardisTickable, Disposable, Linkable {
 			return this.alphaOverride;
 		}
 
-		if (this.current == null) return 1f;
+		if (this.current == null)
+ 			return 1f;
 
 		return this.current.getAlpha();
 	}

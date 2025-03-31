@@ -60,6 +60,10 @@ public class KeyframeTracker extends ArrayList<AnimationKeyframe> implements Tar
 		return this.get(this.current);
 	}
 
+	public boolean isStarting() {
+		return this.current == 0;
+	}
+
 	public float getAlpha() {
 		return this.getCurrent().getAlpha();
 	}

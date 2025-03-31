@@ -372,7 +372,7 @@ public final class TravelHandler extends AnimatedTravelHandler implements Crasha
         this.waiting = false;
         this.tardis.door().closeDoors();
 
-            SoundEvent sound = tardis.stats().getTravelAnimations().get(this.getState()).tracker().getSound();
+        SoundEvent sound = tardis.stats().getTravelAnimations().get(this.getState()).tracker().getSound();
 
         if (this.isCrashing())
             sound = AITSounds.EMERG_MAT;
@@ -381,7 +381,7 @@ public final class TravelHandler extends AnimatedTravelHandler implements Crasha
         this.forcePosition(this.destination());
 
         // Play materialize sound at the destination
-        this.position().getWorld().playSound(null, this.position().getPos(), sound, SoundCategory.BLOCKS);
+        // this.position().getWorld().playSound(null, this.position().getPos(), sound, SoundCategory.BLOCKS);
 
         this.tardis.getDesktop().playSoundAtEveryConsole(sound, SoundCategory.BLOCKS, 2f, 1f);
         //System.out.println(sound.getId());

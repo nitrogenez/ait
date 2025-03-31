@@ -1,10 +1,14 @@
 {
   "id": "ait:classic_mat",
   "tracker": {
-    "sound": "ait:error",
+    "sound": "ait:tardis/mat",
     "keyframes": [
       {
-        "duration": 60,
+        "duration": 120,
+        "alpha": 0
+      },
+      {
+        "duration": 100,
         "alpha": 1
       }
     ]

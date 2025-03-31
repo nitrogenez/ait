@@ -54,6 +54,7 @@ public abstract class TardisAnimation implements TardisTickable, Disposable, Ide
 	protected void tickCommon() {
 		if (!this.isLinked()) return;
 		if (this.tracker.getCurrent().ticks() != 0) return;
+		if (!this.tracker.isStarting()) return;
 
 		Tardis tardis = this.tardis().get();
 		TravelHandlerBase.State state = tardis.travel().getState();

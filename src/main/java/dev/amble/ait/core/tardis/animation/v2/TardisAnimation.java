@@ -8,6 +8,7 @@ import dev.amble.lib.api.Identifiable;
 import dev.amble.lib.util.ServerLifecycleHooks;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import org.joml.Vector3f;
 
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.server.MinecraftServer;
@@ -65,7 +66,7 @@ public abstract class TardisAnimation implements TardisTickable, Disposable, Ide
         TravelHandlerBase.State state = tardis.travel().getState();
 
         float alpha = (state == TravelHandlerBase.State.MAT) ? 0f : 1f;
-        this.tracker.start(tardis.travel().position(), alpha);
+        this.tracker.start(tardis.travel().position(), alpha, tardis.stats().getScale());
     }
 
     @Override
@@ -90,6 +91,13 @@ public abstract class TardisAnimation implements TardisTickable, Disposable, Ide
 
     public float getAlpha() {
         return this.tracker.getAlpha();
+    }
+
+    public Vector3f getScale() {
+        Vector3f scale = this.tracker.getScale();
+        if (!this.isLinked()) return scale;
+
+        return scale.mul(this.tardis().get().stats().getScale()); // relative scaling
     }
 
     // required for datapacks

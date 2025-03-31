@@ -12,6 +12,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import dev.amble.lib.register.unlockable.Unlockable;
 import dev.amble.lib.util.ServerLifecycleHooks;
+import org.joml.Vector3f;
 
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.resource.Resource;
@@ -23,6 +24,7 @@ import dev.amble.ait.api.tardis.KeyedTardisComponent;
 import dev.amble.ait.core.sounds.flight.FlightSound;
 import dev.amble.ait.core.sounds.flight.FlightSoundRegistry;
 import dev.amble.ait.core.sounds.travel.map.TravelSoundMap;
+import dev.amble.ait.core.tardis.handler.travel.AnimatedTravelHandler;
 import dev.amble.ait.core.tardis.vortex.reference.VortexReference;
 import dev.amble.ait.core.tardis.vortex.reference.VortexReferenceRegistry;
 import dev.amble.ait.core.util.Lazy;
@@ -247,19 +249,27 @@ public class StatsHandler extends KeyedTardisComponent {
         }
     }
 
-    public float getXScale() {
+    private float getXScale() {
         double v = tardisXScale.get();
         return (float) v;
     }
 
-    public float getYScale() {
+    private float getYScale() {
         double v = tardisYScale.get();
         return (float) v;
     }
 
-    public float getZScale() {
+    private float getZScale() {
         double v = tardisZScale.get();
         return (float) v;
+    }
+
+    /**
+     * The scale of the TARDIS.
+     * @see AnimatedTravelHandler#getScale()
+     */
+    public Vector3f getScale() {
+        return new Vector3f(this.getXScale(), this.getYScale(), this.getZScale());
     }
 
     public void setXScale(double scale) {

@@ -5,6 +5,7 @@ import java.util.UUID;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
+import org.joml.Vector3f;
 
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.server.MinecraftServer;
@@ -104,6 +105,10 @@ public abstract class AnimatedTravelHandler extends ProgressiveTravelHandler {
 
     public float getAlpha() {
         return this.getAnimations().getAlpha();
+    }
+
+    public Vector3f getScale() {
+        return this.getAnimations().getScale();
     }
 
     protected AnimationHolder getAnimations() {

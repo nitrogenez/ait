@@ -6,6 +6,7 @@ import dev.amble.lib.util.ServerLifecycleHooks;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
+import org.joml.Vector3f;
 
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.network.PacketByteBuf;
@@ -149,6 +150,18 @@ public class AnimationHolder implements TardisTickable, Disposable, Linkable {
              return 1f;
 
         return this.getCurrent().getAlpha();
+    }
+
+    public Vector3f getScale() {
+        if (this.getCurrent() == null) {
+            if (this.isLinked()) {
+                return this.tardis().get().stats().getScale();
+            }
+
+            return new Vector3f(1f, 1f, 1f);
+        }
+
+        return this.getCurrent().getScale();
     }
 
     private void sync(TravelHandlerBase.State state) {

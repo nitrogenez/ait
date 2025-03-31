@@ -2,7 +2,6 @@ package dev.amble.ait.core.tardis.animation.v2.keyframe;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
-import com.mojang.serialization.codecs.RecordCodecBuilder;
 import org.joml.Vector3f;
 
 import net.minecraft.util.dynamic.Codecs;
@@ -78,7 +77,7 @@ public class AnimationKeyframe<T> implements TardisTickable, Disposable {
     }
 
     public AnimationKeyframe<T> instantiate() {
-	    return new AnimationKeyframe<>(this.duration, this.interpolation, this.value.instantiate());
+        return new AnimationKeyframe<>(this.duration, this.interpolation, this.value.instantiate());
     }
 
     public interface InterpolatedValue<T> {

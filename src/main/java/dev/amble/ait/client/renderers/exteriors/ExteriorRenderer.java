@@ -2,7 +2,6 @@ package dev.amble.ait.client.renderers.exteriors;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import dev.amble.lib.data.CachedDirectedGlobalPos;
-import org.joml.Quaternionf;
 import org.joml.Vector3f;
 
 import net.minecraft.block.BlockState;
@@ -129,9 +128,9 @@ public class ExteriorRenderer<T extends ExteriorBlockEntity> implements BlockEnt
 
         // adjust based off animation rotation
         Vector3f animRotationOffset = tardis.travel().getAnimationRotation();
-        matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(animRotationOffset.z()));
-        matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees(animRotationOffset.y()));
-        matrices.multiply(RotationAxis.POSITIVE_Z.rotationDegrees(animRotationOffset.x()));
+        matrices.multiply(RotationAxis.POSITIVE_Z.rotationDegrees(animRotationOffset.z()));
+        matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(animRotationOffset.y()));
+        matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees(animRotationOffset.x()));
 
         this.applyNameTransforms(tardis, matrices, tardis.stats().getName());
 

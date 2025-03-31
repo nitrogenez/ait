@@ -213,9 +213,6 @@ public class BlockbenchParser implements
 				Float nextTime = nextEntry.getKey();
 				Float nextAlpha = nextEntry.getValue();
 
-				// TODO - randomly out of nowhere the values break
-				// They'll be fine, then when they get to the render thread everything goes to NaN or Inf :(
-
 				AnimationKeyframe<Float> frame = new AnimationKeyframe<>((nextTime - currentTime) * 20, AnimationKeyframe.Interpolation.CUBIC, new AnimationKeyframe.InterpolatedFloat(currentAlpha, nextAlpha));
 
 				list.add(frame);
@@ -227,6 +224,12 @@ public class BlockbenchParser implements
 
 	private static KeyframeTracker<Vector3f> parseVectorKeyframe(JsonObject object, float divider) {
 		List<AnimationKeyframe<Vector3f>> list = new ArrayList<>();
+
+		if (object == null) {
+			list.add(new AnimationKeyframe<>(20, AnimationKeyframe.Interpolation.LINEAR, new AnimationKeyframe.InterpolatedVector3f(new Vector3f(1f), new Vector3f(1f))));
+
+			return new KeyframeTracker<>(list);
+		}
 
 		TreeMap<Float, Pair<Vector3f, AnimationKeyframe.Interpolation>> map = new TreeMap<>();
 

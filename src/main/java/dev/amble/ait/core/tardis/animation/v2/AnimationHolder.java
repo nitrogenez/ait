@@ -49,6 +49,11 @@ public class AnimationHolder implements TardisTickable, Disposable, Linkable {
         return this.current;
     }
 
+    public void forceAnimation(TardisAnimation anim) {
+        this.current.dispose();
+        this.current = anim.instantiate();
+    }
+
     @Override
     public void tick(MinecraftServer server) {
         if (this.getCurrent() == null) return;

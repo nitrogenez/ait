@@ -52,10 +52,10 @@ public class RemoteItem extends LinkableItem {
         if (tardis == null)
             return ActionResult.FAIL;
 
-        if (tardis.getFuel() <= 0)
+        if (!TardisServerWorld.isTardisDimension((ServerWorld) world) && tardis.getFuel() <= 0)
             player.sendMessage(Text.translatable("message.ait.remoteitem.warning1"));
 
-        if (tardis.isRefueling())
+        if (!TardisServerWorld.isTardisDimension((ServerWorld) world) &&tardis.isRefueling())
             player.sendMessage(Text.translatable("message.ait.remoteitem.cancel.refuel"));
 
         //It was dematting before anyway so as a lazy fix its a feature now!!

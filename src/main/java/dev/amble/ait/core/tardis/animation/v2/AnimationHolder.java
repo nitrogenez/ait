@@ -40,7 +40,7 @@ public class AnimationHolder implements TardisTickable, Disposable, Linkable {
     }
 
     public AnimationHolder(Tardis tardis) {
-        this(tardis.stats().getTravelAnimations());
+        this(TardisAnimationMap.forTardis(tardis));
 
         this.link(tardis);
     }

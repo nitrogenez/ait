@@ -86,7 +86,6 @@ import dev.amble.ait.core.entities.GallifreyFallsPaintingEntity;
 import dev.amble.ait.core.entities.RiftEntity;
 import dev.amble.ait.core.item.*;
 import dev.amble.ait.core.tardis.Tardis;
-import dev.amble.ait.core.tardis.animation.ExteriorAnimation;
 import dev.amble.ait.core.tardis.handler.travel.TravelHandler;
 import dev.amble.ait.core.tardis.handler.travel.TravelHandlerBase;
 import dev.amble.ait.core.world.TardisServerWorld;
@@ -233,29 +232,6 @@ public class AITModClient implements ClientModInitializer {
                         console.setVariant(id);
                 });
 
-        ClientPlayNetworking.registerGlobalReceiver(ExteriorAnimation.UPDATE,
-                (client, handler, buf, responseSender) -> {
-                    int p = buf.readInt();
-                    UUID tardisId = buf.readUuid();
-
-                    ClientTardisManager.getInstance().getTardis(client, tardisId, tardis -> {
-                        if (tardis == null)
-                            return;
-
-                        // todo remember to use the right world in future !!
-                        BlockEntity block = MinecraftClient.getInstance().world
-                                .getBlockEntity(tardis.travel().position().getPos());
-
-                        if (!(block instanceof ExteriorBlockEntity exterior))
-                            return;
-
-                        if (exterior.getAnimation() == null)
-                            return;
-
-                        exterior.getAnimation().setupAnimation(TravelHandlerBase.State.values()[p]);
-                    });
-                });
-
         ClientPlayNetworking.registerGlobalReceiver(TravelHandler.CANCEL_DEMAT_SOUND, (client, handler, buf,
                 responseSender) -> {
             ClientTardis tardis = ClientTardisUtil.getCurrentTardis();
@@ -263,7 +239,7 @@ public class AITModClient implements ClientModInitializer {
             if (tardis == null)
                 return;
 
-            client.getSoundManager().stopSounds(tardis.stats().getTravelEffects().get(TravelHandlerBase.State.DEMAT).soundId(), SoundCategory.BLOCKS);
+            client.getSoundManager().stopSounds(tardis.travel().getAnimationIdFor(TravelHandlerBase.State.DEMAT), SoundCategory.BLOCKS);
         });
 
         WorldRenderEvents.END.register((context) -> SonicRendering.getInstance().renderWorld(context));

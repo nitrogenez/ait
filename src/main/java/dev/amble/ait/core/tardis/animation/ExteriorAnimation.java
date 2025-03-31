@@ -1,5 +1,6 @@
 package dev.amble.ait.core.tardis.animation;
 
+import dev.amble.ait.core.sounds.travel.TravelSoundRegistry;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
@@ -25,6 +26,9 @@ import dev.amble.ait.core.tardis.handler.travel.TravelHandlerBase;
 import dev.amble.ait.core.tardis.util.NetworkUtil;
 import dev.amble.ait.data.Loyalty;
 
+/**
+ * @see dev.amble.ait.core.tardis.animation.v2.TardisAnimation
+ */
 @Deprecated(forRemoval = true, since = "1.3.0")
 public abstract class ExteriorAnimation {
 
@@ -127,7 +131,7 @@ public abstract class ExteriorAnimation {
         };
 
         this.tellClientsToSetup(state);
-        TravelSound sound = tardis.stats().getTravelEffects().get(state);
+        TravelSound sound = TravelSoundRegistry.EMPTY;
 
         if (sound == null)
             return false;

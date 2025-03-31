@@ -59,8 +59,6 @@ import dev.amble.ait.core.tardis.util.TardisUtil;
 import dev.amble.ait.data.schema.exterior.ExteriorVariantSchema;
 
 public class ExteriorBlockEntity extends AbstractLinkableBlockEntity implements BlockEntityTicker<ExteriorBlockEntity> {
-    private AnimationHolder animations; // todo replace \/ that one
-    private ExteriorAnimation animation;
     private UUID seatEntityUUID = null;
 
     public ExteriorBlockEntity(BlockPos pos, BlockState state) {
@@ -291,7 +289,7 @@ public class ExteriorBlockEntity extends AbstractLinkableBlockEntity implements 
         if (travel.getState() == TravelHandlerBase.State.DEMAT) return;
 
         if (!previouslyLocked && travel.getState() == TravelHandlerBase.State.MAT
-                && travel.getAnimTicks() >= 0.9 * travel.getMaxAnimTicks())
+                && travel.getAlpha() >= 0.9F)
             TardisUtil.teleportInside(tardis, entity);
 
         if (!tardis.door().isClosed()
@@ -341,44 +339,6 @@ public class ExteriorBlockEntity extends AbstractLinkableBlockEntity implements 
         }
 
         this.exteriorLightBlockState(blockState, pos, state);
-    }
-
-    @Deprecated()
-    public void verifyAnimation() {
-        TardisRef ref = this.tardis();
-
-        if (this.animation != null || ref == null || ref.isEmpty())
-            return;
-
-        Tardis tardis = ref.get();
-
-        this.animation = tardis.getExterior().getVariant().animation(this);
-        this.animation.setupAnimation(tardis.travel().getState());
-
-        if (this.getWorld() != null && !this.getWorld().isClient()) {
-            this.animation.tellClientsToSetup(tardis.travel().getState());
-        }
-    }
-
-    public AnimationHolder getAnimations() {
-        if (this.animations == null) {
-            if (!this.isLinked()) throw new IllegalStateException("Tardis is not linked!");
-
-            this.animations = new AnimationHolder(tardis().get());
-        }
-
-        return this.animations;
-    }
-
-    public AnimationHolder clearAnimations() {
-        AnimationHolder previous = this.animations;
-        this.animations = null;
-        return previous;
-    }
-
-    public ExteriorAnimation getAnimation() {
-        this.verifyAnimation();
-        return this.animation;
     }
 
     @Environment(EnvType.CLIENT)

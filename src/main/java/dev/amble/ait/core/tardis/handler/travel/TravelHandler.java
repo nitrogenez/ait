@@ -286,13 +286,9 @@ public final class TravelHandler extends AnimatedTravelHandler implements Crasha
     public ActionQueue forceDemat(TravelSound replacementSound) {
         this.setState(State.DEMAT);
 
-        SoundEvent sound = tardis.stats().getTravelAnimations().get(this.getState()).tracker().getSound();
-
-        // Play dematerialize sound at the position
-        // this.position().getWorld().playSound(null, this.position().getPos(), sound, SoundCategory.BLOCKS);
-
-        //System.out.println(tardis.stats().getTravelEffects().get(this.getState()).soundId());
+        SoundEvent sound = this.getAnimationFor(this.getState()).tracker().getSound();
         this.tardis.getDesktop().playSoundAtEveryConsole(sound, SoundCategory.BLOCKS, 2f, 1f);
+
         this.runAnimations();
 
         this.startFlight();
@@ -326,6 +322,7 @@ public final class TravelHandler extends AnimatedTravelHandler implements Crasha
                 SoundCategory.AMBIENT);
         this.tardis.getDesktop().playSoundAtEveryConsole(AITSounds.ABORT_FLIGHT, SoundCategory.AMBIENT);
 
+        // TODO - cancel for subscribed players instead
         NetworkUtil.sendToInterior(this.tardis.asServer(), CANCEL_DEMAT_SOUND, PacketByteBufs.empty());
     }
 
@@ -370,19 +367,16 @@ public final class TravelHandler extends AnimatedTravelHandler implements Crasha
         this.waiting = false;
         this.tardis.door().closeDoors();
 
-        SoundEvent sound = tardis.stats().getTravelAnimations().get(this.getState()).tracker().getSound();
+        SoundEvent sound = this.getAnimationFor(this.getState()).tracker().getSound();
 
         if (this.isCrashing())
             sound = AITSounds.EMERG_MAT;
 
+        this.tardis.getDesktop().playSoundAtEveryConsole(sound, SoundCategory.BLOCKS, 2f, 1f);
+
         this.destination(pos);
         this.forcePosition(this.destination());
 
-        // Play materialize sound at the destination
-        // this.position().getWorld().playSound(null, this.position().getPos(), sound, SoundCategory.BLOCKS);
-
-        this.tardis.getDesktop().playSoundAtEveryConsole(sound, SoundCategory.BLOCKS, 2f, 1f);
-        //System.out.println(sound.getId());
         this.placeExterior(true); // we schedule block update in #finishRemat
     }
 

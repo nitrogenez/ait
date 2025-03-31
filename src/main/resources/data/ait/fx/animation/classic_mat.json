@@ -1,4 +1,6 @@
 {
+  "name": "Classic",
+  "expected_state": "mat",
   "id": "ait:classic_mat",
   "tracker": {
     "sound": "ait:tardis/mat",

@@ -10,6 +10,8 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.JsonOps;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 
+import dev.amble.ait.core.sounds.travel.TravelSound;
+import dev.amble.ait.core.tardis.handler.travel.TravelHandlerBase;
 import net.minecraft.util.Identifier;
 
 import dev.amble.ait.AITMod;
@@ -20,16 +22,34 @@ public class DatapackAnimation extends TardisAnimation {
     public static final Codec<TardisAnimation> CODEC = RecordCodecBuilder.create(instance -> instance
             .group(
                     Identifier.CODEC.fieldOf("id").forGetter(TardisAnimation::id),
-                    KeyframeTracker.CODEC.fieldOf("tracker").forGetter(TardisAnimation::tracker)
-            ).apply(instance, DatapackAnimation::new));
+                    KeyframeTracker.CODEC.fieldOf("tracker").forGetter(TardisAnimation::tracker),
+                    TravelHandlerBase.State.CODEC.fieldOf("expected_state").forGetter(TardisAnimation::getExpectedState),
+                    Codec.STRING.optionalFieldOf("name", "").forGetter(TardisAnimation::name)
+    ).apply(instance, DatapackAnimation::new));
 
-    protected DatapackAnimation(Identifier id, KeyframeTracker tracker) {
+    private final TravelHandlerBase.State expectedState;
+    private final String name;
+
+    protected DatapackAnimation(Identifier id, KeyframeTracker tracker, TravelHandlerBase.State expectedState, String optName) {
         super(id, tracker);
+
+        this.expectedState = expectedState;
+
+        if (optName.isBlank()) {
+            optName = id.getPath();
+        }
+
+        this.name = optName;
+    }
+
+    @Override
+    public TravelHandlerBase.State getExpectedState() {
+        return this.expectedState;
     }
 
     @Override
     public DatapackAnimation instantiate() {
-        return new DatapackAnimation(this.id(), this.tracker.instantiate());
+        return new DatapackAnimation(this.id(), this.tracker.instantiate(), this.expectedState, this.name);
     }
 
     public static DatapackAnimation fromInputStream(InputStream stream) {
@@ -47,5 +67,10 @@ public class DatapackAnimation extends TardisAnimation {
         });
 
         return created.get();
+    }
+
+    @Override
+    public String name() {
+        return name;
     }
 }

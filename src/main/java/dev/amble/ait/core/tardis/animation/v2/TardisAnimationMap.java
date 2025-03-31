@@ -5,7 +5,7 @@ import java.util.Arrays;
 import java.util.Map;
 
 import com.google.gson.*;
-import dev.amble.ait.core.tardis.handler.SubSystemHandler;
+import dev.amble.ait.core.tardis.Tardis;
 import net.minecraft.util.Identifier;
 
 import dev.amble.ait.core.tardis.animation.v2.datapack.TardisAnimationRegistry;
@@ -30,8 +30,19 @@ public class TardisAnimationMap extends EnumMap.Compliant<TravelHandlerBase.Stat
         this.put(state, sound);
         return this;
     }
+
     public TardisAnimationMap of(TravelHandlerBase.State state, Identifier id) {
         return this.of(state, TardisAnimationRegistry.getInstance().instantiate(id));
+    }
+
+    public static TardisAnimationMap forTardis(Tardis tardis) {
+        TardisAnimationMap map = new TardisAnimationMap();
+
+        for (TravelHandlerBase.State state : TravelHandlerBase.State.values()) {
+            map.of(state, tardis.travel().getAnimationIdFor(state));
+        }
+
+        return map;
     }
 
     public static Object serializer() {

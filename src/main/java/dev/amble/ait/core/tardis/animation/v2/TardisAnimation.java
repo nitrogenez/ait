@@ -4,6 +4,7 @@ import java.lang.reflect.Type;
 import java.util.UUID;
 
 import com.google.gson.*;
+import dev.amble.ait.api.Nameable;
 import dev.amble.ait.core.tardis.animation.v2.datapack.TardisAnimationRegistry;
 import dev.amble.lib.api.Identifiable;
 import dev.amble.lib.util.ServerLifecycleHooks;
@@ -27,7 +28,7 @@ import dev.amble.ait.core.tardis.handler.travel.TravelHandlerBase;
  * Represents an exterior animation for the TARDIS.
  * If you got this from the registry, call {@link TardisAnimation#instantiate()} as to not cause issues.
  */
-public abstract class TardisAnimation implements TardisTickable, Disposable, Identifiable, Linkable {
+public abstract class TardisAnimation implements TardisTickable, Disposable, Identifiable, Linkable, Nameable {
     private final Identifier id;
     private TardisRef ref;
     private boolean isServer = true;
@@ -114,6 +115,13 @@ public abstract class TardisAnimation implements TardisTickable, Disposable, Ide
     public boolean matches(TardisAnimation anim) {
         return this.id().equals(anim.id());
     }
+
+    /**
+     * The state the TARDIS is assumed to be in when this animation is played.
+     * This is used for the selection screen.
+     * @return state
+     */
+    public abstract TravelHandlerBase.State getExpectedState();
 
     /**
      * Creates a new instance of this animation

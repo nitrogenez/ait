@@ -1,27 +1,36 @@
 package dev.amble.ait.core.tardis.handler.travel;
 
+import dev.amble.ait.AITMod;
 import dev.amble.ait.client.tardis.manager.ClientTardisManager;
+import dev.amble.ait.core.tardis.animation.v2.TardisAnimation;
+import dev.amble.ait.core.tardis.animation.v2.datapack.TardisAnimationRegistry;
+import dev.amble.ait.data.properties.Property;
+import dev.amble.ait.data.properties.Value;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
-import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.server.MinecraftServer;
 
-import dev.amble.ait.core.blockentities.ExteriorBlockEntity;
 import dev.amble.ait.core.tardis.animation.v2.AnimationHolder;
 import dev.amble.ait.data.Exclude;
+import net.minecraft.util.Identifier;
 
 import java.util.UUID;
 
 public abstract class AnimatedTravelHandler extends ProgressiveTravelHandler {
+    private static final Property<Identifier> DEMAT_FX = new Property<>(Property.Type.IDENTIFIER, "demat_fx", new Identifier(AITMod.MOD_ID, "classic_demat"));
+    private static final Property<Identifier> MAT_FX = new Property<>(Property.Type.IDENTIFIER, "mat_fx", new Identifier(AITMod.MOD_ID, "classic_mat"));
+    private final Value<Identifier> dematId = DEMAT_FX.create(this);
+    private final Value<Identifier> matId = MAT_FX.create(this);
 
-    private int animationTicks;
+    @Exclude
+    private boolean isAnimationInvalidated;
 
     @Environment(EnvType.CLIENT)
     public static void initClient() {
         ClientPlayNetworking.registerGlobalReceiver(AnimationHolder.UPDATE_PACKET, (client, handler, buf, responseSender) -> {
-            TravelHandlerBase.State state = buf.readEnumConstant(TravelHandlerBase.State.class);
+            State state = buf.readEnumConstant(State.class);
             UUID uuid = buf.readUuid();
 
             ClientTardisManager.getInstance().getTardis(uuid, tardis -> {
@@ -43,6 +52,16 @@ public abstract class AnimatedTravelHandler extends ProgressiveTravelHandler {
         super.onLoaded();
 
         this.state.addListener(state -> this.getAnimations().onStateChange(state));
+
+        dematId.of(this, DEMAT_FX);
+        matId.of(this, MAT_FX);
+
+        dematId.addListener((id) -> {
+            isAnimationInvalidated = true;
+        });
+        matId.addListener((id) -> {
+            isAnimationInvalidated = true;
+        });
     }
 
     @Override
@@ -73,6 +92,10 @@ public abstract class AnimatedTravelHandler extends ProgressiveTravelHandler {
 
         if (this instanceof TravelHandler handler)
             state.finish(handler);
+
+        if (this.isAnimationInvalidated) {
+            this.animations = null;
+        }
     }
 
     public float getAlpha() {
@@ -88,12 +111,24 @@ public abstract class AnimatedTravelHandler extends ProgressiveTravelHandler {
         return this.animations;
     }
 
-    public int getAnimTicks() {
-        return animationTicks; // TODO
+    public Identifier getAnimationIdFor(State state) {
+        return switch (state) {
+            case LANDED, FLIGHT -> Identifier.of("", "");
+            case DEMAT -> this.dematId.get();
+            case MAT -> this.matId.get();
+        };
     }
 
-    public int getMaxAnimTicks() {
-        return tardis.stats().getTravelEffects().get(this.getState()).length(); // TODO
+    protected TardisAnimation getAnimationFor(State state) {
+        return TardisAnimationRegistry.getInstance().getOrFallback(this.getAnimationIdFor(state));
+    }
+
+    public void setAnimationFor(State state, Identifier id) {
+        switch (state) {
+            case LANDED, FLIGHT -> {}
+            case DEMAT -> this.dematId.set(id);
+            case MAT -> this.matId.set(id);
+        }
     }
 
     public abstract boolean shouldTickAnimation();

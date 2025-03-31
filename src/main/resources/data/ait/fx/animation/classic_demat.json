@@ -1,4 +1,6 @@
 {
+  "name": "Classic",
+  "expected_state": "demat",
   "id": "ait:classic_demat",
   "tracker": {
     "sound": "ait:tardis/demat",

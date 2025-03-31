@@ -23,8 +23,6 @@ import dev.amble.ait.api.tardis.KeyedTardisComponent;
 import dev.amble.ait.core.blockentities.ExteriorBlockEntity;
 import dev.amble.ait.core.sounds.flight.FlightSound;
 import dev.amble.ait.core.sounds.flight.FlightSoundRegistry;
-import dev.amble.ait.core.sounds.travel.TravelSound;
-import dev.amble.ait.core.sounds.travel.TravelSoundRegistry;
 import dev.amble.ait.core.sounds.travel.map.TravelSoundMap;
 import dev.amble.ait.core.tardis.animation.v2.TardisAnimationMap;
 import dev.amble.ait.core.tardis.animation.v2.datapack.TardisAnimationRegistry;
@@ -56,8 +54,7 @@ public class StatsHandler extends KeyedTardisComponent {
             World.END);
     private static final Property<HashSet<String>> UNLOCKS = new Property<>(Property.Type.STR_SET, "unlocks",
             new HashSet<>());
-    private static final Property<Identifier> DEMAT_FX = new Property<>(Property.Type.IDENTIFIER, "demat_fx", new Identifier(""));
-    private static final Property<Identifier> MAT_FX = new Property<>(Property.Type.IDENTIFIER, "mat_fx", new Identifier(""));
+
     private static final Property<Identifier> FLIGHT_FX = new Property<>(Property.Type.IDENTIFIER, "flight_fx", new Identifier(""));
     private static final Property<Identifier> VORTEX_FX = new Property<>(Property.Type.IDENTIFIER, "vortex_fx", new Identifier(""));
     private static final BoolProperty SECURITY = new BoolProperty("security", false);
@@ -77,8 +74,6 @@ public class StatsHandler extends KeyedTardisComponent {
     private final BoolValue security = SECURITY.create(this);
     private final BoolValue hailMary = HAIL_MARY.create(this);
     private final BoolValue receiveCalls = RECEIVE_CALLS.create(this);
-    private final Value<Identifier> dematId = DEMAT_FX.create(this);
-    private final Value<Identifier> matId = MAT_FX.create(this);
     private final Value<Identifier> flightId = FLIGHT_FX.create(this);
     private final Value<Identifier> vortexId = VORTEX_FX.create(this);
     private final DoubleValue tardisXScale = TARDIS_X_SCALE.create(this);
@@ -87,8 +82,6 @@ public class StatsHandler extends KeyedTardisComponent {
 
     @Exclude
     private Lazy<TravelSoundMap> travelFxCache;
-    @Exclude
-    private Lazy<TardisAnimationMap> animFxCache;
     @Exclude
     private Lazy<FlightSound> flightFxCache;
     @Exclude
@@ -118,8 +111,6 @@ public class StatsHandler extends KeyedTardisComponent {
         security.of(this, SECURITY);
         hailMary.of(this, HAIL_MARY);
         receiveCalls.of(this, RECEIVE_CALLS);
-        dematId.of(this, DEMAT_FX);
-        matId.of(this, MAT_FX);
         flightId.of(this, FLIGHT_FX);
         vortexId.of(this, VORTEX_FX);
         tardisXScale.of(this, TARDIS_X_SCALE);
@@ -134,16 +125,6 @@ public class StatsHandler extends KeyedTardisComponent {
             if (this.flightFxCache != null)
                 this.flightFxCache.invalidate();
             else this.getFlightEffects();
-        });
-        dematId.addListener((id) -> {
-            if (this.animFxCache != null)
-                this.animFxCache.invalidate();
-            else this.getTravelAnimations();
-        });
-        matId.addListener((id) -> {
-            if (this.animFxCache != null)
-                this.animFxCache.invalidate();
-            else this.getTravelAnimations();
         });
 
         for (Iterator<TardisDesktopSchema> it = DesktopRegistry.getInstance().iterator(); it.hasNext();) {
@@ -312,45 +293,6 @@ public class StatsHandler extends KeyedTardisComponent {
         playerCreatorName.set(this.getPlayerCreatorName());
     }
 
-    public TardisAnimationMap getTravelAnimations() {
-        if (this.animFxCache == null) {
-            this.animFxCache = new Lazy<>(this::createTravelAnimationsCache);
-        }
-
-        return this.animFxCache.get();
-    }
-
-    private TardisAnimationMap createTravelAnimationsCache() {
-        TardisAnimationMap map = new TardisAnimationMap();
-
-        TardisAnimationRegistry registry = TardisAnimationRegistry.getInstance();
-
-        map.put(TravelHandlerBase.State.DEMAT, registry.getOrElse(this.dematId.get(), registry.getOrFallback(AITMod.id("classic_demat"))));
-        map.put(TravelHandlerBase.State.MAT, registry.getOrElse(this.matId.get(), registry.getOrFallback(AITMod.id("classic_mat"))));
-
-        // update exterior
-        this.tardis().getExterior().findExteriorBlock().ifPresent(ExteriorBlockEntity::clearAnimations);
-
-        return map;
-    }
-
-    public TravelSoundMap getTravelEffects() {
-        if (this.travelFxCache == null) {
-            this.travelFxCache = new Lazy<>(this::createTravelEffectsCache);
-        }
-
-        return this.travelFxCache.get();
-    }
-    private TravelSoundMap createTravelEffectsCache() {
-        TravelSoundMap map = new TravelSoundMap();
-
-        // TODO move to proper registries
-        map.put(TravelHandlerBase.State.DEMAT, TravelSoundRegistry.getInstance().getOrElse(this.dematId.get(), TravelSoundRegistry.DEFAULT_DEMAT));
-        map.put(TravelHandlerBase.State.MAT, TravelSoundRegistry.getInstance().getOrElse(this.matId.get(), TravelSoundRegistry.DEFAULT_MAT));
-
-        return map;
-    }
-
     public FlightSound getFlightEffects() {
         if (this.flightFxCache == null) {
             this.flightFxCache = new Lazy<>(this::createFlightEffectsCache);
@@ -387,30 +329,5 @@ public class StatsHandler extends KeyedTardisComponent {
 
         if (this.flightFxCache != null)
             this.flightFxCache.invalidate();
-    }
-
-    private void setDematEffects(TravelSound current) {
-        this.dematId.set(current.id());
-
-        if (this.travelFxCache != null)
-            this.travelFxCache.invalidate();
-    }
-
-    private void setMatEffects(TravelSound current) {
-        this.matId.set(current.id());
-
-        if (this.travelFxCache != null)
-            this.travelFxCache.invalidate();
-    }
-
-    public void setTravelEffects(TravelSound current) {
-        switch (current.target()) {
-            case DEMAT:
-                this.setDematEffects(current);
-                break;
-            case MAT:
-                this.setMatEffects(current);
-                break;
-        }
     }
 }

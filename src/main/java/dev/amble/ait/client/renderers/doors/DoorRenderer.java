@@ -2,7 +2,6 @@ package dev.amble.ait.client.renderers.doors;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.block.entity.BlockEntityRenderer;
 import net.minecraft.client.render.block.entity.BlockEntityRendererFactory;
@@ -15,13 +14,12 @@ import net.minecraft.util.profiler.Profiler;
 
 import dev.amble.ait.api.tardis.TardisComponent;
 import dev.amble.ait.client.boti.BOTI;
+import dev.amble.ait.client.models.doors.CapsuleDoorModel;
 import dev.amble.ait.client.models.doors.DoomDoorModel;
 import dev.amble.ait.client.models.doors.DoorModel;
-import dev.amble.ait.client.models.doors.PoliceBoxDoorModel;
 import dev.amble.ait.client.renderers.AITRenderLayers;
 import dev.amble.ait.client.tardis.ClientTardis;
 import dev.amble.ait.client.util.ClientLightUtil;
-import dev.amble.ait.compat.DependencyChecker;
 import dev.amble.ait.core.blockentities.DoorBlockEntity;
 import dev.amble.ait.core.blocks.DoorBlock;
 import dev.amble.ait.core.tardis.Tardis;
@@ -43,14 +41,14 @@ public class DoorRenderer<T extends DoorBlockEntity> implements BlockEntityRende
             int light, int overlay) {
         if (entity.getWorld() == null) return;
         if (!entity.isLinked()) {
-            PoliceBoxDoorModel doorModel = new PoliceBoxDoorModel(PoliceBoxDoorModel.getTexturedModelData().createModel());
-            doorModel.render(matrices, vertexConsumers.getBuffer(AITRenderLayers.getEntityCutout(ClientExteriorVariantRegistry.BOX_DEFAULT.texture())),
+            matrices.push();
+            matrices.translate(0.5, 1.5, 0.5);
+            matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees(180f));
+            matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(-entity.getCachedState().get(DoorBlock.FACING).asRotation()));
+            CapsuleDoorModel doorModel = new CapsuleDoorModel(CapsuleDoorModel.getTexturedModelData().createModel());
+            doorModel.render(matrices, vertexConsumers.getBuffer(AITRenderLayers.getEntityCutout(ClientExteriorVariantRegistry.CAPSULE_DEFAULT.texture())),
                     light, overlay, 1, 1, 1, 1);
-            RenderLayer layer = DependencyChecker.hasIris()
-                    ? AITRenderLayers.tardisEmissiveCullZOffset(ClientExteriorVariantRegistry.BOX_DEFAULT.emission(), true)
-                    : AITRenderLayers.getBeaconBeam(ClientExteriorVariantRegistry.BOX_DEFAULT.emission(), true);
-            doorModel.render(matrices, vertexConsumers.getBuffer(layer),
-                    0xf000f0, overlay, 1, 1, 1, 1);
+            matrices.pop();
             return;
         }
 

@@ -42,6 +42,9 @@ public class ConsoleRenderer<T extends ConsoleBlockEntity> implements BlockEntit
         if (entity.getWorld() == null) return;
 
         if (!entity.isLinked()) {
+            matrices.push();
+            matrices.translate(0.5, 1.5, 0.5);
+            matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees(180f));
             HartnellConsoleModel model = new HartnellConsoleModel(HartnellConsoleModel.getTexturedModelData().createModel());
             model.render(matrices, vertexConsumers.getBuffer(RenderLayer.getEntityCutoutNoCull(ClientConsoleVariantRegistry.HARTNELL.texture())),
                     light, overlay, 1, 1, 1, 1);
@@ -50,6 +53,7 @@ public class ConsoleRenderer<T extends ConsoleBlockEntity> implements BlockEntit
                     : AITRenderLayers.getBeaconBeam(ClientConsoleVariantRegistry.HARTNELL.emission(), true);
             model.render(matrices, vertexConsumers.getBuffer(layer),
                     0xf000f0, overlay, 1, 1, 1, 1);
+            matrices.pop();
             return;
         }
 

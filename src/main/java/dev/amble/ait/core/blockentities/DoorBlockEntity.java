@@ -77,10 +77,9 @@ public class DoorBlockEntity extends InteriorLinkableBlockEntity {
         }
 
         // woopsie daisy i forgor to put this here lelelelel
-        if (exteriorWorld.getBlockState(exteriorPos).getBlock() instanceof ExteriorBlock
-                && !tardis.areShieldsActive()) {
+        if (exteriorWorld.getBlockState(exteriorPos).getBlock() instanceof ExteriorBlock) {
             boolean waterlogged = exteriorWorld.getBlockState(exteriorPos).get(Properties.WATERLOGGED);
-            world.setBlockState(pos, blockState.with(Properties.WATERLOGGED, waterlogged && tardis.door().isOpen()),
+            world.setBlockState(pos, blockState.with(Properties.WATERLOGGED, waterlogged && tardis.door().isOpen() && !tardis.areShieldsActive()),
                     Block.NOTIFY_ALL | Block.REDRAW_ON_MAIN_THREAD);
 
             world.emitGameEvent(null, GameEvent.BLOCK_CHANGE, pos);

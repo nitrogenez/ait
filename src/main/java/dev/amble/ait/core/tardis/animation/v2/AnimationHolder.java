@@ -1,7 +1,22 @@
 package dev.amble.ait.core.tardis.animation.v2;
 
+import java.util.UUID;
+
+import dev.amble.lib.util.ServerLifecycleHooks;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
+import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
+import net.fabricmc.loader.api.FabricLoader;
+
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.world.ClientWorld;
+import net.minecraft.network.PacketByteBuf;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.Identifier;
+import net.minecraft.util.math.BlockPos;
+
 import dev.amble.ait.AITMod;
-import dev.amble.ait.api.ClientWorldEvents;
 import dev.amble.ait.api.tardis.Disposable;
 import dev.amble.ait.api.tardis.TardisTickable;
 import dev.amble.ait.api.tardis.link.v2.Linkable;
@@ -13,164 +28,146 @@ import dev.amble.ait.core.tardis.Tardis;
 import dev.amble.ait.core.tardis.TardisManager;
 import dev.amble.ait.core.tardis.handler.travel.TravelHandlerBase;
 import dev.amble.ait.core.tardis.util.NetworkUtil;
-import dev.amble.lib.util.ServerLifecycleHooks;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
-import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
-import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
-import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
-import net.fabricmc.loader.api.FabricLoader;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.world.ClientWorld;
-import net.minecraft.network.PacketByteBuf;
-import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.math.BlockPos;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import java.util.UUID;
 
 public class AnimationHolder implements TardisTickable, Disposable, Linkable {
-	public static final Identifier UPDATE_PACKET = AITMod.id("sync/ext_anim");
+    public static final Identifier UPDATE_PACKET = AITMod.id("sync/ext_anim");
 
-	static {
-		if (EnvType.CLIENT == FabricLoader.getInstance().getEnvironmentType()) initClient();
-	}
+    static {
+        if (EnvType.CLIENT == FabricLoader.getInstance().getEnvironmentType()) initClient();
+    }
 
-	@Environment(EnvType.CLIENT)
-	private static void initClient() {
-		ClientPlayNetworking.registerGlobalReceiver(UPDATE_PACKET, (client, handler, buf, responseSender) -> {
-			TravelHandlerBase.State state = buf.readEnumConstant(TravelHandlerBase.State.class);
-			UUID uuid = buf.readUuid();
+    @Environment(EnvType.CLIENT)
+    private static void initClient() {
+        ClientPlayNetworking.registerGlobalReceiver(UPDATE_PACKET, (client, handler, buf, responseSender) -> {
+            TravelHandlerBase.State state = buf.readEnumConstant(TravelHandlerBase.State.class);
+            UUID uuid = buf.readUuid();
 
-			ClientTardisManager.getInstance().getTardis(uuid, tardis -> {
-				ClientWorld world = MinecraftClient.getInstance().world;
-				BlockPos pos = tardis.travel().position().getPos();
+            ClientTardisManager.getInstance().getTardis(uuid, tardis -> {
+                ClientWorld world = MinecraftClient.getInstance().world;
+                BlockPos pos = tardis.travel().position().getPos();
 
-				if (!(world.getBlockEntity(pos) instanceof ExteriorBlockEntity ext)) return;
+                if (!(world.getBlockEntity(pos) instanceof ExteriorBlockEntity ext)) return;
 
-				ext.getAnimations().onStateChange(state);
-			});
-		});
-	}
+                ext.getAnimations().onStateChange(state);
+            });
+        });
+    }
 
-	protected final TardisAnimationMap map;
-	private TardisAnimation current;
-	private float alphaOverride = -1;
-	private boolean isServer = true;
-	private TardisRef ref;
+    protected final TardisAnimationMap map;
+    private TardisAnimation current;
+    private float alphaOverride = -1;
+    private boolean isServer = true;
+    private TardisRef ref;
 
-	public AnimationHolder(TardisAnimationMap map) {
-		this.map = map;
-	}
+    public AnimationHolder(TardisAnimationMap map) {
+        this.map = map;
+    }
 
-	public AnimationHolder(Tardis tardis) {
-		this(tardis.stats().getTravelAnimations());
+    public AnimationHolder(Tardis tardis) {
+        this(tardis.stats().getTravelAnimations());
 
-		this.link(tardis);
-	}
+        this.link(tardis);
+    }
 
-	@Override
-	public void tick(MinecraftServer server) {
-		if (this.current == null) return;
+    @Override
+    public void tick(MinecraftServer server) {
+        if (this.current == null) return;
 
-		this.current.tick(server);
-	}
+        this.current.tick(server);
+    }
 
-	@Environment(EnvType.CLIENT)
-	@Override
-	public void tick(MinecraftClient client) {
-		this.isServer = false;
+    @Environment(EnvType.CLIENT)
+    @Override
+    public void tick(MinecraftClient client) {
+        this.isServer = false;
 
-		if (this.current == null) return;
+        if (this.current == null) return;
 
-		this.current.tick(client);
-	}
+        this.current.tick(client);
+    }
 
-	@Override
-	public boolean isAged() {
-		return this.current.isAged();
-	}
+    @Override
+    public boolean isAged() {
+        return this.current.isAged();
+    }
 
-	@Override
-	public void age() {
-		this.current.age();
-	}
+    @Override
+    public void age() {
+        this.current.age();
+    }
 
-	@Override
-	public void dispose() {
-		this.current.dispose();
-		this.alphaOverride = -1;
-	}
+    @Override
+    public void dispose() {
+        this.current.dispose();
+        this.alphaOverride = -1;
+    }
 
-	@Override
-	public void link(UUID uuid) {
-		this.ref = new TardisRef(uuid, real -> TardisManager.with(!this.isServer, (o, manager) -> manager.demandTardis(o, real), ServerLifecycleHooks::get));
-	}
+    @Override
+    public void link(UUID uuid) {
+        this.ref = new TardisRef(uuid, real -> TardisManager.with(!this.isServer, (o, manager) -> manager.demandTardis(o, real), ServerLifecycleHooks::get));
+    }
 
-	@Override
-	public void link(Tardis tardis) {
-		this.ref = new TardisRef(tardis, real -> TardisManager.with(!this.isServer, (o, manager) -> manager.demandTardis(o, real), ServerLifecycleHooks::get));
-	}
+    @Override
+    public void link(Tardis tardis) {
+        this.ref = new TardisRef(tardis, real -> TardisManager.with(!this.isServer, (o, manager) -> manager.demandTardis(o, real), ServerLifecycleHooks::get));
+    }
 
-	@Override
-	public TardisRef tardis() {
-		return this.ref;
-	}
+    @Override
+    public TardisRef tardis() {
+        return this.ref;
+    }
 
-	public void onStateChange(TravelHandlerBase.State state) {
-		TardisAnimation animation = this.map.get(state);
-		if (animation == null) {
-			switch (state) {
-				case LANDED, DEMAT:
-					this.alphaOverride = 1f;
-				case FLIGHT, MAT:
-					this.alphaOverride = 0f;
-			}
-			return;
-		}
+    public void onStateChange(TravelHandlerBase.State state) {
+        TardisAnimation animation = this.map.get(state);
+        if (animation == null) {
+            switch (state) {
+                case LANDED, DEMAT:
+                    this.alphaOverride = 1f;
+                case FLIGHT, MAT:
+                    this.alphaOverride = 0f;
+            }
+            return;
+        }
 
-		this.alphaOverride = -1;
+        this.alphaOverride = -1;
 
-		if (this.current != null) {
-			this.current.dispose();
-		}
+        if (this.current != null) {
+            this.current.dispose();
+        }
 
-		animation.dispose();;
-		this.current = animation;
+        animation.dispose();;
+        this.current = animation;
 
-		if (this.isLinked()) {
-			this.current.link(this.tardis().get());
-		}
+        if (this.isLinked()) {
+            this.current.link(this.tardis().get());
+        }
 
-		this.sync(state);
-	}
+        this.sync(state);
+    }
 
-	public float getAlpha() {
-		if (this.alphaOverride != -1) {
-			return this.alphaOverride;
-		}
+    public float getAlpha() {
+        if (this.alphaOverride != -1) {
+            return this.alphaOverride;
+        }
 
-		if (this.current == null)
- 			return 1f;
+        if (this.current == null)
+             return 1f;
 
-		return this.current.getAlpha();
-	}
+        return this.current.getAlpha();
+    }
 
-	private void sync(TravelHandlerBase.State state) {
-		if (!ServerLifecycleHooks.isServer() || !this.isLinked() || !(this.tardis().get() instanceof ServerTardis)) return;
+    private void sync(TravelHandlerBase.State state) {
+        if (!ServerLifecycleHooks.isServer() || !this.isLinked() || !(this.tardis().get() instanceof ServerTardis)) return;
 
-		ServerTardis tardis = this.tardis().get().asServer();
+        ServerTardis tardis = this.tardis().get().asServer();
 
-		PacketByteBuf buf = PacketByteBufs.create();
+        PacketByteBuf buf = PacketByteBufs.create();
 
-		buf.writeEnumConstant(state);
-		buf.writeUuid(tardis.getUuid());
+        buf.writeEnumConstant(state);
+        buf.writeUuid(tardis.getUuid());
 
-		NetworkUtil.getSubscribedPlayers(tardis).forEach(player -> {;
-			NetworkUtil.send(player, UPDATE_PACKET, buf);
-		});
-	}
+        NetworkUtil.getSubscribedPlayers(tardis).forEach(player -> {;
+            NetworkUtil.send(player, UPDATE_PACKET, buf);
+        });
+    }
 }

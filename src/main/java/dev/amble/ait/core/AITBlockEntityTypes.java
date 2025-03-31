@@ -6,8 +6,6 @@ import static dev.amble.ait.core.AITItems.isUnlockedOnThisDay;
 
 import java.util.Calendar;
 
-import dev.amble.ait.core.engine.link.block.CableBlockEntity;
-import dev.amble.ait.core.engine.link.block.FullCableBlockEntity;
 import dev.amble.lib.container.impl.BlockEntityContainer;
 import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
 
@@ -17,7 +15,8 @@ import dev.amble.ait.core.blockentities.*;
 import dev.amble.ait.core.blockentities.control.RedstoneControlBlockEntity;
 import dev.amble.ait.core.blocks.PowerConverterBlock;
 import dev.amble.ait.core.engine.block.generic.GenericStructureSystemBlockEntity;
-import dev.amble.ait.core.engine.link.block.FluidLinkBlockEntity;
+import dev.amble.ait.core.engine.link.block.CableBlockEntity;
+import dev.amble.ait.core.engine.link.block.FullCableBlockEntity;
 import dev.amble.ait.module.planet.core.PlanetBlocks;
 
 public class AITBlockEntityTypes implements BlockEntityContainer {

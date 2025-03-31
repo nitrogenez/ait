@@ -1,5 +1,8 @@
 package dev.amble.ait.core.tardis.handler.travel;
 
+import java.util.EnumMap;
+import java.util.Optional;
+
 import dev.amble.lib.data.CachedDirectedGlobalPos;
 import dev.drtheo.queue.api.ActionQueue;
 import dev.drtheo.scheduler.api.Scheduler;
@@ -11,7 +14,6 @@ import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvent;
-import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
@@ -27,7 +29,6 @@ import dev.amble.ait.core.blocks.ExteriorBlock;
 import dev.amble.ait.core.lock.LockedDimension;
 import dev.amble.ait.core.lock.LockedDimensionRegistry;
 import dev.amble.ait.core.sounds.travel.TravelSound;
-import dev.amble.ait.core.tardis.animation.ExteriorAnimation;
 import dev.amble.ait.core.tardis.control.impl.DirectionControl;
 import dev.amble.ait.core.tardis.control.impl.SecurityControl;
 import dev.amble.ait.core.tardis.handler.TardisCrashHandler;
@@ -37,9 +38,6 @@ import dev.amble.ait.core.util.SafePosSearch;
 import dev.amble.ait.core.util.WorldUtil;
 import dev.amble.ait.core.world.RiftChunkManager;
 import dev.amble.ait.data.Exclude;
-
-import java.util.EnumMap;
-import java.util.Optional;
 
 public final class TravelHandler extends AnimatedTravelHandler implements CrashableTardisTravel {
 
@@ -403,9 +401,9 @@ public final class TravelHandler extends AnimatedTravelHandler implements Crasha
         if (this.travelQueue == null)
             this.travelQueue = new EnumMap<>(State.class);
 
-	    ActionQueue queue = this.travelQueue.computeIfAbsent(state, k -> new ActionQueue());
+        ActionQueue queue = this.travelQueue.computeIfAbsent(state, k -> new ActionQueue());
 
-	    queue.execute();
+        queue.execute();
     }
 
     /**

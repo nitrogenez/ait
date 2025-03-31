@@ -10,9 +10,6 @@ import java.util.*;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
-import dev.amble.ait.core.blockentities.ExteriorBlockEntity;
-import dev.amble.ait.core.tardis.animation.v2.TardisAnimationMap;
-import dev.amble.ait.core.tardis.animation.v2.datapack.TardisAnimationRegistry;
 import dev.amble.lib.register.unlockable.Unlockable;
 import dev.amble.lib.util.ServerLifecycleHooks;
 
@@ -23,11 +20,14 @@ import net.minecraft.world.World;
 
 import dev.amble.ait.AITMod;
 import dev.amble.ait.api.tardis.KeyedTardisComponent;
+import dev.amble.ait.core.blockentities.ExteriorBlockEntity;
 import dev.amble.ait.core.sounds.flight.FlightSound;
 import dev.amble.ait.core.sounds.flight.FlightSoundRegistry;
 import dev.amble.ait.core.sounds.travel.TravelSound;
 import dev.amble.ait.core.sounds.travel.TravelSoundRegistry;
 import dev.amble.ait.core.sounds.travel.map.TravelSoundMap;
+import dev.amble.ait.core.tardis.animation.v2.TardisAnimationMap;
+import dev.amble.ait.core.tardis.animation.v2.datapack.TardisAnimationRegistry;
 import dev.amble.ait.core.tardis.handler.travel.TravelHandlerBase;
 import dev.amble.ait.core.tardis.vortex.reference.VortexReference;
 import dev.amble.ait.core.tardis.vortex.reference.VortexReferenceRegistry;
@@ -329,9 +329,9 @@ public class StatsHandler extends KeyedTardisComponent {
         map.put(TravelHandlerBase.State.MAT, registry.getOrElse(this.matId.get(), registry.getOrFallback(AITMod.id("classic_mat"))));
 
         // update exterior
-	    this.tardis().getExterior().findExteriorBlock().ifPresent(ExteriorBlockEntity::clearAnimations);
+        this.tardis().getExterior().findExteriorBlock().ifPresent(ExteriorBlockEntity::clearAnimations);
 
-	    return map;
+        return map;
     }
 
     public TravelSoundMap getTravelEffects() {

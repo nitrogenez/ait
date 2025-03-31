@@ -1,10 +1,11 @@
 package dev.amble.ait.core.blocks;
 
+import net.minecraft.block.BlockState;
+import net.minecraft.util.math.BlockPos;
+
 import dev.amble.ait.core.engine.link.block.FluidLinkBlock;
 import dev.amble.ait.core.engine.link.block.FluidLinkBlockEntity;
 import dev.amble.ait.core.engine.link.block.FullCableBlockEntity;
-import net.minecraft.block.BlockState;
-import net.minecraft.util.math.BlockPos;
 
 public class FullCableBlock extends FluidLinkBlock {
 

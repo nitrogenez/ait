@@ -1,10 +1,8 @@
 package dev.amble.ait.core.blocks;
 
-import dev.amble.ait.core.engine.link.block.FluidLinkBlockEntity;
 import org.jetbrains.annotations.Nullable;
 
 import net.minecraft.block.*;
-import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.state.StateManager;
@@ -21,6 +19,7 @@ import dev.amble.ait.AITMod;
 import dev.amble.ait.core.blockentities.EngineBlockEntity;
 import dev.amble.ait.core.engine.SubSystem;
 import dev.amble.ait.core.engine.block.SubSystemBlock;
+import dev.amble.ait.core.engine.link.block.FluidLinkBlockEntity;
 
 public class EngineBlock extends SubSystemBlock implements BlockEntityProvider {
     public static final DirectionProperty FACING = HorizontalFacingBlock.FACING;

@@ -1,21 +1,21 @@
 package dev.amble.ait.core.util;
 
+import java.util.function.Consumer;
+
 import dev.amble.lib.data.CachedDirectedGlobalPos;
 import dev.drtheo.queue.api.ActionQueue;
 import dev.drtheo.queue.api.util.Value;
 import dev.drtheo.scheduler.api.TimeUnit;
-import net.minecraft.util.StringIdentifiable;
 import org.jetbrains.annotations.Nullable;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.util.StringIdentifiable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.Heightmap;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
-
-import java.util.function.Consumer;
 
 public class SafePosSearch {
 
@@ -43,8 +43,7 @@ public class SafePosSearch {
     /**
      * @return {@literal null} when the position is already safe, {@link ActionQueue} otherwise.
      */
-    @Nullable
-    public static ActionQueue findSafe(CachedDirectedGlobalPos globalPos,
+    @Nullable public static ActionQueue findSafe(CachedDirectedGlobalPos globalPos,
                                        Kind vSearch, boolean hSearch, Value<BlockPos> ref) {
         ServerWorld world = globalPos.getWorld();
         BlockPos pos = globalPos.getPos();

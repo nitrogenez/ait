@@ -1181,7 +1181,7 @@ public class AITModDataGenerator implements DataGeneratorEntrypoint {
         provider.addTranslation("message.ait.max_tardises", "SERVER has reached the maximum amount of TARDISes");
 
         provider.addTranslation("tooltip.ait.key.notardis", "Key does not identify with any TARDIS");
-        provider.addTranslation("tooltip.ait.remoteitem.holdformoreinfo", "Hold shift for more info");
+        provider.addTranslation("tooltip.ait.items.holdformoreinfo", "Hold shift for more info");
         provider.addTranslation("tooltip.ait.remoteitem.notardis", "Remote does not identify with any TARDIS");
         provider.addTranslation("tooltip.ait.distresscall.source", "SOURCE");
 

@@ -41,10 +41,13 @@ public class DoorRenderer<T extends DoorBlockEntity> implements BlockEntityRende
             int light, int overlay) {
         if (entity.getWorld() == null) return;
         if (!entity.isLinked()) {
+            BlockState blockState = entity.getCachedState();
+            float k = blockState.get(DoorBlock.FACING).asRotation();
             matrices.push();
             matrices.translate(0.5, 1.5, 0.5);
+            matrices.scale(1, 1, 1);
+            matrices.multiply(RotationAxis.NEGATIVE_Y.rotationDegrees(k + 180));
             matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees(180f));
-            matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(-entity.getCachedState().get(DoorBlock.FACING).asRotation()));
             CapsuleDoorModel doorModel = new CapsuleDoorModel(CapsuleDoorModel.getTexturedModelData().createModel());
             doorModel.render(matrices, vertexConsumers.getBuffer(AITRenderLayers.getEntityCutout(ClientExteriorVariantRegistry.CAPSULE_DEFAULT.texture())),
                     light, overlay, 1, 1, 1, 1);

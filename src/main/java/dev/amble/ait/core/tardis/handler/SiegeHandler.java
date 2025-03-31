@@ -180,7 +180,7 @@ public class SiegeHandler extends KeyedTardisComponent implements TardisTickable
         if (player.getFrozenTicks() < player.getMinFreezeDamageTicks())
             player.setFrozenTicks(player.getMinFreezeDamageTicks());
 
-        player.setFrozenTicks(player.getFrozenTicks() + 2);
+        player.setFrozenTicks(player.getFrozenTicks() + 20);
     }
 
     private void unfreeze(ServerPlayerEntity player) {

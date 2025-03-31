@@ -225,7 +225,7 @@ public class ExteriorBlock extends Block implements BlockEntityProvider, ICantBr
         TravelHandler travel = tardis.travel();
 
         if (travel.getState() == TravelHandlerBase.State.LANDED
-                || travel.getAnimTicks() >= 0.75 * travel.getMaxAnimTicks())
+                || travel.getAlpha() >= 0.75f)
             return getNormalShape(state, false);
 
         if (DependencyChecker.hasPortals())

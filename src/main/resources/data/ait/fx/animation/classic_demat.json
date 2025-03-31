@@ -1,0 +1,16 @@
+{
+  "id": "ait:classic_demat",
+  "name": "Classic",
+  "expected_state": "demat",
+  "interpolation": "linear",
+  "tracker": {
+    "sound": "ait:tardis/demat",
+    "keyframes": [
+      {
+        "interpolation": "linear",
+        "duration": 200,
+        "alpha": 0
+      }
+    ]
+  }
+}

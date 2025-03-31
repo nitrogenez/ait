@@ -74,7 +74,7 @@ public sealed interface CrashableTardisTravel permits TravelHandler {
 
         tardis.getDesktop().getConsolePos().forEach(console -> {
             Explosion explosion = world.createExplosion(null, null, null,
-                    console.toCenterPos(), 3f * 2, fireGriefing, World.ExplosionSourceType.NONE);
+                    console.toCenterPos(), 3f * power, fireGriefing, World.ExplosionSourceType.NONE);
 
             explosions.add(explosion);
 

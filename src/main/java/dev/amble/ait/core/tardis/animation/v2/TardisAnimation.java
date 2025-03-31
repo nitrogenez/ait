@@ -100,6 +100,14 @@ public abstract class TardisAnimation implements TardisTickable, Disposable, Ide
         return scale.mul(this.tardis().get().stats().getScale()); // relative scaling
     }
 
+    public Vector3f getPosition() {
+        return this.tracker.getPosition();
+    }
+
+    public Vector3f getRotation() {
+        return this.tracker.getRotation();
+    }
+
     // required for datapacks
     public KeyframeTracker tracker() {
         return this.tracker;

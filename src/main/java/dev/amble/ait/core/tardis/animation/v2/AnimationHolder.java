@@ -164,6 +164,22 @@ public class AnimationHolder implements TardisTickable, Disposable, Linkable {
         return this.getCurrent().getScale();
     }
 
+    public Vector3f getPosition() {
+        if (this.getCurrent() == null) {
+            return new Vector3f(0f, 0f, 0f);
+        }
+
+        return this.getCurrent().getPosition();
+    }
+
+    public Vector3f getRotation() {
+        if (this.getCurrent() == null) {
+            return new Vector3f(0f, 0f, 0f);
+        }
+
+        return this.getCurrent().getRotation();
+    }
+
     private void sync(TravelHandlerBase.State state) {
         if (!ServerLifecycleHooks.isServer() || !this.isLinked() || !(this.tardis().get() instanceof ServerTardis)) return;
 

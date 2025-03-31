@@ -111,6 +111,14 @@ public abstract class AnimatedTravelHandler extends ProgressiveTravelHandler {
         return this.getAnimations().getScale();
     }
 
+    public Vector3f getAnimationPosition() {
+        return this.getAnimations().getPosition();
+    }
+
+    public Vector3f getAnimationRotation() {
+        return this.getAnimations().getRotation();
+    }
+
     protected AnimationHolder getAnimations() {
         if (this.animations == null) {
             this.animations = new AnimationHolder(this.tardis());

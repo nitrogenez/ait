@@ -74,6 +74,14 @@ public class KeyframeTracker extends ArrayList<AnimationKeyframe> implements Tar
         return this.getCurrent().getScale();
     }
 
+    public Vector3f getPosition() {
+        return this.getCurrent().getPosition();
+    }
+
+    public Vector3f getRotation() {
+        return this.getCurrent().getRotation();
+    }
+
     @Override
     public void tick(MinecraftServer server) {
         this.tickCommon(false);

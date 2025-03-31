@@ -1,22 +1,23 @@
 package dev.amble.ait.core.tardis.handler.travel;
 
-import dev.amble.ait.AITMod;
-import dev.amble.ait.client.tardis.manager.ClientTardisManager;
-import dev.amble.ait.core.tardis.animation.v2.TardisAnimation;
-import dev.amble.ait.core.tardis.animation.v2.datapack.TardisAnimationRegistry;
-import dev.amble.ait.data.properties.Property;
-import dev.amble.ait.data.properties.Value;
+import java.util.UUID;
+
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
+
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.server.MinecraftServer;
-
-import dev.amble.ait.core.tardis.animation.v2.AnimationHolder;
-import dev.amble.ait.data.Exclude;
 import net.minecraft.util.Identifier;
 
-import java.util.UUID;
+import dev.amble.ait.AITMod;
+import dev.amble.ait.client.tardis.manager.ClientTardisManager;
+import dev.amble.ait.core.tardis.animation.v2.AnimationHolder;
+import dev.amble.ait.core.tardis.animation.v2.TardisAnimation;
+import dev.amble.ait.core.tardis.animation.v2.datapack.TardisAnimationRegistry;
+import dev.amble.ait.data.Exclude;
+import dev.amble.ait.data.properties.Property;
+import dev.amble.ait.data.properties.Value;
 
 public abstract class AnimatedTravelHandler extends ProgressiveTravelHandler {
     private static final Identifier DEFAULT_DEMAT = AITMod.id("new_demat");

@@ -10,13 +10,12 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.JsonOps;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 
-import dev.amble.ait.core.sounds.travel.TravelSound;
-import dev.amble.ait.core.tardis.handler.travel.TravelHandlerBase;
 import net.minecraft.util.Identifier;
 
 import dev.amble.ait.AITMod;
 import dev.amble.ait.core.tardis.animation.v2.TardisAnimation;
 import dev.amble.ait.core.tardis.animation.v2.keyframe.KeyframeTracker;
+import dev.amble.ait.core.tardis.handler.travel.TravelHandlerBase;
 
 public class DatapackAnimation extends TardisAnimation {
     public static final Codec<TardisAnimation> CODEC = RecordCodecBuilder.create(instance -> instance

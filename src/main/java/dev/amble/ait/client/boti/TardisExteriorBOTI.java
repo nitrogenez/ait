@@ -2,7 +2,6 @@ package dev.amble.ait.client.boti;
 
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import org.joml.Vector3f;
 import org.lwjgl.opengl.GL11;
 
 import net.minecraft.client.MinecraftClient;
@@ -69,13 +68,12 @@ public class TardisExteriorBOTI extends BOTI {
         StatsHandler stats = tardis.stats();
         String name = stats.getName();
         stack.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(180));
-        Vector3f scale = tardis.travel().getScale();
         if (name.equalsIgnoreCase("grumm") || name.equalsIgnoreCase("dinnerbone")) {
             stack.multiply(RotationAxis.POSITIVE_X.rotationDegrees(-90f));
-            stack.translate(0, scale.y() + 0.25f, scale.z() - 1.7f);
+            stack.translate(0, tardis.stats().getYScale() + 0.25f, tardis.stats().getZScale() - 1.7f);
         }
-        stack.scale((float) variant.parent().portalWidth() * scale.x(),
-                (float) variant.parent().portalHeight() * scale.y(), scale.z());
+        stack.scale((float) variant.parent().portalWidth() * stats.getXScale(),
+                (float) variant.parent().portalHeight() * stats.getYScale(), stats.getZScale());
         Vec3d vec = variant.parent().adjustPortalPos(new Vec3d(0, -0.4675f, 0), (byte) 0);
         stack.translate(vec.x, vec.y, vec.z);
         RenderLayer whichOne = AITMod.CONFIG.CLIENT.SHOULD_RENDER_BOTI_INTERIOR || AITMod.CONFIG.CLIENT.GREEN_SCREEN_BOTI ?
@@ -97,9 +95,9 @@ public class TardisExteriorBOTI extends BOTI {
         stack.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(180));
         if (name.equalsIgnoreCase("grumm") || name.equalsIgnoreCase("dinnerbone")) {
             stack.multiply(RotationAxis.POSITIVE_X.rotationDegrees(-90f));
-            stack.translate(0, scale.y + 0.25f, scale.z -1.7f);
+            stack.translate(0, tardis.stats().getYScale() + 0.25f, tardis.stats().getZScale() -1.7f);
         }
-        stack.scale(scale.x(), scale.y(), scale.z());
+        stack.scale(stats.getXScale(), stats.getYScale(), stats.getZScale());
 
         ((ExteriorModel) frame).renderDoors(tardis, exterior, frame.getPart(), stack, botiProvider.getBuffer(AITRenderLayers.getBotiInterior(variant.texture())), light, OverlayTexture.DEFAULT_UV, 1, 1F, 1.0F, 1.0F, true);
         botiProvider.draw();
@@ -109,9 +107,9 @@ public class TardisExteriorBOTI extends BOTI {
         stack.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(180));
         if (name.equalsIgnoreCase("grumm") || name.equalsIgnoreCase("dinnerbone")) {
             stack.multiply(RotationAxis.POSITIVE_X.rotationDegrees(-90f));
-            stack.translate(0, scale.y() + 0.25f, scale.z() -1.7f);
+            stack.translate(0, tardis.stats().getYScale() + 0.25f, tardis.stats().getZScale() -1.7f);
         }
-        stack.scale(scale.x(), scale.y(), scale.z());
+        stack.scale(stats.getXScale(), stats.getYScale(), stats.getZScale());
 
         if (variant != ClientExteriorVariantRegistry.CORAL_GROWTH) {
             BiomeHandler handler = exterior.tardis().get().handler(TardisComponent.Id.BIOME);
@@ -128,9 +126,9 @@ public class TardisExteriorBOTI extends BOTI {
         stack.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(180));
         if (name.equalsIgnoreCase("grumm") || name.equalsIgnoreCase("dinnerbone")) {
             stack.multiply(RotationAxis.POSITIVE_X.rotationDegrees(-90f));
-            stack.translate(0, scale.y + 0.25f, scale.z -1.7f);
+            stack.translate(0, tardis.stats().getYScale() + 0.25f, tardis.stats().getZScale() -1.7f);
         }
-        stack.scale(scale.x(), scale.y(), scale.z());
+        stack.scale(stats.getXScale(), stats.getYScale(), stats.getZScale());
         if (variant.emission() != null) {
             float u;
             float t;

@@ -48,6 +48,7 @@ import dev.amble.ait.core.item.SiegeTardisItem;
 import dev.amble.ait.core.item.SonicItem;
 import dev.amble.ait.core.tardis.ServerTardis;
 import dev.amble.ait.core.tardis.Tardis;
+import dev.amble.ait.core.tardis.animation.ExteriorAnimation;
 import dev.amble.ait.core.tardis.handler.BiomeHandler;
 import dev.amble.ait.core.tardis.handler.SonicHandler;
 import dev.amble.ait.core.tardis.handler.travel.TravelHandler;
@@ -56,6 +57,8 @@ import dev.amble.ait.core.tardis.util.TardisUtil;
 import dev.amble.ait.data.schema.exterior.ExteriorVariantSchema;
 
 public class ExteriorBlockEntity extends AbstractLinkableBlockEntity implements BlockEntityTicker<ExteriorBlockEntity> {
+
+    private ExteriorAnimation animation;
     private UUID seatEntityUUID = null;
 
     public ExteriorBlockEntity(BlockPos pos, BlockState state) {
@@ -286,7 +289,7 @@ public class ExteriorBlockEntity extends AbstractLinkableBlockEntity implements 
         if (travel.getState() == TravelHandlerBase.State.DEMAT) return;
 
         if (!previouslyLocked && travel.getState() == TravelHandlerBase.State.MAT
-                && travel.getAlpha() >= 0.9F)
+                && travel.getAnimTicks() >= 0.9 * travel.getMaxAnimTicks())
             TardisUtil.teleportInside(tardis, entity);
 
         if (!tardis.door().isClosed()
@@ -335,15 +338,33 @@ public class ExteriorBlockEntity extends AbstractLinkableBlockEntity implements 
             }
         }
 
+        if (state.animated())
+            this.getAnimation().tick(tardis);
+        else
+            this.getAnimation().reset();
+
         this.exteriorLightBlockState(blockState, pos, state);
+    }
+
+    public ExteriorAnimation getAnimation() {
+        if (!this.isLinked() || this.animation != null)
+            return this.animation;
+
+        Tardis tardis = this.tardis().get();
+
+        this.animation = tardis.getExterior().getVariant().animation(this);
+        this.animation.setupAnimation(tardis.travel().getState());
+
+        if (this.getWorld() != null && !this.getWorld().isClient()) {
+            this.animation.tellClientsToSetup(tardis.travel().getState());
+        }
+
+        return this.animation;
     }
 
     @Environment(EnvType.CLIENT)
     public float getAlpha() {
-        if (!this.isLinked())
-            return 1.0F;
-
-        return this.tardis().get().travel().getAlpha();
+        return this.getAnimation().getAlpha();
     }
 
     private void exteriorLightBlockState(BlockState blockState, BlockPos pos, TravelHandlerBase.State state) {
@@ -353,6 +374,6 @@ public class ExteriorBlockEntity extends AbstractLinkableBlockEntity implements 
         if (!blockState.isOf(AITBlocks.EXTERIOR_BLOCK))
             return;
 
-        this.getWorld().setBlockState(pos, blockState.with(ExteriorBlock.LEVEL_4, MathHelper.clamp(Math.round(this.getAlpha() * 4), 0, 15)));
+        this.getWorld().setBlockState(pos, blockState.with(ExteriorBlock.LEVEL_4, Math.round(this.getAlpha() * 4)));
     }
 }

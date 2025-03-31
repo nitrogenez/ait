@@ -2,7 +2,6 @@ package dev.amble.ait.client.renderers.exteriors;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import dev.amble.lib.data.CachedDirectedGlobalPos;
-import org.joml.Vector3f;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.client.MinecraftClient;
@@ -119,17 +118,6 @@ public class ExteriorRenderer<T extends ExteriorBlockEntity> implements BlockEnt
         float h = RotationPropertyHelper.toDegrees(k);
 
         matrices.push();
-
-        // adjust based off animation position
-        Vector3f animPositionOffset = tardis.travel().getAnimationPosition();
-        matrices.translate(animPositionOffset.x(), animPositionOffset.y(), animPositionOffset.z());
-
-        // adjust based off animation rotation
-        Vector3f animRotationOffset = tardis.travel().getAnimationRotation();
-        matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees(animRotationOffset.x()));
-        matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(animRotationOffset.y()));
-        matrices.multiply(RotationAxis.POSITIVE_Z.rotationDegrees(animRotationOffset.z()));
-
         matrices.translate(0.5f, 0.0f, 0.5f);
 
         Identifier texture = this.variant.texture();
@@ -303,13 +291,11 @@ public class ExteriorRenderer<T extends ExteriorBlockEntity> implements BlockEnt
     }
 
     private void applyNameTransforms(Tardis tardis, MatrixStack matrices, String name) {
-        Vector3f scale = tardis.travel().getScale();
-
         if (name.equalsIgnoreCase("grumm") || name.equalsIgnoreCase("dinnerbone")) {
             matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees(-90f));
-            matrices.translate(0, scale.y + 0.25f, scale.z - 1.7f);
+            matrices.translate(0, tardis.stats().getYScale() + 0.25f, tardis.stats().getZScale() - 1.7f);
         }
 
-        matrices.scale(scale.x, scale.y, scale.z);
+        matrices.scale(tardis.stats().getXScale(), tardis.stats().getYScale(), tardis.stats().getZScale());
     }
 }

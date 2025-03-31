@@ -3,6 +3,7 @@ package dev.amble.ait.core.tardis.animation.v2;
 import java.util.UUID;
 
 import dev.amble.lib.util.ServerLifecycleHooks;
+import dev.drtheo.queue.api.ActionQueue;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
@@ -52,6 +53,16 @@ public class AnimationHolder implements TardisTickable, Disposable, Linkable {
     public void forceAnimation(TardisAnimation anim) {
         this.current.dispose();
         this.current = anim.instantiate();
+    }
+
+    /**
+     * Allows you to enqueue things to be ran when the current animation is completed.
+     * @return The action queue to run when the animation is done. Or null if there is no animation.
+     */
+    public ActionQueue onDone() {
+        if (this.getCurrent() == null) return null;
+
+        return this.getCurrent().onDone();
     }
 
     @Override

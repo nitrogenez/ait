@@ -7,8 +7,10 @@ import com.google.gson.*;
 import dev.amble.ait.AITMod;
 import dev.amble.ait.core.AITSounds;
 import dev.amble.ait.core.tardis.animation.v2.blockbench.BlockbenchParser;
+import dev.amble.ait.data.Exclude;
 import dev.amble.lib.api.Identifiable;
 import dev.amble.lib.util.ServerLifecycleHooks;
+import dev.drtheo.queue.api.ActionQueue;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.registry.Registries;
@@ -46,6 +48,9 @@ public abstract class TardisAnimation implements TardisTickable, Disposable, Ide
     protected final KeyframeTracker<Vector3f> scale;
     protected final KeyframeTracker<Vector3f> position;
     protected final KeyframeTracker<Vector3f> rotation;
+
+    @Exclude
+    private ActionQueue doneQueue;
 
     protected TardisAnimation(Identifier id, @Nullable Identifier soundId, KeyframeTracker<Float> alpha, KeyframeTracker<Vector3f> scale, KeyframeTracker<Vector3f> position, KeyframeTracker<Vector3f> rotation) {
         this.id = id;
@@ -97,6 +102,19 @@ public abstract class TardisAnimation implements TardisTickable, Disposable, Ide
         if (playSound) {
             tardis.getExterior().playSound(this.getSound());
         }
+
+        if (this.isAged() && this.doneQueue != null) {
+            this.doneQueue.execute();
+            this.doneQueue = null;
+        }
+    }
+
+    public ActionQueue onDone() {
+        if (this.doneQueue == null) {
+            this.doneQueue = new ActionQueue();
+        }
+
+        return this.doneQueue;
     }
 
     protected <T> boolean tryStart(KeyframeTracker<T> tracker, T startVal) {

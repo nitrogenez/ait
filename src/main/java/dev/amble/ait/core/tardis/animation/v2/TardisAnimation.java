@@ -4,10 +4,16 @@ import java.lang.reflect.Type;
 import java.util.UUID;
 
 import com.google.gson.*;
+import dev.amble.ait.AITMod;
+import dev.amble.ait.core.AITSounds;
+import dev.amble.ait.core.tardis.animation.v2.blockbench.BlockbenchParser;
 import dev.amble.lib.api.Identifiable;
 import dev.amble.lib.util.ServerLifecycleHooks;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.minecraft.registry.Registries;
+import net.minecraft.sound.SoundEvent;
+import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3f;
 
 import net.minecraft.client.MinecraftClient;
@@ -31,13 +37,28 @@ import dev.amble.ait.core.tardis.handler.travel.TravelHandlerBase;
  */
 public abstract class TardisAnimation implements TardisTickable, Disposable, Identifiable, Linkable, Nameable {
     private final Identifier id;
+    private final Identifier soundId;
+
     private TardisRef ref;
     private boolean isServer = true;
-    protected final KeyframeTracker tracker;
 
-    protected TardisAnimation(Identifier id, KeyframeTracker tracker) {
+    protected final KeyframeTracker<Float> alpha;
+    protected final KeyframeTracker<Vector3f> scale;
+    protected final KeyframeTracker<Vector3f> position;
+    protected final KeyframeTracker<Vector3f> rotation;
+
+    protected TardisAnimation(Identifier id, @Nullable Identifier soundId, KeyframeTracker<Float> alpha, KeyframeTracker<Vector3f> scale, KeyframeTracker<Vector3f> position, KeyframeTracker<Vector3f> rotation) {
         this.id = id;
-        this.tracker = tracker;
+        this.soundId = soundId;
+
+        this.alpha = alpha;
+        this.scale = scale;
+        this.position = position;
+        this.rotation = rotation;
+    }
+
+    protected TardisAnimation(Identifier id, @Nullable Identifier soundId, BlockbenchParser.Result result) {
+        this(id, soundId, result.alpha().instantiate(), result.scale().instantiate(), result.translation().instantiate(), result.rotation().instantiate());
     }
 
     @Override
@@ -45,7 +66,10 @@ public abstract class TardisAnimation implements TardisTickable, Disposable, Ide
     public void tick(MinecraftClient client) {
         this.tickCommon();
 
-        this.tracker.tick(client);
+        this.alpha.tick(client);
+        this.scale.tick(client);
+        this.position.tick(client);
+        this.rotation.tick(client);
 
         this.isServer = false;
     }
@@ -54,34 +78,74 @@ public abstract class TardisAnimation implements TardisTickable, Disposable, Ide
     public void tick(MinecraftServer server) {
         this.tickCommon();
 
-        this.tracker.tick(server);
+        this.alpha.tick(server);
+        this.scale.tick(server);
+        this.position.tick(server);
+        this.rotation.tick(server);
     }
 
     protected void tickCommon() {
         if (!this.isLinked()) return;
-        if (this.tracker.getCurrent().ticks() != 0) return;
-        if (!this.tracker.isStarting()) return;
 
         Tardis tardis = this.tardis().get();
-        TravelHandlerBase.State state = tardis.travel().getState();
 
-        float alpha = (state == TravelHandlerBase.State.MAT) ? 0f : 1f;
-        this.tracker.start(tardis.travel().position(), alpha, tardis.stats().getScale());
+        boolean playSound = this.tryStart(this.alpha, (tardis.travel().getState() == TravelHandlerBase.State.MAT) ? 0f : 1f);
+        playSound = playSound && this.tryStart(this.scale, new Vector3f(1f));
+        playSound = playSound && this.tryStart(this.position, new Vector3f());
+        playSound = playSound && this.tryStart(this.rotation, new Vector3f());
+
+        if (playSound) {
+            tardis.getExterior().playSound(this.getSound());
+        }
+    }
+
+    protected <T> boolean tryStart(KeyframeTracker<T> tracker, T startVal) {
+        if (tracker.getCurrent().ticks() != 0) return false;
+        if (!tracker.isStarting()) return false;
+
+        tracker.start(startVal);
+
+        return true;
+    }
+
+    public SoundEvent getSound() {
+        SoundEvent sfx = Registries.SOUND_EVENT.get(this.soundId);
+
+        if (sfx == null) {
+            AITMod.LOGGER.error("Unknown sound event: {} in tardis animation {}", this.soundId, this.id());
+            sfx = AITSounds.ERROR;
+        }
+
+        return sfx;
+    }
+
+    public Identifier getBlockbenchId() {
+        return this.id();
+    }
+
+    public Identifier getSoundId() {
+        return this.soundId;
     }
 
     @Override
     public void dispose() {
-        this.tracker.dispose();
+        this.alpha.dispose();
+        this.scale.dispose();
+        this.position.dispose();
+        this.rotation.dispose();
     }
 
     @Override
     public boolean isAged() {
-        return this.tracker.isAged();
+        return this.alpha.isAged() && this.scale.isAged() && this.position.isAged() && this.rotation.isAged();
     }
 
     @Override
     public void age() {
-        this.tracker.age();
+        this.alpha.age();
+        this.scale.age();
+        this.position.age();
+        this.rotation.age();
     }
 
     @Override
@@ -90,27 +154,22 @@ public abstract class TardisAnimation implements TardisTickable, Disposable, Ide
     }
 
     public float getAlpha() {
-        return this.tracker.getAlpha();
+        return this.alpha.getValue();
     }
 
     public Vector3f getScale() {
-        Vector3f scale = this.tracker.getScale();
+        Vector3f scale = this.scale.getValue();
         if (!this.isLinked()) return scale;
 
         return scale.mul(this.tardis().get().stats().getScale()); // relative scaling
     }
 
     public Vector3f getPosition() {
-        return this.tracker.getPosition();
+        return this.position.getValue();
     }
 
     public Vector3f getRotation() {
-        return this.tracker.getRotation();
-    }
-
-    // required for datapacks
-    public KeyframeTracker tracker() {
-        return this.tracker;
+        return this.rotation.getValue();
     }
 
     @Override

@@ -286,7 +286,7 @@ public final class TravelHandler extends AnimatedTravelHandler implements Crasha
     public ActionQueue forceDemat(TravelSound replacementSound) {
         this.setState(State.DEMAT);
 
-        SoundEvent sound = this.getAnimationFor(this.getState()).tracker().getSound();
+        SoundEvent sound = this.getAnimationFor(this.getState()).getSound();
         this.tardis.getDesktop().playSoundAtEveryConsole(sound, SoundCategory.BLOCKS, 2f, 1f);
 
         this.runAnimations();
@@ -367,7 +367,7 @@ public final class TravelHandler extends AnimatedTravelHandler implements Crasha
         this.waiting = false;
         this.tardis.door().closeDoors();
 
-        SoundEvent sound = this.getAnimationFor(this.getState()).tracker().getSound();
+        SoundEvent sound = this.getAnimationFor(this.getState()).getSound();
 
         if (this.isCrashing())
             sound = AITSounds.EMERG_MAT;

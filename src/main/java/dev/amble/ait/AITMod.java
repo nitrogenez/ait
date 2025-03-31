@@ -6,6 +6,7 @@ import java.util.Optional;
 import java.util.Random;
 import java.util.UUID;
 
+import dev.amble.ait.core.tardis.animation.v2.blockbench.BlockbenchParser;
 import dev.amble.lib.container.RegistryContainer;
 import dev.amble.lib.register.AmbleRegistries;
 import dev.amble.lib.util.ServerLifecycleHooks;
@@ -168,6 +169,7 @@ public class AITMod implements ModInitializer {
                 TardisAnimationRegistry.getInstance()
         );
         ControlSoundRegistry.init();
+        BlockbenchParser.init();
 
         registerParticles();
 

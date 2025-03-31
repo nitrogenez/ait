@@ -33,7 +33,7 @@ public class TardisAnimationRegistry extends SimpleDatapackRegistry<TardisAnimat
 
     @Override
     public TardisAnimation fallback() {
-        TardisAnimation fallback = this.get(AITMod.id("classic_demat"));
+        TardisAnimation fallback = this.get(AITMod.id("zwip_demat"));
 
         if (fallback == null) {
             throw new IllegalStateException("Classic Demat Animation is null! No fallback.");

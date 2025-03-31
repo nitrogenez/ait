@@ -2,6 +2,7 @@ package dev.amble.ait.client.renderers.exteriors;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import dev.amble.lib.data.CachedDirectedGlobalPos;
+import org.joml.Quaternionf;
 import org.joml.Vector3f;
 
 import net.minecraft.block.BlockState;
@@ -124,13 +125,15 @@ public class ExteriorRenderer<T extends ExteriorBlockEntity> implements BlockEnt
         Vector3f animPositionOffset = tardis.travel().getAnimationPosition();
         matrices.translate(animPositionOffset.x(), animPositionOffset.y(), animPositionOffset.z());
 
+        matrices.translate(0.5f, 0.0f, 0.5f);
+
         // adjust based off animation rotation
         Vector3f animRotationOffset = tardis.travel().getAnimationRotation();
-        matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees(animRotationOffset.x()));
-        matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(animRotationOffset.y()));
-        matrices.multiply(RotationAxis.POSITIVE_Z.rotationDegrees(animRotationOffset.z()));
+        matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(animRotationOffset.z()));
+        matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees(animRotationOffset.y()));
+        matrices.multiply(RotationAxis.POSITIVE_Z.rotationDegrees(animRotationOffset.x()));
 
-        matrices.translate(0.5f, 0.0f, 0.5f);
+        this.applyNameTransforms(tardis, matrices, tardis.stats().getName());
 
         Identifier texture = this.variant.texture();
         Identifier emission = this.variant.emission();
@@ -160,8 +163,6 @@ public class ExteriorRenderer<T extends ExteriorBlockEntity> implements BlockEnt
             profiler.pop();
             return;
         }
-
-        this.applyNameTransforms(tardis, matrices, tardis.stats().getName());
 
         if (travel.antigravs().get() && tardis.flight().falling().get()) {
             float sinFunc = (float) Math.sin((MinecraftClient.getInstance().player.age / 400f * 220f) * 0.2f + 0.2f);

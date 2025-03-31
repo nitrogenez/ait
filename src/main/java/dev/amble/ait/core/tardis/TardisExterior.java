@@ -125,6 +125,8 @@ public class TardisExterior extends TardisComponent {
     public void playSound(SoundEvent sound, SoundCategory category, float volume, float pitch) {
         CachedDirectedGlobalPos pos = tardis.travel().position();
 
+        if (pos == null || pos.getWorld() == null) return;
+
         pos.getWorld().playSound(null, pos.getPos(), sound, category, volume, pitch);
     }
 

@@ -10,54 +10,32 @@ import net.minecraft.util.math.MathHelper;
 
 import dev.amble.ait.api.tardis.Disposable;
 import dev.amble.ait.api.tardis.TardisTickable;
-import dev.amble.ait.data.codec.MoreCodec;
 
 /**
  * Represents a keyframe in an animation.
  * The keyframe interpolates between two alpha values over a duration of ticks.
  */
-public class AnimationKeyframe implements TardisTickable, Disposable {
-    public static final Codec<AnimationKeyframe> CODEC = RecordCodecBuilder.create(instance -> instance
-            .group(Codecs.NONNEGATIVE_INT.fieldOf("duration").forGetter(AnimationKeyframe::getDuration),
-                Codec.FLOAT.optionalFieldOf("alpha", 1f).forGetter(AnimationKeyframe::getTargetAlpha),
-                MoreCodec.VECTOR3F.optionalFieldOf("position", new Vector3f(0, 0, 0)).forGetter(AnimationKeyframe::getTargetPosition),
-                MoreCodec.VECTOR3F.optionalFieldOf("rotation", new Vector3f(0, 0, 0)).forGetter(AnimationKeyframe::getTargetRotation),
-                MoreCodec.VECTOR3F.optionalFieldOf("scale", new Vector3f(1, 1, 1)).forGetter(AnimationKeyframe::getTargetScale),
-                Interpolation.CODEC.optionalFieldOf("interpolation", Interpolation.CUBIC).forGetter(AnimationKeyframe::getInterpolation)
-            ).apply(instance, AnimationKeyframe::new)
-    );
-
-    protected final InterpolatedVector3f scale;
-    protected final InterpolatedVector3f position;
-    protected final InterpolatedVector3f rotation;
-    protected final InterpolatedFloat alpha;
+public class AnimationKeyframe<T> implements TardisTickable, Disposable {
+    protected final InterpolatedValue<T> value;
     protected final Interpolation interpolation;
     protected final int duration;
-
     protected int ticks;
 
-    /**
-     * @param duration The duration of the keyframe in ticks.
-     * @param alpha The target alpha value of the keyframe.
-     * @param position The offset position to reach at the end of the keyframe.
-     * @param rotation The rotation to reach at the end of the keyframe.
-     * @param scales The scale to reach at the end of the keyframe.
-     * @param interpolation Interpolation type to use for the keyframe.
-     */
-    public AnimationKeyframe(int duration, float alpha, Vector3f position, Vector3f rotation, Vector3f scales, Interpolation interpolation) {
-        if (duration < 0 || alpha < 0) {
-            throw new IllegalArgumentException("Invalid keyframe parameters: " + duration + ", " + alpha + ", " + scales + ", " + interpolation);
+    public AnimationKeyframe(int duration, Interpolation type, InterpolatedValue<T> value) {
+        if (duration < 0 || value == null) {
+            throw new IllegalArgumentException("Invalid keyframe parameters: " + duration + ", " + type + ", " + value);
         }
 
         this.duration = duration;
-        this.alpha = new InterpolatedFloat(0, alpha);
-        this.scale = new InterpolatedVector3f(new Vector3f(1, 1, 1), scales);
-        this.position = new InterpolatedVector3f(new Vector3f(0, 0, 0), position);
-        this.rotation = new InterpolatedVector3f(new Vector3f(0, 0, 0), rotation);
+        this.value = value;
 
-        this.interpolation = interpolation;
+        this.interpolation = type;
 
         this.ticks = 0;
+    }
+
+    public AnimationKeyframe(float duration, Interpolation type, InterpolatedValue<T> value) {
+        this((int) duration, type, value);
     }
 
     public boolean isDone() {
@@ -66,22 +44,6 @@ public class AnimationKeyframe implements TardisTickable, Disposable {
 
     public void tickCommon(boolean isClient) {
         ticks++;
-    }
-
-    public void setStartingAlpha(float sAlpha) {
-        this.alpha.setStart(sAlpha);
-    }
-
-    public void setStartingScale(Vector3f sScale) {
-        this.scale.setStart(sScale);
-    }
-
-    public void setStartingPosition(Vector3f sScale) {
-        this.position.setStart(sScale);
-    }
-
-    public void setStartingRotation(Vector3f sScale) {
-        this.rotation.setStart(sScale);
     }
 
     @Override
@@ -103,58 +65,20 @@ public class AnimationKeyframe implements TardisTickable, Disposable {
         return this.ticks;
     }
 
-    public float getAlpha() {
-        return this.alpha.interpolate(this.getProgress(), this.interpolation);
+    public T getValue() {
+        return this.value.interpolate(this.getProgress(), this.interpolation);
     }
 
-    public Vector3f getScale() {
-        return this.scale.interpolate(this.getProgress(), this.interpolation);
-    }
-
-    public Vector3f getPosition() {
-        return this.position.interpolate(this.getProgress(), this.interpolation);
-    }
-
-    public Vector3f getRotation() {
-        return this.rotation.interpolate(this.getProgress(), this.interpolation);
+    public void setStart(T val) {
+        this.value.setStart(val);
     }
 
     public float getProgress() {
         return (float) this.ticks / this.duration;
     }
 
-    private int getDuration() {
-        return this.duration;
-    }
-
-    private float getTargetAlpha() {
-        return this.alpha.target;
-    }
-
-    private Interpolation getInterpolation() {
-        return this.interpolation;
-    }
-
-    private Vector3f getTargetScale() {
-        return this.scale.target;
-    }
-
-    private Vector3f getTargetPosition() {
-        return this.position.target;
-    }
-
-    private Vector3f getTargetRotation() {
-        return this.rotation.target;
-    }
-
-    public AnimationKeyframe instantiate() {
-        AnimationKeyframe created = new AnimationKeyframe(this.duration, this.getTargetAlpha(), this.getTargetPosition(), this.getTargetRotation(), this.getTargetScale(), this.interpolation);
-
-        created.setStartingScale(this.scale.start());
-        created.setStartingAlpha(this.alpha.start());
-        created.setStartingPosition(this.position.start());
-
-        return created;
+    public AnimationKeyframe<T> instantiate() {
+	    return new AnimationKeyframe<>(this.duration, this.interpolation, this.value.instantiate());
     }
 
     public interface InterpolatedValue<T> {
@@ -163,6 +87,7 @@ public class AnimationKeyframe implements TardisTickable, Disposable {
         T interpolate(float progress, Interpolation type);
 
         void setStart(T start);
+        InterpolatedValue<T> instantiate();
     }
 
     public static class InterpolatedFloat implements InterpolatedValue<Float> {
@@ -192,6 +117,11 @@ public class AnimationKeyframe implements TardisTickable, Disposable {
         @Override
         public void setStart(Float start) {
             this.start = start;
+        }
+
+        @Override
+        public InterpolatedValue<Float> instantiate() {
+            return new InterpolatedFloat(this.start, this.target);
         }
     }
 
@@ -225,7 +155,14 @@ public class AnimationKeyframe implements TardisTickable, Disposable {
 
         @Override
         public void setStart(Vector3f start) {
-            this.start = start;
+            synchronized (this) {
+                this.start = start;
+            }
+        }
+
+        @Override
+        public InterpolatedValue<Vector3f> instantiate() {
+            return new InterpolatedVector3f(new Vector3f(this.start), new Vector3f(this.target));
         }
     }
 

@@ -311,14 +311,6 @@ public class ExteriorBlockEntity extends AbstractLinkableBlockEntity implements 
         TravelHandlerBase travel = tardis.travel();
         TravelHandlerBase.State state = travel.getState();
 
-        if (this.tardis().get().travel().getState().animated()) {
-            if (world.isClient()) {
-                this.getAnimations().tick(MinecraftClient.getInstance());
-            } else {
-                this.getAnimations().tick(world.getServer());
-            }
-        }
-
         if (!world.isClient()) {
             if (tardis.travel().isLanded())
                 world.scheduleBlockTick(this.getPos(), AITBlocks.EXTERIOR_BLOCK, 2);
@@ -391,7 +383,10 @@ public class ExteriorBlockEntity extends AbstractLinkableBlockEntity implements 
 
     @Environment(EnvType.CLIENT)
     public float getAlpha() {
-        return this.getAnimations().getAlpha();
+        if (!this.isLinked())
+            return 1.0F;
+
+        return this.tardis().get().travel().getAlpha();
     }
 
     private void exteriorLightBlockState(BlockState blockState, BlockPos pos, TravelHandlerBase.State state) {

@@ -1,7 +1,10 @@
 package dev.amble.ait.core.tardis.animation.v2;
 
+import java.lang.reflect.Type;
 import java.util.UUID;
 
+import com.google.gson.*;
+import dev.amble.ait.core.tardis.animation.v2.datapack.TardisAnimationRegistry;
 import dev.amble.lib.api.Identifiable;
 import dev.amble.lib.util.ServerLifecycleHooks;
 import net.fabricmc.api.EnvType;
@@ -117,4 +120,21 @@ public abstract class TardisAnimation implements TardisTickable, Disposable, Ide
      * @return a new instance
      */
     public abstract TardisAnimation instantiate();
+
+    public static Object serializer() {
+        return new Serializer();
+    }
+
+    public static class Serializer implements JsonSerializer<TardisAnimation>, JsonDeserializer<TardisAnimation> {
+
+        @Override
+        public TardisAnimation deserialize(JsonElement jsonElement, Type type, JsonDeserializationContext jsonDeserializationContext) throws JsonParseException {
+            return TardisAnimationRegistry.getInstance().instantiate(jsonDeserializationContext.deserialize(jsonElement, Identifier.class));
+        }
+
+        @Override
+        public JsonElement serialize(TardisAnimation tardisAnimation, Type type, JsonSerializationContext jsonSerializationContext) {
+            return jsonSerializationContext.serialize(tardisAnimation.id());
+        }
+    }
 }

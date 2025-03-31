@@ -9,6 +9,8 @@ import com.google.gson.ExclusionStrategy;
 import com.google.gson.FieldAttributes;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import dev.amble.ait.core.tardis.animation.v2.TardisAnimation;
+import dev.amble.ait.core.tardis.animation.v2.TardisAnimationMap;
 import dev.amble.lib.data.DirectedBlockPos;
 import dev.amble.lib.data.DirectedGlobalPos;
 import org.jetbrains.annotations.Nullable;
@@ -109,7 +111,9 @@ public abstract class TardisManager<T extends Tardis, C> {
                 .registerTypeAdapter(TardisComponent.IdLike.class, TardisComponentRegistry.idSerializer())
                 .registerTypeAdapter(SubSystemHandler.class, SubSystemHandler.serializer())
                 .registerTypeAdapter(SubSystem.IdLike.class, SubSystemRegistry.idSerializer())
-                .registerTypeAdapter(SubSystem.class, SubSystem.serializer());
+                .registerTypeAdapter(SubSystem.class, SubSystem.serializer())
+                .registerTypeAdapter(TardisAnimationMap.class, TardisAnimationMap.serializer())
+                .registerTypeAdapter(TardisAnimation.class, TardisAnimation.serializer());
     }
 
     protected GsonBuilder getNetworkGson(GsonBuilder builder) {

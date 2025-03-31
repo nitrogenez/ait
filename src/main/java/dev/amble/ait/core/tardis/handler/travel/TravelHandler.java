@@ -204,7 +204,7 @@ public final class TravelHandler extends AnimatedTravelHandler implements Crasha
 
     private void runAnimations(ExteriorBlockEntity exterior) {
         State state = this.getState();
-        exterior.getAnimations().onStateChange(state);
+        this.getAnimations().onStateChange(state);
     }
 
     public void runAnimations() {

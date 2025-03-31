@@ -2,27 +2,23 @@ package dev.amble.ait.core.tardis.animation.v2;
 
 import java.util.UUID;
 
+import dev.amble.ait.core.tardis.animation.v2.datapack.TardisAnimationRegistry;
+import dev.amble.ait.data.Exclude;
 import dev.amble.lib.util.ServerLifecycleHooks;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
-import net.fabricmc.loader.api.FabricLoader;
 
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.world.ClientWorld;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.math.BlockPos;
 
 import dev.amble.ait.AITMod;
 import dev.amble.ait.api.tardis.Disposable;
 import dev.amble.ait.api.tardis.TardisTickable;
 import dev.amble.ait.api.tardis.link.v2.Linkable;
 import dev.amble.ait.api.tardis.link.v2.TardisRef;
-import dev.amble.ait.client.tardis.manager.ClientTardisManager;
-import dev.amble.ait.core.blockentities.ExteriorBlockEntity;
 import dev.amble.ait.core.tardis.ServerTardis;
 import dev.amble.ait.core.tardis.Tardis;
 import dev.amble.ait.core.tardis.TardisManager;
@@ -32,30 +28,10 @@ import dev.amble.ait.core.tardis.util.NetworkUtil;
 public class AnimationHolder implements TardisTickable, Disposable, Linkable {
     public static final Identifier UPDATE_PACKET = AITMod.id("sync/ext_anim");
 
-    static {
-        if (EnvType.CLIENT == FabricLoader.getInstance().getEnvironmentType()) initClient();
-    }
-
-    @Environment(EnvType.CLIENT)
-    private static void initClient() {
-        ClientPlayNetworking.registerGlobalReceiver(UPDATE_PACKET, (client, handler, buf, responseSender) -> {
-            TravelHandlerBase.State state = buf.readEnumConstant(TravelHandlerBase.State.class);
-            UUID uuid = buf.readUuid();
-
-            ClientTardisManager.getInstance().getTardis(uuid, tardis -> {
-                ClientWorld world = MinecraftClient.getInstance().world;
-                BlockPos pos = tardis.travel().position().getPos();
-
-                if (!(world.getBlockEntity(pos) instanceof ExteriorBlockEntity ext)) return;
-
-                ext.getAnimations().onStateChange(state);
-            });
-        });
-    }
-
     protected final TardisAnimationMap map;
     private TardisAnimation current;
     private float alphaOverride = -1;
+    @Exclude
     private boolean isServer = true;
     private TardisRef ref;
 
@@ -69,11 +45,15 @@ public class AnimationHolder implements TardisTickable, Disposable, Linkable {
         this.link(tardis);
     }
 
+    protected TardisAnimation getCurrent() {
+        return this.current;
+    }
+
     @Override
     public void tick(MinecraftServer server) {
-        if (this.current == null) return;
+        if (this.getCurrent() == null) return;
 
-        this.current.tick(server);
+        this.getCurrent().tick(server);
     }
 
     @Environment(EnvType.CLIENT)
@@ -81,24 +61,24 @@ public class AnimationHolder implements TardisTickable, Disposable, Linkable {
     public void tick(MinecraftClient client) {
         this.isServer = false;
 
-        if (this.current == null) return;
+        if (this.getCurrent() == null) return;
 
-        this.current.tick(client);
+        this.getCurrent().tick(client);
     }
 
     @Override
     public boolean isAged() {
-        return this.current.isAged();
+        return this.getCurrent().isAged();
     }
 
     @Override
     public void age() {
-        this.current.age();
+        this.getCurrent().age();
     }
 
     @Override
     public void dispose() {
-        this.current.dispose();
+        this.getCurrent().dispose();
         this.alphaOverride = -1;
     }
 
@@ -110,6 +90,8 @@ public class AnimationHolder implements TardisTickable, Disposable, Linkable {
     @Override
     public void link(Tardis tardis) {
         this.ref = new TardisRef(tardis, real -> TardisManager.with(!this.isServer, (o, manager) -> manager.demandTardis(o, real), ServerLifecycleHooks::get));
+
+        this.isServer = tardis instanceof ServerTardis;
     }
 
     @Override
@@ -119,11 +101,20 @@ public class AnimationHolder implements TardisTickable, Disposable, Linkable {
 
     public void onStateChange(TravelHandlerBase.State state) {
         TardisAnimation animation = this.map.get(state);
+
+        if (state == TravelHandlerBase.State.LANDED) {
+            this.alphaOverride = 1f;
+            return;
+        } else if (state == TravelHandlerBase.State.FLIGHT) {
+            this.alphaOverride = 0f;
+            return;
+        }
+
         if (animation == null) {
             switch (state) {
-                case LANDED, DEMAT:
+                case DEMAT:
                     this.alphaOverride = 1f;
-                case FLIGHT, MAT:
+                case MAT:
                     this.alphaOverride = 0f;
             }
             return;
@@ -131,15 +122,15 @@ public class AnimationHolder implements TardisTickable, Disposable, Linkable {
 
         this.alphaOverride = -1;
 
-        if (this.current != null) {
-            this.current.dispose();
+        if (this.getCurrent() != null) {
+            this.getCurrent().dispose();
         }
 
         animation.dispose();;
-        this.current = animation;
+        this.current = animation.instantiate();
 
         if (this.isLinked()) {
-            this.current.link(this.tardis().get());
+            this.getCurrent().link(this.tardis().get());
         }
 
         this.sync(state);
@@ -150,10 +141,15 @@ public class AnimationHolder implements TardisTickable, Disposable, Linkable {
             return this.alphaOverride;
         }
 
-        if (this.current == null)
+/*        if (!this.isServer && ServerLifecycleHooks.get().getTicks() % 20 == 0) {
+            System.out.println(this);
+            System.out.println(this.getCurrent());
+        }*/
+
+        if (this.getCurrent() == null)
              return 1f;
 
-        return this.current.getAlpha();
+        return this.getCurrent().getAlpha();
     }
 
     private void sync(TravelHandlerBase.State state) {

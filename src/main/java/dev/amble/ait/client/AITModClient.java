@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.UUID;
 
+import dev.amble.ait.core.tardis.handler.travel.AnimatedTravelHandler;
 import dev.amble.lib.register.AmbleRegistries;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.EnvType;
@@ -273,6 +274,8 @@ public class AITModClient implements ClientModInitializer {
         AstralMapBlock.registerSyncListener();
 
         ClientPlayConnectionEvents.JOIN.register((handler, sender, client) -> BOTI.tryWarn());
+
+        AnimatedTravelHandler.initClient();
     }
     public static Screen screenFromId(int id) {
         return screenFromId(id, null, null);

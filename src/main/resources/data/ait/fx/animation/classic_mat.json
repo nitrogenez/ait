@@ -4,11 +4,11 @@
     "sound": "ait:tardis/mat",
     "keyframes": [
       {
-        "duration": 120,
+        "duration": 200,
         "alpha": 0
       },
       {
-        "duration": 100,
+        "duration": 180,
         "alpha": 1
       }
     ]

@@ -23,6 +23,7 @@ import dev.amble.ait.core.tardis.TardisManager;
 import dev.amble.ait.core.tardis.animation.v2.datapack.TardisAnimationRegistry;
 import dev.amble.ait.core.tardis.animation.v2.keyframe.KeyframeTracker;
 import dev.amble.ait.core.tardis.handler.travel.TravelHandlerBase;
+import org.joml.Vector3f;
 
 /**
  * Represents an exterior animation for the TARDIS.
@@ -65,7 +66,7 @@ public abstract class TardisAnimation implements TardisTickable, Disposable, Ide
         TravelHandlerBase.State state = tardis.travel().getState();
 
         float alpha = (state == TravelHandlerBase.State.MAT) ? 0f : 1f;
-        this.tracker.start(tardis.travel().position(), alpha);
+        this.tracker.start(tardis.travel().position(), alpha, tardis.stats().getScale());
     }
 
     @Override
@@ -90,6 +91,13 @@ public abstract class TardisAnimation implements TardisTickable, Disposable, Ide
 
     public float getAlpha() {
         return this.tracker.getAlpha();
+    }
+
+    public Vector3f getScale() {
+        Vector3f scale = this.tracker.getScale();
+        if (!this.isLinked()) return scale;
+
+        return scale.mul(this.tardis().get().stats().getScale()); // relative scaling
     }
 
     // required for datapacks

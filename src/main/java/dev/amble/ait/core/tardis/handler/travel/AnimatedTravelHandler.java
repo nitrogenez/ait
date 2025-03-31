@@ -18,6 +18,7 @@ import dev.amble.ait.core.tardis.animation.v2.datapack.TardisAnimationRegistry;
 import dev.amble.ait.data.Exclude;
 import dev.amble.ait.data.properties.Property;
 import dev.amble.ait.data.properties.Value;
+import org.joml.Vector3f;
 
 public abstract class AnimatedTravelHandler extends ProgressiveTravelHandler {
     private static final Identifier DEFAULT_DEMAT = AITMod.id("new_demat");
@@ -104,6 +105,10 @@ public abstract class AnimatedTravelHandler extends ProgressiveTravelHandler {
 
     public float getAlpha() {
         return this.getAnimations().getAlpha();
+    }
+
+    public Vector3f getScale() {
+        return this.getAnimations().getScale();
     }
 
     protected AnimationHolder getAnimations() {

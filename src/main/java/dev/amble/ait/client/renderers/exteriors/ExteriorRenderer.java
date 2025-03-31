@@ -37,6 +37,7 @@ import dev.amble.ait.core.tardis.handler.travel.TravelHandler;
 import dev.amble.ait.data.datapack.DatapackConsole;
 import dev.amble.ait.data.schema.exterior.ClientExteriorVariantSchema;
 import dev.amble.ait.registry.impl.exterior.ClientExteriorVariantRegistry;
+import org.joml.Vector3f;
 
 public class ExteriorRenderer<T extends ExteriorBlockEntity> implements BlockEntityRenderer<T> {
 
@@ -291,11 +292,13 @@ public class ExteriorRenderer<T extends ExteriorBlockEntity> implements BlockEnt
     }
 
     private void applyNameTransforms(Tardis tardis, MatrixStack matrices, String name) {
+        Vector3f scale = tardis.travel().getScale();
+
         if (name.equalsIgnoreCase("grumm") || name.equalsIgnoreCase("dinnerbone")) {
             matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees(-90f));
-            matrices.translate(0, tardis.stats().getYScale() + 0.25f, tardis.stats().getZScale() - 1.7f);
+            matrices.translate(0, scale.y + 0.25f, scale.z - 1.7f);
         }
 
-        matrices.scale(tardis.stats().getXScale(), tardis.stats().getYScale(), tardis.stats().getZScale());
+        matrices.scale(scale.x, scale.y, scale.z);
     }
 }

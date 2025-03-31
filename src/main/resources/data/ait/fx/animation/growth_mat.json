@@ -1,0 +1,22 @@
+{
+  "id": "ait:growth_mat",
+  "name": "Growing",
+  "expected_state": "mat",
+  "tracker": {
+    "sound": "ait:tardis/mat",
+    "keyframes": [
+      {
+        "interpolation": "linear",
+        "duration": 212,
+        "alpha": 0,
+        "scale": [0, 0, 0]
+      },
+      {
+        "interpolation": "linear",
+        "duration": 168,
+        "alpha": 1,
+        "scale": [1, 1, 1]
+      }
+    ]
+  }
+}

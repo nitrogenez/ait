@@ -20,6 +20,7 @@ import dev.amble.ait.AITMod;
 import dev.amble.ait.api.tardis.Disposable;
 import dev.amble.ait.api.tardis.TardisTickable;
 import dev.amble.ait.core.AITSounds;
+import org.joml.Vector3f;
 
 /**
  * A collection of keyframes that can be tracked.
@@ -69,6 +70,10 @@ public class KeyframeTracker extends ArrayList<AnimationKeyframe> implements Tar
         return this.getCurrent().getAlpha();
     }
 
+    public Vector3f getScale() {
+        return this.getCurrent().getScale();
+    }
+
     @Override
     public void tick(MinecraftServer server) {
         this.tickCommon(false);
@@ -89,6 +94,7 @@ public class KeyframeTracker extends ArrayList<AnimationKeyframe> implements Tar
             this.current++; // current is now previous
 
             this.getCurrent().setStartingAlpha(current.getAlpha());
+            this.getCurrent().setStartingScale(current.getScale());
 
             current.dispose();
         }
@@ -115,10 +121,11 @@ public class KeyframeTracker extends ArrayList<AnimationKeyframe> implements Tar
         return this;
     }
 
-    public void start(@Nullable CachedDirectedGlobalPos source, float alpha) {
+    public void start(@Nullable CachedDirectedGlobalPos source, float alpha, Vector3f scale) {
         this.dispose();
 
         this.getCurrent().setStartingAlpha(alpha);
+        this.getCurrent().setStartingScale(scale);
 
         if (source == null || source.getWorld() == null) return;
 

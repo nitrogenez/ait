@@ -10,6 +10,7 @@ import java.util.*;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
+import dev.amble.ait.core.tardis.handler.travel.AnimatedTravelHandler;
 import dev.amble.lib.register.unlockable.Unlockable;
 import dev.amble.lib.util.ServerLifecycleHooks;
 
@@ -35,6 +36,7 @@ import dev.amble.ait.data.properties.dbl.DoubleProperty;
 import dev.amble.ait.data.properties.dbl.DoubleValue;
 import dev.amble.ait.data.schema.desktop.TardisDesktopSchema;
 import dev.amble.ait.registry.impl.DesktopRegistry;
+import org.joml.Vector3f;
 
 public class StatsHandler extends KeyedTardisComponent {
 
@@ -247,19 +249,27 @@ public class StatsHandler extends KeyedTardisComponent {
         }
     }
 
-    public float getXScale() {
+    private float getXScale() {
         double v = tardisXScale.get();
         return (float) v;
     }
 
-    public float getYScale() {
+    private float getYScale() {
         double v = tardisYScale.get();
         return (float) v;
     }
 
-    public float getZScale() {
+    private float getZScale() {
         double v = tardisZScale.get();
         return (float) v;
+    }
+
+    /**
+     * The scale of the TARDIS.
+     * @see AnimatedTravelHandler#getScale()
+     */
+    public Vector3f getScale() {
+        return new Vector3f(this.getXScale(), this.getYScale(), this.getZScale());
     }
 
     public void setXScale(double scale) {

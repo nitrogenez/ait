@@ -23,6 +23,7 @@ import dev.amble.ait.core.tardis.TardisManager;
 import dev.amble.ait.core.tardis.handler.travel.TravelHandlerBase;
 import dev.amble.ait.core.tardis.util.NetworkUtil;
 import dev.amble.ait.data.Exclude;
+import org.joml.Vector3f;
 
 public class AnimationHolder implements TardisTickable, Disposable, Linkable {
     public static final Identifier UPDATE_PACKET = AITMod.id("sync/ext_anim");
@@ -149,6 +150,18 @@ public class AnimationHolder implements TardisTickable, Disposable, Linkable {
              return 1f;
 
         return this.getCurrent().getAlpha();
+    }
+
+    public Vector3f getScale() {
+        if (this.getCurrent() == null) {
+            if (this.isLinked()) {
+                return this.tardis().get().stats().getScale();
+            }
+
+            return new Vector3f(1f, 1f, 1f);
+        }
+
+        return this.getCurrent().getScale();
     }
 
     private void sync(TravelHandlerBase.State state) {

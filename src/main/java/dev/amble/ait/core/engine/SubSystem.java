@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.function.Supplier;
 
 import com.google.gson.*;
-import dev.amble.ait.core.AITBlocks;
 import dev.amble.lib.data.CachedDirectedGlobalPos;
 import org.jetbrains.annotations.Nullable;
 
@@ -20,6 +19,7 @@ import dev.amble.ait.api.tardis.Initializable;
 import dev.amble.ait.api.tardis.TardisComponent;
 import dev.amble.ait.api.tardis.TardisEvents;
 import dev.amble.ait.client.tardis.ClientTardis;
+import dev.amble.ait.core.AITBlocks;
 import dev.amble.ait.core.engine.impl.*;
 import dev.amble.ait.core.tardis.ServerTardis;
 import dev.amble.ait.core.tardis.Tardis;

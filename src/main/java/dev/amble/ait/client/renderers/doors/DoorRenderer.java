@@ -14,6 +14,7 @@ import net.minecraft.util.profiler.Profiler;
 
 import dev.amble.ait.api.tardis.TardisComponent;
 import dev.amble.ait.client.boti.BOTI;
+import dev.amble.ait.client.models.doors.CapsuleDoorModel;
 import dev.amble.ait.client.models.doors.DoomDoorModel;
 import dev.amble.ait.client.models.doors.DoorModel;
 import dev.amble.ait.client.renderers.AITRenderLayers;
@@ -38,14 +39,28 @@ public class DoorRenderer<T extends DoorBlockEntity> implements BlockEntityRende
     @Override
     public void render(T entity, float tickDelta, MatrixStack matrices, VertexConsumerProvider vertexConsumers,
             int light, int overlay) {
-        if (!entity.isLinked() || entity.getWorld() == null)
+        if (entity.getWorld() == null) return;
+        if (!entity.isLinked()) {
+            BlockState blockState = entity.getCachedState();
+            float k = blockState.get(DoorBlock.FACING).asRotation();
+            matrices.push();
+            matrices.translate(0.5, 1.5, 0.5);
+            matrices.scale(1, 1, 1);
+            matrices.multiply(RotationAxis.NEGATIVE_Y.rotationDegrees(k + 180));
+            matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees(180f));
+            CapsuleDoorModel doorModel = new CapsuleDoorModel(CapsuleDoorModel.getTexturedModelData().createModel());
+            doorModel.render(matrices, vertexConsumers.getBuffer(AITRenderLayers.getEntityCutout(ClientExteriorVariantRegistry.CAPSULE_DEFAULT.texture())),
+                    light, overlay, 1, 1, 1, 1);
+            matrices.pop();
             return;
+        }
 
         Profiler profiler = entity.getWorld().getProfiler();
         profiler.push("door");
 
         ClientTardis tardis = entity.tardis().get().asClient();
-        this.renderDoor(profiler, tardis, entity, matrices, vertexConsumers, light, overlay);
+        if (!tardis.siege().isActive())
+            this.renderDoor(profiler, tardis, entity, matrices, vertexConsumers, light, overlay);
 
         profiler.pop();
     }

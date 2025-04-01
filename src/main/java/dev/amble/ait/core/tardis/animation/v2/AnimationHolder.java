@@ -50,11 +50,11 @@ public class AnimationHolder implements TardisTickable, Disposable, Linkable {
         return this.current;
     }
 
-    public void forceAnimation(TardisAnimation anim) {
+    public boolean setAnimation(TardisAnimation anim) {
         if (this.isLinked()) {
             if (anim.getExpectedState() != tardis().get().travel().getState()) {
                 AITMod.LOGGER.error("Tried to force animation {} but the tardis is in state {} which is unexpected!", anim.id(), tardis().get().travel().getState());
-                return;
+                return false;
             }
         }
 
@@ -63,6 +63,7 @@ public class AnimationHolder implements TardisTickable, Disposable, Linkable {
         }
 
         this.current = anim.instantiate();
+        return true;
     }
 
     /**

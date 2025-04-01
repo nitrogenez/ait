@@ -17,10 +17,10 @@ import dev.amble.ait.api.tardis.TardisTickable;
 public class AnimationKeyframe<T> implements TardisTickable, Disposable {
     protected final InterpolatedValue<T> value;
     protected final Interpolation interpolation;
-    protected final int duration;
+    protected final float duration;
     protected int ticks;
 
-    public AnimationKeyframe(int duration, Interpolation type, InterpolatedValue<T> value) {
+    public AnimationKeyframe(float duration, Interpolation type, InterpolatedValue<T> value) {
         if (duration < 0 || value == null) {
             throw new IllegalArgumentException("Invalid keyframe parameters: " + duration + ", " + type + ", " + value);
         }
@@ -31,10 +31,6 @@ public class AnimationKeyframe<T> implements TardisTickable, Disposable {
         this.interpolation = type;
 
         this.ticks = 0;
-    }
-
-    public AnimationKeyframe(float duration, Interpolation type, InterpolatedValue<T> value) {
-        this((int) duration, type, value);
     }
 
     public boolean isDone() {
@@ -57,7 +53,7 @@ public class AnimationKeyframe<T> implements TardisTickable, Disposable {
 
     @Override
     public void age() {
-        this.ticks = this.duration;
+        this.ticks = MathHelper.ceil(this.duration);
     }
 
     public int ticks() {

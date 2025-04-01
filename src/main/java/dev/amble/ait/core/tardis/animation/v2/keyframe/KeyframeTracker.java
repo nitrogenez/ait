@@ -16,7 +16,7 @@ import dev.amble.ait.api.tardis.TardisTickable;
  */
 public class KeyframeTracker<T> extends ArrayList<AnimationKeyframe<T>> implements TardisTickable, Disposable {
     protected int current; // The current keyframe we are on.
-    private int duration;
+    private float duration;
 
     /**
      * A collection of keyframes that can be tracked.
@@ -85,7 +85,7 @@ public class KeyframeTracker<T> extends ArrayList<AnimationKeyframe<T>> implemen
         return this.getCurrent().isDone() && this.current == (this.size() - 1);
     }
 
-    public int duration() {
+    public float duration() {
         if (this.duration == -1) {
             return this.calculateDuration();
         }

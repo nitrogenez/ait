@@ -10,18 +10,18 @@ import net.minecraft.sound.SoundEvents;
 import net.minecraft.world.GameRules;
 import net.minecraft.world.World;
 
+import dev.amble.ait.core.AITEntityTypes;
 import dev.amble.ait.core.AITItems;
 
+public class TrenzalorePaintingEntity extends BOTIPaintingEntity {
 
-public class GallifreyFallsPaintingEntity extends BOTIPaintingEntity {
-
-    public GallifreyFallsPaintingEntity(EntityType<? extends BOTIPaintingEntity> entityType, World world) {
-        super(entityType, world);
+    public TrenzalorePaintingEntity(EntityType<? extends TrenzalorePaintingEntity> entityType, World world) {
+        super(AITEntityTypes.TRENZALORE_PAINTING_ENTITY_TYPE, world);
     }
 
     @Override
     public ItemStack getPickBlockStack() {
-        return new ItemStack(AITItems.GALLIFREY_FALLS_PAINTING);
+        return new ItemStack(AITItems.TRENZALORE_PAINTING);
     }
 
     @Override
@@ -33,6 +33,6 @@ public class GallifreyFallsPaintingEntity extends BOTIPaintingEntity {
         if (entity instanceof PlayerEntity player && player.isCreative()) {
             return;
         }
-        this.dropItem(AITItems.GALLIFREY_FALLS_PAINTING);
+        this.dropItem(AITItems.TRENZALORE_PAINTING);
     }
 }

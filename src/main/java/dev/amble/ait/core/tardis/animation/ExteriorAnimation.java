@@ -20,16 +20,11 @@ import dev.amble.ait.AITMod;
 import dev.amble.ait.core.blockentities.ExteriorBlockEntity;
 import dev.amble.ait.core.effects.ZeitonHighEffect;
 import dev.amble.ait.core.sounds.travel.TravelSound;
-import dev.amble.ait.core.sounds.travel.TravelSoundRegistry;
 import dev.amble.ait.core.tardis.Tardis;
 import dev.amble.ait.core.tardis.handler.travel.TravelHandlerBase;
 import dev.amble.ait.core.tardis.util.NetworkUtil;
 import dev.amble.ait.data.Loyalty;
 
-/**
- * @see dev.amble.ait.core.tardis.animation.v2.TardisAnimation
- */
-@Deprecated(forRemoval = true, since = "1.3.0")
 public abstract class ExteriorAnimation {
 
     public static final Identifier UPDATE = AITMod.id("update_setup_anim");
@@ -131,7 +126,7 @@ public abstract class ExteriorAnimation {
         };
 
         this.tellClientsToSetup(state);
-        TravelSound sound = TravelSoundRegistry.EMPTY;
+        TravelSound sound = tardis.stats().getTravelEffects().get(state);
 
         if (sound == null)
             return false;

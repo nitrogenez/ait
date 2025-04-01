@@ -338,19 +338,6 @@ public class ExteriorBlockEntity extends AbstractLinkableBlockEntity implements 
         this.exteriorLightBlockState(blockState, pos, state);
     }
 
-    @Environment(EnvType.CLIENT)
-    public float getAlpha(float delta) {
-        if (!this.isLinked())
-            return 1.0F;
-
-        return this.tardis().get().travel().getAlpha(delta);
-    }
-
-    @Environment(EnvType.CLIENT)
-    public float getAlpha() {
-        return this.getAlpha(0F);
-    }
-
     private void exteriorLightBlockState(BlockState blockState, BlockPos pos, TravelHandlerBase.State state) {
         if (!state.animated())
             return;
@@ -358,6 +345,10 @@ public class ExteriorBlockEntity extends AbstractLinkableBlockEntity implements 
         if (!blockState.isOf(AITBlocks.EXTERIOR_BLOCK))
             return;
 
-        this.getWorld().setBlockState(pos, blockState.with(ExteriorBlock.LEVEL_4, MathHelper.clamp(Math.round(this.getAlpha() * 4), 0, 15)));
+        if (!this.isLinked()) return;
+
+        Tardis tardis = this.tardis().get();
+
+        this.getWorld().setBlockState(pos, blockState.with(ExteriorBlock.LEVEL_4, MathHelper.clamp(Math.round(tardis.travel().getAlpha() * 4), 0, 15)));
     }
 }

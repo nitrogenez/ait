@@ -188,12 +188,12 @@ public class BlockbenchParser implements
     private void parseAndStore(JsonObject json, String namespace) {
         // store in raw lookup
         // namespace -> raw json source
-	    this.rawLookup.computeIfAbsent(namespace, k -> new ArrayList<>());
+        this.rawLookup.computeIfAbsent(namespace, k -> new ArrayList<>());
         this.rawLookup.get(namespace).add(json);
 
         // parse and store in lookup
         HashMap<Identifier, Result> map = parse(json, namespace);
-	    this.lookup.putAll(map);
+        this.lookup.putAll(map);
     }
 
     public static HashMap<Identifier, Result> parse(JsonObject json, String namespace) {

@@ -170,7 +170,7 @@ public class BlockbenchParser implements
 
     private static Result parseTracker(JsonObject main, JsonObject timeline) {
         KeyframeTracker<Vector3f> rotation = parseVectorKeyframe(main.get("rotation"), 1f, new Vector3f(0f, 0f, 0f));
-        KeyframeTracker<Vector3f> translation = parseVectorKeyframe(main.get("position"), 10f, new Vector3f(0f, 0f, 0f));
+        KeyframeTracker<Vector3f> translation = parseVectorKeyframe(main.get("position"), 16f, new Vector3f(0f, 0f, 0f));
         KeyframeTracker<Vector3f> scale = parseVectorKeyframe(main.get("scale"), 1f, new Vector3f(1f, 1f, 1f));
         KeyframeTracker<Float> alpha = parseAlphaKeyframe(timeline);
 

@@ -20,6 +20,9 @@ public class AnimationKeyframe<T> implements TardisTickable, Disposable {
     protected final float duration;
     protected int ticks;
 
+    private AnimationKeyframe<T> previous;
+    private AnimationKeyframe<T> next;
+
     public AnimationKeyframe(float duration, Interpolation type, InterpolatedValue<T> value) {
         if (duration < 0 || value == null) {
             throw new IllegalArgumentException("Invalid keyframe parameters: " + duration + ", " + type + ", " + value);
@@ -66,7 +69,33 @@ public class AnimationKeyframe<T> implements TardisTickable, Disposable {
      * @return The current value of the keyframe.
      */
     public T getValue(float delta) {
-        return this.value.interpolate(this.getProgress(delta), this.interpolation);
+        return this.value.interpolate(this.getProgress(delta), this.getPreviousValue(), this.getNextValue(), this.interpolation);
+    }
+
+    protected T getPreviousValue() {
+        if (this.previous == null) return this.value.start();
+
+        return this.previous.value.start();
+    }
+
+    protected T getNextValue() {
+        if (this.next == null) return this.value.target();
+
+        return this.next.value.target();
+    }
+
+    /**
+     * Set the next data point to improve interpolation values
+     */
+    public void setNext(AnimationKeyframe<T> val) {
+        this.next = val;
+    }
+
+    /**
+     * Set the previous data point to improve interpolation values
+     */
+    public void setPrevious(AnimationKeyframe<T> val) {
+        this.previous = val;
     }
 
     public void setStart(T val) {
@@ -89,7 +118,7 @@ public class AnimationKeyframe<T> implements TardisTickable, Disposable {
     public interface InterpolatedValue<T> {
         T start();
         T target();
-        T interpolate(float progress, Interpolation type);
+        T interpolate(float progress, T previous, T next, Interpolation type);
 
         void setStart(T start);
         InterpolatedValue<T> instantiate();
@@ -115,8 +144,8 @@ public class AnimationKeyframe<T> implements TardisTickable, Disposable {
         }
 
         @Override
-        public Float interpolate(float progress, Interpolation type) {
-            return type.interpolate(progress, this.start(), this.target());
+        public Float interpolate(float progress, Float previous, Float next, Interpolation type) {
+            return type.interpolate(progress, previous, this.start(), this.target(), next);
         }
 
         @Override
@@ -150,11 +179,11 @@ public class AnimationKeyframe<T> implements TardisTickable, Disposable {
         }
 
         @Override
-        public Vector3f interpolate(float progress, Interpolation type) {
+        public Vector3f interpolate(float progress, Vector3f previous, Vector3f next, Interpolation type) {
             return new Vector3f(
-                type.interpolate(progress, this.start.x, this.target.x),
-                type.interpolate(progress, this.start.y, this.target.y),
-                type.interpolate(progress, this.start.z, this.target.z)
+                type.interpolate(progress, previous.x, this.start.x, this.target.x, next.x),
+                type.interpolate(progress, previous.y, this.start.y, this.target.y, next.y),
+                type.interpolate(progress, previous.z, this.start.z, this.target.z, next.z)
             );
         }
 
@@ -174,18 +203,18 @@ public class AnimationKeyframe<T> implements TardisTickable, Disposable {
     public enum Interpolation {
         LINEAR {
             @Override
-            public float interpolate(float progress, float start, float end) {
+            public float interpolate(float progress, float previous, float start, float end, float next) {
                 return MathHelper.lerp(Math.min(progress, 1), start, end);
             }
         },
         CUBIC {;
             @Override
-            public float interpolate(float progress, float start, float end) {
-                return MathHelper.catmullRom(Math.min(progress, 1), start, start, end, end);
+            public float interpolate(float progress, float previous, float start, float end, float next) {
+                return MathHelper.catmullRom(Math.min(progress, 1), previous, start, end, next);
             }
         };
 
-        public abstract float interpolate(float progress, float start, float end);
+        public abstract float interpolate(float progress, float previous, float start, float end, float next);
 
         public static final Codec<Interpolation> CODEC = Codecs.NON_EMPTY_STRING.flatXmap(s -> {
             try {

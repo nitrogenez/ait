@@ -70,9 +70,19 @@ public class KeyframeTracker<T> extends ArrayList<AnimationKeyframe<T>> implemen
         if (current.isDone() && !this.isDone()) {
             this.current++; // current is now previous
 
-            this.getCurrent().setStart(current.getValue(0F));
+            AnimationKeyframe<T> previous = current;
+            current = this.getCurrent();
+            AnimationKeyframe<T> next = null;
 
-            current.dispose();
+            if (this.current + 1 < this.size()) {
+                next = this.get(this.current + 1);
+            }
+
+            current.setStart(previous.getValue(0F));
+            current.setPrevious(previous);
+            current.setNext(next);
+
+            previous.dispose();
         }
     }
 

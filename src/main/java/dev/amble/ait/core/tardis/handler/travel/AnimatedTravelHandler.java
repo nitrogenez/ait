@@ -62,10 +62,10 @@ public abstract class AnimatedTravelHandler extends ProgressiveTravelHandler {
         matId.of(this, MAT_FX);
 
         dematId.addListener((id) -> {
-            isAnimationInvalidated = true;
+            this.invalidateAnimations();
         });
         matId.addListener((id) -> {
-            isAnimationInvalidated = true;
+            this.invalidateAnimations();
         });
     }
 
@@ -103,20 +103,50 @@ public abstract class AnimatedTravelHandler extends ProgressiveTravelHandler {
         }
     }
 
+    private void invalidateAnimations() {
+        if (this.getState().animated()) {
+            this.isAnimationInvalidated = true;
+            return;
+        }
+
+        this.animations = null;
+    }
+
     public float getAlpha() {
-        return this.getAnimations().getAlpha();
+        return this.getAlpha(0F);
     }
 
     public Vector3f getScale() {
-        return this.getAnimations().getScale();
+        return this.getScale(0F);
     }
 
     public Vector3f getAnimationPosition() {
-        return this.getAnimations().getPosition();
+        return this.getAnimationPosition(0F);
     }
 
     public Vector3f getAnimationRotation() {
-        return this.getAnimations().getRotation();
+        return this.getAnimationRotation(0F);
+    }
+
+
+    public float getAlpha(float delta) {
+        return this.getAnimations().getAlpha(delta);
+    }
+
+    public Vector3f getScale(float delta) {
+        return this.getAnimations().getScale(delta);
+    }
+
+    public Vector3f getAnimationPosition(float delta) {
+        return this.getAnimations().getPosition(delta);
+    }
+
+    public Vector3f getAnimationRotation(float delta) {
+        return this.getAnimations().getRotation(delta);
+    }
+
+    public boolean isHitboxShown() {
+        return this.getAlpha() > 0.5F && this.getScale().equals(1, 1, 1) && this.getAnimationPosition().equals(0, 0, 0) && this.getAnimationRotation().equals(0, 0, 0);
     }
 
     protected AnimationHolder getAnimations() {

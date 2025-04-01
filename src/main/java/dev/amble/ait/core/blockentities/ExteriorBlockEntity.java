@@ -7,8 +7,6 @@ import java.util.UUID;
 import dev.amble.lib.data.CachedDirectedGlobalPos;
 import dev.drtheo.scheduler.api.Scheduler;
 import dev.drtheo.scheduler.api.TimeUnit;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -313,7 +311,7 @@ public class ExteriorBlockEntity extends AbstractLinkableBlockEntity implements 
             return;
         }
 
-        if (!tardis.travel().isLanded() && this.getAlpha() > 0.105f && AITMod.CONFIG.CLIENT.RENDER_DEMAT_PARTICLES) {
+        if (AITMod.CONFIG.CLIENT.RENDER_DEMAT_PARTICLES && !tardis.travel().isLanded() && tardis.travel().isHitboxShown()) {
             for (int ji = 0; ji < 4; ji++) {
                 double offsetX = AITMod.RANDOM.nextGaussian() * 0.125f;
                 double offsetY = AITMod.RANDOM.nextGaussian() * 0.125f;
@@ -338,14 +336,6 @@ public class ExteriorBlockEntity extends AbstractLinkableBlockEntity implements 
         this.exteriorLightBlockState(blockState, pos, state);
     }
 
-    @Environment(EnvType.CLIENT)
-    public float getAlpha() {
-        if (!this.isLinked())
-            return 1.0F;
-
-        return this.tardis().get().travel().getAlpha();
-    }
-
     private void exteriorLightBlockState(BlockState blockState, BlockPos pos, TravelHandlerBase.State state) {
         if (!state.animated())
             return;
@@ -353,6 +343,10 @@ public class ExteriorBlockEntity extends AbstractLinkableBlockEntity implements 
         if (!blockState.isOf(AITBlocks.EXTERIOR_BLOCK))
             return;
 
-        this.getWorld().setBlockState(pos, blockState.with(ExteriorBlock.LEVEL_4, MathHelper.clamp(Math.round(this.getAlpha() * 4), 0, 15)));
+        if (!this.isLinked()) return;
+
+        Tardis tardis = this.tardis().get();
+
+        this.getWorld().setBlockState(pos, blockState.with(ExteriorBlock.LEVEL_4, MathHelper.clamp(Math.round(tardis.travel().getAlpha() * 4), 0, 15)));
     }
 }

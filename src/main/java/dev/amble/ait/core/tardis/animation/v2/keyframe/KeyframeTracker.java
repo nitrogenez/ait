@@ -2,48 +2,29 @@ package dev.amble.ait.core.tardis.animation.v2.keyframe;
 
 import java.util.*;
 
-import com.mojang.serialization.Codec;
-import com.mojang.serialization.codecs.RecordCodecBuilder;
-import dev.amble.lib.data.CachedDirectedGlobalPos;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import org.jetbrains.annotations.Nullable;
-import org.joml.Vector3f;
 
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.registry.Registries;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.sound.SoundCategory;
-import net.minecraft.sound.SoundEvent;
-import net.minecraft.util.Identifier;
 
-import dev.amble.ait.AITMod;
 import dev.amble.ait.api.tardis.Disposable;
 import dev.amble.ait.api.tardis.TardisTickable;
-import dev.amble.ait.core.AITSounds;
 
 /**
  * A collection of keyframes that can be tracked.
  */
-public class KeyframeTracker extends ArrayList<AnimationKeyframe> implements TardisTickable, Disposable {
-    public static final Codec<KeyframeTracker> CODEC = RecordCodecBuilder.create(instance -> instance
-            .group(Identifier.CODEC.fieldOf("sound").forGetter(KeyframeTracker::soundId),
-                    AnimationKeyframe.CODEC.listOf().fieldOf("keyframes").forGetter(KeyframeTracker::getFrames)
-            ).apply(instance, KeyframeTracker::new));
-
-    protected final Identifier soundId;
+public class KeyframeTracker<T> extends ArrayList<AnimationKeyframe<T>> implements TardisTickable, Disposable {
     protected int current; // The current keyframe we are on.
-    private int duration;
+    private float duration;
 
     /**
      * A collection of keyframes that can be tracked.
-     * @param sound The (optional) sound to play when this begins.
      * @param frames The keyframes to track
      */
-    public KeyframeTracker(@Nullable Identifier sound, Collection<AnimationKeyframe> frames) {
+    public KeyframeTracker(Collection<AnimationKeyframe<T>> frames) {
         super();
 
-        this.soundId = sound;
         this.current = 0;
 
         this.addAll(frames);
@@ -54,7 +35,7 @@ public class KeyframeTracker extends ArrayList<AnimationKeyframe> implements Tar
      * Get the current keyframe.
      * @return The current keyframe.
      */
-    public AnimationKeyframe getCurrent() {
+    public AnimationKeyframe<T> getCurrent() {
         if (this.size() == 0) {
             throw new NoSuchElementException("Keyframe Tracker " + this + " is missing keyframes!");
         }
@@ -66,20 +47,8 @@ public class KeyframeTracker extends ArrayList<AnimationKeyframe> implements Tar
         return this.current == 0;
     }
 
-    public float getAlpha() {
-        return this.getCurrent().getAlpha();
-    }
-
-    public Vector3f getScale() {
-        return this.getCurrent().getScale();
-    }
-
-    public Vector3f getPosition() {
-        return this.getCurrent().getPosition();
-    }
-
-    public Vector3f getRotation() {
-        return this.getCurrent().getRotation();
+    public T getValue(float delta) {
+        return this.getCurrent().getValue(delta);
     }
 
     @Override
@@ -94,58 +63,39 @@ public class KeyframeTracker extends ArrayList<AnimationKeyframe> implements Tar
     }
 
     protected void tickCommon(boolean isClient) {
-        AnimationKeyframe current = this.get(this.current);
+        AnimationKeyframe<T> current = this.get(this.current);
 
         current.tickCommon(isClient);
 
         if (current.isDone() && !this.isDone()) {
             this.current++; // current is now previous
 
-            this.getCurrent().setStartingAlpha(current.getAlpha());
-            this.getCurrent().setStartingScale(current.getScale());
+            AnimationKeyframe<T> previous = current;
+            current = this.getCurrent();
+            AnimationKeyframe<T> next = null;
 
-            current.dispose();
+            if (this.current + 1 < this.size()) {
+                next = this.get(this.current + 1);
+            }
+
+            current.setStart(previous.getValue(0F));
+            current.setPrevious(previous);
+            current.setNext(next);
+
+            previous.dispose();
         }
     }
 
-    public SoundEvent getSound() {
-        SoundEvent sfx = Registries.SOUND_EVENT.get(this.soundId);
-
-        if (sfx == null) {
-            AITMod.LOGGER.error("Unknown sound event: {} in keyframe tracker {}", this.soundId, this);
-            sfx = AITSounds.ERROR;
-        }
-
-        return sfx;
-    }
-
-    // required for datapacks
-    private Identifier soundId() {
-        return this.soundId;
-    }
-
-    // required for datapacks
-    private List<AnimationKeyframe> getFrames() {
-        return this;
-    }
-
-    public void start(@Nullable CachedDirectedGlobalPos source, float alpha, Vector3f scale) {
+    public void start(T val) {
         this.dispose();
-
-        this.getCurrent().setStartingAlpha(alpha);
-        this.getCurrent().setStartingScale(scale);
-
-        if (source == null || source.getWorld() == null) return;
-
-        // Play sound at source
-        source.getWorld().playSound(null, source.getPos(), this.getSound(), SoundCategory.BLOCKS, 1.0f, 1.0f);
+        // this.getCurrent().setStart(val);
     }
 
     public boolean isDone() {
         return this.getCurrent().isDone() && this.current == (this.size() - 1);
     }
 
-    public int duration() {
+    public float duration() {
         if (this.duration == -1) {
             return this.calculateDuration();
         }
@@ -155,7 +105,7 @@ public class KeyframeTracker extends ArrayList<AnimationKeyframe> implements Tar
     private int calculateDuration() {
         int total = 0;
 
-        for (AnimationKeyframe keyframe : this) {
+        for (AnimationKeyframe<T> keyframe : this) {
             total += keyframe.duration;
         }
 
@@ -181,13 +131,13 @@ public class KeyframeTracker extends ArrayList<AnimationKeyframe> implements Tar
         this.current = 0;
     }
 
-    public KeyframeTracker instantiate() {
-        Collection<AnimationKeyframe> frames = new ArrayList<>();
+    public KeyframeTracker<T> instantiate() {
+        Collection<AnimationKeyframe<T>> frames = new ArrayList<>();
 
-        for (AnimationKeyframe keyframe : this) {
+        for (AnimationKeyframe<T> keyframe : this) {
             frames.add(keyframe.instantiate());
         }
 
-        return new KeyframeTracker(this.soundId, frames);
+        return new KeyframeTracker<>(frames);
     }
 }

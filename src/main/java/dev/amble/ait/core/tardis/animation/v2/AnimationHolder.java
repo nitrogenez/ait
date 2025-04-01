@@ -3,6 +3,7 @@ package dev.amble.ait.core.tardis.animation.v2;
 import java.util.UUID;
 
 import dev.amble.lib.util.ServerLifecycleHooks;
+import dev.drtheo.queue.api.ActionQueue;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
@@ -47,6 +48,32 @@ public class AnimationHolder implements TardisTickable, Disposable, Linkable {
 
     protected TardisAnimation getCurrent() {
         return this.current;
+    }
+
+    public boolean setAnimation(TardisAnimation anim) {
+        if (this.isLinked()) {
+            if (anim.getExpectedState() != tardis().get().travel().getState()) {
+                AITMod.LOGGER.error("Tried to force animation {} but the tardis is in state {} which is unexpected!", anim.id(), tardis().get().travel().getState());
+                return false;
+            }
+        }
+
+        if (this.current != null) {
+            this.current.dispose();
+        }
+
+        this.current = anim.instantiate();
+        return true;
+    }
+
+    /**
+     * Allows you to enqueue things to be ran when the current animation is completed.
+     * @return The action queue to run when the animation is done. Or null if there is no animation.
+     */
+    public ActionQueue onDone() {
+        if (this.getCurrent() == null) return null;
+
+        return this.getCurrent().onDone();
     }
 
     @Override
@@ -136,7 +163,7 @@ public class AnimationHolder implements TardisTickable, Disposable, Linkable {
         this.sync(state);
     }
 
-    public float getAlpha() {
+    public float getAlpha(float delta) {
         if (this.alphaOverride != -1) {
             return this.alphaOverride;
         }
@@ -149,10 +176,10 @@ public class AnimationHolder implements TardisTickable, Disposable, Linkable {
         if (this.getCurrent() == null)
              return 1f;
 
-        return this.getCurrent().getAlpha();
+        return this.getCurrent().getAlpha(delta);
     }
 
-    public Vector3f getScale() {
+    public Vector3f getScale(float delta) {
         if (this.getCurrent() == null) {
             if (this.isLinked()) {
                 return this.tardis().get().stats().getScale();
@@ -161,23 +188,23 @@ public class AnimationHolder implements TardisTickable, Disposable, Linkable {
             return new Vector3f(1f, 1f, 1f);
         }
 
-        return this.getCurrent().getScale();
+        return this.getCurrent().getScale(delta);
     }
 
-    public Vector3f getPosition() {
+    public Vector3f getPosition(float delta) {
         if (this.getCurrent() == null) {
             return new Vector3f(0f, 0f, 0f);
         }
 
-        return this.getCurrent().getPosition();
+        return this.getCurrent().getPosition(delta);
     }
 
-    public Vector3f getRotation() {
+    public Vector3f getRotation(float delta) {
         if (this.getCurrent() == null) {
             return new Vector3f(0f, 0f, 0f);
         }
 
-        return this.getCurrent().getRotation();
+        return this.getCurrent().getRotation(delta);
     }
 
     private void sync(TravelHandlerBase.State state) {

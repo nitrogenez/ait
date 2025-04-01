@@ -11,7 +11,7 @@ public class TardisAnimationRegistry extends SimpleDatapackRegistry<TardisAnimat
     private static TardisAnimationRegistry INSTANCE;
 
     private TardisAnimationRegistry() {
-        super(DatapackAnimation::fromInputStream, DatapackAnimation.CODEC, "fx/animation", true, AITMod.MOD_ID);
+        super(DatapackAnimation::fromInputStream, DatapackAnimation.CODEC, "fx/animation/type", true, AITMod.MOD_ID);
     }
 
     public static TardisAnimationRegistry getInstance() {

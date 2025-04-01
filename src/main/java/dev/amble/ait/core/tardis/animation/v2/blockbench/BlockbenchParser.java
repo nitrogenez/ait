@@ -133,7 +133,7 @@ public class BlockbenchParser implements
         this.lookup.clear();
 
         for (Identifier id : manager
-                .findResources("fx/blockbench", filename -> filename.getPath().endsWith("animation.json")).keySet()) {
+                .findResources("fx/animation/keyframes", filename -> filename.getPath().endsWith("animation.json")).keySet()) {
             try (InputStream stream = manager.getResource(id).get().getInputStream()) {
                 parseAndStore(JsonParser.parseReader(new InputStreamReader(stream)).getAsJsonObject(), id.getNamespace());
                 AmbleKit.LOGGER.info("Loaded blockbench file {}", id);

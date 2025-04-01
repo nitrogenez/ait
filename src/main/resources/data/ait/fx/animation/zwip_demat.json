@@ -1,6 +1,5 @@
 {
   "id": "ait:zwip_demat",
   "name": "zwip",
-  "expected_state": "demat",
-  "sound": "ait:tardis/demat"
+  "expected_state": "demat"
 }

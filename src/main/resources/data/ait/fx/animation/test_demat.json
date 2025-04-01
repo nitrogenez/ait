@@ -1,6 +1,0 @@
-{
-  "id": "ait:test_demat",
-  "name": "test",
-  "expected_state": "demat",
-  "sound": "ait:tardis/siege_enable"
-}

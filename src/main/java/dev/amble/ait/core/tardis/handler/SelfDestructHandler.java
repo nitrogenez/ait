@@ -37,6 +37,7 @@ public class SelfDestructHandler extends KeyedTardisComponent implements TardisT
     @Override
     public void onLoaded() {
         queued.of(this, QUEUED);
+        this.destructing = false;
     }
 
     public void boom() {
@@ -105,7 +106,9 @@ public class SelfDestructHandler extends KeyedTardisComponent implements TardisT
 
         if (!this.destructing) {
             tardis.getDesktop().startQueue(true);
-            Scheduler.get().runTaskLater(this::complete, TimeUnit.SECONDS, 5);
+
+            tardis.travel().setTemporaryAnimation(AITMod.id("self_destruct"));
+            tardis.travel().onAnimationComplete(this::complete);
 
             this.destructing = true;
         }

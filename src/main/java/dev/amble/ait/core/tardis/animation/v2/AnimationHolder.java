@@ -63,6 +63,13 @@ public class AnimationHolder implements TardisTickable, Disposable, Linkable {
         }
 
         this.current = anim.instantiate();
+        this.alphaOverride = -1F;
+
+        if (this.isLinked()) {
+            this.current.link(this.tardis().get());
+            this.sync(this.tardis().get().travel().getState());
+        }
+
         return true;
     }
 
@@ -95,6 +102,8 @@ public class AnimationHolder implements TardisTickable, Disposable, Linkable {
 
     @Override
     public boolean isAged() {
+        if (this.getCurrent() == null) return true;
+
         return this.getCurrent().isAged();
     }
 
@@ -207,6 +216,13 @@ public class AnimationHolder implements TardisTickable, Disposable, Linkable {
         return this.getCurrent().getRotation(delta);
     }
 
+    private boolean trySync() {
+        if (this.getCurrent() == null || !this.isLinked()) return false;
+
+        this.sync(this.tardis().get().travel().getState());
+        return true;
+    }
+
     private void sync(TravelHandlerBase.State state) {
         if (!ServerLifecycleHooks.isServer() || !this.isLinked() || !(this.tardis().get() instanceof ServerTardis)) return;
 
@@ -215,6 +231,7 @@ public class AnimationHolder implements TardisTickable, Disposable, Linkable {
         PacketByteBuf buf = PacketByteBufs.create();
 
         buf.writeEnumConstant(state);
+        buf.writeIdentifier(this.current.id());
         buf.writeUuid(tardis.getUuid());
 
         NetworkUtil.getSubscribedPlayers(tardis).forEach(player -> {;

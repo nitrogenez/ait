@@ -36,9 +36,14 @@ public abstract class AnimatedTravelHandler extends ProgressiveTravelHandler {
     public static void initClient() {
         ClientPlayNetworking.registerGlobalReceiver(AnimationHolder.UPDATE_PACKET, (client, handler, buf, responseSender) -> {
             State state = buf.readEnumConstant(State.class);
+            Identifier id = buf.readIdentifier();
             UUID uuid = buf.readUuid();
 
             ClientTardisManager.getInstance().getTardis(uuid, tardis -> {
+                if (state == State.LANDED) {
+                    tardis.travel().setTemporaryAnimation(id);
+                    return;
+                }
 
                 tardis.travel().getAnimations().onStateChange(state);
             });
@@ -92,6 +97,8 @@ public abstract class AnimatedTravelHandler extends ProgressiveTravelHandler {
 
     protected void tickAnimationProgress(MinecraftServer server, State state) {
         this.getAnimations().tick(server);
+
+        if (state == State.LANDED) return;
 
         if (!this.getAnimations().isAged()) return;
 
@@ -176,6 +183,21 @@ public abstract class AnimatedTravelHandler extends ProgressiveTravelHandler {
             case DEMAT -> this.dematId.set(id);
             case MAT -> this.matId.set(id);
         }
+    }
+
+    public boolean setTemporaryAnimation(Identifier animId) {
+        TardisAnimation anim = TardisAnimationRegistry.getInstance().getOrFallback(animId);
+
+        return this.getAnimations().setAnimation(anim);
+    }
+
+    /**
+     * Sets a runnable to be called when the CURRENT animation is complete.
+     * This will not be ran on subsequent animations.
+     * @param runnable code to run
+     */
+    public void onAnimationComplete(Runnable runnable) {
+        this.getAnimations().onDone().thenRun(runnable);
     }
 
     public abstract boolean shouldTickAnimation();

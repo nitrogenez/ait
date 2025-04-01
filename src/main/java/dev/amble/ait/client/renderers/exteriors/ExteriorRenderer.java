@@ -168,9 +168,6 @@ public class ExteriorRenderer<T extends ExteriorBlockEntity> implements BlockEnt
             matrices.translate(0, sinFunc, 0);
         }
 
-        if (tardis.selfDestruct().isQueued())
-            matrices.scale(0.7f, 0.7f, 0.7f);
-
         model.renderWithAnimations(tardis, entity, this.model.getPart(),
                 matrices, vertexConsumers.getBuffer(AITRenderLayers.getEntityTranslucentCull(texture)), light, overlay, 1, 1,
                 1, alpha);

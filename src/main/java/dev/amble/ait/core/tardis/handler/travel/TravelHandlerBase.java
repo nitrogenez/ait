@@ -247,7 +247,7 @@ public abstract class TravelHandlerBase extends KeyedTardisComponent implements 
     }
 
     public enum State implements Ordered {
-        LANDED, DEMAT(null, TravelHandler::finishDemat), FLIGHT, MAT(
+        LANDED(null, (t) -> {}, true), DEMAT(null, TravelHandler::finishDemat), FLIGHT, MAT(
                 null, TravelHandler::finishRemat);
 
         public static final Codec<State> CODEC = Codecs.NON_EMPTY_STRING.flatXmap(s -> {

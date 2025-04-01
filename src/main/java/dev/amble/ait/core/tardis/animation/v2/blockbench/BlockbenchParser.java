@@ -3,6 +3,7 @@ package dev.amble.ait.core.tardis.animation.v2.blockbench;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -41,7 +42,7 @@ public class BlockbenchParser implements
     private static final Lock LOCK = new ReentrantLock();
 
     private final HashMap<Identifier, Result> lookup = new HashMap<>();
-    private final HashMap<Identifier, JsonObject> rawLookup = new HashMap<>();
+    private final ConcurrentHashMap<String, List<JsonObject>> rawLookup = new ConcurrentHashMap<>();
     private static final BlockbenchParser instance = new BlockbenchParser();
 
     private BlockbenchParser() {
@@ -68,9 +69,13 @@ public class BlockbenchParser implements
         PacketByteBuf buf = PacketByteBufs.create();
 
         buf.writeInt(this.rawLookup.size());
-        for (Map.Entry<Identifier, JsonObject> entry : this.rawLookup.entrySet()) {
-            buf.writeIdentifier(entry.getKey());
-            buf.writeString(entry.getValue().toString());
+        for (Map.Entry<String, List<JsonObject>> entry : this.rawLookup.entrySet()) {
+            buf.writeString(entry.getKey());
+
+            buf.writeInt(entry.getValue().size());
+            for (JsonObject json : entry.getValue()) {
+                buf.writeString(json.toString());
+            }
         }
 
         return buf;
@@ -93,14 +98,26 @@ public class BlockbenchParser implements
     }
 
     private void receive(PacketByteBuf buf) {
+        this.rawLookup.clear();
+        this.lookup.clear();
+
         int size = buf.readInt();
         for (int i = 0; i < size; i++) {
-            Identifier id = buf.readIdentifier();
-            String json = buf.readString();
+            String namespace = buf.readString();
 
-            this.rawLookup.put(id, JsonParser.parseString(json).getAsJsonObject());
-            this.lookup.put(id, parse(this.rawLookup.get(id)));
+            int jsonSize = buf.readInt();
+            List<JsonObject> jsons = new ArrayList<>();
+
+            for (int j = 0; j < jsonSize; j++) {
+                String jsonString = buf.readString();
+                JsonObject json = JsonParser.parseString(jsonString).getAsJsonObject();
+                jsons.add(json);
+            }
+
+            this.rawLookup.put(namespace, jsons);
         }
+
+        this.parseRawLookup();
 
         AITMod.LOGGER.info("Received {} blockbench animation files", this.rawLookup.size());
     }
@@ -112,15 +129,14 @@ public class BlockbenchParser implements
 
     @Override
     public void reload(ResourceManager manager) {
+        this.rawLookup.clear();
+        this.lookup.clear();
+
         for (Identifier id : manager
                 .findResources("fx/blockbench", filename -> filename.getPath().endsWith("animation.json")).keySet()) {
             try (InputStream stream = manager.getResource(id).get().getInputStream()) {
-                this.rawLookup.put(id, JsonParser.parseReader(new InputStreamReader(stream)).getAsJsonObject());
-
-                Result created = parse(this.rawLookup.get(id));
-
-                this.lookup.put(id, created);
-                AmbleKit.LOGGER.info("Loaded blockbench file {}", id.toString());
+                parseAndStore(JsonParser.parseReader(new InputStreamReader(stream)).getAsJsonObject(), id.getNamespace());
+                AmbleKit.LOGGER.info("Loaded blockbench file {}", id);
             } catch (Exception e) {
                 AmbleKit.LOGGER.error("Error occurred while loading resource json {}", id.toString(), e);
             }
@@ -136,7 +152,7 @@ public class BlockbenchParser implements
     }
 
     public static Result getOrThrow(Identifier id) {
-        Result result = getInstance().lookup.get(id.withPrefixedPath("fx/blockbench/").withSuffixedPath(".animation.json"));
+        Result result = getInstance().lookup.get(id);
 
         if (result == null) {
             throw new IllegalStateException("No blockbench animation found for " + id);
@@ -154,18 +170,53 @@ public class BlockbenchParser implements
         }
     }
 
-    public static Result parse(InputStream stream) {
-        return parse(JsonParser.parseReader(new InputStreamReader(stream)).getAsJsonObject());
+    private void parseRawLookup() {
+        this.lookup.clear();
+
+        for (Map.Entry<String, List<JsonObject>> entry : this.rawLookup.entrySet()) {
+            String namespace = entry.getKey();
+
+            List<JsonObject> animations = entry.getValue();
+
+            for (JsonObject json : animations) {
+                HashMap<Identifier, Result> map = parse(json, namespace);
+                this.lookup.putAll(map);
+            }
+        }
     }
 
-    public static Result parse(JsonObject json) {
+    private void parseAndStore(JsonObject json, String namespace) {
+        // store in raw lookup
+        // namespace -> raw json source
+	    this.rawLookup.computeIfAbsent(namespace, k -> new ArrayList<>());
+        this.rawLookup.get(namespace).add(json);
+
+        // parse and store in lookup
+        HashMap<Identifier, Result> map = parse(json, namespace);
+	    this.lookup.putAll(map);
+    }
+
+    public static HashMap<Identifier, Result> parse(JsonObject json, String namespace) {
         // get animations
         JsonObject animations = json.getAsJsonObject("animations");
-        JsonObject firstAnimation = animations.getAsJsonObject(animations.keySet().iterator().next()); // get the first found animation
 
-        JsonObject bones = firstAnimation.getAsJsonObject("bones");
+        HashMap<Identifier, Result> map = new HashMap<>();
 
-        return parseTracker(bones.getAsJsonObject(bones.keySet().iterator().next()), firstAnimation.getAsJsonObject("timeline"));
+        for (String key : animations.keySet()) {
+            JsonObject anim = animations.getAsJsonObject(key);
+            Identifier id = Identifier.of(namespace, key);
+
+            Result result = parseAnimation(anim);
+            map.put(id, result);
+        }
+
+        return map;
+    }
+
+    private static Result parseAnimation(JsonObject anim) {
+        JsonObject bones = anim.getAsJsonObject("bones");
+
+        return parseTracker(bones.getAsJsonObject(bones.keySet().iterator().next()), anim.getAsJsonObject("timeline"));
     }
 
     private static Result parseTracker(JsonObject main, JsonObject timeline) {

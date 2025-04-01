@@ -69,7 +69,7 @@ public class ExteriorRenderer<T extends ExteriorBlockEntity> implements BlockEnt
 
         profiler.swap("render");
 
-        if (entity.getAlpha() > 0)
+        if (tardis.travel().getAlpha() > 0)
             this.renderExterior(profiler, tardis, entity, tickDelta, matrices, vertexConsumers, light, overlay);
 
         profiler.pop();
@@ -79,7 +79,7 @@ public class ExteriorRenderer<T extends ExteriorBlockEntity> implements BlockEnt
 
     private void renderExterior(Profiler profiler, ClientTardis tardis, T entity, float tickDelta, MatrixStack matrices,
                                 VertexConsumerProvider vertexConsumers, int light, int overlay) {
-        final float alpha = entity.getAlpha(tickDelta);
+        final float alpha = tardis.travel().getAlpha(tickDelta);
         RenderSystem.enableCull();
         RenderSystem.enableBlend();
         RenderSystem.enableDepthTest();

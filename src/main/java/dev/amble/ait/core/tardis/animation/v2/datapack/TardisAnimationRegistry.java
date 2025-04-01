@@ -11,7 +11,7 @@ public class TardisAnimationRegistry extends SimpleDatapackRegistry<TardisAnimat
     private static TardisAnimationRegistry INSTANCE;
 
     private TardisAnimationRegistry() {
-        super(DatapackAnimation::fromInputStream, DatapackAnimation.CODEC, "fx/animation", true, AITMod.MOD_ID);
+        super(DatapackAnimation::fromInputStream, DatapackAnimation.CODEC, "fx/animation/type", true, AITMod.MOD_ID);
     }
 
     public static TardisAnimationRegistry getInstance() {
@@ -33,7 +33,7 @@ public class TardisAnimationRegistry extends SimpleDatapackRegistry<TardisAnimat
 
     @Override
     public TardisAnimation fallback() {
-        TardisAnimation fallback = this.get(AITMod.id("zwip_demat"));
+        TardisAnimation fallback = this.get(AITMod.id("classic_demat"));
 
         if (fallback == null) {
             throw new IllegalStateException("Classic Demat Animation is null! No fallback.");

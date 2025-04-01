@@ -133,7 +133,7 @@ public class BlockbenchParser implements
         this.lookup.clear();
 
         for (Identifier id : manager
-                .findResources("fx/blockbench", filename -> filename.getPath().endsWith("animation.json")).keySet()) {
+                .findResources("fx/animation/keyframes", filename -> filename.getPath().endsWith("animation.json")).keySet()) {
             try (InputStream stream = manager.getResource(id).get().getInputStream()) {
                 parseAndStore(JsonParser.parseReader(new InputStreamReader(stream)).getAsJsonObject(), id.getNamespace());
                 AmbleKit.LOGGER.info("Loaded blockbench file {}", id);
@@ -188,12 +188,12 @@ public class BlockbenchParser implements
     private void parseAndStore(JsonObject json, String namespace) {
         // store in raw lookup
         // namespace -> raw json source
-	    this.rawLookup.computeIfAbsent(namespace, k -> new ArrayList<>());
+        this.rawLookup.computeIfAbsent(namespace, k -> new ArrayList<>());
         this.rawLookup.get(namespace).add(json);
 
         // parse and store in lookup
         HashMap<Identifier, Result> map = parse(json, namespace);
-	    this.lookup.putAll(map);
+        this.lookup.putAll(map);
     }
 
     public static HashMap<Identifier, Result> parse(JsonObject json, String namespace) {

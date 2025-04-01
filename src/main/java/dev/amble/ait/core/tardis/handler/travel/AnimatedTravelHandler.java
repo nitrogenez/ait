@@ -113,19 +113,36 @@ public abstract class AnimatedTravelHandler extends ProgressiveTravelHandler {
     }
 
     public float getAlpha() {
-        return this.getAnimations().getAlpha();
+        return this.getAlpha(0F);
     }
 
     public Vector3f getScale() {
-        return this.getAnimations().getScale();
+        return this.getScale(0F);
     }
 
     public Vector3f getAnimationPosition() {
-        return this.getAnimations().getPosition();
+        return this.getAnimationPosition(0F);
     }
 
     public Vector3f getAnimationRotation() {
-        return this.getAnimations().getRotation();
+        return this.getAnimationRotation(0F);
+    }
+
+
+    public float getAlpha(float delta) {
+        return this.getAnimations().getAlpha(delta);
+    }
+
+    public Vector3f getScale(float delta) {
+        return this.getAnimations().getScale(delta);
+    }
+
+    public Vector3f getAnimationPosition(float delta) {
+        return this.getAnimations().getPosition(delta);
+    }
+
+    public Vector3f getAnimationRotation(float delta) {
+        return this.getAnimations().getRotation(delta);
     }
 
     public boolean isHitboxShown() {

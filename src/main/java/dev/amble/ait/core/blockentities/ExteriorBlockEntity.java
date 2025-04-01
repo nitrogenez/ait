@@ -339,11 +339,16 @@ public class ExteriorBlockEntity extends AbstractLinkableBlockEntity implements 
     }
 
     @Environment(EnvType.CLIENT)
-    public float getAlpha() {
+    public float getAlpha(float delta) {
         if (!this.isLinked())
             return 1.0F;
 
-        return this.tardis().get().travel().getAlpha();
+        return this.tardis().get().travel().getAlpha(delta);
+    }
+
+    @Environment(EnvType.CLIENT)
+    public float getAlpha() {
+        return this.getAlpha(0F);
     }
 
     private void exteriorLightBlockState(BlockState blockState, BlockPos pos, TravelHandlerBase.State state) {

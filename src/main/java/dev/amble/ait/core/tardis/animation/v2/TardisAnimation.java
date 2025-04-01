@@ -175,23 +175,23 @@ public abstract class TardisAnimation implements TardisTickable, Disposable, Ide
         return this.id;
     }
 
-    public float getAlpha() {
-        return this.alpha.getValue();
+    public float getAlpha(float delta) {
+        return this.alpha.getValue(delta);
     }
 
-    public Vector3f getScale() {
-        Vector3f scale = this.scale.getValue();
+    public Vector3f getScale(float delta) {
+        Vector3f scale = this.scale.getValue(delta);
         if (!this.isLinked()) return scale;
 
         return scale.mul(this.tardis().get().stats().getScale()); // relative scaling
     }
 
-    public Vector3f getPosition() {
-        return this.position.getValue();
+    public Vector3f getPosition(float delta) {
+        return this.position.getValue(delta);
     }
 
-    public Vector3f getRotation() {
-        return this.rotation.getValue();
+    public Vector3f getRotation(float delta) {
+        return this.rotation.getValue(delta);
     }
 
     @Override

@@ -64,16 +64,26 @@ public class AnimationKeyframe<T> implements TardisTickable, Disposable {
         return this.ticks;
     }
 
-    public T getValue() {
-        return this.value.interpolate(this.getProgress(), this.interpolation);
+    /**
+     * Get the current value of the keyframe.
+     * @param delta Delta time between ticks in rendering
+     * @return The current value of the keyframe.
+     */
+    public T getValue(float delta) {
+        return this.value.interpolate(this.getProgress(delta), this.interpolation);
     }
 
     public void setStart(T val) {
         this.value.setStart(val);
     }
 
-    public float getProgress() {
-        return (float) this.ticks / this.duration;
+    /**
+     * Get the current progress of the keyframe.
+     * @param delta Delta time between ticks in rendering
+     * @return
+     */
+    public float getProgress(float delta) {
+        return (this.ticks + delta) / this.duration;
     }
 
     public AnimationKeyframe<T> instantiate() {

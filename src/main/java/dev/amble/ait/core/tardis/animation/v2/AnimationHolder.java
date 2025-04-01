@@ -163,7 +163,7 @@ public class AnimationHolder implements TardisTickable, Disposable, Linkable {
         this.sync(state);
     }
 
-    public float getAlpha() {
+    public float getAlpha(float delta) {
         if (this.alphaOverride != -1) {
             return this.alphaOverride;
         }
@@ -176,10 +176,10 @@ public class AnimationHolder implements TardisTickable, Disposable, Linkable {
         if (this.getCurrent() == null)
              return 1f;
 
-        return this.getCurrent().getAlpha();
+        return this.getCurrent().getAlpha(delta);
     }
 
-    public Vector3f getScale() {
+    public Vector3f getScale(float delta) {
         if (this.getCurrent() == null) {
             if (this.isLinked()) {
                 return this.tardis().get().stats().getScale();
@@ -188,23 +188,23 @@ public class AnimationHolder implements TardisTickable, Disposable, Linkable {
             return new Vector3f(1f, 1f, 1f);
         }
 
-        return this.getCurrent().getScale();
+        return this.getCurrent().getScale(delta);
     }
 
-    public Vector3f getPosition() {
+    public Vector3f getPosition(float delta) {
         if (this.getCurrent() == null) {
             return new Vector3f(0f, 0f, 0f);
         }
 
-        return this.getCurrent().getPosition();
+        return this.getCurrent().getPosition(delta);
     }
 
-    public Vector3f getRotation() {
+    public Vector3f getRotation(float delta) {
         if (this.getCurrent() == null) {
             return new Vector3f(0f, 0f, 0f);
         }
 
-        return this.getCurrent().getRotation();
+        return this.getCurrent().getRotation(delta);
     }
 
     private void sync(TravelHandlerBase.State state) {

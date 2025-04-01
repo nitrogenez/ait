@@ -47,8 +47,8 @@ public class KeyframeTracker<T> extends ArrayList<AnimationKeyframe<T>> implemen
         return this.current == 0;
     }
 
-    public T getValue() {
-        return this.getCurrent().getValue();
+    public T getValue(float delta) {
+        return this.getCurrent().getValue(delta);
     }
 
     @Override
@@ -70,7 +70,7 @@ public class KeyframeTracker<T> extends ArrayList<AnimationKeyframe<T>> implemen
         if (current.isDone() && !this.isDone()) {
             this.current++; // current is now previous
 
-            this.getCurrent().setStart(current.getValue());
+            this.getCurrent().setStart(current.getValue(0F));
 
             current.dispose();
         }

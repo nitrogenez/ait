@@ -79,7 +79,7 @@ public class ExteriorRenderer<T extends ExteriorBlockEntity> implements BlockEnt
 
     private void renderExterior(Profiler profiler, ClientTardis tardis, T entity, float tickDelta, MatrixStack matrices,
                                 VertexConsumerProvider vertexConsumers, int light, int overlay) {
-        final float alpha = entity.getAlpha();
+        final float alpha = entity.getAlpha(tickDelta);
         RenderSystem.enableCull();
         RenderSystem.enableBlend();
         RenderSystem.enableDepthTest();
@@ -121,18 +121,18 @@ public class ExteriorRenderer<T extends ExteriorBlockEntity> implements BlockEnt
         matrices.push();
 
         // adjust based off animation position
-        Vector3f animPositionOffset = tardis.travel().getAnimationPosition();
+        Vector3f animPositionOffset = tardis.travel().getAnimationPosition(tickDelta);
         matrices.translate(animPositionOffset.x(), animPositionOffset.y(), animPositionOffset.z());
 
         matrices.translate(0.5f, 0.0f, 0.5f);
 
         // adjust based off animation rotation
-        Vector3f animRotationOffset = tardis.travel().getAnimationRotation();
+        Vector3f animRotationOffset = tardis.travel().getAnimationRotation(tickDelta);
         matrices.multiply(RotationAxis.POSITIVE_Z.rotationDegrees(animRotationOffset.z()));
         matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(animRotationOffset.y()));
         matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees(animRotationOffset.x()));
 
-        this.applyNameTransforms(tardis, matrices, tardis.stats().getName());
+        this.applyNameTransforms(tardis, matrices, tardis.stats().getName(), tickDelta);
 
         Identifier texture = this.variant.texture();
         Identifier emission = this.variant.emission();
@@ -302,8 +302,8 @@ public class ExteriorRenderer<T extends ExteriorBlockEntity> implements BlockEnt
         }
     }
 
-    private void applyNameTransforms(Tardis tardis, MatrixStack matrices, String name) {
-        Vector3f scale = tardis.travel().getScale();
+    private void applyNameTransforms(Tardis tardis, MatrixStack matrices, String name, float delta) {
+        Vector3f scale = tardis.travel().getScale(delta);
 
         if (name.equalsIgnoreCase("grumm") || name.equalsIgnoreCase("dinnerbone")) {
             matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees(-90f));

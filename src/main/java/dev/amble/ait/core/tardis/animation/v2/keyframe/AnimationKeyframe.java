@@ -175,7 +175,7 @@ public class AnimationKeyframe<T> implements TardisTickable, Disposable {
         LINEAR {
             @Override
             public float interpolate(float progress, float start, float end) {
-                return MathHelper.lerp(progress, start, end);
+                return MathHelper.lerp(Math.max(progress, 1), start, end);
             }
         },
         CUBIC {;

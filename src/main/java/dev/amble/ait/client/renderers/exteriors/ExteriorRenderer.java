@@ -132,10 +132,6 @@ public class ExteriorRenderer<T extends ExteriorBlockEntity> implements BlockEnt
         matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(animRotationOffset.y()));
         matrices.multiply(RotationAxis.POSITIVE_Z.rotationDegrees(animRotationOffset.x()));
 
-        if (animRotationOffset.z < 0 || animRotationOffset.y < 0 || animRotationOffset.x < 0) {
-            System.out.println(animRotationOffset);
-        }
-
         this.applyNameTransforms(tardis, matrices, tardis.stats().getName(), tickDelta);
 
         Identifier texture = this.variant.texture();

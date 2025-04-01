@@ -78,7 +78,7 @@ public class KeyframeTracker<T> extends ArrayList<AnimationKeyframe<T>> implemen
 
     public void start(T val) {
         this.dispose();
-        this.getCurrent().setStart(val);
+        // this.getCurrent().setStart(val);
     }
 
     public boolean isDone() {

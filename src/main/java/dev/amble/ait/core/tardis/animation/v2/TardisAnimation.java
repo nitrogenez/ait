@@ -97,7 +97,7 @@ public abstract class TardisAnimation implements TardisTickable, Disposable, Ide
 
         Tardis tardis = this.tardis().get();
 
-        boolean playSound = this.tryStart(this.alpha, (tardis.travel().getState() == TravelHandlerBase.State.MAT) ? 0f : 1f);
+        boolean playSound = this.tryStart(this.alpha, 1f);
         playSound = playSound && this.tryStart(this.scale, new Vector3f(1f));
         playSound = playSound && this.tryStart(this.position, new Vector3f());
         playSound = playSound && this.tryStart(this.rotation, new Vector3f());

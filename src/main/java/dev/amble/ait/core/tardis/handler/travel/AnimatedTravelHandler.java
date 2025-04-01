@@ -62,10 +62,10 @@ public abstract class AnimatedTravelHandler extends ProgressiveTravelHandler {
         matId.of(this, MAT_FX);
 
         dematId.addListener((id) -> {
-            isAnimationInvalidated = true;
+            this.invalidateAnimations();
         });
         matId.addListener((id) -> {
-            isAnimationInvalidated = true;
+            this.invalidateAnimations();
         });
     }
 
@@ -103,6 +103,15 @@ public abstract class AnimatedTravelHandler extends ProgressiveTravelHandler {
         }
     }
 
+    private void invalidateAnimations() {
+        if (this.getState().animated()) {
+            this.isAnimationInvalidated = true;
+            return;
+        }
+
+        this.animations = null;
+    }
+
     public float getAlpha() {
         return this.getAnimations().getAlpha();
     }
@@ -117,6 +126,10 @@ public abstract class AnimatedTravelHandler extends ProgressiveTravelHandler {
 
     public Vector3f getAnimationRotation() {
         return this.getAnimations().getRotation();
+    }
+
+    public boolean isHitboxShown() {
+        return this.getAlpha() > 0.5F && this.getScale().equals(1, 1, 1) && this.getAnimationPosition().equals(0, 0, 0) && this.getAnimationRotation().equals(0, 0, 0);
     }
 
     protected AnimationHolder getAnimations() {

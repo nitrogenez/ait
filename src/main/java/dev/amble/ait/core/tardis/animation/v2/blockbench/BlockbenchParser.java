@@ -7,6 +7,7 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import dev.amble.lib.AmbleKit;
@@ -168,9 +169,9 @@ public class BlockbenchParser implements
     }
 
     private static Result parseTracker(JsonObject main, JsonObject timeline) {
-        KeyframeTracker<Vector3f> rotation = parseVectorKeyframe(main.getAsJsonObject("rotation"), 1f);
-        KeyframeTracker<Vector3f> translation = parseVectorKeyframe(main.getAsJsonObject("position"), 16f);
-        KeyframeTracker<Vector3f> scale = parseVectorKeyframe(main.getAsJsonObject("scale"), 1f);
+        KeyframeTracker<Vector3f> rotation = parseVectorKeyframe(main.get("rotation"), 1f, new Vector3f(0f, 0f, 0f));
+        KeyframeTracker<Vector3f> translation = parseVectorKeyframe(main.get("position"), 10f, new Vector3f(0f, 0f, 0f));
+        KeyframeTracker<Vector3f> scale = parseVectorKeyframe(main.get("scale"), 1f, new Vector3f(1f, 1f, 1f));
         KeyframeTracker<Float> alpha = parseAlphaKeyframe(timeline);
 
         return new Result(alpha, rotation, translation, scale);
@@ -224,14 +225,28 @@ public class BlockbenchParser implements
         return new KeyframeTracker<>(list);
     }
 
-    private static KeyframeTracker<Vector3f> parseVectorKeyframe(JsonObject object, float divider) {
+    private static KeyframeTracker<Vector3f> parseVectorKeyframe(JsonElement element, float divider, Vector3f fallback) {
         List<AnimationKeyframe<Vector3f>> list = new ArrayList<>();
 
-        if (object == null) {
-            list.add(new AnimationKeyframe<>(20, AnimationKeyframe.Interpolation.LINEAR, new AnimationKeyframe.InterpolatedVector3f(new Vector3f(1f), new Vector3f(1f))));
+        if (element == null) {
+            list.add(new AnimationKeyframe<>(20, AnimationKeyframe.Interpolation.LINEAR, new AnimationKeyframe.InterpolatedVector3f(fallback, fallback)));
 
             return new KeyframeTracker<>(list);
         }
+
+        if (element.isJsonArray()) {
+            Vector3f vec = parseVector(element.getAsJsonArray());
+            list.add(new AnimationKeyframe<>(20, AnimationKeyframe.Interpolation.LINEAR, new AnimationKeyframe.InterpolatedVector3f(vec, vec)));
+            return new KeyframeTracker<>(list);
+        }
+
+        if (element.isJsonPrimitive()) {
+            Vector3f vec = new Vector3f(element.getAsJsonPrimitive().getAsFloat());
+            list.add(new AnimationKeyframe<>(20, AnimationKeyframe.Interpolation.LINEAR, new AnimationKeyframe.InterpolatedVector3f(vec, vec)));
+            return new KeyframeTracker<>(list);
+        }
+
+        JsonObject object = element.getAsJsonObject();
 
         TreeMap<Float, Pair<Vector3f, AnimationKeyframe.Interpolation>> map = new TreeMap<>();
 

@@ -42,7 +42,7 @@ import dev.amble.ait.core.tardis.handler.travel.TravelHandlerBase;
  */
 public abstract class TardisAnimation implements TardisTickable, Disposable, Identifiable, Linkable, Nameable {
     private final Identifier id;
-    private final Identifier soundId;
+    private Identifier soundId;
 
     private TardisRef ref;
     private boolean isServer = true;
@@ -135,6 +135,7 @@ public abstract class TardisAnimation implements TardisTickable, Disposable, Ide
         if (sfx == null) {
             AITMod.LOGGER.error("Unknown sound event: {} in tardis animation {}", this.soundId, this.id());
             sfx = AITSounds.ERROR;
+            this.soundId = sfx.getId();
         }
 
         return sfx;

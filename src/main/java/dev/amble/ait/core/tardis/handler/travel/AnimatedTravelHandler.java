@@ -58,14 +58,10 @@ public abstract class AnimatedTravelHandler extends ProgressiveTravelHandler {
         super(id);
     }
 
+
     @Override
-    public void onLoaded() {
-        super.onLoaded();
-
-        this.state.addListener(state -> this.getAnimations().onStateChange(state));
-
-        dematId.of(this, DEMAT_FX);
-        matId.of(this, MAT_FX);
+    protected void onInit(InitContext ctx) {
+        super.onInit(ctx);
 
         dematId.addListener((id) -> {
             this.invalidateAnimations();
@@ -73,6 +69,16 @@ public abstract class AnimatedTravelHandler extends ProgressiveTravelHandler {
         matId.addListener((id) -> {
             this.invalidateAnimations();
         });
+
+        this.state.addListener(state -> this.getAnimations().onStateChange(state));
+    }
+
+    @Override
+    public void onLoaded() {
+        super.onLoaded();
+
+        dematId.of(this, DEMAT_FX);
+        matId.of(this, MAT_FX);
     }
 
     @Override

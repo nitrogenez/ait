@@ -2,6 +2,7 @@ package dev.amble.ait.core.tardis.handler.travel;
 
 import java.util.UUID;
 
+import dev.amble.ait.core.tardis.animation.v2.blockbench.BlockbenchParser;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
@@ -21,8 +22,8 @@ import dev.amble.ait.data.properties.Property;
 import dev.amble.ait.data.properties.Value;
 
 public abstract class AnimatedTravelHandler extends ProgressiveTravelHandler {
-    private static final Identifier DEFAULT_DEMAT = AITMod.id("new_demat");
-    private static final Identifier DEFAULT_MAT = AITMod.id("new_mat");
+    private static final Identifier DEFAULT_DEMAT = AITMod.id("pulsating_demat");
+    private static final Identifier DEFAULT_MAT = AITMod.id("pulsating_mat");
 
     private static final Property<Identifier> DEMAT_FX = new Property<>(Property.Type.IDENTIFIER, "demat_fx", DEFAULT_DEMAT);
     private static final Property<Identifier> MAT_FX = new Property<>(Property.Type.IDENTIFIER, "mat_fx", DEFAULT_MAT);
@@ -91,20 +92,29 @@ public abstract class AnimatedTravelHandler extends ProgressiveTravelHandler {
     }
 
     protected void tickAnimationProgress(MinecraftServer server, State state) {
+        if (!this.getAnimations().isRunning()) {
+            if (this.isAnimationInvalidated) {
+                this.animations = null;
+            }
+
+            return;
+        }
+
         this.getAnimations().tick(server);
 
         if (!this.getAnimations().isAged()) return;
 
         if (this instanceof TravelHandler handler)
             state.finish(handler);
-
-        if (this.isAnimationInvalidated) {
-            this.animations = null;
-        }
     }
 
     private void invalidateAnimations() {
         if (this.getState().animated()) {
+            if (this.getState() == State.LANDED && !this.getAnimations().isRunning()) {
+                this.animations = null;
+                return;
+            }
+
             this.isAnimationInvalidated = true;
             return;
         }

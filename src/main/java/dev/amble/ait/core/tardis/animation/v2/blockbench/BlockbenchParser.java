@@ -39,8 +39,6 @@ public class BlockbenchParser implements
         SimpleSynchronousResourceReloadListener {
     private static final Identifier SYNC = AITMod.id("blockbench_sync");
 
-    private static final Lock LOCK = new ReentrantLock();
-
     private final HashMap<Identifier, Result> lookup = new HashMap<>();
     private final ConcurrentHashMap<String, List<JsonObject>> rawLookup = new ConcurrentHashMap<>();
     private static final BlockbenchParser instance = new BlockbenchParser();
@@ -133,7 +131,7 @@ public class BlockbenchParser implements
         this.lookup.clear();
 
         for (Identifier id : manager
-                .findResources("fx/blockbench", filename -> filename.getPath().endsWith("animation.json")).keySet()) {
+                .findResources("fx/animation/keyframes", filename -> filename.getPath().endsWith("animation.json")).keySet()) {
             try (InputStream stream = manager.getResource(id).get().getInputStream()) {
                 parseAndStore(JsonParser.parseReader(new InputStreamReader(stream)).getAsJsonObject(), id.getNamespace());
                 AmbleKit.LOGGER.info("Loaded blockbench file {}", id);
@@ -188,12 +186,12 @@ public class BlockbenchParser implements
     private void parseAndStore(JsonObject json, String namespace) {
         // store in raw lookup
         // namespace -> raw json source
-	    this.rawLookup.computeIfAbsent(namespace, k -> new ArrayList<>());
+        this.rawLookup.computeIfAbsent(namespace, k -> new ArrayList<>());
         this.rawLookup.get(namespace).add(json);
 
         // parse and store in lookup
         HashMap<Identifier, Result> map = parse(json, namespace);
-	    this.lookup.putAll(map);
+        this.lookup.putAll(map);
     }
 
     public static HashMap<Identifier, Result> parse(JsonObject json, String namespace) {
@@ -270,6 +268,11 @@ public class BlockbenchParser implements
                 AnimationKeyframe<Float> frame = new AnimationKeyframe<>((nextTime - currentTime) * 20, AnimationKeyframe.Interpolation.CUBIC, new AnimationKeyframe.InterpolatedFloat(currentAlpha, nextAlpha));
 
                 list.add(frame);
+            } else {
+                if (!list.isEmpty()) continue;
+
+                AnimationKeyframe<Float> frame = new AnimationKeyframe<>(20, AnimationKeyframe.Interpolation.CUBIC, new AnimationKeyframe.InterpolatedFloat(currentAlpha, currentAlpha));
+                list.add(frame);
             }
         }
 
@@ -329,13 +332,13 @@ public class BlockbenchParser implements
                 Float nextTime = nextEntry.getKey();
                 Vector3f nextVector = nextEntry.getValue().getLeft();
 
-                LOCK.lock();
-                try {
-                    AnimationKeyframe<Vector3f> frame = new AnimationKeyframe<>((nextTime - currentTime) * 20, currentType, new AnimationKeyframe.InterpolatedVector3f(currentVector, nextVector));
-                    list.add(frame);
-                } finally {
-                    LOCK.unlock();
-                }
+                AnimationKeyframe<Vector3f> frame = new AnimationKeyframe<>((nextTime - currentTime) * 20, currentType, new AnimationKeyframe.InterpolatedVector3f(currentVector, nextVector));
+                list.add(frame);
+            } else {
+                if (!list.isEmpty()) continue;
+
+                AnimationKeyframe<Vector3f> frame = new AnimationKeyframe<>(20, currentType, new AnimationKeyframe.InterpolatedVector3f(currentVector, currentVector));
+                list.add(frame);
             }
         }
 

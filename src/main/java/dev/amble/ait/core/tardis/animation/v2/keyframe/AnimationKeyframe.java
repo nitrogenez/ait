@@ -189,9 +189,7 @@ public class AnimationKeyframe<T> implements TardisTickable, Disposable {
 
         @Override
         public void setStart(Vector3f start) {
-            synchronized (this) {
-                this.start = start;
-            }
+            this.start = start;
         }
 
         @Override

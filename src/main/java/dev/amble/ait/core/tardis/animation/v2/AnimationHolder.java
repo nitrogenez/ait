@@ -181,11 +181,6 @@ public class AnimationHolder implements TardisTickable, Disposable, Linkable {
             return this.alphaOverride;
         }
 
-/*        if (!this.isServer && ServerLifecycleHooks.get().getTicks() % 20 == 0) {
-            System.out.println(this);
-            System.out.println(this.getCurrent());
-        }*/
-
         if (this.getCurrent() == null)
              return 1f;
 

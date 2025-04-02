@@ -101,8 +101,6 @@ public abstract class AnimatedTravelHandler extends ProgressiveTravelHandler {
             if (this.isAnimationInvalidated) {
                 this.animations = null;
             }
-
-            return;
         }
 
         this.getAnimations().tick(server);

@@ -103,6 +103,8 @@ public abstract class TardisAnimation implements TardisTickable, Disposable, Ide
             tardis.getExterior().playSound(this.getSound());
         }
 
+        System.out.println(this.isAged() + " " + this.alpha.isAged() + " " + this.scale.isAged() + " " + this.position.isAged() + " " + this.rotation.isAged());
+
         if (this.isAged() && this.doneQueue != null) {
             this.doneQueue.execute();
             this.doneQueue = null;

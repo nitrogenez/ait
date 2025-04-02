@@ -22,6 +22,8 @@ import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
 import net.fabricmc.fabric.api.resource.SimpleSynchronousResourceReloadListener;
 import net.fabricmc.loader.api.FabricLoader;
+import net.objecthunter.exp4j.Expression;
+import net.objecthunter.exp4j.ExpressionBuilder;
 import org.joml.Vector3f;
 
 import net.minecraft.network.PacketByteBuf;
@@ -34,6 +36,9 @@ import net.minecraft.util.Pair;
 import dev.amble.ait.AITMod;
 import dev.amble.ait.core.tardis.animation.v2.keyframe.AnimationKeyframe;
 import dev.amble.ait.core.tardis.animation.v2.keyframe.KeyframeTracker;
+
+import javax.script.ScriptEngine;
+import javax.script.ScriptEngineManager;
 
 public class BlockbenchParser implements
         SimpleSynchronousResourceReloadListener {
@@ -347,9 +352,32 @@ public class BlockbenchParser implements
 
     private static Vector3f parseVector(JsonArray json) {
         return new Vector3f(
-                json.get(0).getAsFloat(),
-                json.get(1).getAsFloat(),
-                json.get(2).getAsFloat()
+            parseFloat(json.get(0)),
+            parseFloat(json.get(1)),
+            parseFloat(json.get(2))
         );
+    }
+
+    private static float parseFloat(JsonElement element) {
+        // they could be math equations
+        try {
+            return element.getAsFloat();
+        } catch (NumberFormatException ignored) {
+        }
+
+        try {
+            return parseMath(element.getAsString());
+        } catch (Exception e) {
+            AITMod.LOGGER.error("Error occurred while parsing float {}", element);
+            return 0;
+        }
+    }
+
+    private static float parseMath(String data) {
+        // parses math expressions like "1 + 2 * 3" or "1 - 2 / 3"
+        // using net.objecthunter.exp4j
+        Expression expression = new ExpressionBuilder(data).build();
+        double result = expression.evaluate();
+        return (float) result;
     }
 }

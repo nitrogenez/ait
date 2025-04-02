@@ -58,10 +58,9 @@ public abstract class AnimatedTravelHandler extends ProgressiveTravelHandler {
         super(id);
     }
 
-
     @Override
-    protected void onInit(InitContext ctx) {
-        super.onInit(ctx);
+    public void postInit(InitContext ctx) {
+        super.postInit(ctx);
 
         dematId.addListener((id) -> {
             this.invalidateAnimations();

@@ -1,5 +1,6 @@
 package dev.amble.ait.core.tardis.handler;
 
+import dev.amble.ait.data.Exclude;
 import dev.amble.lib.data.CachedDirectedGlobalPos;
 import dev.drtheo.scheduler.api.Scheduler;
 import dev.drtheo.scheduler.api.TimeUnit;
@@ -28,6 +29,7 @@ public class SelfDestructHandler extends KeyedTardisComponent implements TardisT
     private static final BoolProperty QUEUED = new BoolProperty("queued");
     private final BoolValue queued = QUEUED.create(this);
 
+    @Exclude
     private boolean destructing;
 
     public SelfDestructHandler() {

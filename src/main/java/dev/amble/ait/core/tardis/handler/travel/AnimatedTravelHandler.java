@@ -2,6 +2,7 @@ package dev.amble.ait.core.tardis.handler.travel;
 
 import java.util.UUID;
 
+import dev.amble.ait.core.tardis.animation.v2.blockbench.BlockbenchParser;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
@@ -91,20 +92,31 @@ public abstract class AnimatedTravelHandler extends ProgressiveTravelHandler {
     }
 
     protected void tickAnimationProgress(MinecraftServer server, State state) {
+        if (!this.getAnimations().isRunning()) {
+            if (this.isAnimationInvalidated) {
+                this.animations = null;
+            }
+
+            return;
+        }
+
+        System.out.println(BlockbenchParser.getOrFallback(this.getAnimationIdFor(state)));
+
         this.getAnimations().tick(server);
 
         if (!this.getAnimations().isAged()) return;
 
         if (this instanceof TravelHandler handler)
             state.finish(handler);
-
-        if (this.isAnimationInvalidated) {
-            this.animations = null;
-        }
     }
 
     private void invalidateAnimations() {
         if (this.getState().animated()) {
+            if (this.getState() == State.LANDED && !this.getAnimations().isRunning()) {
+                this.animations = null;
+                return;
+            }
+
             this.isAnimationInvalidated = true;
             return;
         }

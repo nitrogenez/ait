@@ -50,6 +50,10 @@ public class AnimationHolder implements TardisTickable, Disposable, Linkable {
         return this.current;
     }
 
+    public boolean isRunning() {
+        return this.current != null && !this.current.isAged();
+    }
+
     public boolean setAnimation(TardisAnimation anim) {
         if (this.isLinked()) {
             if (anim.getExpectedState() != tardis().get().travel().getState()) {

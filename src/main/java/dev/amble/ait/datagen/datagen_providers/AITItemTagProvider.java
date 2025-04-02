@@ -31,7 +31,7 @@ public class AITItemTagProvider extends FabricTagProvider<Item> {
         getOrCreateTagBuilder(AITTags.Items.SONIC_ITEM).add(AITItems.SONIC_SCREWDRIVER);
 
         getOrCreateTagBuilder(ItemTags.CREEPER_DROP_MUSIC_DISCS).add(AITItems.DRIFTING_MUSIC_DISC)
-                .add(AITItems.MERCURY_MUSIC_DISC).add(AITItems.WONDERFUL_TIME_IN_SPACE_MUSIC_DISC)
+               .add(AITItems.WONDERFUL_TIME_IN_SPACE_MUSIC_DISC)
                 .add(AITItems.GOOD_MAN_MUSIC_DISC)
                 .add(AITItems.EARTH_MUSIC_DISC).add(AITItems.VENUS_MUSIC_DISC);
 

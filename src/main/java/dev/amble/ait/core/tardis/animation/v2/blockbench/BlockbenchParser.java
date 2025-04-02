@@ -22,6 +22,8 @@ import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
 import net.fabricmc.fabric.api.resource.SimpleSynchronousResourceReloadListener;
 import net.fabricmc.loader.api.FabricLoader;
+import net.objecthunter.exp4j.Expression;
+import net.objecthunter.exp4j.ExpressionBuilder;
 import org.joml.Vector3f;
 
 import net.minecraft.network.PacketByteBuf;
@@ -35,11 +37,12 @@ import dev.amble.ait.AITMod;
 import dev.amble.ait.core.tardis.animation.v2.keyframe.AnimationKeyframe;
 import dev.amble.ait.core.tardis.animation.v2.keyframe.KeyframeTracker;
 
+import javax.script.ScriptEngine;
+import javax.script.ScriptEngineManager;
+
 public class BlockbenchParser implements
         SimpleSynchronousResourceReloadListener {
     private static final Identifier SYNC = AITMod.id("blockbench_sync");
-
-    private static final Lock LOCK = new ReentrantLock();
 
     private final HashMap<Identifier, Result> lookup = new HashMap<>();
     private final ConcurrentHashMap<String, List<JsonObject>> rawLookup = new ConcurrentHashMap<>();
@@ -270,6 +273,11 @@ public class BlockbenchParser implements
                 AnimationKeyframe<Float> frame = new AnimationKeyframe<>((nextTime - currentTime) * 20, AnimationKeyframe.Interpolation.CUBIC, new AnimationKeyframe.InterpolatedFloat(currentAlpha, nextAlpha));
 
                 list.add(frame);
+            } else {
+                if (!list.isEmpty()) continue;
+
+                AnimationKeyframe<Float> frame = new AnimationKeyframe<>(20, AnimationKeyframe.Interpolation.CUBIC, new AnimationKeyframe.InterpolatedFloat(currentAlpha, currentAlpha));
+                list.add(frame);
             }
         }
 
@@ -329,13 +337,13 @@ public class BlockbenchParser implements
                 Float nextTime = nextEntry.getKey();
                 Vector3f nextVector = nextEntry.getValue().getLeft();
 
-                LOCK.lock();
-                try {
-                    AnimationKeyframe<Vector3f> frame = new AnimationKeyframe<>((nextTime - currentTime) * 20, currentType, new AnimationKeyframe.InterpolatedVector3f(currentVector, nextVector));
-                    list.add(frame);
-                } finally {
-                    LOCK.unlock();
-                }
+                AnimationKeyframe<Vector3f> frame = new AnimationKeyframe<>((nextTime - currentTime) * 20, currentType, new AnimationKeyframe.InterpolatedVector3f(currentVector, nextVector));
+                list.add(frame);
+            } else {
+                if (!list.isEmpty()) continue;
+
+                AnimationKeyframe<Vector3f> frame = new AnimationKeyframe<>(20, currentType, new AnimationKeyframe.InterpolatedVector3f(currentVector, currentVector));
+                list.add(frame);
             }
         }
 
@@ -344,9 +352,32 @@ public class BlockbenchParser implements
 
     private static Vector3f parseVector(JsonArray json) {
         return new Vector3f(
-                json.get(0).getAsFloat(),
-                json.get(1).getAsFloat(),
-                json.get(2).getAsFloat()
+            parseFloat(json.get(0)),
+            parseFloat(json.get(1)),
+            parseFloat(json.get(2))
         );
+    }
+
+    private static float parseFloat(JsonElement element) {
+        // they could be math equations
+        try {
+            return element.getAsFloat();
+        } catch (NumberFormatException ignored) {
+        }
+
+        try {
+            return parseMath(element.getAsString());
+        } catch (Exception e) {
+            AITMod.LOGGER.error("Error occurred while parsing float {}", element);
+            return 0;
+        }
+    }
+
+    private static float parseMath(String data) {
+        // parses math expressions like "1 + 2 * 3" or "1 - 2 / 3"
+        // using net.objecthunter.exp4j
+        Expression expression = new ExpressionBuilder(data).build();
+        double result = expression.evaluate();
+        return (float) result;
     }
 }

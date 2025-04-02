@@ -22,8 +22,8 @@ import dev.amble.ait.data.properties.Property;
 import dev.amble.ait.data.properties.Value;
 
 public abstract class AnimatedTravelHandler extends ProgressiveTravelHandler {
-    private static final Identifier DEFAULT_DEMAT = AITMod.id("classic_demat");
-    private static final Identifier DEFAULT_MAT = AITMod.id("classic_mat");
+    private static final Identifier DEFAULT_DEMAT = AITMod.id("pulsating_demat");
+    private static final Identifier DEFAULT_MAT = AITMod.id("pulsating_mat");
 
     private static final Property<Identifier> DEMAT_FX = new Property<>(Property.Type.IDENTIFIER, "demat_fx", DEFAULT_DEMAT);
     private static final Property<Identifier> MAT_FX = new Property<>(Property.Type.IDENTIFIER, "mat_fx", DEFAULT_MAT);
@@ -99,8 +99,6 @@ public abstract class AnimatedTravelHandler extends ProgressiveTravelHandler {
 
             return;
         }
-
-        System.out.println(BlockbenchParser.getOrFallback(this.getAnimationIdFor(state)));
 
         this.getAnimations().tick(server);
 

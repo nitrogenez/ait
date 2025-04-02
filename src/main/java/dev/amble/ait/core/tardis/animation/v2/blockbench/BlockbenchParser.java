@@ -39,8 +39,6 @@ public class BlockbenchParser implements
         SimpleSynchronousResourceReloadListener {
     private static final Identifier SYNC = AITMod.id("blockbench_sync");
 
-    private static final Lock LOCK = new ReentrantLock();
-
     private final HashMap<Identifier, Result> lookup = new HashMap<>();
     private final ConcurrentHashMap<String, List<JsonObject>> rawLookup = new ConcurrentHashMap<>();
     private static final BlockbenchParser instance = new BlockbenchParser();
@@ -270,6 +268,11 @@ public class BlockbenchParser implements
                 AnimationKeyframe<Float> frame = new AnimationKeyframe<>((nextTime - currentTime) * 20, AnimationKeyframe.Interpolation.CUBIC, new AnimationKeyframe.InterpolatedFloat(currentAlpha, nextAlpha));
 
                 list.add(frame);
+            } else {
+                if (!list.isEmpty()) continue;
+
+                AnimationKeyframe<Float> frame = new AnimationKeyframe<>(20, AnimationKeyframe.Interpolation.CUBIC, new AnimationKeyframe.InterpolatedFloat(currentAlpha, currentAlpha));
+                list.add(frame);
             }
         }
 
@@ -329,13 +332,13 @@ public class BlockbenchParser implements
                 Float nextTime = nextEntry.getKey();
                 Vector3f nextVector = nextEntry.getValue().getLeft();
 
-                LOCK.lock();
-                try {
-                    AnimationKeyframe<Vector3f> frame = new AnimationKeyframe<>((nextTime - currentTime) * 20, currentType, new AnimationKeyframe.InterpolatedVector3f(currentVector, nextVector));
-                    list.add(frame);
-                } finally {
-                    LOCK.unlock();
-                }
+                AnimationKeyframe<Vector3f> frame = new AnimationKeyframe<>((nextTime - currentTime) * 20, currentType, new AnimationKeyframe.InterpolatedVector3f(currentVector, nextVector));
+                list.add(frame);
+            } else {
+                if (!list.isEmpty()) continue;
+
+                AnimationKeyframe<Vector3f> frame = new AnimationKeyframe<>(20, currentType, new AnimationKeyframe.InterpolatedVector3f(currentVector, currentVector));
+                list.add(frame);
             }
         }
 

@@ -16,6 +16,7 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
+import net.minecraft.text.Text;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.explosion.Explosion;
@@ -101,7 +102,7 @@ public sealed interface CrashableTardisTravel permits TravelHandler {
         }
 
         tardis.door().setLocked(true);
-        tardis.alarm().enabled().set(true);
+        tardis.alarm().enable(Text.literal("AHHH IM CRASHINGGG"));
         this.antigravs().set(false);
         this.speed(0);
         tardis.removeFuel(700 * power);

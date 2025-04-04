@@ -102,7 +102,7 @@ public sealed interface CrashableTardisTravel permits TravelHandler {
         }
 
         tardis.door().setLocked(true);
-        tardis.alarm().enable(Text.literal("AHHH IM CRASHINGGG"));
+        tardis.alarm().enable(Text.literal("System Alert: TARDIS is experiencing a critical failure."));
         this.antigravs().set(false);
         this.speed(0);
         tardis.removeFuel(700 * power);

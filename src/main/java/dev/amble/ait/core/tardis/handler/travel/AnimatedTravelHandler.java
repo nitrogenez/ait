@@ -37,9 +37,14 @@ public abstract class AnimatedTravelHandler extends ProgressiveTravelHandler {
     public static void initClient() {
         ClientPlayNetworking.registerGlobalReceiver(AnimationHolder.UPDATE_PACKET, (client, handler, buf, responseSender) -> {
             State state = buf.readEnumConstant(State.class);
+            Identifier id = buf.readIdentifier();
             UUID uuid = buf.readUuid();
 
             ClientTardisManager.getInstance().getTardis(uuid, tardis -> {
+                if (state == State.LANDED) {
+                    tardis.travel().setTemporaryAnimation(id);
+                    return;
+                }
 
                 tardis.travel().getAnimations().onStateChange(state);
             });
@@ -54,13 +59,8 @@ public abstract class AnimatedTravelHandler extends ProgressiveTravelHandler {
     }
 
     @Override
-    public void onLoaded() {
-        super.onLoaded();
-
-        this.state.addListener(state -> this.getAnimations().onStateChange(state));
-
-        dematId.of(this, DEMAT_FX);
-        matId.of(this, MAT_FX);
+    public void postInit(InitContext ctx) {
+        super.postInit(ctx);
 
         dematId.addListener((id) -> {
             this.invalidateAnimations();
@@ -68,6 +68,16 @@ public abstract class AnimatedTravelHandler extends ProgressiveTravelHandler {
         matId.addListener((id) -> {
             this.invalidateAnimations();
         });
+
+        this.state.addListener(state -> this.getAnimations().onStateChange(state));
+    }
+
+    @Override
+    public void onLoaded() {
+        super.onLoaded();
+
+        dematId.of(this, DEMAT_FX);
+        matId.of(this, MAT_FX);
     }
 
     @Override
@@ -96,11 +106,11 @@ public abstract class AnimatedTravelHandler extends ProgressiveTravelHandler {
             if (this.isAnimationInvalidated) {
                 this.animations = null;
             }
-
-            return;
         }
 
         this.getAnimations().tick(server);
+
+        if (state == State.LANDED) return;
 
         if (!this.getAnimations().isAged()) return;
 
@@ -186,6 +196,21 @@ public abstract class AnimatedTravelHandler extends ProgressiveTravelHandler {
             case DEMAT -> this.dematId.set(id);
             case MAT -> this.matId.set(id);
         }
+    }
+
+    public boolean setTemporaryAnimation(Identifier animId) {
+        TardisAnimation anim = TardisAnimationRegistry.getInstance().getOrFallback(animId);
+
+        return this.getAnimations().setAnimation(anim);
+    }
+
+    /**
+     * Sets a runnable to be called when the CURRENT animation is complete.
+     * This will not be ran on subsequent animations.
+     * @param runnable code to run
+     */
+    public void onAnimationComplete(Runnable runnable) {
+        this.getAnimations().onDone().thenRun(runnable);
     }
 
     public abstract boolean shouldTickAnimation();

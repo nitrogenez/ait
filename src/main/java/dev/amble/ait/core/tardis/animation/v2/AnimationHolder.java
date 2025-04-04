@@ -62,11 +62,20 @@ public class AnimationHolder implements TardisTickable, Disposable, Linkable {
             }
         }
 
+        Tardis tardis = this.tardis().get();
+
         if (this.current != null) {
             this.current.dispose();
         }
 
         this.current = anim.instantiate();
+        this.alphaOverride = -1F;
+
+        if (this.isLinked()) {
+            this.current.link(tardis);
+            this.sync(tardis.travel().getState());
+        }
+
         return true;
     }
 
@@ -75,16 +84,16 @@ public class AnimationHolder implements TardisTickable, Disposable, Linkable {
      * @return The action queue to run when the animation is done. Or null if there is no animation.
      */
     public ActionQueue onDone() {
-        if (this.getCurrent() == null) return null;
+        if (this.current == null) return null;
 
-        return this.getCurrent().onDone();
+        return this.current.onDone();
     }
 
     @Override
     public void tick(MinecraftServer server) {
-        if (this.getCurrent() == null) return;
+        if (this.current == null) return;
 
-        this.getCurrent().tick(server);
+        this.current.tick(server);
     }
 
     @Environment(EnvType.CLIENT)
@@ -92,24 +101,26 @@ public class AnimationHolder implements TardisTickable, Disposable, Linkable {
     public void tick(MinecraftClient client) {
         this.isServer = false;
 
-        if (this.getCurrent() == null) return;
+        if (this.current == null) return;
 
-        this.getCurrent().tick(client);
+        this.current.tick(client);
     }
 
     @Override
     public boolean isAged() {
-        return this.getCurrent().isAged();
+        if (this.current == null) return true;
+
+        return this.current.isAged();
     }
 
     @Override
     public void age() {
-        this.getCurrent().age();
+        this.current.age();
     }
 
     @Override
     public void dispose() {
-        this.getCurrent().dispose();
+        this.current.dispose();
         this.alphaOverride = -1;
     }
 
@@ -153,15 +164,15 @@ public class AnimationHolder implements TardisTickable, Disposable, Linkable {
 
         this.alphaOverride = -1;
 
-        if (this.getCurrent() != null) {
-            this.getCurrent().dispose();
+        if (this.current != null) {
+            this.current.dispose();
         }
 
         animation.dispose();;
         this.current = animation.instantiate();
 
         if (this.isLinked()) {
-            this.getCurrent().link(this.tardis().get());
+            this.current.link(this.tardis().get());
         }
 
         this.sync(state);
@@ -172,19 +183,14 @@ public class AnimationHolder implements TardisTickable, Disposable, Linkable {
             return this.alphaOverride;
         }
 
-/*        if (!this.isServer && ServerLifecycleHooks.get().getTicks() % 20 == 0) {
-            System.out.println(this);
-            System.out.println(this.getCurrent());
-        }*/
-
-        if (this.getCurrent() == null)
+        if (this.current == null)
              return 1f;
 
-        return this.getCurrent().getAlpha(delta);
+        return this.current.getAlpha(delta);
     }
 
     public Vector3f getScale(float delta) {
-        if (this.getCurrent() == null) {
+        if (this.current == null) {
             if (this.isLinked()) {
                 return this.tardis().get().stats().getScale();
             }
@@ -192,23 +198,23 @@ public class AnimationHolder implements TardisTickable, Disposable, Linkable {
             return new Vector3f(1f, 1f, 1f);
         }
 
-        return this.getCurrent().getScale(delta);
+        return this.current.getScale(delta);
     }
 
     public Vector3f getPosition(float delta) {
-        if (this.getCurrent() == null) {
+        if (this.current == null) {
             return new Vector3f(0f, 0f, 0f);
         }
 
-        return this.getCurrent().getPosition(delta);
+        return this.current.getPosition(delta);
     }
 
     public Vector3f getRotation(float delta) {
-        if (this.getCurrent() == null) {
+        if (this.current == null) {
             return new Vector3f(0f, 0f, 0f);
         }
 
-        return this.getCurrent().getRotation(delta);
+        return this.current.getRotation(delta);
     }
 
     private void sync(TravelHandlerBase.State state) {
@@ -219,6 +225,7 @@ public class AnimationHolder implements TardisTickable, Disposable, Linkable {
         PacketByteBuf buf = PacketByteBufs.create();
 
         buf.writeEnumConstant(state);
+        buf.writeIdentifier(this.current.id());
         buf.writeUuid(tardis.getUuid());
 
         NetworkUtil.getSubscribedPlayers(tardis).forEach(player -> {;

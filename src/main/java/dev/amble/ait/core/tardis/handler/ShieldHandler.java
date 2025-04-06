@@ -114,9 +114,9 @@ public class ShieldHandler extends KeyedTardisComponent implements TardisTickabl
 
         if (this.visuallyShielded().get()) {
             bweepSoundTimer++;
-            if (bweepSoundTimer >= 60) {
+            if (bweepSoundTimer >= 44) {
                 bweepSoundTimer = 0;
-                world.playSound(null, exteriorPos, AITSounds.BWEEP, SoundCategory.BLOCKS, 1f, 1f);
+                world.playSound(null, exteriorPos, AITSounds.SHIELD_AMBIANCE, SoundCategory.BLOCKS, 3f, 0.7f);
             }
         } else {
             bweepSoundTimer = 0;

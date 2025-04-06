@@ -27,11 +27,10 @@ public class AnimationConstants {
         float ttt = tt * delta;
 
         Vector3f result = new Vector3f();
-        result.add(p0.mul(uuu));
-        result.add(p1.mul(3 * uu * delta));
-        result.add(p2.mul(3 * u * tt));
-        result.add(p3.mul(ttt));
-
+        result.add(new Vector3f(p0).mul(uuu));
+        result.add(new Vector3f(p1).mul(3 * uu * delta));
+        result.add(new Vector3f(p2).mul(3 * u * tt));
+        result.add(new Vector3f(p3).mul(ttt));
         return result.mul(scale);
     };
 }

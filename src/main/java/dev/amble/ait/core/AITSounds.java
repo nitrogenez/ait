@@ -80,8 +80,8 @@ public class AITSounds {
     public static final SoundEvent GROAN = register("tardis/groan");
     public static final SoundEvent REMOTE_LOCK = register("tardis/remote_lock");
     public static final SoundEvent REMOTE_UNLOCK = register("tardis/remote_unlock");
-    public static final SoundEvent INTERIOR_KEY_INTERACT = register("tardis/interior_key_interact");
-    public static final SoundEvent EXTERIOR_KEY_INTERACT = register("tardis/exterior_key_interact");
+    public static final SoundEvent KEY_LOCK = register("tardis/key_lock");
+    public static final SoundEvent KEY_UNLOCK = register("tardis/key_unlock");
     //Possible could be used for a mood related thing?
     public static final SoundEvent TARDIS_REJECTION_SFX = register("tardis/tardis_rejection_sfx");
 

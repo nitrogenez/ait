@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Random;
 
+import dev.amble.ait.core.tardis.handler.ServerAlarmHandler;
 import dev.amble.lib.data.CachedDirectedGlobalPos;
 import dev.amble.lib.util.ServerLifecycleHooks;
 import dev.drtheo.queue.api.ActionQueue;
@@ -102,7 +103,7 @@ public sealed interface CrashableTardisTravel permits TravelHandler {
         }
 
         tardis.door().setLocked(true);
-        tardis.alarm().enable(Text.literal("System Alert: TARDIS is experiencing a critical failure."));
+        tardis.alarm().enable(ServerAlarmHandler.AlarmType.CRASHING);
         this.antigravs().set(false);
         this.speed(0);
         tardis.removeFuel(700 * power);

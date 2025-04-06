@@ -57,7 +57,9 @@ public class ServerAlarmHandler extends KeyedTardisComponent implements TardisTi
     public void postInit(InitContext ctx) {
         super.postInit(ctx);
 
-        alarms = new ArrayDeque<>();
+        if (this.isServer()) {
+            alarms = new ArrayDeque<>();
+        }
     }
 
     /**
@@ -298,6 +300,26 @@ public class ServerAlarmHandler extends KeyedTardisComponent implements TardisTi
             public Countdown build() {
                 return new Countdown(translation, ticks);
             }
+        }
+    }
+
+    public enum AlarmType implements Alarm {
+        CRASHING,
+        HAIL_MARY("tardis.message.protocol_813.travel");
+
+        private final String translation;
+
+        AlarmType() {
+            this.translation = "tardis.message.alarm." + this.name().toLowerCase();
+        }
+
+        AlarmType(String translation) {
+            this.translation = translation;
+        }
+
+        @Override
+        public Optional<Text> getAlarmText() {
+            return Optional.of(Text.translatable(this.translation).formatted(Formatting.RED));
         }
     }
 }

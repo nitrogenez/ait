@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import dev.amble.ait.core.tardis.handler.ServerAlarmHandler;
 import dev.amble.lib.data.CachedDirectedGlobalPos;
 import org.jetbrains.annotations.Nullable;
 
@@ -153,7 +154,7 @@ public class KeyItem extends LinkableItem {
         CachedDirectedGlobalPos globalPos = CachedDirectedGlobalPos.create((ServerWorld) world, pos,
                 (byte) RotationPropertyHelper.fromYaw(player.getBodyYaw()));
 
-        tardis.alarm().enable(Text.translatable("tardis.message.protocol_813.travel").formatted(Formatting.RED));
+        tardis.alarm().enable(ServerAlarmHandler.AlarmType.HAIL_MARY);
         tardis.travel().dematerialize();
 
         if (travel.getState() != TravelHandlerBase.State.DEMAT)

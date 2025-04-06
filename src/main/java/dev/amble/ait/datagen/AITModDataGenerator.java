@@ -1366,6 +1366,8 @@ public class AITModDataGenerator implements DataGeneratorEntrypoint {
         provider.addTranslation("exterior.ait.1980", "1980");
 
 
+        // Alarms
+        provider.addTranslation("tardis.message.alarm.crashing", "System Alert: TARDIS is experiencing a critical failure.");
 
         // Security Settings Menu
         provider.addTranslation("screen.ait.sonic.button", "> Sonic Settings");

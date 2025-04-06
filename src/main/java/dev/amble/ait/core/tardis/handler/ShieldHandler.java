@@ -19,6 +19,7 @@ import dev.amble.ait.api.tardis.KeyedTardisComponent;
 import dev.amble.ait.api.tardis.TardisEvents;
 import dev.amble.ait.api.tardis.TardisTickable;
 import dev.amble.ait.core.AITDimensions;
+import dev.amble.ait.core.AITSounds;
 import dev.amble.ait.core.AITStatusEffects;
 import dev.amble.ait.core.tardis.control.impl.SecurityControl;
 import dev.amble.ait.core.tardis.handler.travel.TravelHandler;
@@ -32,6 +33,8 @@ public class ShieldHandler extends KeyedTardisComponent implements TardisTickabl
     private final BoolValue isShielded = IS_SHIELDED.create(this);
     public static BoolProperty IS_VISUALLY_SHIELDED = new BoolProperty("is_visually_shielded", false);
     private final BoolValue isVisuallyShielded = IS_VISUALLY_SHIELDED.create(this);
+
+    private int bweepSoundTimer = 0;
 
     public ShieldHandler() {
         super(Id.SHIELDS);
@@ -108,6 +111,16 @@ public class ShieldHandler extends KeyedTardisComponent implements TardisTickabl
 
         World world = globalExteriorPos.getWorld();
         BlockPos exteriorPos = globalExteriorPos.getPos();
+
+        if (this.visuallyShielded().get()) {
+            bweepSoundTimer++;
+            if (bweepSoundTimer >= 60) {
+                bweepSoundTimer = 0;
+                world.playSound(null, exteriorPos, AITSounds.BWEEP, SoundCategory.BLOCKS, 1f, 1f);
+            }
+        } else {
+            bweepSoundTimer = 0;
+        }
 
         world.getOtherEntities(null, new Box(exteriorPos).expand(8f)).stream()
                 .filter(entity -> entity.isPushable() || entity instanceof ProjectileEntity)

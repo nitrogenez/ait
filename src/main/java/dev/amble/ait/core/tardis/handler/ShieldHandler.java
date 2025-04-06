@@ -34,7 +34,7 @@ public class ShieldHandler extends KeyedTardisComponent implements TardisTickabl
     public static BoolProperty IS_VISUALLY_SHIELDED = new BoolProperty("is_visually_shielded", false);
     private final BoolValue isVisuallyShielded = IS_VISUALLY_SHIELDED.create(this);
 
-    private int shieldambientSoundTimer = 0;
+    private int shieldAmbienceTicks = 0;
 
     public ShieldHandler() {
         super(Id.SHIELDS);
@@ -113,15 +113,12 @@ public class ShieldHandler extends KeyedTardisComponent implements TardisTickabl
         BlockPos exteriorPos = globalExteriorPos.getPos();
 
         if (this.visuallyShielded().get()) {
-            shieldambientSoundTimer++;
-            if (shieldambientSoundTimer >= 44) {
-                shieldambientSoundTimer = 0;
-                world.playSound(null, exteriorPos, AITSounds.SHIELD_AMBIANCE, SoundCategory.BLOCKS, 3f, 0.7f);
+            shieldAmbienceTicks++;
+            if (shieldAmbienceTicks >= 44) {
+                shieldAmbienceTicks = 0;
+                tardis.getExterior().playSound(AITSounds.SHIELD_AMBIANCE, SoundCategory.BLOCKS, 2f, 0.7f);
             }
-        } else {
-            shieldambientSoundTimer = 0;
         }
-
         world.getOtherEntities(null, new Box(exteriorPos).expand(8f)).stream()
                 .filter(entity -> entity.isPushable() || entity instanceof ProjectileEntity)
                 .forEach(entity -> {

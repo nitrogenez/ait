@@ -231,16 +231,6 @@ public class AITModClient implements ClientModInitializer {
                         console.setVariant(id);
                 });
 
-        ClientPlayNetworking.registerGlobalReceiver(TravelHandler.CANCEL_DEMAT_SOUND, (client, handler, buf,
-                responseSender) -> {
-            ClientTardis tardis = ClientTardisUtil.getCurrentTardis();
-
-            if (tardis == null)
-                return;
-
-            client.getSoundManager().stopSounds(tardis.travel().getAnimationIdFor(TravelHandlerBase.State.DEMAT), SoundCategory.BLOCKS);
-        });
-
         WorldRenderEvents.END.register((context) -> SonicRendering.getInstance().renderWorld(context));
         HudRenderCallback.EVENT.register((context, delta) -> SonicRendering.getInstance().renderGui(context, delta));
 

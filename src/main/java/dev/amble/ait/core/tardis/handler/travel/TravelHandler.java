@@ -3,12 +3,18 @@ package dev.amble.ait.core.tardis.handler.travel;
 import java.util.EnumMap;
 import java.util.Optional;
 
+import dev.amble.ait.client.tardis.ClientTardis;
+import dev.amble.ait.client.util.ClientTardisUtil;
 import dev.amble.lib.data.CachedDirectedGlobalPos;
 import dev.drtheo.queue.api.ActionQueue;
 import dev.drtheo.scheduler.api.Scheduler;
 import dev.drtheo.scheduler.api.TimeUnit;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.server.world.ServerWorld;
@@ -97,6 +103,21 @@ public final class TravelHandler extends AnimatedTravelHandler implements Crasha
             }
             if (tardis.travel().isCrashing())
                 tardis.travel().setCrashing(false);
+        });
+
+        if (EnvType.CLIENT == FabricLoader.getInstance().getEnvironmentType()) initializeClient();
+    }
+
+    @Environment(EnvType.CLIENT)
+    private static void initializeClient() {
+        ClientPlayNetworking.registerGlobalReceiver(TravelHandler.CANCEL_DEMAT_SOUND, (client, handler, buf,
+                                                                                       responseSender) -> {
+            ClientTardis tardis = ClientTardisUtil.getCurrentTardis();
+
+            if (tardis == null)
+                return;
+
+            client.getSoundManager().stopSounds(tardis.travel().getAnimationIdFor(TravelHandlerBase.State.DEMAT), SoundCategory.BLOCKS);
         });
     }
 

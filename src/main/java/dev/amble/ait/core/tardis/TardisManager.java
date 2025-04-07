@@ -3,7 +3,6 @@ package dev.amble.ait.core.tardis;
 import java.util.Collection;
 import java.util.UUID;
 import java.util.function.Consumer;
-import java.util.function.Predicate;
 import java.util.function.Supplier;
 
 import com.google.gson.ExclusionStrategy;

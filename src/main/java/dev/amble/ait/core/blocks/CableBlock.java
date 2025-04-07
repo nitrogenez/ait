@@ -5,8 +5,6 @@ import java.util.Map;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
 
-import dev.amble.ait.core.engine.link.block.CableBlockEntity;
-import dev.amble.ait.core.engine.link.block.FluidLinkBlockEntity;
 import net.minecraft.block.*;
 import net.minecraft.fluid.FluidState;
 import net.minecraft.fluid.Fluids;
@@ -23,7 +21,9 @@ import net.minecraft.world.BlockView;
 import net.minecraft.world.WorldAccess;
 
 import dev.amble.ait.core.engine.link.IFluidLink;
+import dev.amble.ait.core.engine.link.block.CableBlockEntity;
 import dev.amble.ait.core.engine.link.block.FluidLinkBlock;
+import dev.amble.ait.core.engine.link.block.FluidLinkBlockEntity;
 
 public class CableBlock extends FluidLinkBlock implements Waterloggable {
 

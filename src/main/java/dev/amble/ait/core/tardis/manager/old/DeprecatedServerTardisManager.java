@@ -8,7 +8,6 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import com.mojang.datafixers.util.Either;
-import dev.amble.ait.data.TardisMap;
 import dev.amble.lib.data.CachedDirectedGlobalPos;
 import dev.drtheo.multidim.MultiDim;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
@@ -39,6 +38,7 @@ import dev.amble.ait.core.tardis.manager.TardisBuilder;
 import dev.amble.ait.core.tardis.manager.TardisFileManager;
 import dev.amble.ait.core.tardis.util.TardisUtil;
 import dev.amble.ait.data.Exclude;
+import dev.amble.ait.data.TardisMap;
 import dev.amble.ait.data.properties.Value;
 
 public abstract class DeprecatedServerTardisManager extends TardisManager<ServerTardis, MinecraftServer> {

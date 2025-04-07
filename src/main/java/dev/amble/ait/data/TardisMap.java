@@ -36,8 +36,7 @@ public abstract class TardisMap<T> extends ConcurrentHashMap<UUID, T> {
             return Either.right(e);
         }
 
-        @Nullable
-        public Either<T, Exception> put(T t) {
+        @Nullable public Either<T, Exception> put(T t) {
             if (t == null)
                 return null;
 

@@ -10,8 +10,6 @@ import com.google.gson.InstanceCreator;
 
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.world.ServerWorld;
-import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
 
 import dev.amble.ait.api.tardis.TardisComponent;
 import dev.amble.ait.core.world.TardisServerWorld;

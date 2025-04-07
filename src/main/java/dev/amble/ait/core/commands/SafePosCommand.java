@@ -7,7 +7,6 @@ import com.mojang.brigadier.Command;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import dev.amble.ait.core.util.SafePosSearch;
 import dev.amble.lib.data.CachedDirectedGlobalPos;
 
 import net.minecraft.command.argument.BlockPosArgumentType;
@@ -23,6 +22,7 @@ import net.minecraft.util.math.BlockPos;
 
 import dev.amble.ait.AITMod;
 import dev.amble.ait.core.commands.argument.GroundSearchArgumentType;
+import dev.amble.ait.core.util.SafePosSearch;
 
 public class SafePosCommand {
 

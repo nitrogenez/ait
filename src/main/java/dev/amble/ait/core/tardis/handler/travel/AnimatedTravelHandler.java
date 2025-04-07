@@ -6,6 +6,7 @@ import dev.amble.ait.core.tardis.animation.v2.blockbench.BlockbenchParser;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
+import net.fabricmc.loader.api.FabricLoader;
 import org.joml.Vector3f;
 
 import net.minecraft.client.MinecraftClient;
@@ -32,6 +33,10 @@ public abstract class AnimatedTravelHandler extends ProgressiveTravelHandler {
 
     @Exclude
     private boolean isAnimationInvalidated;
+
+    static {
+        if (EnvType.CLIENT == FabricLoader.getInstance().getEnvironmentType()) initClient();
+    }
 
     @Environment(EnvType.CLIENT)
     public static void initClient() {

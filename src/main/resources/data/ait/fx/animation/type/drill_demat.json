@@ -1,6 +1,5 @@
 {
   "id": "ait:drill_demat",
-  "name": "drill",
   "expected_state": "demat",
   "sound": "ait:tardis/drill/demat"
 }

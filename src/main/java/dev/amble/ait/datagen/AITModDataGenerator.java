@@ -1426,6 +1426,22 @@ public class AITModDataGenerator implements DataGeneratorEntrypoint {
         provider.addTranslation(SubSystem.Id.STABILISERS.toTranslationKey(), "Blue Stabilisers");
         provider.addTranslation(SubSystem.Id.EMERGENCY_POWER.toTranslationKey(), "Emergency Backup Power");
 
+        // Exterior Animations
+        provider.addTranslation(AITMod.MOD_ID + ".animation.bnt_demat", "Bill & Ted");
+        provider.addTranslation(AITMod.MOD_ID + ".animation.bnt_mat", "Bill & Ted");
+        provider.addTranslation(AITMod.MOD_ID + ".animation.classic_demat", "Classic");
+        provider.addTranslation(AITMod.MOD_ID + ".animation.classic_mat", "Classic");
+        provider.addTranslation(AITMod.MOD_ID + ".animation.crumple", "Crumple");
+        provider.addTranslation(AITMod.MOD_ID + ".animation.drill_demat", "Drill");
+        provider.addTranslation(AITMod.MOD_ID + ".animation.drill_mat", "Drill");
+        provider.addTranslation(AITMod.MOD_ID + ".animation.ghost_mat", "Ghosting");
+        provider.addTranslation(AITMod.MOD_ID + ".animation.pulsating_demat", "Pulsating");
+        provider.addTranslation(AITMod.MOD_ID + ".animation.pulsating_mat", "Pulsating");
+        provider.addTranslation(AITMod.MOD_ID + ".animation.self_destruct", "Self Destruct");
+        provider.addTranslation(AITMod.MOD_ID + ".animation.zwip_demat", "Zwip");
+        provider.addTranslation(AITMod.MOD_ID + ".animation.zwip_mat", "Zwip");
+
+
         return provider;
     }
 

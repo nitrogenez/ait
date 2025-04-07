@@ -1,6 +1,5 @@
 {
   "id": "ait:pulsating_demat",
-  "name": "pulsating",
   "expected_state": "demat",
   "sound": "ait:tardis/demat"
 }

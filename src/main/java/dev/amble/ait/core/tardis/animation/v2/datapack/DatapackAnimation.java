@@ -9,6 +9,7 @@ import com.google.gson.JsonParser;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.JsonOps;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.minecraft.text.Text;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3f;
 
@@ -31,7 +32,7 @@ public class DatapackAnimation extends TardisAnimation {
     ).apply(instance, DatapackAnimation::new));
 
     private final TravelHandlerBase.State expectedState;
-    private final String name;
+    private final String nameKey;
     private final Identifier blockbenchId;
 
     protected DatapackAnimation(Identifier id, Identifier blockbench, TravelHandlerBase.State expectedState, String optName, @Nullable Identifier sound) {
@@ -42,10 +43,10 @@ public class DatapackAnimation extends TardisAnimation {
         this.expectedState = expectedState;
 
         if (optName.isBlank()) {
-            optName = id.getPath();
+            optName = id.getNamespace() + ".animation." + id.getPath();
         }
 
-        this.name = optName;
+        this.nameKey = optName;
     }
 
     protected DatapackAnimation(Identifier id, KeyframeTracker<Float> alpha, KeyframeTracker<Vector3f> scale, KeyframeTracker<Vector3f> position, KeyframeTracker<Vector3f> rotation, Identifier blockbench, TravelHandlerBase.State expectedState, String optName, @Nullable Identifier soundId) {
@@ -59,7 +60,7 @@ public class DatapackAnimation extends TardisAnimation {
             optName = id.getPath();
         }
 
-        this.name = optName;
+        this.nameKey = optName;
     }
 
     @Override
@@ -74,7 +75,7 @@ public class DatapackAnimation extends TardisAnimation {
 
     @Override
     public DatapackAnimation instantiate() {
-        return new DatapackAnimation(this.id(), this.alpha.instantiate(), this.scale.instantiate(), this.position.instantiate(), this.rotation.instantiate(), this.blockbenchId, this.expectedState, this.name, this.getSound().getId());
+        return new DatapackAnimation(this.id(), this.alpha.instantiate(), this.scale.instantiate(), this.position.instantiate(), this.rotation.instantiate(), this.blockbenchId, this.expectedState, this.nameKey, this.getSound().getId());
     }
 
     public static DatapackAnimation fromInputStream(InputStream stream) {
@@ -96,6 +97,6 @@ public class DatapackAnimation extends TardisAnimation {
 
     @Override
     public String name() {
-        return name;
+        return Text.translatable(this.nameKey).getString();
     }
 }

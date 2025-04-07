@@ -118,6 +118,7 @@ public class AITSounds {
     public static final SoundEvent HAIL_MARY = register("controls/hail_mary");
     public static final SoundEvent SIEGE = register("controls/siege");
     public static final SoundEvent DIRECTION = register("controls/direction");
+    public static final SoundEvent THROTTLE_SNAP = register("controls/throttle_snap");
     public static final SoundEvent SET_WAYPOINT = register("controls/waypoint_set");
     public static final SoundEvent XYZ = register("controls/xyz");
     public static final SoundEvent RANDOMIZE = register("controls/randomize");

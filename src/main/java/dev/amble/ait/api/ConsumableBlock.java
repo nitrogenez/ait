@@ -14,7 +14,9 @@ public interface ConsumableBlock {
     /**
      * Returns true if the block can accept the item stack from the specified direction.
      */
-    boolean canAcceptItem(World world, BlockPos pos, ItemStack stack, Direction from);
+    default boolean canAcceptItem(World world, BlockPos pos, ItemStack stack, Direction from) {
+        return true;
+    }
 
     /**
      * Attempts to insert the given item into the block from the given direction.

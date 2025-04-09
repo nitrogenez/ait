@@ -19,9 +19,6 @@ import dev.amble.ait.api.ConsumableBlock;
 @Mixin(HopperBlockEntity.class)
 public abstract class HopperBlockEntityMixin {
 
-    /**
-     * Injects into the static insert() method to handle custom block interaction
-     */
     @Inject(method = "insert(Lnet/minecraft/world/World;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/block/BlockState;Lnet/minecraft/inventory/Inventory;)Z",
             at = @At("HEAD"), cancellable = true)
     private static void ait$insertIntoConsumableBlock(

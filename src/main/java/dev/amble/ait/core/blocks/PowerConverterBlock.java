@@ -90,12 +90,15 @@ public class PowerConverterBlock extends DirectionalFluidLinkBlock implements Co
     }
 
     @Override
+    public boolean canAcceptItem(World world, BlockPos pos, ItemStack stack, Direction from) {
+        return stack.isIn(AITTags.Items.IS_TARDIS_FUEL);
+    }
+
+    @Override
     public ItemStack insertItem(World world, BlockPos pos, ItemStack stack, Direction from, boolean simulate) {
         if (!(world.getBlockEntity(pos) instanceof FluidLinkBlockEntity be)) return stack;
 
         if (!be.isPowered()) return stack;
-
-        if (!stack.isIn(AITTags.Items.IS_TARDIS_FUEL)) return stack;
 
         if (!simulate && !world.isClient) {
             be.source().addLevel(175);

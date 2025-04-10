@@ -32,7 +32,6 @@ public class PowerControl extends Control {
 
             if (doorLocked && doorClosed && power >= 1000 && power <= 2017) {
                 world.playSound(null, console, AITSounds.GOOD_MAN_MUSIC, SoundCategory.BLOCKS, 3.0f, 1.0f);
-                tardis.fuel().addFuel(1250);
             }
         }
 

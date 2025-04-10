@@ -22,11 +22,10 @@ public class PowerControl extends Control {
     public Result runServer(Tardis tardis, ServerPlayerEntity player, ServerWorld world, BlockPos console, boolean leftClick) {
         super.runServer(tardis, player, world, console, leftClick);
 
-        boolean hadPower = tardis.fuel().hasPower();
         tardis.fuel().togglePower();
 
         //Todo add check for if toyota variant (specifically capaldis)
-        if (!hadPower && tardis.fuel().hasPower()) {
+        if (tardis.fuel().hasPower()) {
             boolean doorLocked = tardis.door().locked();
             boolean doorClosed = !tardis.door().isOpen();
             int power = (int) tardis.fuel().getCurrentFuel();

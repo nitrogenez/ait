@@ -24,14 +24,15 @@ public class PowerControl extends Control {
 
         tardis.fuel().togglePower();
 
-        //Todo add check for if toyota variant (specifically capaldis)
+
         if (tardis.fuel().hasPower()) {
             boolean doorLocked = tardis.door().locked();
             boolean doorClosed = !tardis.door().isOpen();
             int power = (int) tardis.fuel().getCurrentFuel();
 
             if (doorLocked && doorClosed && power >= 1000 && power <= 2017) {
-                world.playSound(null, console, AITSounds.GOOD_MAN_MUSIC, SoundCategory.VOICE, 3.0f, 1.0f);
+                world.playSound(null, console, AITSounds.GOOD_MAN_MUSIC, SoundCategory.WEATHER, 3.0f, 1.0f);
+                tardis.fuel().addFuel(1250);
             }
         }
 

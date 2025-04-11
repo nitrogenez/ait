@@ -1,6 +1,5 @@
 package dev.amble.ait.module.planet.mixin.gravity;
 
-import dev.amble.ait.AITMod;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;

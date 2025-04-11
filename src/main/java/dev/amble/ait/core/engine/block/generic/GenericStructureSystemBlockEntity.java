@@ -50,7 +50,7 @@ public class GenericStructureSystemBlockEntity extends StructureSystemBlockEntit
                     return ActionResult.SUCCESS;
                 }
                 StackUtil.spawn(world, pos, this.idSource.copyAndEmpty());
-                if (this.tardis().isPresent()) {
+                if (this.tardis().isPresent() && this.id() != null) {
                     this.tardis().get().subsystems().remove(this.id());
                 }
                 world.playSound(null, this.getPos(), AITSounds.WAYPOINT_ACTIVATE, SoundCategory.BLOCKS, 1.0f, 0.1f);

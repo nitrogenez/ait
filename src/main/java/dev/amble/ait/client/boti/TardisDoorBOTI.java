@@ -99,6 +99,8 @@ public class TardisDoorBOTI extends BOTI {
         VortexUtil util = stats.getVortexEffects().toUtil();
         if (!tardis.travel().isLanded() /*&& !tardis.flight().isFlying()*/) {
             util.renderVortex(stack);
+            util.renderVortexLayer(stack, 1.5f);
+            util.renderVortexLayer(stack, 2.5f);
             /*// TODO not a clue if this will work but oh well - Loqor
             stack.push();
             stack.scale(0.9f, 0.9f, 0.9f);

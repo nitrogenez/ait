@@ -106,7 +106,7 @@ public class ShieldHandler extends KeyedTardisComponent implements TardisTickabl
         if (travel.getState() == TravelHandlerBase.State.FLIGHT)
             return;
 
-        tardis.removeFuel(2 * travel.instability());
+        tardis.removeFuel(2 * travel.instability()); // idle drain of 2 fuel per tick
         CachedDirectedGlobalPos globalExteriorPos = travel.position();
 
         World world = globalExteriorPos.getWorld();
@@ -119,7 +119,6 @@ public class ShieldHandler extends KeyedTardisComponent implements TardisTickabl
                 tardis.getExterior().playSound(AITSounds.SHIELD_AMBIANCE, SoundCategory.BLOCKS, 2f, 0.7f);
             }
         }
-
         world.getOtherEntities(null, new Box(exteriorPos).expand(8f)).stream()
                 .filter(entity -> entity.isPushable() || entity instanceof ProjectileEntity)
                 .forEach(entity -> {
@@ -136,26 +135,35 @@ public class ShieldHandler extends KeyedTardisComponent implements TardisTickabl
                             return;
                         }
                     }
-
                     if (this.visuallyShielded().get()) {
                         Vec3d centerExteriorPos = exteriorPos.toCenterPos();
 
                         if (entity.squaredDistanceTo(centerExteriorPos) <= 8f) {
-                            Vec3d motion = entity.getPos().subtract(centerExteriorPos).normalize().multiply(0.8f);
+                            Vec3d motion = entity.getBlockPos().toCenterPos().subtract(centerExteriorPos).normalize()
+                                    .multiply(0.1f);
 
-                            entity.setVelocity(motion);
+                            if (entity instanceof ProjectileEntity projectile) {
+                                BlockPos pos = projectile.getBlockPos();
+
+                                if (projectile instanceof TridentEntity) {
+                                    projectile.getVelocity().add(motion.multiply(2f));
+
+                                    world.playSound(null, pos, SoundEvents.ITEM_TRIDENT_HIT, SoundCategory.BLOCKS, 1f,
+                                            1f);
+                                    return;
+                                }
+
+                                world.playSound(null, pos, SoundEvents.ENTITY_GENERIC_BURN, SoundCategory.BLOCKS, 1f,
+                                        1f);
+
+                                projectile.discard();
+                                return;
+                            }
+
+                            entity.setVelocity(entity.getVelocity().add(motion.multiply(2f)));
+
                             entity.velocityDirty = true;
                             entity.velocityModified = true;
-
-                            if (entity instanceof ProjectileEntity projectile && !(projectile instanceof TridentEntity)) {
-                                world.playSound(null, projectile.getBlockPos(), SoundEvents.ENTITY_ARROW_HIT_PLAYER,
-                                        SoundCategory.BLOCKS, 1f, 1f);
-                            }
-
-                            if (entity instanceof TridentEntity trident) {
-                                world.playSound(null, trident.getBlockPos(), SoundEvents.ITEM_TRIDENT_HIT,
-                                        SoundCategory.BLOCKS, 1f, 1f);
-                            }
                         }
                     }
                 });

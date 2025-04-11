@@ -126,9 +126,17 @@ public class DoorRenderer<T extends DoorBlockEntity> implements BlockEntityRende
 
             float colorAlpha = 1;
 
-            float red = alarms ? !power ? 0.25f : s : s;
-            float green = alarms ? !power ? 0.01f : 0.3f : t;
-            float blue = alarms ? !power ? 0.01f : 0.3f : u;
+            float red = alarms
+                    ? (!power ? 0.25f : s)
+                    : (power ? s : 0f);
+
+            float green = alarms
+                    ? (!power ? 0.01f : 0.3f)
+                    : (power ? t : 0f);
+
+            float blue = alarms
+                    ? (!power ? 0.01f : 0.3f)
+                    : (power ? u : 0f);
 
             ClientLightUtil.renderEmissive((v, l) -> model.renderWithAnimations(
                     tardis, entity, model.getPart(), matrices, v, l, overlay, red, green, blue, colorAlpha

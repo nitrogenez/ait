@@ -34,6 +34,7 @@ public class PowerControl extends Control {
                     baseChance += 7f;
                 }
 
+                // TEMP SOUNDS, DIAN STILL HAS TO REMAKE THEM INTO MORE "MC" ISH SOUNDS
                 if (RANDOM.nextInt(100) < baseChance) {
                     SoundEvent track = RANDOM.nextBoolean() ? AITSounds.MAD_MAN : AITSounds.MAD_MAN_SAD;
                     world.playSound(null, console, track, SoundCategory.BLOCKS, 3.0f, 1.0f);

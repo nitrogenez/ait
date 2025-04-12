@@ -77,6 +77,12 @@ public class TelepathicControl extends Control {
             return Result.FAILURE;
         }
 
+        if (type == Items.FLINT_AND_STEEL) {
+            player.getServerWorld().playSound(null, console, AITSounds.FLINT_AND_STEEL, SoundCategory.AMBIENT, 0.25f, 1f);
+            tardis.siege().texture().set(SiegeHandler.DEFAULT_TEXTURRE);
+            return Result.FAILURE;
+        }
+
         if (type == Items.STONE) {
             tardis.siege().texture().set(SiegeHandler.DEFAULT_TEXTURRE);
             return Result.FAILURE;
@@ -251,7 +257,7 @@ public class TelepathicControl extends Control {
     }
 
     public static void locateStructureOfInterest(ServerPlayerEntity player, Tardis tardis, ServerWorld world,
-            BlockPos source) {
+                                                 BlockPos source) {
         if (world.getRegistryKey() == World.NETHER) {
             getStructureViaChunkGen(player, tardis, world, source, RADIUS, StructureKeys.FORTRESS);
         } else if (world.getRegistryKey() == World.END) {
@@ -272,7 +278,7 @@ public class TelepathicControl extends Control {
     }
 
     public static void getStructureViaChunkGen(ServerPlayerEntity player, Tardis tardis, ServerWorld world,
-            BlockPos pos, int radius, RegistryKey<Structure> key) {
+                                               BlockPos pos, int radius, RegistryKey<Structure> key) {
         Registry<Structure> registry = world.getRegistryManager().get(RegistryKeys.STRUCTURE);
 
         if (registry.getEntry(key).isPresent())
@@ -281,7 +287,7 @@ public class TelepathicControl extends Control {
     }
 
     public static void getStructureViaWorld(ServerPlayerEntity player, Tardis tardis, ServerWorld world, BlockPos pos,
-            int radius, TagKey<Structure> key) {
+                                            int radius, TagKey<Structure> key) {
         locateWithWorldAsync(player, tardis, key, world, pos, radius);
     }
 
@@ -301,7 +307,7 @@ public class TelepathicControl extends Control {
     }
 
     public static void locateWithChunkGenAsync(ServerPlayerEntity player, Tardis tardis,
-            RegistryEntryList<Structure> structureList, ServerWorld world, BlockPos center, int radius) {
+                                               RegistryEntryList<Structure> structureList, ServerWorld world, BlockPos center, int radius) {
         AsyncLocatorUtil.locate(world, structureList, center, radius, false).thenOnServerThread(pos -> {
             BlockPos newPos = pos != null ? pos.getFirst() : null;
             if (newPos != null) {
@@ -315,7 +321,7 @@ public class TelepathicControl extends Control {
     }
 
     public static void locateWithWorldAsync(ServerPlayerEntity player, Tardis tardis, TagKey<Structure> structureTagKey,
-            ServerWorld world, BlockPos center, int radius) {
+                                            ServerWorld world, BlockPos center, int radius) {
         AsyncLocatorUtil.locate(world, structureTagKey, center, radius, false).thenOnServerThread(pos -> {
             if (pos != null) {
                 tardis.travel().forceDestination(cached -> cached.pos(pos.withY(75)));

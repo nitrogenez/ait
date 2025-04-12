@@ -177,6 +177,9 @@ public class AITSounds {
 
     public static final SoundEvent CLOISTER = register("tardis/cloister");
 
+    // Easter egg
+    public static final SoundEvent FLINT_AND_STEEL = register("tardis/secret/flint_and_steel");
+
 
     // Creaks
     public static final SoundEvent CREAK_ONE = register("tardis/creaks/creak_one");

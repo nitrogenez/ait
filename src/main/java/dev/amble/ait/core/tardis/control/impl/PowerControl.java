@@ -1,5 +1,7 @@
 package dev.amble.ait.core.tardis.control.impl;
 
+import java.util.Random;
+
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
@@ -11,8 +13,8 @@ import dev.amble.ait.core.AITSounds;
 import dev.amble.ait.core.tardis.Tardis;
 import dev.amble.ait.core.tardis.control.Control;
 
-
 public class PowerControl extends Control {
+    private static final Random RANDOM = new Random();
 
     public PowerControl() {
         super(AITMod.id("power"));
@@ -21,17 +23,21 @@ public class PowerControl extends Control {
     @Override
     public Result runServer(Tardis tardis, ServerPlayerEntity player, ServerWorld world, BlockPos console, boolean leftClick) {
         super.runServer(tardis, player, world, console, leftClick);
-
         tardis.fuel().togglePower();
 
-
         if (tardis.fuel().hasPower()) {
-            boolean doorLocked = tardis.door().locked();
-            boolean doorClosed = !tardis.door().isOpen();
             int power = (int) tardis.fuel().getCurrentFuel();
 
-            if (doorLocked && doorClosed && power >= 1000 && power <= 2017) {
-                world.playSound(null, console, AITSounds.GOOD_MAN_MUSIC, SoundCategory.BLOCKS, 3.0f, 1.0f);
+            if (power >= 2017) {
+                float baseChance = 1f;
+                if (tardis.isRefueling()) {
+                    baseChance += 7f;
+                }
+
+                if (RANDOM.nextInt(100) < baseChance) {
+                    SoundEvent track = RANDOM.nextBoolean() ? AITSounds.MAD_MAN : AITSounds.MAD_MAN_SAD;
+                    world.playSound(null, console, track, SoundCategory.BLOCKS, 3.0f, 1.0f);
+                }
             }
         }
 

@@ -42,10 +42,6 @@ public class ElectricalDischargeControl extends Control {
             return Result.FAILURE;
         }
 
-        if (player.getRandom().nextFloat() < 0.005f) {
-            world.playSound(null, console, AITSounds.I_AM_STEVE, SoundCategory.BLOCKS, 1.5f, 1.0f);
-        }
-
         tardis.fuel().removeFuel(ARTRON_COST);
 
         BlockPos exteriorPos = tardis.travel().position().getPos();

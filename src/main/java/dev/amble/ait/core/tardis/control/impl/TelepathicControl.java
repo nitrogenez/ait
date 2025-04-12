@@ -77,12 +77,6 @@ public class TelepathicControl extends Control {
             return Result.FAILURE;
         }
 
-        if (type == Items.FLINT_AND_STEEL) {
-            player.getServerWorld().playSound(null, console, AITSounds.FLINT_AND_STEEL, SoundCategory.AMBIENT, 0.25f, 1f);
-            tardis.siege().texture().set(SiegeHandler.DEFAULT_TEXTURRE);
-            return Result.FAILURE;
-        }
-
         if (type == Items.STONE) {
             tardis.siege().texture().set(SiegeHandler.DEFAULT_TEXTURRE);
             return Result.FAILURE;

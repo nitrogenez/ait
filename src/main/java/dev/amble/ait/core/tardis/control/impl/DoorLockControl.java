@@ -2,7 +2,6 @@ package dev.amble.ait.core.tardis.control.impl;
 
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
-import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 
@@ -21,9 +20,6 @@ public class DoorLockControl extends Control {
     public Result runServer(Tardis tardis, ServerPlayerEntity player, ServerWorld world, BlockPos console, boolean leftClick) {
         super.runServer(tardis, player, world, console, leftClick);
 
-        if (player.getRandom().nextFloat() < 0.005f) {
-            world.playSound(null, console, AITSounds.CHICKEN_JOCKIE, SoundCategory.BLOCKS, 1.5f, 1.0f);
-        }
 
         tardis.door().interactToggleLock(player);
         return tardis.door().locked() ? Result.SUCCESS_ALT : Result.SUCCESS;

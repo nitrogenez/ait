@@ -6,15 +6,12 @@ import dev.amble.lib.data.CachedDirectedGlobalPos;
 import dev.drtheo.scheduler.api.Scheduler;
 import dev.drtheo.scheduler.api.TimeUnit;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.text.Text;
-import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 
 import dev.amble.ait.AITMod;
@@ -48,11 +45,6 @@ public class EngineOverloadControl extends Control {
         }
 
 
-        ItemStack handStack = player.getStackInHand(Hand.MAIN_HAND);
-        if (handStack.isOf(Items.COOKED_CHICKEN) && RANDOM.nextFloat() < 0.01f) {
-            world.playSound(null, player.getBlockPos(), AITSounds.LAVA_CHICKEN, SoundCategory.BLOCKS, 1.0F, 1.0F);
-            return Result.SUCCESS;
-        }
         boolean isInFlight = tardis.travel().getState() == TravelHandlerBase.State.FLIGHT;
 
         if (!isInFlight) {

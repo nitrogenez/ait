@@ -2,6 +2,7 @@ package dev.amble.ait.core.tardis.control.impl;
 
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 
@@ -48,6 +49,10 @@ public class ThrottleControl extends Control {
 
         if (travel.getState() == TravelHandler.State.DEMAT)
             tardis.sequence().setActivePlayer(player);
+
+        if (player.getRandom().nextFloat() < 0.005f) {
+            world.playSound(null, console, AITSounds.RELEASE_MC_MOVIE, SoundCategory.BLOCKS, 1.5f, 1.0f);
+        }
 
         return player.isSneaking() ? Result.SUCCESS_ALT : Result.SUCCESS;
     }

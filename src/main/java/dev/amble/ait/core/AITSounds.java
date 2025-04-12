@@ -179,6 +179,8 @@ public class AITSounds {
 
     // Easter egg
     public static final SoundEvent FLINT_AND_STEEL = register("tardis/secret/flint_and_steel");
+    public static final SoundEvent RELEASE_MC_MOVIE = register("tardis/secret/release");
+    public static final SoundEvent LAVA_CHICKEN = register("tardis/secret/lava_chicken");
 
 
     // Creaks

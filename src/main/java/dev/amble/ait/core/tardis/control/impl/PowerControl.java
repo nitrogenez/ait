@@ -1,7 +1,5 @@
 package dev.amble.ait.core.tardis.control.impl;
 
-import java.util.Random;
-
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
@@ -14,7 +12,6 @@ import dev.amble.ait.core.tardis.Tardis;
 import dev.amble.ait.core.tardis.control.Control;
 
 public class PowerControl extends Control {
-    private static final Random RANDOM = new Random();
 
     public PowerControl() {
         super(AITMod.id("power"));
@@ -27,18 +24,13 @@ public class PowerControl extends Control {
 
         if (tardis.fuel().hasPower()) {
             int power = (int) tardis.fuel().getCurrentFuel();
+            boolean inRange = power >= 1500 && power <= 2017;
+            boolean doorLocked = tardis.door().locked();
+            boolean refueling = !tardis.isRefueling();
 
-            if (power >= 2017) {
-                float baseChance = 1f;
-                if (tardis.isRefueling()) {
-                    baseChance += 7f;
-                }
-
-                // TEMP SOUNDS, DIAN STILL HAS TO REMAKE THEM INTO MORE "MC" ISH SOUNDS
-                if (RANDOM.nextInt(100) < baseChance) {
-                    SoundEvent track = RANDOM.nextBoolean() ? AITSounds.MAD_MAN : AITSounds.MAD_MAN_SAD;
-                    world.playSound(null, console, track, SoundCategory.BLOCKS, 3.0f, 1.0f);
-                }
+            if (inRange && doorLocked && refueling) {
+                SoundEvent track = world.getRandom().nextBoolean() ? AITSounds.MAD_MAN : AITSounds.MAD_MAN_SAD;
+                world.playSound(null, console, track, SoundCategory.BLOCKS, 3.0f, 1.0f);
             }
         }
 

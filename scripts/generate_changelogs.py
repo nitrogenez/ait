@@ -67,7 +67,7 @@ for e in j:
 
     if ':cl:' not in body:
         print(f'#{num}: changelog not found, using title')
-        clines.append(e['title'] + f' ([#{num}]({e['html_url']})')
+        clines.append(e['title'] + f' ([#{num}]({e['html_url']}))\n')
         continue
 
     print(f'#{num} changelog found')
@@ -82,7 +82,7 @@ for e in j:
         if ls[n] in STOP:
             break
 
-        clines.append(ls[n] +f' ([#{num}]({e['html_url']})')
+        clines.append(ls[n] +f' ([#{num}]({e['html_url']}))')
 
 with open('CHANGELOG.md', 'w') as f:
     f.write(PREFIX + str(last_update))

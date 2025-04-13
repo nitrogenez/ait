@@ -54,7 +54,9 @@ public class PlaqueBlockEntity extends InteriorLinkableBlockEntity {
     @Override
     public void readNbt(NbtCompound nbt) {
         super.readNbt(nbt);
-        this.customPlaqueText = nbt.getString("CustomPlaqueText");
+        if (nbt.contains("CustomPlaqueText")) {
+            this.customPlaqueText = nbt.getString("CustomPlaqueText");
+        }
         if (this.customPlaqueText == null || this.customPlaqueText.isEmpty()) {
             this.customPlaqueText = "Type 50 TT Capsule";
         }

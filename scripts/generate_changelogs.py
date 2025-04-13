@@ -67,7 +67,7 @@ for e in j:
 
     if ':cl:' not in body:
         print(f'#{num}: changelog not found, using title')
-        clines.append(e['title'] + f' ([#{num}]({e['html_url']}))\n')
+        clines.append('- '+ e['title'] + f' ([#{num}]({e['html_url']}))\n')
         continue
 
     print(f'#{num} changelog found')

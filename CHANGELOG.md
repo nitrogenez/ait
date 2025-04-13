@@ -14,7 +14,7 @@ Last update: #0
 - fix: no more seemingly random server crashes in multiplayer ([#1397](https://github.com/amblelabs/ait/pull/1397))
 - Fix: loottables  ([#1392](https://github.com/amblelabs/ait/pull/1392))
 - feat: shield ambiance ([#1391](https://github.com/amblelabs/ait/pull/1391))
-- Key now makes a UNLOCK/LOCK sound rather than having separate sounds for the interior and exterior. ([#1390](https://github.com/amblelabs/ait/pull/1390))
+- Key now makes a UNLOCK/LOCK sound rather then having separate sounds for the interior and exterior. ([#1390](https://github.com/amblelabs/ait/pull/1390))
 - Removed handles ability to summon the TARDIS. ([#1379](https://github.com/amblelabs/ait/pull/1379))
 - HOUSE VORTEX ([#1371](https://github.com/amblelabs/ait/pull/1371))
 - amethyst and zeiton can no longer repair circuits. ([#1369](https://github.com/amblelabs/ait/pull/1369))

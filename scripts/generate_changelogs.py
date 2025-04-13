@@ -82,7 +82,7 @@ for e in j:
         if ls[n] in STOP:
             break
 
-        clines.append(ls[n] +f' ([#{num}]({e['html_url']}))')
+        clines.append(ls[n] + f" ([#{num}]({e['html_url']}))")
 
 with open('CHANGELOG.md', 'w') as f:
     f.write(PREFIX + str(last_update))

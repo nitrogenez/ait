@@ -1,11 +1,15 @@
 Last update: #0
 
 - Update Changelog ([#1419](https://github.com/amblelabs/ait/pull/1419))
+
 - feat: editable TARDIS type number! ([#1418](https://github.com/amblelabs/ait/pull/1418))
+
 - Feature: Vortex Layers (pls no judge the code)  ([#1410](https://github.com/amblelabs/ait/pull/1410))
+
 - Fixed shields ([#1408](https://github.com/amblelabs/ait/pull/1408))
 - Easter egg ([#1407](https://github.com/amblelabs/ait/pull/1407))
 - feat: hopper intake on power converter ([#1406](https://github.com/amblelabs/ait/pull/1406))
+
 - Implemented a throttle snap sound ([#1398](https://github.com/amblelabs/ait/pull/1398))
 - fix: no more seemingly random server crashes in multiplayer ([#1397](https://github.com/amblelabs/ait/pull/1397))
 - Fix: loottables  ([#1392](https://github.com/amblelabs/ait/pull/1392))
@@ -16,6 +20,9 @@ Last update: #0
 - amethyst and zeiton can no longer repair circuits. ([#1369](https://github.com/amblelabs/ait/pull/1369))
 - tweak: legacy interior ([#1368](https://github.com/amblelabs/ait/pull/1368))
 - Legacy interior ([#1359](https://github.com/amblelabs/ait/pull/1359))
+
 - remove: mercury disc ([#1358](https://github.com/amblelabs/ait/pull/1358))
+
 - feat: added shift for more info for items with info ([#1357](https://github.com/amblelabs/ait/pull/1357))
+
 - Revert "Animations: Interpolating Values & Rotating & Positioning" ([#1353](https://github.com/amblelabs/ait/pull/1353))

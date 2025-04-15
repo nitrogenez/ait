@@ -51,8 +51,8 @@ public class AddonExterior extends ExteriorVariantSchema {
     @Environment(EnvType.CLIENT)
     private ClientExterior client;
     private Door door;
-    private float portalWidth;
-    private float portalHeight;
+    private float portalWidth = -1f;
+    private float portalHeight = -1f;
     @Environment(EnvType.CLIENT)
     private Vector3f sonicItemTranslations;
     private Vec3d seatTranslations;
@@ -180,6 +180,11 @@ public class AddonExterior extends ExteriorVariantSchema {
     @Override
     public double portalHeight() {
         return this.portalHeight;
+    }
+
+    @Override
+    public boolean hasPortals() {
+        return this.portalHeight() != -1 && this.portalWidth() != -1;
     }
 
     public AddonExterior setDoor(Door door) {

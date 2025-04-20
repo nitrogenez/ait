@@ -39,7 +39,7 @@ public class HammerHangerControl extends Control {
         ItemStack stack = player.getMainHandStack();
 
         if (stack.getItem() instanceof HammerItem) {
-            if (!tardis.extra().getConsoleHammer().isEmpty()) return Result.FAILURE;
+            if (tardis.extra().getConsoleHammer() == null || !tardis.extra().getConsoleHammer().isEmpty()) return Result.FAILURE;
 
             handler.insertConsoleHammer(stack.copy());
             player.setStackInHand(Hand.MAIN_HAND, ItemStack.EMPTY);

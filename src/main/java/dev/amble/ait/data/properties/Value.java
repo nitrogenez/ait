@@ -94,7 +94,10 @@ public class Value<T> implements Disposable {
     }
 
     protected void sync() {
-        if (this.holder == null || !(this.holder.tardis() instanceof ServerTardis tardis)) {
+        if (this.holder == null)
+            return
+
+        if (!(this.holder.tardis() instanceof ServerTardis tardis)) {
             this.syncToServer();
             return;
         }

@@ -60,6 +60,8 @@ public class AddonExterior extends ExteriorVariantSchema {
     @Nullable private BiFunction<Vec3d, Byte, Vec3d> portalTranslations;
     @Environment(EnvType.CLIENT)
     private Vector3f sonicItemTranslations;
+    @Environment(EnvType.CLIENT)
+    private boolean hasTransparentDoors;
     private Vec3d seatTranslations;
 
     public AddonExterior(Identifier category, String modid, String name) {
@@ -144,6 +146,13 @@ public class AddonExterior extends ExteriorVariantSchema {
     @Environment(EnvType.CLIENT)
     public AddonExterior setModel(ExteriorModel model) {
         this.client = new ClientExterior(this, model);
+
+        return this;
+    }
+
+    @Environment(EnvType.CLIENT)
+    public AddonExterior setModel(boolean hasTransparentDoors) {
+        this.hasTransparentDoors = hasTransparentDoors;
 
         return this;
     }
@@ -252,7 +261,7 @@ public class AddonExterior extends ExteriorVariantSchema {
         }
         public ClientExterior(AddonExterior parent, ExteriorModel model) {
             this(parent, model, parent.sonicItemTranslations != null ? parent.sonicItemTranslations :
-                    new Vector3f(0, 0, 0), BiomeOverrides.builder().build(), false);
+                    new Vector3f(0, 0, 0), BiomeOverrides.builder().build(), parent.hasTransparentDoors);
         }
         @Override
         public Identifier texture() {

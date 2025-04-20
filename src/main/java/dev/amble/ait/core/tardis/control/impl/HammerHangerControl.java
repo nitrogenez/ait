@@ -30,7 +30,7 @@ public class HammerHangerControl extends Control {
         if ((leftClick || player.isSneaking()) && (handler.getConsoleHammer() != null)) {
             ItemStack item;
 
-            item = handler.takeConsoleHammer();
+            item = handler.consoleHammerInserted();
 
             player.getInventory().offerOrDrop(item);
             return Result.SUCCESS_ALT;
@@ -39,7 +39,9 @@ public class HammerHangerControl extends Control {
         ItemStack stack = player.getMainHandStack();
 
         if (stack.getItem() instanceof HammerItem) {
-            handler.insertConsoleHammer(stack, console);
+            if (!tardis.extra().getConsoleHammer().isEmpty()) return Result.FAILURE;
+
+            handler.insertConsoleHammer(stack.copy());
             player.setStackInHand(Hand.MAIN_HAND, ItemStack.EMPTY);
         }
 

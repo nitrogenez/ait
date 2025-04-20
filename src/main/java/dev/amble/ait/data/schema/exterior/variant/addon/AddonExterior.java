@@ -151,7 +151,7 @@ public class AddonExterior extends ExteriorVariantSchema {
     }
 
     @Environment(EnvType.CLIENT)
-    public AddonExterior setModel(boolean hasTransparentDoors) {
+    public AddonExterior setHasTransparentDoors(boolean hasTransparentDoors) {
         this.hasTransparentDoors = hasTransparentDoors;
 
         return this;

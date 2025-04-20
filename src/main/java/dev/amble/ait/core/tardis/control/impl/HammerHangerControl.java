@@ -33,16 +33,17 @@ public class HammerHangerControl extends Control {
             item = handler.consoleHammerInserted();
 
             player.getInventory().offerOrDrop(item);
+            handler.insertConsoleHammer(null);
             return Result.SUCCESS_ALT;
         }
 
         ItemStack stack = player.getMainHandStack();
 
         if (stack.getItem() instanceof HammerItem) {
-            if (tardis.extra().getConsoleHammer() == null || !tardis.extra().getConsoleHammer().isEmpty()) return Result.FAILURE;
-
-            handler.insertConsoleHammer(stack.copy());
-            player.setStackInHand(Hand.MAIN_HAND, ItemStack.EMPTY);
+            if (handler.getConsoleHammer() == null || handler.getConsoleHammer().isEmpty()) {
+                handler.insertConsoleHammer(stack.copy());
+                player.setStackInHand(Hand.MAIN_HAND, ItemStack.EMPTY);
+            }
         }
 
         return Result.SUCCESS;

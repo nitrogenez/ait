@@ -1,7 +1,10 @@
 Last update: #0
 
+- use my own maven repo instead of jitpack ([#1426](https://github.com/amblelabs/ait/pull/1426))
+- Changelog is now more accurate & PR number is hyperlinked ([#1421](https://github.com/amblelabs/ait/pull/1421))
 - Update Changelog ([#1419](https://github.com/amblelabs/ait/pull/1419))
 - feat: editable TARDIS type number! ([#1418](https://github.com/amblelabs/ait/pull/1418))
+- Easter egg ([#1415](https://github.com/amblelabs/ait/pull/1415))
 - Feature: Vortex Layers (pls no judge the code)  ([#1410](https://github.com/amblelabs/ait/pull/1410))
 - Fixed shields ([#1408](https://github.com/amblelabs/ait/pull/1408))
 - Easter egg ([#1407](https://github.com/amblelabs/ait/pull/1407))
@@ -15,7 +18,3 @@ Last update: #0
 - HOUSE VORTEX ([#1371](https://github.com/amblelabs/ait/pull/1371))
 - amethyst and zeiton can no longer repair circuits. ([#1369](https://github.com/amblelabs/ait/pull/1369))
 - tweak: legacy interior ([#1368](https://github.com/amblelabs/ait/pull/1368))
-- Legacy interior ([#1359](https://github.com/amblelabs/ait/pull/1359))
-- remove: mercury disc ([#1358](https://github.com/amblelabs/ait/pull/1358))
-- feat: added shift for more info for items with info ([#1357](https://github.com/amblelabs/ait/pull/1357))
-- Revert "Animations: Interpolating Values & Rotating & Positioning" ([#1353](https://github.com/amblelabs/ait/pull/1353))

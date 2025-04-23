@@ -63,13 +63,6 @@ public abstract class AnimatedTravelHandler extends ProgressiveTravelHandler {
     public void postInit(InitContext ctx) {
         super.postInit(ctx);
 
-        dematId.addListener((id) -> {
-            this.invalidateAnimations();
-        });
-        matId.addListener((id) -> {
-            this.invalidateAnimations();
-        });
-
         this.state.addListener(state -> this.getAnimations().onStateChange(state));
     }
 
@@ -197,6 +190,8 @@ public abstract class AnimatedTravelHandler extends ProgressiveTravelHandler {
             case DEMAT -> this.dematId.set(id);
             case MAT -> this.matId.set(id);
         }
+
+        this.invalidateAnimations();
     }
 
     public boolean setTemporaryAnimation(Identifier animId) {

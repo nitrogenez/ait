@@ -25,6 +25,7 @@ import dev.amble.ait.core.blockentities.ExteriorBlockEntity;
 import dev.amble.ait.core.tardis.handler.BiomeHandler;
 import dev.amble.ait.core.tardis.handler.StatsHandler;
 import dev.amble.ait.data.schema.exterior.ClientExteriorVariantSchema;
+import dev.amble.ait.data.schema.exterior.ExteriorVariantSchema;
 import dev.amble.ait.registry.impl.exterior.ClientExteriorVariantRegistry;
 
 
@@ -72,9 +73,10 @@ public class TardisExteriorBOTI extends BOTI {
             stack.multiply(RotationAxis.POSITIVE_X.rotationDegrees(-90f));
             stack.translate(0, tardis.stats().getYScale() + 0.25f, tardis.stats().getZScale() - 1.7f);
         }
-        stack.scale((float) variant.parent().portalWidth() * stats.getXScale(),
-                (float) variant.parent().portalHeight() * stats.getYScale(), stats.getZScale());
-        Vec3d vec = variant.parent().adjustPortalPos(new Vec3d(0, -0.4675f, 0), (byte) 0);
+        ExteriorVariantSchema parent = variant.parent();
+        stack.scale((float) parent.portalWidth() * stats.getXScale(),
+                (float) parent.portalHeight() * stats.getYScale(), stats.getZScale());
+        Vec3d vec = parent.adjustPortalPos(new Vec3d(0, -0.4675f, 0), (byte) 0);
         stack.translate(vec.x, vec.y, vec.z);
         RenderLayer whichOne = AITMod.CONFIG.CLIENT.SHOULD_RENDER_BOTI_INTERIOR || AITMod.CONFIG.CLIENT.GREEN_SCREEN_BOTI ?
                 RenderLayer.getDebugFilledBox() : RenderLayer.getEndGateway();

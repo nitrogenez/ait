@@ -8,6 +8,8 @@ import dev.amble.ait.AITMod;
 import dev.amble.ait.core.tardis.animation.v2.TardisAnimation;
 
 public class TardisAnimationRegistry extends SimpleDatapackRegistry<TardisAnimation> {
+    public static final Identifier DEFAULT_DEMAT = AITMod.id("pulsating_demat");
+    public static final Identifier DEFAULT_MAT = AITMod.id("pulsating_mat");
     private static TardisAnimationRegistry INSTANCE;
 
     private TardisAnimationRegistry() {

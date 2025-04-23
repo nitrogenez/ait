@@ -2,7 +2,6 @@ package dev.amble.ait.core.tardis.handler.travel;
 
 import java.util.UUID;
 
-import dev.amble.ait.core.tardis.animation.v2.blockbench.BlockbenchParser;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
@@ -14,7 +13,6 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.Identifier;
 
-import dev.amble.ait.AITMod;
 import dev.amble.ait.client.tardis.manager.ClientTardisManager;
 import dev.amble.ait.core.tardis.animation.v2.AnimationHolder;
 import dev.amble.ait.core.tardis.animation.v2.TardisAnimation;
@@ -24,11 +22,8 @@ import dev.amble.ait.data.properties.Property;
 import dev.amble.ait.data.properties.Value;
 
 public abstract class AnimatedTravelHandler extends ProgressiveTravelHandler {
-    private static final Identifier DEFAULT_DEMAT = AITMod.id("pulsating_demat");
-    private static final Identifier DEFAULT_MAT = AITMod.id("pulsating_mat");
-
-    private static final Property<Identifier> DEMAT_FX = new Property<>(Property.Type.IDENTIFIER, "demat_fx", DEFAULT_DEMAT);
-    private static final Property<Identifier> MAT_FX = new Property<>(Property.Type.IDENTIFIER, "mat_fx", DEFAULT_MAT);
+    private static final Property<Identifier> DEMAT_FX = new Property<>(Property.Type.IDENTIFIER, "demat_fx", TardisAnimationRegistry.DEFAULT_DEMAT);
+    private static final Property<Identifier> MAT_FX = new Property<>(Property.Type.IDENTIFIER, "mat_fx", TardisAnimationRegistry.DEFAULT_MAT);
     private final Value<Identifier> dematId = DEMAT_FX.create(this);
     private final Value<Identifier> matId = MAT_FX.create(this);
 

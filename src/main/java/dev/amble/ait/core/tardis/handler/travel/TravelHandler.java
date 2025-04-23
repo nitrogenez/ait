@@ -174,6 +174,8 @@ public final class TravelHandler extends AnimatedTravelHandler implements Crasha
 
     @Override
     public void postInit(InitContext context) {
+        super.postInit(context);
+
         if (this.isServer() && context.created())
             this.placeExterior(true);
     }

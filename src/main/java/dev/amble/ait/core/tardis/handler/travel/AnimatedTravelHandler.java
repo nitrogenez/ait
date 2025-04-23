@@ -60,13 +60,6 @@ public abstract class AnimatedTravelHandler extends ProgressiveTravelHandler {
     }
 
     @Override
-    public void postInit(InitContext ctx) {
-        super.postInit(ctx);
-
-        this.state.addListener(state -> this.getAnimations().onStateChange(state));
-    }
-
-    @Override
     public void onLoaded() {
         super.onLoaded();
 
@@ -198,6 +191,13 @@ public abstract class AnimatedTravelHandler extends ProgressiveTravelHandler {
         TardisAnimation anim = TardisAnimationRegistry.getInstance().getOrFallback(animId);
 
         return this.getAnimations().setAnimation(anim);
+    }
+
+    @Override
+    protected void setState(State state) {
+        super.setState(state);
+
+        this.getAnimations().onStateChange(state);
     }
 
     /**

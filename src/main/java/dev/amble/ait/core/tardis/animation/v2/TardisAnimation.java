@@ -39,6 +39,7 @@ import dev.amble.ait.data.Exclude;
  */
 public abstract class TardisAnimation implements TardisTickable, Disposable, Identifiable, Linkable, Nameable {
     private final Identifier id;
+    @Nullable
     private Identifier soundId;
 
     private TardisRef ref;
@@ -127,7 +128,11 @@ public abstract class TardisAnimation implements TardisTickable, Disposable, Ide
     }
 
     public SoundEvent getSound() {
-        SoundEvent sfx = Registries.SOUND_EVENT.get(this.soundId);
+        SoundEvent sfx = null;
+
+        if (soundId != null) {
+            sfx = Registries.SOUND_EVENT.get(this.soundId);
+        }
 
         if (sfx == null) {
             AITMod.LOGGER.error("Unknown sound event: {} in tardis animation {}", this.soundId, this.id());

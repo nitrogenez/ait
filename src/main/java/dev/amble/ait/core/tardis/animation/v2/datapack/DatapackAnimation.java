@@ -25,42 +25,30 @@ public class DatapackAnimation extends TardisAnimation {
     public static final Codec<TardisAnimation> CODEC = RecordCodecBuilder.create(instance -> instance
             .group(
                     Identifier.CODEC.fieldOf("id").forGetter(TardisAnimation::id),
-                    Identifier.CODEC.optionalFieldOf("blockbench_file", new Identifier("")).forGetter(TardisAnimation::getBlockbenchId),
+                    Identifier.CODEC.optionalFieldOf("blockbench_file", null).forGetter(TardisAnimation::getBlockbenchId),
                     TravelHandlerBase.State.CODEC.fieldOf("expected_state").forGetter(TardisAnimation::getExpectedState),
-                    Codec.STRING.optionalFieldOf("name", "").forGetter(TardisAnimation::name),
-                    Identifier.CODEC.optionalFieldOf("sound", new Identifier("")).forGetter(TardisAnimation::getSoundId)
+                    Identifier.CODEC.optionalFieldOf("sound", null).forGetter(TardisAnimation::getSoundId)
     ).apply(instance, DatapackAnimation::new));
 
     private final TravelHandlerBase.State expectedState;
     private final String nameKey;
+    @Nullable
     private final Identifier blockbenchId;
 
-    protected DatapackAnimation(Identifier id, Identifier blockbench, TravelHandlerBase.State expectedState, String optName, @Nullable Identifier sound) {
-        super(id, sound, BlockbenchParser.getOrFallback((blockbench.equals(new Identifier(""))) ? id : blockbench));
+    protected DatapackAnimation(Identifier id, Identifier blockbench, TravelHandlerBase.State expectedState, @Nullable Identifier sound) {
+        super(id, sound, BlockbenchParser.getOrFallback(blockbench == null ? id : blockbench));
 
         this.blockbenchId = blockbench;
-
         this.expectedState = expectedState;
-
-        if (optName.isBlank()) {
-            optName = id.getNamespace() + ".animation." + id.getPath();
-        }
-
-        this.nameKey = optName;
+        this.nameKey = id.toTranslationKey("animation");
     }
 
     protected DatapackAnimation(Identifier id, KeyframeTracker<Float> alpha, KeyframeTracker<Vector3f> scale, KeyframeTracker<Vector3f> position, KeyframeTracker<Vector3f> rotation, Identifier blockbench, TravelHandlerBase.State expectedState, String optName, @Nullable Identifier soundId) {
         super(id, soundId, alpha, scale, position, rotation);
 
         this.blockbenchId = blockbench;
-
         this.expectedState = expectedState;
-
-        if (optName.isBlank()) {
-            optName = id.getPath();
-        }
-
-        this.nameKey = optName;
+        this.nameKey = id.toTranslationKey("animation");
     }
 
     @Override

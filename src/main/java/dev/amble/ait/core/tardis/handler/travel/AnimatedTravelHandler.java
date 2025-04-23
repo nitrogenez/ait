@@ -7,6 +7,7 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.loader.api.FabricLoader;
+import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3f;
 
 import net.minecraft.client.MinecraftClient;
@@ -183,9 +184,10 @@ public abstract class AnimatedTravelHandler extends ProgressiveTravelHandler {
         return this.animations;
     }
 
+    @Nullable
     public Identifier getAnimationIdFor(State state) {
         return switch (state) {
-            case LANDED, FLIGHT -> Identifier.of("", "");
+            case LANDED, FLIGHT -> null;
             case DEMAT -> this.dematId.get();
             case MAT -> this.matId.get();
         };
@@ -197,7 +199,6 @@ public abstract class AnimatedTravelHandler extends ProgressiveTravelHandler {
 
     public void setAnimationFor(State state, Identifier id) {
         switch (state) {
-            case LANDED, FLIGHT -> {}
             case DEMAT -> this.dematId.set(id);
             case MAT -> this.matId.set(id);
         }

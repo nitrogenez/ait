@@ -14,9 +14,6 @@ import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.item.*;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemGroups;
-import net.minecraft.item.MusicDiscItem;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeys;
@@ -194,9 +191,6 @@ public class AITItems extends ItemContainer {
     public static final Item WONDERFUL_TIME_IN_SPACE_MUSIC_DISC = new MusicDiscItem(1, AITSounds.WONDERFUL_TIME_IN_SPACE,
             new AItemSettings().maxCount(1).rarity(Rarity.RARE), 73);
 
-    @NoEnglish
-    public static final Item MERCURY_MUSIC_DISC = new MusicDiscItem(11, AITSounds.MERCURY_MUSIC,
-            new AItemSettings().maxCount(1).rarity(Rarity.RARE), 216);
 
     @NoEnglish
     public static final Item VENUS_MUSIC_DISC = new MusicDiscItem(1, AITSounds.VENUS_MUSIC,
@@ -258,8 +252,7 @@ public class AITItems extends ItemContainer {
     static {
         ItemGroupEvents.modifyEntriesEvent(ItemGroups.TOOLS).register(entries -> {
             entries.addAfter(Items.MUSIC_DISC_RELIC, DRIFTING_MUSIC_DISC);
-            entries.addAfter(DRIFTING_MUSIC_DISC, MERCURY_MUSIC_DISC);
-            entries.addAfter(MERCURY_MUSIC_DISC, WONDERFUL_TIME_IN_SPACE_MUSIC_DISC);
+            entries.addAfter(DRIFTING_MUSIC_DISC, WONDERFUL_TIME_IN_SPACE_MUSIC_DISC);
             entries.addAfter(WONDERFUL_TIME_IN_SPACE_MUSIC_DISC, EARTH_MUSIC_DISC);
             entries.addAfter(EARTH_MUSIC_DISC, VENUS_MUSIC_DISC, GOOD_MAN_MUSIC_DISC);
         });

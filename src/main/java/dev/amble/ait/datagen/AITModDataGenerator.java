@@ -816,8 +816,6 @@ public class AITModDataGenerator implements DataGeneratorEntrypoint {
         provider.addTranslation(AITItems.WONDERFUL_TIME_IN_SPACE_MUSIC_DISC, "Music Disc");
         provider.addTranslation(AITItems.DRIFTING_MUSIC_DISC.getTranslationKey() + ".desc", "Radio - Drifting");
         provider.addTranslation(AITItems.WONDERFUL_TIME_IN_SPACE_MUSIC_DISC.getTranslationKey() + ".desc", "Dian - Wonderful Time in Space");
-        provider.addTranslation(AITItems.MERCURY_MUSIC_DISC, "Music Disc");
-        provider.addTranslation(AITItems.MERCURY_MUSIC_DISC.getTranslationKey() + ".desc", "Nitrogenez - Mercury");
         provider.addTranslation(AITItems.EARTH_MUSIC_DISC, "Music Disc");
         provider.addTranslation(AITItems.EARTH_MUSIC_DISC.getTranslationKey() + ".desc", "Nitrogenez - Earth");
         provider.addTranslation(AITItems.VENUS_MUSIC_DISC, "Music Disc");
@@ -903,6 +901,7 @@ public class AITModDataGenerator implements DataGeneratorEntrypoint {
         provider.addTranslation("desktop.ait.axos", "Axos");
         provider.addTranslation("desktop.ait.cherryblossom", "Cherryblossom");
         provider.addTranslation("desktop.ait.corpoyta", "Corpoyta");
+        provider.addTranslation("desktop.ait.legacy", "Legacy");
 
         // Sonic Screwdrivers
         provider.addTranslation("sonic.ait.prime", "Prime");
@@ -1045,7 +1044,7 @@ public class AITModDataGenerator implements DataGeneratorEntrypoint {
         provider.addTranslation("warning.ait.needs_subsystem", "ERROR, REQUIRES ACTIVE SUBSYSTEM: %s");
         provider.addTranslation("tardis.message.growth.hint", "Throw the Personality Matrix into the water to give it life...");
         provider.addTranslation("tardis.message.growth.no_cage", "Cage the TARDIS Coral to begin Plasmic coating process!");
-        provider.addTranslation("tardis.message.interiorchange.not_enough_plasmic_material", "Not enough Plasmic Material for shell: %s / 8");
+
         provider.addTranslation("message.ait.control.ylandtype", "Vertical Search Mode: %s");
         provider.addTranslation("message.ait.loyalty_amount", "Loyalty Level: %s");
         provider.addTranslation("message.ait.landing_code", "Landing Code...");
@@ -1190,7 +1189,7 @@ public class AITModDataGenerator implements DataGeneratorEntrypoint {
         provider.addTranslation("message.ait.max_tardises", "SERVER has reached the maximum amount of TARDISes");
 
         provider.addTranslation("tooltip.ait.key.notardis", "Key does not identify with any TARDIS");
-        provider.addTranslation("tooltip.ait.remoteitem.holdformoreinfo", "Hold shift for more info");
+        provider.addTranslation("tooltip.ait.items.holdformoreinfo", "Hold shift for more info");
         provider.addTranslation("tooltip.ait.remoteitem.notardis", "Remote does not identify with any TARDIS");
         provider.addTranslation("tooltip.ait.distresscall.source", "SOURCE");
 
@@ -1256,25 +1255,6 @@ public class AITModDataGenerator implements DataGeneratorEntrypoint {
         provider.addTranslation("message.ait.handles.disable_refuel","<Handles> Refuel Disabled.");
         provider.addTranslation("message.ait.handles.when","<Handles> When.");
         provider.addTranslation("message.ait.handles.when","<Handles> Affirmative.");
-        provider.addTranslation("message.ait.handles.play_wtis","<Handles> Now Playing Wonderful Time In Space.");
-        provider.addTranslation("message.ait.handles.play_drifting","<Handles> Now Playing Drifting.");
-        provider.addTranslation("message.ait.handles.play_mercury","<Handles> Now Playing Mercury.");
-        provider.addTranslation("message.ait.handles.play_13","<Handles> Now Playing 13.");
-        provider.addTranslation("message.ait.handles.play_cat","<Handles> Now Playing Cat.");
-        provider.addTranslation("message.ait.handles.play_blocks","<Handles> Now Playing Blocks.");
-        provider.addTranslation("message.ait.handles.play_chirp","<Handles> Now Playing Chirp.");
-        provider.addTranslation("message.ait.handles.play_far","<Handles> Now Playing Far.");
-        provider.addTranslation("message.ait.handles.play_hall","<Handles> Now Playing Hall.");
-        provider.addTranslation("message.ait.handles.play_mellohi","<Handles> Now Playing Mellohi.");
-        provider.addTranslation("message.ait.handles.play_stal","<Handles> Now Playing Stal.");
-        provider.addTranslation("message.ait.handles.play_strad","<Handles> Now Playing Strad.");
-        provider.addTranslation("message.ait.handles.play_ward","<Handles> Now Playing Ward.");
-        provider.addTranslation("message.ait.handles.play_11","<Handles> Now Playing 11.");
-        provider.addTranslation("message.ait.handles.play_wait","<Handles> Now Playing Wait.");
-        provider.addTranslation("message.ait.handles.play_pigstep","<Handles> Now Playing Pigstep.");
-        provider.addTranslation("message.ait.handles.play_otherside","<Handles> Now Playing Otherside.");
-        provider.addTranslation("message.ait.handles.play_relic","<Handles> Now Playing Relic.");
-        provider.addTranslation("message.ait.handles.play_5","<Handles> Now Playing 5.");
 
 
         // Exterior Variant translations
@@ -1349,6 +1329,8 @@ public class AITModDataGenerator implements DataGeneratorEntrypoint {
         provider.addTranslation("exterior.ait.1980", "1980");
 
 
+        // Alarms
+        provider.addTranslation("tardis.message.alarm.crashing", "System Alert: TARDIS is experiencing a critical failure.");
 
         // Security Settings Menu
         provider.addTranslation("screen.ait.sonic.button", "> Sonic Settings");
@@ -1359,13 +1341,16 @@ public class AITModDataGenerator implements DataGeneratorEntrypoint {
         provider.addTranslation("screen.ait.security.hostile_alarms", "> Hostile Alarms");
         provider.addTranslation("screen.ait.security.minimum_loyalty", "> Isomorphic LVL");
         provider.addTranslation("screen.ait.security.receive_distress_calls", "> Receive Distress Calls");
+
+        // Interior changing
         provider.addTranslation("tardis.message.interiorchange.not_enough_fuel",
                 "The TARDIS does not have enough fuel to change it's interior");
         provider.addTranslation("tardis.message.interiorchange.warning",
                 "ARS initiated, console room is being reconfigured, please vacate the interior!");
         provider.addTranslation("tardis.message.interiorchange.subsystems_enabled",
                 "TARDIS has %s subsystems enabled. Are you sure you want to do this?");
-
+        provider.addTranslation("tardis.message.interiorchange.not_enough_plasmic_material", "Not enough Plasmic Material for shell: %s / 8");
+        provider.addTranslation("tardis.message.interiorchange.regenerating", "Interior Reconfiguration in %s seconds");
         // Landing Pad
         provider.addTranslation("message.ait.landingpad.adjust", "Your landing position has been adjusted");
 

@@ -28,11 +28,13 @@ import dev.amble.ait.core.blockentities.DoorBlockEntity;
 import dev.amble.ait.core.tardis.handler.StatsHandler;
 import dev.amble.ait.core.tardis.handler.travel.TravelHandlerBase;
 import dev.amble.ait.data.schema.exterior.ClientExteriorVariantSchema;
+import dev.amble.ait.data.schema.exterior.ExteriorVariantSchema;
 import dev.amble.ait.registry.impl.CategoryRegistry;
 
 public class TardisDoorBOTI extends BOTI {
     public static void renderInteriorDoorBoti(ClientTardis tardis, DoorBlockEntity door, ClientExteriorVariantSchema variant, MatrixStack stack, Identifier frameTex, SinglePartEntityModel frame, ModelPart mask, int light) {
-        if (!variant.parent().hasPortals()) return;
+        ExteriorVariantSchema parent = variant.parent();
+        if (!parent.hasPortals()) return;
 
         if (!AITMod.CONFIG.CLIENT.ENABLE_TARDIS_BOTI)
             return;
@@ -68,9 +70,9 @@ public class TardisDoorBOTI extends BOTI {
         StatsHandler stats = tardis.stats();
         Vector3f scale = tardis.travel().getScale();
 
-        stack.scale((float) variant.parent().portalWidth() * scale.x(),
-                (float) variant.parent().portalHeight() * scale.y(), scale.z());
-        Vec3d vec = variant.parent().door().adjustPortalPos(new Vec3d(0, -0.55f, 0), Direction.NORTH);
+        stack.scale((float) parent.portalWidth() * scale.x(),
+                (float) parent.portalHeight() * scale.y(), scale.z());
+        Vec3d vec = parent.door().adjustPortalPos(new Vec3d(0, -0.55f, 0), Direction.NORTH);
         stack.translate(vec.x, vec.y, vec.z);
         if (tardis.travel().getState() == TravelHandlerBase.State.LANDED) {
             RenderLayer whichOne = AITMod.CONFIG.CLIENT.SHOULD_RENDER_BOTI_INTERIOR || AITMod.CONFIG.CLIENT.GREEN_SCREEN_BOTI ?

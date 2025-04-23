@@ -1,6 +1,7 @@
 package dev.amble.ait.core.tardis.animation.v2;
 
 import java.lang.reflect.Type;
+import java.util.Optional;
 import java.util.UUID;
 
 import com.google.gson.*;
@@ -143,12 +144,12 @@ public abstract class TardisAnimation implements TardisTickable, Disposable, Ide
         return sfx;
     }
 
-    public Identifier getBlockbenchId() {
-        return this.id();
+    public Optional<Identifier> getBlockbenchId() {
+        return Optional.of(this.id());
     }
 
-    public Identifier getSoundId() {
-        return this.soundId;
+    public Optional<Identifier> getSoundId() {
+        return Optional.ofNullable(this.soundId);
     }
 
     @Override

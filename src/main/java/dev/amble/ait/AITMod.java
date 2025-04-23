@@ -248,6 +248,7 @@ public class AITMod implements ModInitializer {
             DebugCommand.register(dispatcher);
             EraseChunksCommand.register(dispatcher);
             FlightCommand.register(dispatcher);
+            SetDoorParticleCommand.register(dispatcher, registryAccess);
         }));
 
         ServerPlayNetworking.registerGlobalReceiver(TardisUtil.REGION_LANDING_CODE,

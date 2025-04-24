@@ -19,6 +19,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtHelper;
+import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
@@ -35,14 +36,16 @@ import dev.amble.ait.core.AITItems;
 import dev.amble.ait.core.AITSounds;
 import dev.amble.ait.core.blockentities.ConsoleBlockEntity;
 import dev.amble.ait.core.entities.base.LinkableDummyLivingEntity;
+import dev.amble.ait.core.item.HammerItem;
+import dev.amble.ait.core.item.SonicItem;
 import dev.amble.ait.core.item.control.ControlBlockItem;
+import dev.amble.ait.core.item.sonic.SonicMode;
 import dev.amble.ait.core.tardis.Tardis;
 import dev.amble.ait.core.tardis.control.Control;
 import dev.amble.ait.core.tardis.control.ControlTypes;
 import dev.amble.ait.data.schema.console.ConsoleTypeSchema;
 
 public class ConsoleControlEntity extends LinkableDummyLivingEntity {
-
     private static final TrackedData<Float> WIDTH = DataTracker.registerData(ConsoleControlEntity.class,
             TrackedDataHandlerRegistry.FLOAT);
     private static final TrackedData<Float> HEIGHT = DataTracker.registerData(ConsoleControlEntity.class,
@@ -335,11 +338,30 @@ public class ConsoleControlEntity extends LinkableDummyLivingEntity {
 
         control.runAnimation(tardis, (ServerPlayerEntity) player, (ServerWorld) world);
 
+        if (player.getMainHandStack().getItem() instanceof SonicItem && this.getDurability() < 1.0f) {
+            if (SonicItem.mode(player.getMainHandStack()).equals(SonicMode.Modes.TARDIS)) {
+                this.setDurability(MAX_DURABILITY);
+            }
+        }
+
         if (this.isOnDelay())
             return false;
 
         if (!this.control.canRun(tardis, (ServerPlayerEntity) player))
             return false;
+
+        boolean hasMallet = player.getMainHandStack().getItem() instanceof HammerItem;
+        if ((this.getDurability() <= DurabilityStates.OCCASIONALLY_JAM.durability && !hasMallet) &&
+                (this.getDurability() <= DurabilityStates.CATCH_FIRE.durability || random.nextBoolean())) {
+            switch (this.getDurabilityState(this.getDurability())) {
+                case SPARKING -> this.spark();
+                case CATCH_FIRE -> this.setOnFireFor(2);
+
+            }
+            if (random.nextBoolean()) {
+                return false;
+            }
+        }
 
         if (this.control.shouldHaveDelay(tardis) && !this.isOnDelay()) {
             this.dataTracker.set(ON_DELAY, true);
@@ -349,10 +371,25 @@ public class ConsoleControlEntity extends LinkableDummyLivingEntity {
 
         Control.Result result = this.control.handleRun(tardis, (ServerPlayerEntity) player, (ServerWorld) world, this.consoleBlockPos, leftClick);
 
+        if (result == Control.Result.SEQUENCE) {
+            // This is just for testing but its funny as hell.
+            if (random.nextBetween(0, 40) == 20) {
+                int subtractCauseICan = random.nextBetween(0, 200);
+                this.subtractDurability(subtractCauseICan / 200f);
+            }
+        }
+
         this.getConsole().ifPresent(console -> this.getWorld().playSound(null, this.getBlockPos(), this.control.getSound(console.getTypeSchema(), result), SoundCategory.BLOCKS, 0.7f,
                 1f));
 
         return result.isSuccess();
+    }
+
+    private void spark() {
+        if (this.getEntityWorld().isClient()) return;
+        Vec3d pos = this.getPos();
+        ((ServerWorld) this.getEntityWorld()).spawnParticles(ParticleTypes.ELECTRIC_SPARK, pos.getX(), pos.getY(), pos.getZ(), 5, 0.2, 0.2, 0.2, 0.01);
+        ((ServerWorld) this.getEntityWorld()).spawnParticles(ParticleTypes.LAVA,  pos.getX(), pos.getY(), pos.getZ(), 3, 0.1, 0.1, 0.1, 0.01);
     }
 
     /**

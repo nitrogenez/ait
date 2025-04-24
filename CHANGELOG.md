@@ -19,3 +19,4 @@
 - fix: rename hammer -> mallet ([#1464](https://github.com/amblelabs/ait/pull/1464))
 - fix: disabled experimental messages still shown during opening of existing AIT maps ([#1470](https://github.com/amblelabs/ait/pull/1470))
 - Removed pottery shards from opinions ([#1468](https://github.com/amblelabs/ait/pull/1468))
+- fix: unused warning-message and missing -title (as well as some wording) ([#1473](https://github.com/amblelabs/ait/pull/1473))

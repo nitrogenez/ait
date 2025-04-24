@@ -2,6 +2,7 @@ package dev.amble.ait.core.tardis.handler.travel;
 
 import java.util.UUID;
 
+import dev.amble.ait.core.tardis.animation.v2.TardisAnimationMap;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
@@ -172,7 +173,11 @@ public abstract class AnimatedTravelHandler extends ProgressiveTravelHandler {
 
     protected AnimationHolder getAnimations() {
         if (this.animations == null) {
-            this.animations = new AnimationHolder(this.tardis());
+            if (this.tardis() != null) { // Ask loqor how this happened, because I dont know.
+                this.animations = new AnimationHolder(this.tardis());
+            } else {
+                this.animations = new AnimationHolder(new TardisAnimationMap());
+            }
             this.animations.onStateChange(this.getState());
         }
 

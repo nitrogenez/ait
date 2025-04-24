@@ -102,6 +102,19 @@ public class OverloadSonicMode extends SonicMode {
             TntBlock.primeTnt(world, pos);
             world.removeBlock(pos, false);
             world.emitGameEvent(user, GameEvent.BLOCK_DESTROY, pos);
+            return;
+        }
+
+        if (state.isOf(Blocks.OBSIDIAN)) {
+            // try place fire above if replaceable
+            BlockPos firePos = pos.up();
+            BlockState fireState = Blocks.FIRE.getDefaultState();
+
+            if (world.getBlockState(firePos).isReplaceable()) {
+                world.setBlockState(firePos, fireState);
+                world.emitGameEvent(user, GameEvent.BLOCK_PLACE, firePos);
+                playFx(world, firePos);
+            }
         }
     }
 
@@ -155,5 +168,10 @@ public class OverloadSonicMode extends SonicMode {
     @Override
     public Identifier model(SonicSchema.Models models) {
         return models.overload();
+    }
+
+    @Override
+    public int fuelCost() {
+        return 2;
     }
 }

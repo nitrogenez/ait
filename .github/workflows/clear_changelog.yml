@@ -1,4 +1,4 @@
-name: Clear Changelog on Release or Manual Run
+name: Clear Changelog
 
 on:
   pull_request:

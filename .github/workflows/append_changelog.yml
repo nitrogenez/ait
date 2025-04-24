@@ -1,4 +1,4 @@
-name: Append Changelog on PR Merge or Manual Run
+name: Update Changelog
 
 on:
   pull_request:

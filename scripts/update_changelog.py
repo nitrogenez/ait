@@ -17,10 +17,19 @@ def fetch_pr(pr_number):
     r.raise_for_status()
     return r.json()
 
-def extract_entries(title, body):
-    m = re.search(r":cl:(.*?)(?:\n---|\n-->)", body or "", re.S)
-    if m:
-        return [ln.strip() for ln in m.group(1).splitlines() if ln.strip()]
+def extract_entries(title: str, body: str) -> list[str]:
+    """
+    Return list of lines from the LAST :cl: … block,
+    where the block runs until the next '---', '-->', OR end-of-string.
+    If no :cl: block, return [ title ].
+    """
+    # findall returns every capture of (.*?) before a terminator or end-of-string :contentReference[oaicite:5]{index=5}
+    blocks = re.findall(r":cl:(.*?)(?=(?:\n---|\n-->|$))", body or "", re.S)
+    if blocks:
+        last = blocks[-1]                          # negative index gives last match :contentReference[oaicite:6]{index=6}
+        # split into non-empty, stripped lines
+        return [ln.strip() for ln in last.splitlines() if ln.strip()]
+    # fallback when no live :cl: found :contentReference[oaicite:7]{index=7}
     return [title]
 
 def process_pr(pr):

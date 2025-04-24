@@ -1,4 +1,4 @@
-Last update: #0
+Last update: #1426
 
 - fix: red warning for experimental versions was shown for release versions ([#1462](https://github.com/amblelabs/ait/pull/1462))
 - fix(manager): crash when loading & file manager locked ([#1459](https://github.com/amblelabs/ait/pull/1459))
@@ -15,13 +15,3 @@ Last update: #0
 - 1.3.0 into Main ( Frequent, Small Updates ) ([#1439](https://github.com/amblelabs/ait/pull/1439))
 - fix the hammer crash ([#1438](https://github.com/amblelabs/ait/pull/1438))
 - fix the addie bug ([#1436](https://github.com/amblelabs/ait/pull/1436))
-- use my own maven repo instead of jitpack ([#1426](https://github.com/amblelabs/ait/pull/1426))
-- Changelog is now more accurate & PR number is hyperlinked ([#1421](https://github.com/amblelabs/ait/pull/1421))
-- Update Changelog ([#1419](https://github.com/amblelabs/ait/pull/1419))
-- feat: editable TARDIS type number! ([#1418](https://github.com/amblelabs/ait/pull/1418))
-- Easter egg ([#1415](https://github.com/amblelabs/ait/pull/1415))
-- Feature: Vortex Layers (pls no judge the code)  ([#1410](https://github.com/amblelabs/ait/pull/1410))
-- Fixed shields ([#1408](https://github.com/amblelabs/ait/pull/1408))
-- Easter egg ([#1407](https://github.com/amblelabs/ait/pull/1407))
-- feat: hopper intake on power converter ([#1406](https://github.com/amblelabs/ait/pull/1406))
-- Implemented a throttle snap sound ([#1398](https://github.com/amblelabs/ait/pull/1398))

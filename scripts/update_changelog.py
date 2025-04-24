@@ -19,17 +19,25 @@ def fetch_pr(pr_number):
 
 def extract_entries(title: str, body: str) -> list[str]:
     """
-    Return list of lines from the LAST :cl: … block,
-    where the block runs until the next '---', '-->', OR end-of-string.
-    If no :cl: block, return [ title ].
+    1. Strip all HTML comments.
+    2. Find all blocks after each :cl: or 🆑 marker up to ---, -->, or end-of-string.
+    3. Return lines from the LAST such block (negative index [-1]).
+    4. If no block found, return [title].
     """
-    # findall returns every capture of (.*?) before a terminator or end-of-string :contentReference[oaicite:5]{index=5}
-    blocks = re.findall(r":cl:(.*?)(?=(?:\n---|\n-->|$))", body or "", re.S)
+    # 1) Remove ALL HTML comments (<!-- ... -->), DOTALL so it spans lines :contentReference[oaicite:4]{index=4}
+    cleaned = re.sub(r"<!--.*?-->", "", body or "", flags=re.S)
+
+    # 2) Find all ":cl:" or "🆑" blocks up to the next ---, -->, or end-of-string :contentReference[oaicite:5]{index=5}
+    pattern = r"(?:\:cl\:|🆑)(.*?)(?=(?:\n---|\n-->|$))"
+    blocks = re.findall(pattern, cleaned, flags=re.S)  # returns list of inner captures :contentReference[oaicite:6]{index=6}
+
     if blocks:
-        last = blocks[-1]                          # negative index gives last match :contentReference[oaicite:6]{index=6}
-        # split into non-empty, stripped lines
+        # 3) Only use the LAST block via negative indexing :contentReference[oaicite:7]{index=7}
+        last = blocks[-1]
+        # split on lines, strip whitespace, drop empty lines
         return [ln.strip() for ln in last.splitlines() if ln.strip()]
-    # fallback when no live :cl: found :contentReference[oaicite:7]{index=7}
+
+    # 4) Fallback when no live marker found :contentReference[oaicite:8]{index=8}
     return [title]
 
 def process_pr(pr):

@@ -171,8 +171,11 @@ public class ConsoleControlEntity extends LinkableDummyLivingEntity {
         if (handStack.getItem() instanceof ControlBlockItem)
             return ActionResult.FAIL;
 
-        if (hand == Hand.MAIN_HAND)
-            this.run(player, player.getWorld(), false);
+        if (hand == Hand.MAIN_HAND) {
+            if (!this.run(player, player.getWorld(), false)) {
+                this.playFailFx();
+            }
+        }
 
         return ActionResult.SUCCESS;
     }
@@ -188,10 +191,22 @@ public class ConsoleControlEntity extends LinkableDummyLivingEntity {
             if (player.getOffHandStack().getItem() == Items.COMMAND_BLOCK) {
                 controlEditorHandler(player);
             } else
-                this.run((PlayerEntity) source.getAttacker(), source.getAttacker().getWorld(), true);
+                if (!this.run((PlayerEntity) source.getAttacker(), source.getAttacker().getWorld(), true))
+                    this.playFailFx();;
         }
 
         return false;
+    }
+
+    private void playFailFx() {
+        if (this.getWorld().isClient())
+            return;
+
+        ServerWorld world = (ServerWorld) this.getWorld();
+
+        // spawn particle above the control
+        world.spawnParticles(AITMod.CORAL_PARTICLE, this.getX(), this.getY() + 0.25, this.getZ(), 1, 0.05, 0.05, 0.05, 0.025);
+        world.playSound(null, this.getBlockPos(), AITSounds.KNOCK, SoundCategory.BLOCKS, 0.75F, AITMod.RANDOM.nextFloat(0.5F, 1.5F));
     }
 
     @Override
@@ -313,10 +328,6 @@ public class ConsoleControlEntity extends LinkableDummyLivingEntity {
         control.runAnimation(tardis, (ServerPlayerEntity) player, (ServerWorld) world);
 
         if (this.isOnDelay()) {
-            // spawn particle above the control
-            ((ServerWorld) world).spawnParticles(AITMod.CORAL_PARTICLE, this.getX(), this.getY() + 0.25, this.getZ(), 1, 0.05, 0.05, 0.05, 0.025);
-            world.playSound(null, this.getBlockPos(), AITSounds.KNOCK, SoundCategory.PLAYERS, 0.75F, AITMod.RANDOM.nextFloat(0.5F, 1.5F));
-
             return false;
         }
 

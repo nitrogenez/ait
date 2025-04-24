@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import dev.drtheo.scheduler.api.Scheduler;
 import dev.drtheo.scheduler.api.TimeUnit;
+import net.minecraft.sound.SoundEvents;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3f;
 
@@ -311,13 +312,18 @@ public class ConsoleControlEntity extends LinkableDummyLivingEntity {
 
         control.runAnimation(tardis, (ServerPlayerEntity) player, (ServerWorld) world);
 
-        if (this.isOnDelay())
+        if (this.isOnDelay()) {
+            // spawn particle above the control
+            ((ServerWorld) world).spawnParticles(AITMod.CORAL_PARTICLE, this.getX(), this.getY() + 0.25, this.getZ(), 1, 0.05, 0.05, 0.05, 0.025);
+            world.playSound(null, this.getBlockPos(), AITSounds.KNOCK, SoundCategory.PLAYERS, 0.75F, AITMod.RANDOM.nextFloat(0.5F, 1.5F));
+
             return false;
+        }
 
         if (!this.control.canRun(tardis, (ServerPlayerEntity) player))
             return false;
 
-        if (this.control.shouldHaveDelay(tardis) && !this.isOnDelay()) {
+        if (this.control.shouldHaveDelay(tardis)) {
             this.dataTracker.set(ON_DELAY, true);
 
             Scheduler.get().runTaskLater(() -> this.dataTracker.set(ON_DELAY, false), TimeUnit.TICKS, this.control.getDelayLength());

@@ -64,6 +64,7 @@ public class ConsoleControlEntity extends LinkableDummyLivingEntity {
 
     private BlockPos consoleBlockPos;
     private Control control;
+    private static final float MAX_DURABILITY = 1.0f;
 
     public ConsoleControlEntity(EntityType<? extends LivingEntity> entityType, World world) {
         super(entityType, world, false);
@@ -106,7 +107,7 @@ public class ConsoleControlEntity extends LinkableDummyLivingEntity {
         this.dataTracker.startTracking(SEQUENCE_LENGTH, 0);
         this.dataTracker.startTracking(WAS_SEQUENCED, false);
         this.dataTracker.startTracking(ON_DELAY, false);
-        this.dataTracker.startTracking(DURABILITY, 1.0f);
+        this.dataTracker.startTracking(DURABILITY, MAX_DURABILITY);
     }
 
     @Override
@@ -297,8 +298,19 @@ public class ConsoleControlEntity extends LinkableDummyLivingEntity {
     public float getDurability() {
         return this.dataTracker.get(DURABILITY);
     }
+    public DurabilityStates getDurabilityState(float durability) {
+        return DurabilityStates.get(durability);
+    }
     public void setDurability(float durability) {
         this.dataTracker.set(DURABILITY, durability);
+    }
+
+    public void addDurability(float durability) {
+        this.setDurability(Math.min(durability, MAX_DURABILITY));
+    }
+
+    public void subtractDurability(float durability) {
+        this.setDurability(Math.max(this.getDurability() - durability, 0));
     }
     public boolean run(PlayerEntity player, World world, boolean leftClick) {
         if (world.getRandom().nextBetween(1, 10_000) == 72)
@@ -406,5 +418,54 @@ public class ConsoleControlEntity extends LinkableDummyLivingEntity {
     }
 
     @Override
-    public void setCustomName(@Nullable Text name) { }
+    public boolean doesRenderOnFire() {
+        return DurabilityStates.get(this.getDurability()).equals(DurabilityStates.CATCH_FIRE);
+    }
+
+    @Override
+    public void setCustomName(@Nullable Text name) {}
+
+    public enum DurabilityStates {
+        JAMMED(0.0f),
+        CATCH_FIRE(0.25f),
+        SPARKING(0.5f),
+        OCCASIONALLY_JAM(0.75f),
+        FULL(ConsoleControlEntity.MAX_DURABILITY);
+        public final float durability;
+        DurabilityStates(float durabilityLevel) {
+            this.durability = durabilityLevel;
+        }
+
+        public static DurabilityStates get(String id) {
+            return DurabilityStates.valueOf(id.toUpperCase());
+        }
+
+        public static DurabilityStates get(float level) {
+            level = DurabilityStates.normalize(level);
+
+            for (int i = 0; i < values().length - 1; i++) {
+                DurabilityStates current = values()[i];
+                DurabilityStates next = values()[i + 1];
+
+                if (current.durability <= level && level < next.durability)
+                    return current;
+            }
+
+            return DurabilityStates.FULL;
+        }
+
+        public static float normalize(float durability) {
+            return Math.min(Math.max(durability, DurabilityStates.JAMMED.durability), DurabilityStates.FULL.durability);
+        }
+
+        public DurabilityStates next() {
+            return switch (this) {
+                case JAMMED -> CATCH_FIRE;
+                case CATCH_FIRE -> SPARKING;
+                case SPARKING -> OCCASIONALLY_JAM;
+                case OCCASIONALLY_JAM -> FULL;
+                case FULL -> JAMMED;
+            };
+        }
+    }
 }

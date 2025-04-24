@@ -59,6 +59,8 @@ public class ConsoleControlEntity extends LinkableDummyLivingEntity {
             TrackedDataHandlerRegistry.BOOLEAN);
     private static final TrackedData<Boolean> ON_DELAY = DataTracker.registerData(ConsoleControlEntity.class,
             TrackedDataHandlerRegistry.BOOLEAN);
+    private static final TrackedData<Float> DURABILITY = DataTracker.registerData(ConsoleControlEntity.class,
+            TrackedDataHandlerRegistry.FLOAT);
 
     private BlockPos consoleBlockPos;
     private Control control;
@@ -104,6 +106,7 @@ public class ConsoleControlEntity extends LinkableDummyLivingEntity {
         this.dataTracker.startTracking(SEQUENCE_LENGTH, 0);
         this.dataTracker.startTracking(WAS_SEQUENCED, false);
         this.dataTracker.startTracking(ON_DELAY, false);
+        this.dataTracker.startTracking(DURABILITY, 1.0f);
     }
 
     @Override
@@ -121,6 +124,7 @@ public class ConsoleControlEntity extends LinkableDummyLivingEntity {
         nbt.putBoolean("partOfSequence", this.isPartOfSequence());
         nbt.putInt("sequenceColor", this.getSequenceIndex());
         nbt.putBoolean("wasSequenced", this.wasSequenced());
+        nbt.putFloat("durability", this.getDurability());
     }
 
     @Override
@@ -149,6 +153,9 @@ public class ConsoleControlEntity extends LinkableDummyLivingEntity {
 
         if (nbt.contains("wasSequenced"))
             this.setWasSequenced(nbt.getBoolean("wasSequenced"));
+
+        if (nbt.contains("durability"))
+            this.setDurability(nbt.getFloat("durability"));
     }
 
     @Override
@@ -287,7 +294,12 @@ public class ConsoleControlEntity extends LinkableDummyLivingEntity {
     public boolean isOnDelay() {
         return this.dataTracker.get(ON_DELAY);
     }
-
+    public float getDurability() {
+        return this.dataTracker.get(DURABILITY);
+    }
+    public void setDurability(float durability) {
+        this.dataTracker.set(DURABILITY, durability);
+    }
     public boolean run(PlayerEntity player, World world, boolean leftClick) {
         if (world.getRandom().nextBetween(1, 10_000) == 72)
             this.getWorld().playSound(null, this.getBlockPos(), AITSounds.EVEN_MORE_SECRET_MUSIC, SoundCategory.MASTER,

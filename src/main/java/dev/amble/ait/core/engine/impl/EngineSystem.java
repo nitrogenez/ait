@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
+import dev.amble.ait.core.tardis.animation.v2.datapack.TardisAnimationRegistry;
 import dev.amble.lib.util.ServerLifecycleHooks;
 import org.joml.Vector3f;
 
@@ -174,9 +175,8 @@ public class EngineSystem extends DurableSubSystem {
             return new Phaser(
                     (phaser) -> {
                         ServerTardis tdis = sTardis.asServer();
-                        TardisUtil.sendMessageToInterior(tdis, Text.translatable("tardis.message.engine.phasing").formatted(Formatting.RED));
                         TardisUtil.sendMessageToLinked(tdis, Text.translatable("tardis.message.engine.phasing").formatted(Formatting.RED));
-                        tdis.alarm().enabled().set(true);
+                        tdis.alarm().enable(Text.translatable("tardis.message.engine.phasing").formatted(Formatting.RED));
                         tdis.getDesktop().playSoundAtEveryConsole(AITSounds.HOP_DEMAT);
                         tdis.getExterior().playSound(AITSounds.HOP_DEMAT);
                         sTardis.subsystems().demat().removeDurability(5);
@@ -189,7 +189,7 @@ public class EngineSystem extends DurableSubSystem {
                                 sTardis.travel().speed(500);
                                 sTardis.getDesktop().playSoundAtEveryConsole(AITSounds.UNSTABLE_FLIGHT_LOOP);
                                 sTardis.getExterior().playSound(AITSounds.UNSTABLE_FLIGHT_LOOP);
-                                sTardis.travel().forceDemat(TravelSoundRegistry.PHASING_DEMAT);
+                                sTardis.travel().forceDemat(TardisAnimationRegistry.getInstance().instantiate(AITMod.id("crumple")), TardisAnimationRegistry.getInstance().instantiate(AITMod.id("ghost_mat"))); // TODO - make phasing anims!! - duzo
                                 sTardis.travel().autopilot(false);
                             }
                             TardisEvents.ENGINES_PHASE.invoker().onPhase(system);
@@ -199,7 +199,7 @@ public class EngineSystem extends DurableSubSystem {
                         SoundEvent sound = (phaser.countdown < (phaser.initial - 300)) ? AITSounds.HOP_MAT : AITSounds.LAND_THUD;
                         sTardis.getDesktop().playSoundAtEveryConsole(sound);
                         sTardis.getExterior().playSound(sound);
-                        sTardis.alarm().enabled().set(false);
+                        sTardis.alarm().disable();
                     },
                     (phaser) -> travel.isLanded() &&
                             sTardis.subsystems().demat().durability() < 300 &&

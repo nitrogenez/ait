@@ -3,6 +3,7 @@ package dev.amble.ait.core.tardis.handler.travel;
 import java.util.EnumMap;
 import java.util.Optional;
 
+import dev.amble.ait.core.tardis.animation.v2.TardisAnimation;
 import dev.amble.lib.data.CachedDirectedGlobalPos;
 import dev.drtheo.queue.api.ActionQueue;
 import dev.drtheo.scheduler.api.Scheduler;
@@ -44,6 +45,7 @@ import dev.amble.ait.core.util.SafePosSearch;
 import dev.amble.ait.core.util.WorldUtil;
 import dev.amble.ait.core.world.RiftChunkManager;
 import dev.amble.ait.data.Exclude;
+import org.jetbrains.annotations.Nullable;
 
 public final class TravelHandler extends AnimatedTravelHandler implements CrashableTardisTravel {
 
@@ -256,7 +258,12 @@ public final class TravelHandler extends AnimatedTravelHandler implements Crasha
         Scheduler.get().runTaskLater(() -> this.travelCooldown = false, TimeUnit.SECONDS, 5);
     }
 
-    public Optional<ActionQueue> dematerialize(TravelSound sound) {
+    /**
+     * Dematerializes the TARDIS and returns the action queue to be executed
+     * @param demat the demat animation to play, or null to use the default sound
+     * @param remat the remat animation to play, or null to use the default sound
+     */
+    public Optional<ActionQueue> dematerialize(@Nullable TardisAnimation demat, @Nullable TardisAnimation remat) {
         if (this.getState() != State.LANDED)
             return Optional.empty();
 
@@ -277,11 +284,11 @@ public final class TravelHandler extends AnimatedTravelHandler implements Crasha
             return Optional.empty();
         }
 
-        return Optional.of(this.forceDemat(sound));
+        return Optional.of(this.forceDemat(demat, remat));
     }
 
     public Optional<ActionQueue> dematerialize() {
-        return this.dematerialize(null);
+        return this.dematerialize(null, null);
     }
 
     private void failDemat() {
@@ -306,11 +313,29 @@ public final class TravelHandler extends AnimatedTravelHandler implements Crasha
         this.createCooldown();
     }
 
-    public ActionQueue forceDemat(TravelSound replacementSound) {
+    /**
+     * Forcefully dematerializes the TARDIS and returns the action queue to be
+     * @param demat the demat animation to play, or null to use the default sound
+     * @param remat the remat animation to play, or null to use the default sound
+     * */
+    public ActionQueue forceDemat(@Nullable TardisAnimation demat, @Nullable TardisAnimation remat) {
         this.setState(State.DEMAT);
 
-        SoundEvent sound = this.getAnimationFor(this.getState()).getSound();
-        this.tardis.getDesktop().playSoundAtEveryConsole(sound, SoundCategory.BLOCKS, 2f, 1f);
+        TardisAnimation anim = this.getAnimationFor(State.DEMAT);
+        if (demat != null) {
+            TardisAnimation finalExpected = anim;
+            this.queueFor(State.FLIGHT).thenRun(() -> this.setAnimationFor(State.DEMAT, finalExpected.id()));
+            this.setAnimationFor(State.DEMAT, demat.id());
+            anim = demat;
+        }
+
+        if (remat != null) {
+            TardisAnimation finalRematPrevious = this.getAnimationFor(State.MAT);
+            this.queueFor(State.MAT).thenRun(() -> this.setAnimationFor(State.MAT, remat.id()));
+            this.queueFor(State.LANDED).thenRun(() -> this.setAnimationFor(State.MAT, finalRematPrevious.id()));
+        }
+
+        this.tardis.getDesktop().playSoundAtEveryConsole(anim.getSound(), SoundCategory.BLOCKS, 2f, 1f);
 
         this.runAnimations();
 
@@ -320,7 +345,7 @@ public final class TravelHandler extends AnimatedTravelHandler implements Crasha
     }
 
     public void forceDemat() {
-        this.forceDemat(null);
+        this.forceDemat(null, null);
     }
 
     public void finishDemat() {

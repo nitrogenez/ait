@@ -1,28 +1,47 @@
-import os, json, re
+import os, json, re, argparse
+import requests
 
-# Load the full webhook payload
-with open(os.environ['GITHUB_EVENT_PATH'], 'r') as f:
-    event = json.load(f)
+parser = argparse.ArgumentParser()
+parser.add_argument(
+    "--pr-numbers", default="", help="Comma-separated PR numbers to process"
+)
+args = parser.parse_args()
 
-pr = event.get('pull_request', {})
-number = pr.get('number')
-title = pr.get('title', '').strip()
-body = pr.get('body', '') or ''
+repo = os.environ["GITHUB_REPOSITORY"]
+token = os.environ["BOT_TOKEN"]
+headers = {"Authorization": f"Bearer {token}", "Accept": "application/vnd.github.v3+json"}
 
-# Extract changelog block after ":cl:" up to "---" or "-->"
-m = re.search(r':cl:(.*?)(?:\n---|\n-->)', body, re.S)
-if m:
-    # split into non-empty lines, strip whitespace
-    entries = [line.strip() for line in m.group(1).splitlines() if line.strip()]
+def fetch_pr(pr_number):
+    url = f"https://api.github.com/repos/{repo}/pulls/{pr_number}"
+    r = requests.get(url, headers=headers)
+    r.raise_for_status()
+    return r.json()
+
+def extract_entries(title, body):
+    m = re.search(r":cl:(.*?)(?:\n---|\n-->)", body or "", re.S)
+    if m:
+        return [ln.strip() for ln in m.group(1).splitlines() if ln.strip()]
+    return [title]
+
+def process_pr(pr):
+    num = pr["number"]
+    title = pr["title"].strip()
+    body = pr.get("body") or ""
+    entries = extract_entries(title, body)
+    link = f"https://github.com/{repo}/pull/{num}"
+    return [f"- {e} ([#{num}]({link}))" for e in entries]
+
+all_lines = []
+
+if args.pr_numbers:
+    for n in args.pr_numbers.split(","):
+        pr = fetch_pr(n.strip())
+        all_lines.extend(process_pr(pr))
 else:
-    # fallback to PR title
-    entries = [title]
+    with open(os.environ["GITHUB_EVENT_PATH"]) as f:
+        ev = json.load(f)
+    pr = ev["pull_request"]
+    all_lines = process_pr(pr)
 
-# Format entries
-repo = os.environ['GITHUB_REPOSITORY']
-link = f'https://github.com/{repo}/pull/{number}'
-lines = [f"- {e} ([#{number}]({link}))" for e in entries]
-
-# Append to CHANGELOG.md
-with open('CHANGELOG.md', 'a') as fh:
-    fh.write('\n'.join(lines) + '\n')
+with open("CHANGELOG.md", "a") as fh:
+    fh.write("\n".join(all_lines) + "\n")

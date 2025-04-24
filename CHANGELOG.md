@@ -16,3 +16,4 @@
 - feat: classic (de)mat ([#1311](https://github.com/amblelabs/ait/pull/1311))
 - feat: drill (de)mat ([#1311](https://github.com/amblelabs/ait/pull/1311))
 - refactor: exterior animations & their datapacks ([#1311](https://github.com/amblelabs/ait/pull/1311))
+- fix: rename hammer -> mallet ([#1464](https://github.com/amblelabs/ait/pull/1464))

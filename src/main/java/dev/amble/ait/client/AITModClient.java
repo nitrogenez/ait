@@ -22,7 +22,6 @@ import net.fabricmc.fabric.api.event.client.player.ClientPreAttackCallback;
 import org.jetbrains.annotations.Nullable;
 
 import net.minecraft.block.DoorBlock;
-import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.item.ModelPredicateProviderRegistry;
@@ -32,7 +31,6 @@ import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.block.entity.BlockEntityRendererFactories;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.client.world.ClientWorld;
-import net.minecraft.sound.SoundCategory;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.*;
 import net.minecraft.world.LightType;
@@ -85,9 +83,6 @@ import dev.amble.ait.core.entities.GallifreyFallsPaintingEntity;
 import dev.amble.ait.core.entities.RiftEntity;
 import dev.amble.ait.core.item.*;
 import dev.amble.ait.core.tardis.Tardis;
-import dev.amble.ait.core.tardis.animation.ExteriorAnimation;
-import dev.amble.ait.core.tardis.handler.travel.TravelHandler;
-import dev.amble.ait.core.tardis.handler.travel.TravelHandlerBase;
 import dev.amble.ait.core.world.TardisServerWorld;
 import dev.amble.ait.data.schema.console.ConsoleTypeSchema;
 import dev.amble.ait.data.schema.exterior.ClientExteriorVariantSchema;
@@ -231,39 +226,6 @@ public class AITModClient implements ClientModInitializer {
                     if (client.world.getBlockEntity(consolePos) instanceof ConsoleGeneratorBlockEntity console)
                         console.setVariant(id);
                 });
-
-        ClientPlayNetworking.registerGlobalReceiver(ExteriorAnimation.UPDATE,
-                (client, handler, buf, responseSender) -> {
-                    int p = buf.readInt();
-                    UUID tardisId = buf.readUuid();
-
-                    ClientTardisManager.getInstance().getTardis(client, tardisId, tardis -> {
-                        if (tardis == null)
-                            return;
-
-                        // todo remember to use the right world in future !!
-                        BlockEntity block = MinecraftClient.getInstance().world
-                                .getBlockEntity(tardis.travel().position().getPos());
-
-                        if (!(block instanceof ExteriorBlockEntity exterior))
-                            return;
-
-                        if (exterior.getAnimation() == null)
-                            return;
-
-                        exterior.getAnimation().setupAnimation(TravelHandlerBase.State.values()[p]);
-                    });
-                });
-
-        ClientPlayNetworking.registerGlobalReceiver(TravelHandler.CANCEL_DEMAT_SOUND, (client, handler, buf,
-                responseSender) -> {
-            ClientTardis tardis = ClientTardisUtil.getCurrentTardis();
-
-            if (tardis == null)
-                return;
-
-            client.getSoundManager().stopSounds(tardis.stats().getTravelEffects().get(TravelHandlerBase.State.DEMAT).soundId(), SoundCategory.BLOCKS);
-        });
 
         WorldRenderEvents.END.register((context) -> SonicRendering.getInstance().renderWorld(context));
         HudRenderCallback.EVENT.register((context, delta) -> SonicRendering.getInstance().renderGui(context, delta));

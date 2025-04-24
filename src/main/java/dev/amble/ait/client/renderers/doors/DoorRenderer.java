@@ -1,5 +1,7 @@
 package dev.amble.ait.client.renderers.doors;
 
+import org.joml.Vector3f;
+
 import net.minecraft.block.BlockState;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.VertexConsumerProvider;
@@ -64,7 +66,8 @@ public class DoorRenderer<T extends DoorBlockEntity> implements BlockEntityRende
 
         matrices.push();
         matrices.translate(0.5, 0, 0.5);
-        matrices.scale(tardis.stats().getXScale(), tardis.stats().getYScale(), tardis.stats().getZScale());
+        Vector3f scale = tardis.travel().getScale();
+        matrices.scale(scale.x, scale.y, scale.z);
         matrices.multiply(RotationAxis.NEGATIVE_Y.rotationDegrees(k));
         matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees(180f));
 
@@ -111,9 +114,17 @@ public class DoorRenderer<T extends DoorBlockEntity> implements BlockEntityRende
 
             float colorAlpha = 1;
 
-            float red = alarms ? !power ? 0.25f : s : s;
-            float green = alarms ? !power ? 0.01f : 0.3f : t;
-            float blue = alarms ? !power ? 0.01f : 0.3f : u;
+            float red = alarms
+                    ? (!power ? 0.25f : s)
+                    : (power ? s : 0f);
+
+            float green = alarms
+                    ? (!power ? 0.01f : 0.3f)
+                    : (power ? t : 0f);
+
+            float blue = alarms
+                    ? (!power ? 0.01f : 0.3f)
+                    : (power ? u : 0f);
 
             ClientLightUtil.renderEmissive((v, l) -> model.renderWithAnimations(
                     tardis, entity, model.getPart(), matrices, v, l, overlay, red, green, blue, colorAlpha

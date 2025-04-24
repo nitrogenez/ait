@@ -23,6 +23,7 @@ import dev.amble.ait.AITMod;
 import dev.amble.ait.api.tardis.TardisEvents;
 import dev.amble.ait.core.tardis.Tardis;
 import dev.amble.ait.core.tardis.TardisDesktop;
+import dev.amble.ait.core.tardis.handler.ServerAlarmHandler;
 import dev.amble.ait.core.tardis.handler.TardisCrashHandler;
 import dev.amble.ait.core.tardis.util.TardisUtil;
 import dev.amble.ait.data.properties.bool.BoolValue;
@@ -98,7 +99,7 @@ public sealed interface CrashableTardisTravel permits TravelHandler {
         }
 
         tardis.door().setLocked(true);
-        tardis.alarm().enabled().set(true);
+        tardis.alarm().enable(ServerAlarmHandler.AlarmType.CRASHING);
         this.antigravs().set(false);
         this.speed(0);
         tardis.removeFuel(700 * power);

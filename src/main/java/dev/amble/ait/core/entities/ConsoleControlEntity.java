@@ -171,10 +171,8 @@ public class ConsoleControlEntity extends LinkableDummyLivingEntity {
         if (handStack.getItem() instanceof ControlBlockItem)
             return ActionResult.FAIL;
 
-        if (hand == Hand.MAIN_HAND) {
-            if (!this.run(player, player.getWorld(), false)) {
-                this.playFailFx();
-            }
+        if (hand == Hand.MAIN_HAND && !this.run(player, player.getWorld(), false)) {
+            this.playFailFx();
         }
 
         return ActionResult.SUCCESS;
@@ -192,7 +190,7 @@ public class ConsoleControlEntity extends LinkableDummyLivingEntity {
                 controlEditorHandler(player);
             } else
                 if (!this.run((PlayerEntity) source.getAttacker(), source.getAttacker().getWorld(), true))
-                    this.playFailFx();;
+                    this.playFailFx();
         }
 
         return false;
@@ -327,14 +325,13 @@ public class ConsoleControlEntity extends LinkableDummyLivingEntity {
 
         control.runAnimation(tardis, (ServerPlayerEntity) player, (ServerWorld) world);
 
-        if (this.isOnDelay()) {
+        if (this.isOnDelay())
             return false;
-        }
 
         if (!this.control.canRun(tardis, (ServerPlayerEntity) player))
             return false;
 
-        if (this.control.shouldHaveDelay(tardis)) {
+        if (this.control.shouldHaveDelay(tardis) && !this.isOnDelay()) {
             this.dataTracker.set(ON_DELAY, true);
 
             Scheduler.get().runTaskLater(() -> this.dataTracker.set(ON_DELAY, false), TimeUnit.TICKS, this.control.getDelayLength());

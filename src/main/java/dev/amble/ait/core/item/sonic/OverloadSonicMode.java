@@ -8,6 +8,7 @@ import net.minecraft.particle.BlockStateParticleEffect;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
+import net.minecraft.sound.SoundEvents;
 import net.minecraft.state.property.Properties;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
@@ -106,14 +107,12 @@ public class OverloadSonicMode extends SonicMode {
         }
 
         if (state.isOf(Blocks.OBSIDIAN)) {
-            // try place fire above if replaceable
-            BlockPos firePos = pos.up();
-            BlockState fireState = Blocks.FIRE.getDefaultState();
-
-            if (world.getBlockState(firePos).isReplaceable()) {
-                world.setBlockState(firePos, fireState);
-                world.emitGameEvent(user, GameEvent.BLOCK_PLACE, firePos);
-                playFx(world, firePos);
+            BlockPos blockPos2 = pos.offset(blockHit.getSide());
+            if (AbstractFireBlock.canPlaceAt(world, blockPos2, user.getHorizontalFacing())) {
+                this.playFx(world, blockPos2);
+                BlockState blockState2 = AbstractFireBlock.getState(world, blockPos2);
+                world.setBlockState(blockPos2, blockState2, Block.NOTIFY_ALL | Block.REDRAW_ON_MAIN_THREAD);
+                world.emitGameEvent(user, GameEvent.BLOCK_PLACE, pos);
             }
         }
     }

@@ -18,3 +18,4 @@
 - refactor: exterior animations & their datapacks ([#1311](https://github.com/amblelabs/ait/pull/1311))
 - fix: rename hammer -> mallet ([#1464](https://github.com/amblelabs/ait/pull/1464))
 - fix: disabled experimental messages still shown during opening of existing AIT maps ([#1470](https://github.com/amblelabs/ait/pull/1470))
+- Removed pottery shards from opinions ([#1468](https://github.com/amblelabs/ait/pull/1468))

@@ -1,0 +1,30 @@
+name: Clear Changelog on Release
+
+on:
+  pull_request:
+    types: [closed]
+    branches: [release]        # PR into 'release'
+
+jobs:
+  clear-changelog:
+    if: github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Truncate CHANGELOG.md
+        run: echo -n '' > CHANGELOG.md
+
+      - name: Commit & push cleared changelog
+        env:
+          TOKEN: ${{ secrets.BOT_TOKEN }}
+        run: |
+          git config user.name "github-bot"
+          git config user.email "bot@users.noreply.github.com"
+          git add CHANGELOG.md
+          git commit -m "chore: clear CHANGELOG on release"
+          git push https://x-access-token:${TOKEN}@github.com/${{ github.repository }} HEAD:release

@@ -1,0 +1,3 @@
+- ci(changelog): append on merge & reset on release ([#1463](https://github.com/amblelabs/ait/pull/1463))
+- fix red warning in main menu for releases ([#1462](https://github.com/amblelabs/ait/pull/1462))
+- fix(manager): crash when loading & file manager locked ([#1459](https://github.com/amblelabs/ait/pull/1459))

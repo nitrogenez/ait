@@ -58,8 +58,7 @@ public class TardisSonicMode extends SonicMode {
             HitResult hitResult = SonicMode.getHitResult(user, 2);
 
             // summon to selected block
-            if (hitResult instanceof BlockHitResult blockHit)
-                return this.interactBlock(stack, world, player, blockHit.getBlockPos());
+            return this.interactBlock(stack, world, player, BlockPos.ofFloored(hitResult.getPos()));
         }
         boolean isLookingUp = user.getPitch() < 0;
 

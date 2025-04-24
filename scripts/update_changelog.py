@@ -24,20 +24,20 @@ def extract_entries(title: str, body: str) -> list[str]:
     3. Return lines from the LAST such block (negative index [-1]).
     4. If no block found, return [title].
     """
-    # 1) Remove ALL HTML comments (<!-- ... -->), DOTALL so it spans lines :contentReference[oaicite:4]{index=4}
+    # 1) Remove ALL HTML comments (<!-- ... -->), DOTALL so it spans lines
     cleaned = re.sub(r"<!--.*?-->", "", body or "", flags=re.S)
 
-    # 2) Find all ":cl:" or "🆑" blocks up to the next ---, -->, or end-of-string :contentReference[oaicite:5]{index=5}
+    # 2) Find all ":cl:" or "🆑" blocks up to the next ---, -->, or end-of-string
     pattern = r"(?:\:cl\:|🆑)(.*?)(?=(?:\n---|\n-->|$))"
-    blocks = re.findall(pattern, cleaned, flags=re.S)  # returns list of inner captures :contentReference[oaicite:6]{index=6}
+    blocks = re.findall(pattern, cleaned, flags=re.S)  # returns list of inner captures
 
     if blocks:
-        # 3) Only use the LAST block via negative indexing :contentReference[oaicite:7]{index=7}
+        # 3) Only use the LAST block via negative indexing
         last = blocks[-1]
         # split on lines, strip whitespace, drop empty lines
         return [ln.strip() for ln in last.splitlines() if ln.strip()]
 
-    # 4) Fallback when no live marker found :contentReference[oaicite:8]{index=8}
+    # 4) Fallback when no live marker found
     return [title]
 
 def process_pr(pr):
@@ -46,7 +46,12 @@ def process_pr(pr):
     body = pr.get("body") or ""
     entries = extract_entries(title, body)
     link = f"https://github.com/{repo}/pull/{num}"
-    return [f"- {e} ([#{num}]({link}))" for e in entries]
+    lines = []
+    for e in entries:
+        # strip any existing leading dashes and spaces
+        clean = e.lstrip('- ').strip()
+        lines.append(f"- {clean} ([#{num}]({link}))")
+    return lines
 
 all_lines = []
 

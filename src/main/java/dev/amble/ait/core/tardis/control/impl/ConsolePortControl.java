@@ -45,7 +45,7 @@ public class ConsolePortControl extends Control {
 
         ItemStack itemStack = player.getMainHandStack();
 
-        if (itemStack.isIn(AITTags.Items.IS_TARDIS_FUEL) || itemStack.getItem() instanceof MusicDiscItem) {
+        if (itemStack.isIn(AITTags.Items.INSERTABLE_DISCS) || itemStack.getItem() instanceof MusicDiscItem) {
             if (!tardis.extra().getInsertedDisc().isEmpty()) return Result.FAILURE;
 
 

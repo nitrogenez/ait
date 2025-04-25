@@ -29,3 +29,4 @@
 - tweak(sonic): overload consumes 2x fuel ([#1465](https://github.com/amblelabs/ait/pull/1465))
 - fix(sonic): stacking above 1 ([#1465](https://github.com/amblelabs/ait/pull/1465))
 - feat: added music disc insertable tag ([#1483](https://github.com/amblelabs/ait/pull/1483))
+- Mini Addititons ([#1401](https://github.com/amblelabs/ait/pull/1401))

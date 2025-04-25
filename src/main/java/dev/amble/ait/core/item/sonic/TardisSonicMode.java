@@ -99,9 +99,11 @@ public class TardisSonicMode extends SonicMode {
             return false;
         }
 
-        // check if player is within range of TARDIS
+        // check if player is within range of and in same world as TARDIS
+        World tardisWorld = tardis.travel().position().getWorld();
+        boolean inSameWorld = player.getWorld().equals(tardisWorld);
         boolean isNearTardis = TardisUtil.isNearTardis(player, tardis, 256);
-        if (!isNearTardis) {
+        if (!inSameWorld || !isNearTardis) {
             player.sendMessage(Text.translatable("sonic.ait.mode.tardis.is_not_in_range"), true);
             return false;
         }

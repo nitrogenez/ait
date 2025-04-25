@@ -23,3 +23,5 @@
 - feat: indicate that control is on cooldown ([#1466](https://github.com/amblelabs/ait/pull/1466))
 - add: max range of 256 blocks for sonic summon ([#1485](https://github.com/amblelabs/ait/pull/1485))
 - Mad man music for easter egg ([#1486](https://github.com/amblelabs/ait/pull/1486))
+- feat: after reconfig, steam particles spawn ([#1461](https://github.com/amblelabs/ait/pull/1461))
+- feat: /ait door_particle command to spawn your own ([#1461](https://github.com/amblelabs/ait/pull/1461))

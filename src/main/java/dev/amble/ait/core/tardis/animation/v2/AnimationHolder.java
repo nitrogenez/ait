@@ -187,18 +187,18 @@ public class AnimationHolder implements TardisTickable, Disposable, Linkable {
     }
 
     public float getAlpha(float delta) {
+        if (this.isLinked()) {
+            Tardis tardis = this.tardis().get();
+            if (tardis.cloak().cloaked().get())
+                return cloakAlpha(tardis);
+        }
+
         if (this.alphaOverride != -1) {
             return this.alphaOverride;
         }
 
         if (this.current == null)
              return 1f;
-
-        if (this.isLinked()) {
-            Tardis tardis = this.tardis().get();
-            if (tardis.cloak().cloaked().get())
-                return cloakAlpha(tardis);
-        }
 
         return this.current.getAlpha(delta);
     }

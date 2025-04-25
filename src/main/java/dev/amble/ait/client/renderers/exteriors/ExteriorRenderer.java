@@ -72,6 +72,9 @@ public class ExteriorRenderer<T extends ExteriorBlockEntity> implements BlockEnt
         if (tardis.travel().getAlpha() > 0)
             this.renderExterior(profiler, tardis, entity, tickDelta, matrices, vertexConsumers, light, overlay);
 
+        if ((tardis.door().getLeftRot() > 0 || variant.hasTransparentDoors()) && !tardis.isGrowth() && tardis.travel().isLanded())
+            BOTI.EXTERIOR_RENDER_QUEUE.add(entity);
+
         profiler.pop();
 
         profiler.pop();
@@ -174,8 +177,8 @@ public class ExteriorRenderer<T extends ExteriorBlockEntity> implements BlockEnt
 
         //System.out.println( variant.hasTransparentDoors());
 
-        if ((tardis.door().getLeftRot() > 0 || variant.hasTransparentDoors()) && !tardis.isGrowth() && travel.isLanded())
-            BOTI.EXTERIOR_RENDER_QUEUE.add(entity);
+        /*if ((tardis.door().getLeftRot() > 0 || variant.hasTransparentDoors()) && !tardis.isGrowth() && travel.isLanded())
+            BOTI.EXTERIOR_RENDER_QUEUE.add(entity);*/
             //this.renderExteriorBoti(entity, variant, matrices, texture, model, BotiPortalModel.getTexturedModelData().createModel(), light);
 
         /*if (tardis.<OvergrownHandler>handler(TardisComponent.Id.OVERGROWN).overgrown().get()) {

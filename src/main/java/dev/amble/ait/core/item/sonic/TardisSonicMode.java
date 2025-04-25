@@ -1,5 +1,6 @@
 package dev.amble.ait.core.item.sonic;
 
+import dev.amble.ait.core.tardis.util.TardisUtil;
 import dev.amble.lib.data.CachedDirectedGlobalPos;
 import dev.amble.lib.data.DirectedGlobalPos;
 
@@ -12,7 +13,6 @@ import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -96,6 +96,13 @@ public class TardisSonicMode extends SonicMode {
 
         if (!tardis.subsystems().get(SubSystem.Id.STABILISERS).isUsable()) {
             player.sendMessage(Text.translatable("sonic.ait.mode.tardis.does_not_have_stabilisers"), true);
+            return false;
+        }
+
+        // check if player is within range of TARDIS
+        boolean isNearTardis = TardisUtil.isNearTardis(player, tardis, 256);
+        if (!isNearTardis) {
+            player.sendMessage(Text.translatable("sonic.ait.mode.tardis.is_not_in_range"), true);
             return false;
         }
 

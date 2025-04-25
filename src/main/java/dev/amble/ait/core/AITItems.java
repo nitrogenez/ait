@@ -76,7 +76,7 @@ public class AITItems extends ItemContainer {
             ArmorItem.Type.HELMET, new AItemSettings().group(AITItemGroups.MAIN).maxCount(1).maxDamage(80),
             true);
 
-    public static final Item SONIC_SCREWDRIVER = new SonicItem(new AItemSettings().group(AITItemGroups.MAIN));
+    public static final Item SONIC_SCREWDRIVER = new SonicItem(new AItemSettings().maxCount(1).group(AITItemGroups.MAIN));
 
     public static final Item HYPERCUBE = new HypercubeItem(new AItemSettings().maxCount(1).group(AITItemGroups.MAIN));
     public static final Item PSYCHPAPER = new PsychpaperItem(new AItemSettings().maxCount(1).group(AITItemGroups.MAIN));

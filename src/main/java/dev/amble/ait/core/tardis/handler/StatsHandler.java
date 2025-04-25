@@ -300,8 +300,10 @@ public class StatsHandler extends KeyedTardisComponent {
     public void markCreationDate() {
         // set the creation date to now, along with the time zone, and store it in a computer-readable string format
         Date now = Date.from(Instant.now());
-        creationDate.set(DateFormat.getDateTimeInstance(DateFormat.LONG, 3).format(now));
-        dateTimeZone.set(DateFormat.getTimeInstance(DateFormat.LONG).getTimeZone().getID());
+        if (this.creationDate.get() == null && this.dateTimeZone.get() == null) {
+            creationDate.set(DateFormat.getDateTimeInstance(DateFormat.LONG, 3).format(now));
+            dateTimeZone.set(DateFormat.getTimeInstance(DateFormat.LONG).getTimeZone().getID());
+        }
     }
 
     public void markPlayerCreatorName() {

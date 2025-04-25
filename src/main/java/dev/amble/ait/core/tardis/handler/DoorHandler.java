@@ -1,7 +1,11 @@
 package dev.amble.ait.core.tardis.handler;
 
+import dev.amble.lib.data.CachedDirectedGlobalPos;
 import dev.amble.lib.data.DirectedBlockPos;
 import net.fabricmc.fabric.api.util.TriState;
+import net.minecraft.particle.ParticleEffect;
+import net.minecraft.particle.ParticleType;
+import net.minecraft.particle.ParticleTypes;
 import org.jetbrains.annotations.Nullable;
 
 import net.minecraft.entity.Entity;
@@ -33,6 +37,8 @@ import dev.amble.ait.data.properties.flt.FloatProperty;
 import dev.amble.ait.data.properties.flt.FloatValue;
 import dev.amble.ait.data.schema.door.DoorSchema;
 
+import java.util.Optional;
+
 public class DoorHandler extends KeyedTardisComponent implements TardisTickable {
 
     private static final BoolProperty LOCKED_DOORS = new BoolProperty("locked");
@@ -53,6 +59,10 @@ public class DoorHandler extends KeyedTardisComponent implements TardisTickable 
 
     private final FloatValue leftDoorRot = LEFT_DOOR_ROT.create(this);
     private final FloatValue rightDoorRot = RIGHT_DOOR_ROT.create(this);
+
+    @Exclude
+    @Nullable
+    private ParticleEffect doorOpenParticles = null; // server-only
 
     /*
      this is the previous state before it was changed, used for
@@ -102,6 +112,17 @@ public class DoorHandler extends KeyedTardisComponent implements TardisTickable 
 
         leftDoorRot.flatMap(rot -> this.tryUpdateRot(rot, this.getDoorState() != DoorState.CLOSED));
         rightDoorRot.flatMap(rot -> this.tryUpdateRot(rot, this.getDoorState() == DoorState.BOTH));
+
+        if (this.doorOpenParticles != null && server.getTicks() % 5 == 0 && tardis.door().isOpen()) {
+            Vec3d exteriorPosition = TardisUtil.offsetPos(tardis.travel().position().toPos(), -0.15F);
+            exteriorPosition = TardisUtil.offsetDoorPosition(exteriorPosition, tardis.travel().position().getRotation());
+
+            ServerWorld exteriorWorld = tardis.travel().position().getWorld();
+
+            exteriorWorld.spawnParticles(this.doorOpenParticles, exteriorPosition.getX(),
+                    exteriorPosition.getY() + 0.1, exteriorPosition.getZ(), 25, 0.25D, 1.1,
+                    0.25D, 0.025D);
+        }
     }
 
     private float tryUpdateRot(float rot, boolean opening) {
@@ -357,6 +378,38 @@ public class DoorHandler extends KeyedTardisComponent implements TardisTickable 
     // FIXME @THEO
     public float getRightRot() {
         return this.rightDoorRot.get();
+    }
+
+    /**
+     * Sets the particles which will spawn at the doors when they are opened
+     * Server-side Only
+     * @param particle particle to spawn
+     * @see #tick(MinecraftServer)
+     * @author duzo
+     */
+    public void setDoorParticles(ParticleEffect particle) {
+        this.doorOpenParticles = particle;
+    }
+
+    /**
+     * Gets the particles which will spawn at the doors when they are opened
+     * Server-side Only
+     * @return particles to spawn
+     */
+    public Optional<ParticleEffect> getDoorParticle() {
+        return Optional.ofNullable(this.doorOpenParticles);
+    }
+
+    public boolean tryReplaceDoorParticle(ParticleEffect expected, ParticleEffect replacement) {
+        if (this.doorOpenParticles == null)
+            return false;
+
+        if (this.doorOpenParticles.getType() == expected.getType()) {
+            this.doorOpenParticles = replacement;
+            return true;
+        }
+
+        return false;
     }
 
     public enum InteractionResult {

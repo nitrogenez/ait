@@ -465,4 +465,14 @@ public class TardisUtil {
 
         return Optional.ofNullable(nearestPlayer);
     }
+
+    public static boolean isNearTardis(PlayerEntity player, Tardis tardis, double radius) {
+        return radius >= distanceFromTardis(player, tardis);
+    }
+
+    public static double distanceFromTardis(PlayerEntity player, Tardis tardis) {
+        BlockPos pPos = player.getBlockPos();
+        BlockPos tPos = tardis.travel().position().getPos();
+        return Math.sqrt(tPos.getSquaredDistance(pPos));
+    }
 }

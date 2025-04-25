@@ -22,3 +22,4 @@
 - fix: unused warning-message and missing -title (as well as some wording) ([#1473](https://github.com/amblelabs/ait/pull/1473))
 - feat: indicate that control is on cooldown ([#1466](https://github.com/amblelabs/ait/pull/1466))
 - add: max range of 256 blocks for sonic summon ([#1485](https://github.com/amblelabs/ait/pull/1485))
+- Mad man music for easter egg ([#1486](https://github.com/amblelabs/ait/pull/1486))

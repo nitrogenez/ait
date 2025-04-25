@@ -25,3 +25,6 @@
 - Mad man music for easter egg ([#1486](https://github.com/amblelabs/ait/pull/1486))
 - feat: after reconfig, steam particles spawn ([#1461](https://github.com/amblelabs/ait/pull/1461))
 - feat: /ait door_particle command to spawn your own ([#1461](https://github.com/amblelabs/ait/pull/1461))
+- feat(sonic): overload can light nether portals ([#1465](https://github.com/amblelabs/ait/pull/1465))
+- tweak(sonic): overload consumes 2x fuel ([#1465](https://github.com/amblelabs/ait/pull/1465))
+- fix(sonic): stacking above 1 ([#1465](https://github.com/amblelabs/ait/pull/1465))

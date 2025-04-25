@@ -1,14 +1,13 @@
 package dev.amble.ait.core.tardis.handler;
 
-import dev.amble.lib.data.CachedDirectedGlobalPos;
+import java.util.Optional;
+
 import dev.amble.lib.data.DirectedBlockPos;
 import net.fabricmc.fabric.api.util.TriState;
-import net.minecraft.particle.ParticleEffect;
-import net.minecraft.particle.ParticleType;
-import net.minecraft.particle.ParticleTypes;
 import org.jetbrains.annotations.Nullable;
 
 import net.minecraft.entity.Entity;
+import net.minecraft.particle.ParticleEffect;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
@@ -37,8 +36,6 @@ import dev.amble.ait.data.properties.flt.FloatProperty;
 import dev.amble.ait.data.properties.flt.FloatValue;
 import dev.amble.ait.data.schema.door.DoorSchema;
 
-import java.util.Optional;
-
 public class DoorHandler extends KeyedTardisComponent implements TardisTickable {
 
     private static final BoolProperty LOCKED_DOORS = new BoolProperty("locked");
@@ -61,8 +58,7 @@ public class DoorHandler extends KeyedTardisComponent implements TardisTickable 
     private final FloatValue rightDoorRot = RIGHT_DOOR_ROT.create(this);
 
     @Exclude
-    @Nullable
-    private ParticleEffect doorOpenParticles = null; // server-only
+    @Nullable private ParticleEffect doorOpenParticles = null; // server-only
 
     /*
      this is the previous state before it was changed, used for

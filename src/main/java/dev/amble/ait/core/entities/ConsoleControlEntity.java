@@ -5,7 +5,6 @@ import java.util.Optional;
 
 import dev.drtheo.scheduler.api.Scheduler;
 import dev.drtheo.scheduler.api.TimeUnit;
-import net.minecraft.sound.SoundEvents;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3f;
 

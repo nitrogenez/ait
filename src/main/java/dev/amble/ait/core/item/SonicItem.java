@@ -205,4 +205,3 @@ public class SonicItem extends LinkableItem implements ArtronHolderItem {
         return MAX_FUEL;
     }
 }
-

@@ -1,6 +1,5 @@
 package dev.amble.ait.core.item.sonic;
 
-import dev.amble.ait.core.tardis.util.TardisUtil;
 import dev.amble.lib.data.CachedDirectedGlobalPos;
 import dev.amble.lib.data.DirectedGlobalPos;
 
@@ -20,6 +19,7 @@ import net.minecraft.world.World;
 import dev.amble.ait.core.engine.SubSystem;
 import dev.amble.ait.core.item.SonicItem;
 import dev.amble.ait.core.tardis.Tardis;
+import dev.amble.ait.core.tardis.util.TardisUtil;
 import dev.amble.ait.core.world.TardisServerWorld;
 import dev.amble.ait.data.schema.sonic.SonicSchema;
 

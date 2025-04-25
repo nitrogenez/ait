@@ -20,4 +20,5 @@
 - fix: disabled experimental messages still shown during opening of existing AIT maps ([#1470](https://github.com/amblelabs/ait/pull/1470))
 - Removed pottery shards from opinions ([#1468](https://github.com/amblelabs/ait/pull/1468))
 - fix: unused warning-message and missing -title (as well as some wording) ([#1473](https://github.com/amblelabs/ait/pull/1473))
-- feat: indicate that control is on cooldown ([#1466](https://github.com/amblelabs/ait/pull/1466))- add: max range of 256 blocks for sonic summon ([#1485](https://github.com/amblelabs/ait/pull/1485))
+- feat: indicate that control is on cooldown ([#1466](https://github.com/amblelabs/ait/pull/1466))
+- add: max range of 256 blocks for sonic summon ([#1485](https://github.com/amblelabs/ait/pull/1485))

@@ -17,8 +17,7 @@ public class AITSounds {
     public static final SoundEvent EARTH_MUSIC = register("music/earth_nitrogenez");
     public static final SoundEvent VENUS_MUSIC = register("music/venus_nitrogenez");
     public static final SoundEvent GOOD_MAN_MUSIC = register("music/good_man_dian");
-    public static final SoundEvent MAD_MAN = register("music/mad_man");
-    public static final SoundEvent MAD_MAN_SAD = register("music/mad_man_sad");
+    public static final SoundEvent MAD_MAN = register("music/mad_man_dian");
     public static final SoundEvent SPACE = register("music/space");
 
     // TARDIS
@@ -62,6 +61,13 @@ public class AITSounds {
     //MASTER SOUNDS
     public static final SoundEvent MASTER_DEMAT = register("tardis/master_demat");
     public static final SoundEvent MASTER_MAT = register("tardis/master_mat");
+    // BILL & TED
+    public static final SoundEvent BNT_DEMAT = register("tardis/bnt/demat");
+    public static final SoundEvent BNT_MAT = register("tardis/bnt/mat");
+    // DRILL
+    public static final SoundEvent DRILL_DEMAT = register("tardis/drill/demat");
+    public static final SoundEvent DRILL_MAT = register("tardis/drill/mat");
+
     //STABILIZE
     public static final SoundEvent STABILIZE = register("tardis/stabilize_flight");
 

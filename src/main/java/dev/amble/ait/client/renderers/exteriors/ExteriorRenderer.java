@@ -2,6 +2,7 @@ package dev.amble.ait.client.renderers.exteriors;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import dev.amble.lib.data.CachedDirectedGlobalPos;
+import org.joml.Vector3f;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.client.MinecraftClient;
@@ -68,8 +69,11 @@ public class ExteriorRenderer<T extends ExteriorBlockEntity> implements BlockEnt
 
         profiler.swap("render");
 
-        if (entity.getAlpha() > 0)
+        if (tardis.travel().getAlpha() > 0)
             this.renderExterior(profiler, tardis, entity, tickDelta, matrices, vertexConsumers, light, overlay);
+
+        if ((tardis.door().getLeftRot() > 0 || variant.hasTransparentDoors()) && !tardis.isGrowth() && tardis.travel().isLanded())
+            BOTI.EXTERIOR_RENDER_QUEUE.add(entity);
 
         profiler.pop();
 
@@ -78,7 +82,7 @@ public class ExteriorRenderer<T extends ExteriorBlockEntity> implements BlockEnt
 
     private void renderExterior(Profiler profiler, ClientTardis tardis, T entity, float tickDelta, MatrixStack matrices,
                                 VertexConsumerProvider vertexConsumers, int light, int overlay) {
-        final float alpha = entity.getAlpha();
+        final float alpha = tardis.travel().getAlpha(tickDelta);
         RenderSystem.enableCull();
         RenderSystem.enableBlend();
         RenderSystem.enableDepthTest();
@@ -118,7 +122,20 @@ public class ExteriorRenderer<T extends ExteriorBlockEntity> implements BlockEnt
         float h = RotationPropertyHelper.toDegrees(k);
 
         matrices.push();
+
+        // adjust based off animation position
+        Vector3f animPositionOffset = tardis.travel().getAnimationPosition(tickDelta);
+        matrices.translate(animPositionOffset.x(), animPositionOffset.y(), animPositionOffset.z());
+
         matrices.translate(0.5f, 0.0f, 0.5f);
+
+        // adjust based off animation rotation
+        Vector3f animRotationOffset = tardis.travel().getAnimationRotation(tickDelta);
+        matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees(animRotationOffset.z()));
+        matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(animRotationOffset.y()));
+        matrices.multiply(RotationAxis.POSITIVE_Z.rotationDegrees(animRotationOffset.x()));
+
+        this.applyNameTransforms(tardis, matrices, tardis.stats().getName(), tickDelta);
 
         Identifier texture = this.variant.texture();
         Identifier emission = this.variant.emission();
@@ -149,15 +166,10 @@ public class ExteriorRenderer<T extends ExteriorBlockEntity> implements BlockEnt
             return;
         }
 
-        this.applyNameTransforms(tardis, matrices, tardis.stats().getName());
-
         if (travel.antigravs().get() && tardis.flight().falling().get()) {
             float sinFunc = (float) Math.sin((MinecraftClient.getInstance().player.age / 400f * 220f) * 0.2f + 0.2f);
             matrices.translate(0, sinFunc, 0);
         }
-
-        if (tardis.selfDestruct().isQueued())
-            matrices.scale(0.7f, 0.7f, 0.7f);
 
         model.renderWithAnimations(tardis, entity, this.model.getPart(),
                 matrices, vertexConsumers.getBuffer(AITRenderLayers.getEntityTranslucentCull(texture)), light, overlay, 1, 1,
@@ -165,8 +177,8 @@ public class ExteriorRenderer<T extends ExteriorBlockEntity> implements BlockEnt
 
         //System.out.println( variant.hasTransparentDoors());
 
-        if ((tardis.door().getLeftRot() > 0 || variant.hasTransparentDoors()) && !tardis.isGrowth() && travel.isLanded())
-            BOTI.EXTERIOR_RENDER_QUEUE.add(entity);
+        /*if ((tardis.door().getLeftRot() > 0 || variant.hasTransparentDoors()) && !tardis.isGrowth() && travel.isLanded())
+            BOTI.EXTERIOR_RENDER_QUEUE.add(entity);*/
             //this.renderExteriorBoti(entity, variant, matrices, texture, model, BotiPortalModel.getTexturedModelData().createModel(), light);
 
         /*if (tardis.<OvergrownHandler>handler(TardisComponent.Id.OVERGROWN).overgrown().get()) {
@@ -185,7 +197,8 @@ public class ExteriorRenderer<T extends ExteriorBlockEntity> implements BlockEnt
             float t;
             float s;
 
-            if ((tardis.stats().getName() != null && "partytardis".equals(tardis.stats().getName().toLowerCase()) ||(!tardis.extra().getInsertedDisc().isEmpty()))) {
+            if ((tardis.stats().getName() != null && "partytardis".equals(tardis.stats().getName().toLowerCase())) ||
+                    (!tardis.extra().getInsertedDisc().isEmpty())) {
                 int m = 25;
                 int n = MinecraftClient.getInstance().player.age / m + MinecraftClient.getInstance().player.getId();
                 int o = DyeColor.values().length;
@@ -197,15 +210,24 @@ public class ExteriorRenderer<T extends ExteriorBlockEntity> implements BlockEnt
                 s = fs[0] * (1f - r) + gs[0] * r;
                 t = fs[1] * (1f - r) + gs[1] * r;
                 u = fs[2] * (1f - r) + gs[2] * r;
+            } else if (tardis.sonic().getExteriorSonic() != null) {
+                float time = MinecraftClient.getInstance().player.age + MinecraftClient.getInstance().getTickDelta();
+                float progress = (float)((Math.sin(time * 0.03) + 1) / 2.0f);
+
+                final float FROM_R = 1.0f, FROM_G = 1.0f, FROM_B = 1.0f;
+                final float TO_R = 0.3f, TO_G = 0.3f, TO_B = 1.0f;
+
+                s = FROM_R * (1f - progress) + TO_R * progress;
+                t = FROM_G * (1f - progress) + TO_G * progress;
+                u = FROM_B * (1f - progress) + TO_B * progress;
             } else {
-                float[] hs = new float[]{ 1.0f, 1.0f, 1.0f };
-                s = hs[0];
-                t = hs[1];
-                u = hs[2];
+                s = 1.0f;
+                t = 1.0f;
+                u = 1.0f;
             }
 
-            float colorAlpha = 1 - alpha;
 
+            float colorAlpha = 1 - alpha;
             boolean power = tardis.fuel().hasPower();
 
             float red = alarms
@@ -224,6 +246,7 @@ public class ExteriorRenderer<T extends ExteriorBlockEntity> implements BlockEnt
                     tardis, entity, this.model.getPart(), matrices, v, l, overlay, red, green, blue, alpha
             ), emission, vertexConsumers);
         }
+
 
         profiler.swap("biome");
 
@@ -298,12 +321,14 @@ public class ExteriorRenderer<T extends ExteriorBlockEntity> implements BlockEnt
         }
     }
 
-    private void applyNameTransforms(Tardis tardis, MatrixStack matrices, String name) {
+    private void applyNameTransforms(Tardis tardis, MatrixStack matrices, String name, float delta) {
+        Vector3f scale = tardis.travel().getScale(delta);
+
         if (name.equalsIgnoreCase("grumm") || name.equalsIgnoreCase("dinnerbone")) {
             matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees(-90f));
-            matrices.translate(0, tardis.stats().getYScale() + 0.25f, tardis.stats().getZScale() - 1.7f);
+            matrices.translate(0, scale.y + 0.25f, scale.z - 1.7f);
         }
 
-        matrices.scale(tardis.stats().getXScale(), tardis.stats().getYScale(), tardis.stats().getZScale());
+        matrices.scale(scale.x, scale.y, scale.z);
     }
 }

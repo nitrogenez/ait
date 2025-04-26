@@ -1,0 +1,1 @@
+- Changelog now includes PR Authors by [@duzos](https://github.com/duzos) ([#1489](https://github.com/amblelabs/ait/pull/1489))

@@ -1,1 +1,5 @@
 - Changelog now includes PR Authors | by [@duzos](https://github.com/duzos) ([#1489](https://github.com/amblelabs/ait/pull/1489))
+- fix: remote achievement desc | by [@Addi3](https://github.com/Addi3) ([#1490](https://github.com/amblelabs/ait/pull/1490))
+- fix: proton / eight demat/mat anim translations | by [@Addi3](https://github.com/Addi3) ([#1490](https://github.com/amblelabs/ait/pull/1490))
+- fix: updated eight demat/mat sounds | by [@Addi3](https://github.com/Addi3) ([#1490](https://github.com/amblelabs/ait/pull/1490))
+- fix: fixed eight mat anim | by [@Addi3](https://github.com/Addi3) ([#1490](https://github.com/amblelabs/ait/pull/1490))

@@ -65,7 +65,7 @@ def process_pr(pr):
         clean = e.lstrip('- ').strip()
         # Append "by authors" only if authors list not empty
         suffix = f" by {authors_md}" if authors_md else ""
-        lines.append(f"- {clean}{suffix} ([#{num}]({link}))")
+        lines.append(f"- {clean} |{suffix} ([#{num}]({link}))")
     return lines
 
 all_lines = []

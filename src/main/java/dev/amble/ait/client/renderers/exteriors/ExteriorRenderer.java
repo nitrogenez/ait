@@ -124,13 +124,13 @@ public class ExteriorRenderer<T extends ExteriorBlockEntity> implements BlockEnt
         matrices.push();
 
         // adjust based off animation position
-        Vector3f animPositionOffset = tardis.travel().getAnimationPosition(tickDelta);
+        Vector3f animPositionOffset = travel.getAnimationPosition(tickDelta);
         matrices.translate(animPositionOffset.x(), animPositionOffset.y(), animPositionOffset.z());
 
         matrices.translate(0.5f, 0.0f, 0.5f);
 
         // adjust based off animation rotation
-        Vector3f animRotationOffset = tardis.travel().getAnimationRotation(tickDelta);
+        Vector3f animRotationOffset = travel.getAnimationRotation(tickDelta);
         matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees(animRotationOffset.z()));
         matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(animRotationOffset.y()));
         matrices.multiply(RotationAxis.POSITIVE_Z.rotationDegrees(animRotationOffset.x()));

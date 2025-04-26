@@ -51,8 +51,7 @@ public class ExteriorRenderer<T extends ExteriorBlockEntity> implements BlockEnt
     private ClientExteriorVariantSchema variant;
     private ExteriorModel model;
 
-    public ExteriorRenderer(BlockEntityRendererFactory.Context ctx) {
-    }
+    public ExteriorRenderer(BlockEntityRendererFactory.Context ctx) {}
 
     @Override
     public void render(T entity, float tickDelta, MatrixStack matrices, VertexConsumerProvider vertexConsumers,
@@ -174,19 +173,6 @@ public class ExteriorRenderer<T extends ExteriorBlockEntity> implements BlockEnt
         model.renderWithAnimations(tardis, entity, this.model.getPart(),
                 matrices, vertexConsumers.getBuffer(AITRenderLayers.getEntityTranslucentCull(texture)), light, overlay, 1, 1,
                 1, alpha);
-
-        //System.out.println( variant.hasTransparentDoors());
-
-        /*if ((tardis.door().getLeftRot() > 0 || variant.hasTransparentDoors()) && !tardis.isGrowth() && travel.isLanded())
-            BOTI.EXTERIOR_RENDER_QUEUE.add(entity);*/
-            //this.renderExteriorBoti(entity, variant, matrices, texture, model, BotiPortalModel.getTexturedModelData().createModel(), light);
-
-        /*if (tardis.<OvergrownHandler>handler(TardisComponent.Id.OVERGROWN).overgrown().get()) {
-            model.renderWithAnimations(entity, this.model.getPart(), matrices,
-                    vertexConsumers.getBuffer(AITRenderLayers.getEntityTranslucentCull(
-                            tardis.<OvergrownHandler>handler(TardisComponent.Id.OVERGROWN).getOvergrownTexture())),
-                    light, overlay, 1, 1, 1, alpha);
-        }*/
 
         profiler.push("emission");
         boolean alarms = tardis.alarm().enabled().get();

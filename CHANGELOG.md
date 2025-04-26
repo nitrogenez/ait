@@ -30,3 +30,4 @@
 - fix(sonic): stacking above 1 ([#1465](https://github.com/amblelabs/ait/pull/1465))
 - feat: added music disc insertable tag ([#1483](https://github.com/amblelabs/ait/pull/1483))
 - Mini Addititons ([#1401](https://github.com/amblelabs/ait/pull/1401))
+- fix: remove barrier blocks on engine break ([#1267](https://github.com/amblelabs/ait/pull/1267))

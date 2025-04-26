@@ -509,6 +509,19 @@ public class AITModDataGenerator implements DataGeneratorEntrypoint {
                     .input('B', Blocks.BLACK_WOOL)
                     .criterion(hasItem(Blocks.BLACK_WOOL), conditionsFromItem(Blocks.BLACK_WOOL)));
 
+            provider.addShapedRecipe(ShapedRecipeJsonBuilder.create(RecipeCategory.DECORATIONS, AITItems.TRENZALORE_PAINTING)
+                    .pattern("OBO")
+                    .pattern("BSB")
+                    .pattern("OPO")
+                    .input('O', Blocks.PURPLE_WOOL)
+                    .criterion(hasItem(Blocks.PURPLE_WOOL), conditionsFromItem(Blocks.PURPLE_WOOL))
+                    .input('S', Items.NETHER_STAR)
+                    .criterion(hasItem(Items.NETHER_STAR), conditionsFromItem(Items.NETHER_STAR))
+                    .input('P', Items.PAINTING)
+                    .criterion(hasItem(Items.PAINTING), conditionsFromItem(Items.PAINTING))
+                    .input('B', Blocks.BLACK_WOOL)
+                    .criterion(hasItem(Blocks.BLACK_WOOL), conditionsFromItem(Blocks.BLACK_WOOL)));
+
             provider.addShapedRecipe(ShapedRecipeJsonBuilder.create(RecipeCategory.TOOLS, AITItems.PSYCHPAPER)
                     .pattern("SOS")
                     .pattern("BPB")
@@ -722,6 +735,7 @@ public class AITModDataGenerator implements DataGeneratorEntrypoint {
         });
 
         provider.addTranslation("ait.tardis.likes_item", "The TARDIS may like this item...");
+        provider.addTranslation("tooltip.ait.remoteitem.holdformoreinfo", "Hold shift for more info");
 
         // Control entities
         provider.addTranslation("control.ait.antigravs", "Antigravs");
@@ -804,7 +818,8 @@ public class AITModDataGenerator implements DataGeneratorEntrypoint {
         provider.addTranslation(AITEntityTypes.CONTROL_ENTITY_TYPE.getTranslationKey(), "Control Entity");
         provider.addTranslation(AITEntityTypes.FALLING_TARDIS_TYPE.getTranslationKey(), "Falling TARDIS");
         provider.addTranslation(AITEntityTypes.FLIGHT_TARDIS_TYPE.getTranslationKey(), "RWF TARDIS");
-        provider.addTranslation(AITEntityTypes.GALLIFREY_FALLS_PAINTING_TYPE.getTranslationKey(), "Galifray Falls Painting");
+        provider.addTranslation(AITEntityTypes.GALLIFREY_FALLS_PAINTING_ENTITY_TYPE.getTranslationKey(), "Gallifrey Falls Painting");
+        provider.addTranslation(AITEntityTypes.TRENZALORE_PAINTING_ENTITY_TYPE.getTranslationKey(), "Trenzalore Painting");
         provider.addTranslation(GunEntityTypes.STASER_BOLT_ENTITY_TYPE.getTranslationKey(), "Stazer Bolt Projectile");
 
         // Items
@@ -827,6 +842,7 @@ public class AITModDataGenerator implements DataGeneratorEntrypoint {
         provider.addTranslation(AITItems.CLASSIC_KEY_UPGRADE_SMITHING_TEMPLATE, "Smithing Template");
         provider.addTranslation(AITItems.PSYCHPAPER, "Psychic Paper");
         provider.addTranslation(AITItems.GALLIFREY_FALLS_PAINTING, "Painting");
+        provider.addTranslation(AITItems.TRENZALORE_PAINTING, "Painting");
         provider.addTranslation(AITItems.HAMMER, "Mallet");
         provider.addTranslation("ait.item.drink.mug_empty", "Empty Mug");
         provider.addTranslation("ait.item.drink.hot_cocoa", "Hot Cocoa");
@@ -980,6 +996,9 @@ public class AITModDataGenerator implements DataGeneratorEntrypoint {
         provider.addTranslation("painting.ait.gallifrey_falls.title", "Gallifrey Falls");
         provider.addTranslation("painting.ait.gallifrey_falls.author", "???");
 
+        provider.addTranslation("painting.ait.trenzalore.title", "Trenzalore");
+        provider.addTranslation("painting.ait.trenzalore.author", "???");
+
         provider.addTranslation("painting.ait.peanut.title", "Peanut");
         provider.addTranslation("painting.ait.peanut.author", "???");
 
@@ -1120,7 +1139,7 @@ public class AITModDataGenerator implements DataGeneratorEntrypoint {
         provider.addTranslation("achievement." + AITMod.MOD_ID + ".title.brand_new", "Having a Coffee!");
         provider.addTranslation("achievement." + AITMod.MOD_ID + ".description.brand_new", "OH MY GOD! IVE DONE IT AGAIN!");
         provider.addTranslation("achievement.ait.title.remote", "Grand Design");
-        provider.addTranslation("achievement.ait.title.description", "The Stattenheim Remote is yours. Fascinating. Now we shall observe precisely how you manipulate causality… and fracture under pressure.");
+        provider.addTranslation("achievement.ait.description.remote", "The Stattenheim Remote is yours. Fascinating. Now we shall observe precisely how you manipulate causality… and fracture under pressure.");
 
         // Commands
         // Fuel
@@ -1429,6 +1448,10 @@ public class AITModDataGenerator implements DataGeneratorEntrypoint {
         provider.addTranslation("animation." + AITMod.MOD_ID + ".self_destruct", "Self Destruct");
         provider.addTranslation("animation." + AITMod.MOD_ID + ".zwip_demat", "Zwip");
         provider.addTranslation("animation." + AITMod.MOD_ID + ".zwip_mat", "Zwip");
+        provider.addTranslation("animation." + AITMod.MOD_ID + ".eight_demat", "Eight");
+        provider.addTranslation("animation." + AITMod.MOD_ID + ".eight_mat", "Eight");
+        provider.addTranslation("animation." + AITMod.MOD_ID + ".proton_mat", "Proton");
+        provider.addTranslation("animation." + AITMod.MOD_ID + ".proton_demat", "Proton");
 
 
         return provider;

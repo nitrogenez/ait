@@ -8,6 +8,7 @@ import java.util.function.Function;
 import dev.amble.lib.util.ServerLifecycleHooks;
 import org.joml.Vector3f;
 
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.text.Text;
@@ -34,6 +35,11 @@ public class EngineSystem extends DurableSubSystem {
 
     public EngineSystem() {
         super(Id.ENGINE);
+    }
+
+    @Override
+    public Item asItem() {
+        return AITBlocks.ENGINE_BLOCK.asItem();
     }
 
     @Override

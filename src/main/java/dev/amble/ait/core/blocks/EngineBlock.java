@@ -1,10 +1,8 @@
 package dev.amble.ait.core.blocks;
 
-import net.minecraft.block.entity.BlockEntity;
 import org.jetbrains.annotations.Nullable;
 
 import net.minecraft.block.*;
-import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.state.StateManager;
@@ -18,11 +16,10 @@ import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 
 import dev.amble.ait.AITMod;
-import dev.amble.ait.core.AITBlockEntityTypes;
 import dev.amble.ait.core.blockentities.EngineBlockEntity;
 import dev.amble.ait.core.engine.SubSystem;
 import dev.amble.ait.core.engine.block.SubSystemBlock;
-import dev.amble.ait.core.engine.block.SubSystemBlockEntity;
+import dev.amble.ait.core.engine.link.block.FluidLinkBlockEntity;
 
 public class EngineBlock extends SubSystemBlock implements BlockEntityProvider {
     public static final DirectionProperty FACING = HorizontalFacingBlock.FACING;
@@ -60,7 +57,7 @@ public class EngineBlock extends SubSystemBlock implements BlockEntityProvider {
     }
 
     @Nullable @Override
-    public BlockEntity createBlockEntity(BlockPos pos, BlockState state) {
+    public FluidLinkBlockEntity createBlockEntity(BlockPos pos, BlockState state) {
         return new EngineBlockEntity(pos, state);
     }
 
@@ -98,10 +95,5 @@ public class EngineBlock extends SubSystemBlock implements BlockEntityProvider {
     @Override
     public BlockRenderType getRenderType(BlockState state) {
         return BlockRenderType.ENTITYBLOCK_ANIMATED;
-    }
-
-    @Override
-    protected BlockEntityType<? extends SubSystemBlockEntity> getType() {
-        return AITBlockEntityTypes.ENGINE_BLOCK_ENTITY_TYPE;
     }
 }

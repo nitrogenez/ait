@@ -2,23 +2,21 @@ package dev.amble.ait.core.entities;
 
 import java.util.Optional;
 
-import org.apache.commons.lang3.Validate;
 import org.jetbrains.annotations.Nullable;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.decoration.AbstractDecorationEntity;
-import net.minecraft.entity.decoration.painting.PaintingVariant;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.listener.ClientPlayPacketListener;
 import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.s2c.play.EntitySpawnS2CPacket;
-import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.GameRules;
 import net.minecraft.world.World;
 
@@ -38,11 +36,6 @@ public class GallifreyFallsPaintingEntity extends AbstractDecorationEntity imple
         super(AITEntityTypes.GALLIFREY_FALLS_PAINTING_TYPE, world, pos);
     }
 
-    public GallifreyFallsPaintingEntity(World world, BlockPos pos, Direction direction, RegistryEntry<PaintingVariant> variant) {
-        this(world, pos);
-        this.setFacing(direction);
-    }
-
     public static Optional<GallifreyFallsPaintingEntity> placePainting(World world, BlockPos pos, Direction facing) {
         GallifreyFallsPaintingEntity paintingEntity = new GallifreyFallsPaintingEntity(world, pos);
 
@@ -55,11 +48,9 @@ public class GallifreyFallsPaintingEntity extends AbstractDecorationEntity imple
         }
     }
 
-
-
     @Override
     public void writeCustomDataToNbt(NbtCompound nbt) {
-        nbt.putByte("facing", (byte)this.facing.getHorizontal());
+        nbt.putByte("facing", (byte) this.facing.getHorizontal());
         super.writeCustomDataToNbt(nbt);
     }
 
@@ -70,7 +61,6 @@ public class GallifreyFallsPaintingEntity extends AbstractDecorationEntity imple
         this.setFacing(this.facing);
     }
 
-
     @Override
     public int getWidthPixels() {
         return WIDTH;
@@ -79,26 +69,6 @@ public class GallifreyFallsPaintingEntity extends AbstractDecorationEntity imple
     @Override
     public int getHeightPixels() {
         return HEIGHT;
-    }
-
-    protected void setFacing(Direction facing) {
-        Validate.notNull(facing);
-        Validate.isTrue(facing.getAxis().isHorizontal());
-        this.facing = facing;
-        this.setYaw(this.facing.getHorizontal() * 90);
-        this.prevYaw = this.getYaw();
-        this.updateAttachmentPosition();
-    }
-
-    @Override
-    public Packet<ClientPlayPacketListener> createSpawnPacket() {
-        return new EntitySpawnS2CPacket(this, this.facing.getId(), this.getDecorationBlockPos());
-    }
-
-    @Override
-    public void onSpawnPacket(EntitySpawnS2CPacket packet) {
-        super.onSpawnPacket(packet);
-        this.setFacing(Direction.byId(packet.getEntityData()));
     }
 
     @Override
@@ -112,13 +82,36 @@ public class GallifreyFallsPaintingEntity extends AbstractDecorationEntity imple
             return;
         }
         this.playSound(SoundEvents.ENTITY_PAINTING_BREAK, 1.0f, 1.0f);
-        if (entity instanceof PlayerEntity) {
-            PlayerEntity playerEntity = (PlayerEntity) entity;
-            if (playerEntity.getAbilities().creativeMode) {
-                return;
-            }
+        if (entity instanceof PlayerEntity player && player.isCreative()) {
+            return;
         }
         this.dropItem(AITItems.GALLIFREY_FALLS_PAINTING);
+    }
+
+    @Override
+    public void refreshPositionAndAngles(double x, double y, double z, float yaw, float pitch) {
+        this.setPosition(x, y, z);
+    }
+
+    @Override
+    public void updateTrackedPositionAndAngles(double x, double y, double z, float yaw, float pitch, int interpolationSteps, boolean interpolate) {
+        this.setPosition(x, y, z);
+    }
+
+    @Override
+    public Vec3d getSyncedPos() {
+        return Vec3d.of(this.attachmentPos);
+    }
+
+    @Override
+    public Packet<ClientPlayPacketListener> createSpawnPacket() {
+        return new EntitySpawnS2CPacket(this, this.facing.getId(), this.getDecorationBlockPos());
+    }
+
+    @Override
+    public void onSpawnPacket(EntitySpawnS2CPacket packet) {
+        super.onSpawnPacket(packet);
+        this.setFacing(Direction.byId(packet.getEntityData()));
     }
 
     @Override

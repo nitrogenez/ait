@@ -7,7 +7,9 @@ import dev.amble.lib.util.ServerLifecycleHooks;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
+import net.minecraft.item.Item;
 
+import dev.amble.ait.core.AITItems;
 import dev.amble.ait.core.engine.DurableSubSystem;
 import dev.amble.ait.core.engine.StructureHolder;
 import dev.amble.ait.core.engine.block.multi.MultiBlockStructure;
@@ -40,6 +42,11 @@ public class LifeSupportCircuit extends DurableSubSystem implements StructureHol
     @Override
     public MultiBlockStructure getStructure() {
         return MultiBlockStructure.EMPTY;
+    }
+
+    @Override
+    public Item asItem() {
+        return AITItems.LIFE_SUPPORT;
     }
 
     @Override

@@ -40,8 +40,6 @@ public class PermissionHandler extends KeyedTardisComponent {
     }
 
     static {
-        // TODO: make properties have a built-in util to C->S
-        // YES PLEASE :)))
         ServerPlayNetworking.registerGlobalReceiver(P19_LOYALTY_SYNC,
                 ServerTardisManager.receiveTardis((tardis, server, player, handler, buf, responseSender) -> {
                     if (tardis == null)

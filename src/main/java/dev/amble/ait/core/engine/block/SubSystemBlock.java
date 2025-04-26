@@ -65,13 +65,6 @@ public abstract class SubSystemBlock extends FluidLinkBlock {
         return ActionResult.SUCCESS;
     }
 
-    protected abstract BlockEntityType<? extends SubSystemBlockEntity> getType();
-
-    @Override
-    public @Nullable BlockEntity createBlockEntity(BlockPos pos, BlockState state) {
-        return this.getType().instantiate(pos, state);
-    }
-
     @Override
     public void randomDisplayTick(BlockState state, World world, BlockPos pos, Random random) {
         super.randomDisplayTick(state, world, pos, random);

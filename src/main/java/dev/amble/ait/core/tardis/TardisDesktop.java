@@ -1,6 +1,8 @@
 package dev.amble.ait.core.tardis;
 
-import java.util.*;
+import java.util.HashSet;
+import java.util.Optional;
+import java.util.Set;
 
 import dev.amble.lib.data.DirectedBlockPos;
 import dev.drtheo.queue.api.ActionQueue;
@@ -10,7 +12,7 @@ import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.decoration.ItemFrameEntity;
+import net.minecraft.entity.decoration.AbstractDecorationEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvent;
@@ -87,17 +89,6 @@ public class TardisDesktop extends TardisComponent {
 
         // must be done in postInit, because it accesses door and alarm handlers
         this.changeInterior(schema, false, false).execute();
-    }
-
-    @Override
-    public void onLoaded() {
-        if (this.isClient())
-            return;
-
-        for (BlockPos pos : this.consolePos) {
-            if (tardis.asServer().getInteriorWorld().getBlockEntity(pos) instanceof ConsoleBlockEntity console)
-                console.markNeedsControl();
-        }
     }
 
     public TardisDesktopSchema getSchema() {
@@ -181,14 +172,14 @@ public class TardisDesktop extends TardisComponent {
     }
 
     public ActionQueue createDesktopClearQueue() {
-        ServerWorld world = this.tardis.asServer().getInteriorWorld();
+        ServerTardis tardis = this.tardis.asServer();
+        ServerWorld world = tardis.getInteriorWorld();
         int chunkRadius = ChunkSectionPos.getSectionCoord(RADIUS);
 
-        // FIXME THEO: gross
-        TardisUtil.getEntitiesInBox(ItemFrameEntity.class, world, corners.getBox(), frame -> true)
+        TardisUtil.getEntitiesInBox(AbstractDecorationEntity.class, world, corners.getBox(), frame -> true)
                 .forEach(frame -> frame.remove(Entity.RemovalReason.DISCARDED));
 
-        return new ChunkEraser.Builder().build(
+        return new ChunkEraser.Builder().withFlags(Block.FORCE_STATE).build(
                 world, -chunkRadius, -chunkRadius, chunkRadius, chunkRadius
         ).thenRun(() -> {
             this.consolePos.clear();

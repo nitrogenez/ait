@@ -37,7 +37,6 @@ import net.minecraft.world.explosion.ExplosionBehavior;
 
 import dev.amble.ait.AITMod;
 import dev.amble.ait.client.tardis.ClientTardis;
-import dev.amble.ait.core.*;
 import dev.amble.ait.core.AITBlocks;
 import dev.amble.ait.core.AITDamageTypes;
 import dev.amble.ait.core.AITEntityTypes;
@@ -48,7 +47,6 @@ import dev.amble.ait.core.entities.base.LinkableDummyEntity;
 import dev.amble.ait.core.tardis.Tardis;
 import dev.amble.ait.core.tardis.handler.travel.TravelHandler;
 import dev.amble.ait.core.tardis.util.TardisUtil;
-import dev.amble.ait.core.util.ForcedChunkUtil;
 import dev.amble.ait.module.planet.core.space.planet.Planet;
 import dev.amble.ait.module.planet.core.space.planet.PlanetRegistry;
 import dev.amble.ait.module.planet.core.util.ISpaceImmune;
@@ -63,6 +61,8 @@ public class FallingTardisEntity extends LinkableDummyEntity implements ISpaceIm
     @Nullable public NbtCompound blockEntityData;
 
     private BlockState state;
+
+
 
     public FallingTardisEntity(EntityType<? extends Entity> entityType, World world) {
         super(entityType, world);
@@ -101,6 +101,7 @@ public class FallingTardisEntity extends LinkableDummyEntity implements ISpaceIm
     protected void tickInVoid() {
         this.stopFalling(true);
     }
+
 
     @Override
     public void tick() {
@@ -168,9 +169,6 @@ public class FallingTardisEntity extends LinkableDummyEntity implements ISpaceIm
 
             player.playSound(sound, volume, 1.0f);
         });
-
-        if (ForcedChunkUtil.isChunkForced((ServerWorld) this.getWorld(), blockPos))
-            ForcedChunkUtil.stopForceLoading((ServerWorld) this.getWorld(), blockPos);
 
         if (isCrashing) {
             this.getWorld().createExplosion(this, null, new ExplosionBehavior() {

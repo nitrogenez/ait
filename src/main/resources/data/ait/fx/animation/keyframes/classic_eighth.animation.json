@@ -1,7 +1,7 @@
 {
 	"format_version": "1.8.0",
 	"animations": {
-		"classic_eight_demat": {
+		"classic_eighth_demat": {
 			"animation_length": 43.5833,
 			"bones": {
 				"tardis": {
@@ -21,7 +21,7 @@
 				"8.5": "0;"
 			}
 		},
-		"classic_eight_mat": {
+		"classic_eighth_mat": {
 			"animation_length": 25.0833,
 			"bones": {
 				"tardis": {

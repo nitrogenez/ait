@@ -69,6 +69,8 @@ public class ExteriorRenderer<T extends ExteriorBlockEntity> implements BlockEnt
 
         profiler.swap("render");
 
+        this.updateModel(tardis);
+
         if (tardis.travel().getAlpha() > 0)
             this.renderExterior(profiler, tardis, entity, tickDelta, matrices, vertexConsumers, light, overlay);
 
@@ -114,8 +116,6 @@ public class ExteriorRenderer<T extends ExteriorBlockEntity> implements BlockEnt
             profiler.pop();
             return;
         }
-
-        this.updateModel(tardis);
 
         BlockState blockState = entity.getCachedState();
         int k = blockState.get(ExteriorBlock.ROTATION);

@@ -735,6 +735,7 @@ public class AITModDataGenerator implements DataGeneratorEntrypoint {
         });
 
         provider.addTranslation("ait.tardis.likes_item", "The TARDIS may like this item...");
+        provider.addTranslation("tooltip.ait.remoteitem.holdformoreinfo", "Hold shift for more info");
 
         // Control entities
         provider.addTranslation("control.ait.antigravs", "Antigravs");

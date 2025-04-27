@@ -1,0 +1,1 @@
+- fix: missing text for waypoint error message | by [@Mansarde](https://github.com/Mansarde) ([#1496](https://github.com/amblelabs/ait/pull/1496))

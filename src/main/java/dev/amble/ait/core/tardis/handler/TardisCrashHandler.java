@@ -82,10 +82,11 @@ public class TardisCrashHandler extends KeyedTardisComponent implements TardisTi
         CachedDirectedGlobalPos exteriorPosition = tardis.travel().position();
         ServerWorld exteriorWorld = exteriorPosition.getWorld();
 
-        if (tardis.door().isOpen() && state != State.NORMAL) {
-            exteriorWorld.spawnParticles(ParticleTypes.CAMPFIRE_COSY_SMOKE, exteriorPosition.getPos().toCenterPos().x,
-                    exteriorPosition.getPos().getY() + 2f, exteriorPosition.getPos().toCenterPos().z, 1, 0.05D, 0.05D,
-                    0.05D, 0.01D);
+        DoorHandler door = tardis.door();
+        if (state != State.NORMAL) {
+            door.setDoorParticles(ParticleTypes.CAMPFIRE_COSY_SMOKE);
+        } else {
+            door.tryReplaceDoorParticle(ParticleTypes.CAMPFIRE_COSY_SMOKE, null);
         }
 
         if (state != State.TOXIC)

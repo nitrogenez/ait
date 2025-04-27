@@ -1,5 +1,6 @@
 package dev.amble.ait.core.item.sonic;
 
+import dev.amble.ait.core.AITBlocks;
 import dev.amble.lib.api.ICantBreak;
 
 import net.minecraft.block.Block;
@@ -32,6 +33,8 @@ import dev.amble.ait.core.world.TardisServerWorld;
 import dev.amble.ait.data.landing.LandingPadRegion;
 import dev.amble.ait.data.landing.LandingPadSpot;
 import dev.amble.ait.data.schema.sonic.SonicSchema;
+
+import java.util.Arrays;
 
 public class ScanningSonicMode extends SonicMode {
     private static final Text RIFT_FOUND = Text.translatable("message.ait.sonic.riftfound").formatted(Formatting.AQUA)
@@ -98,6 +101,27 @@ public class ScanningSonicMode extends SonicMode {
         Block block = state.getBlock();
 
         String blastRes = String.format("%.2f", block.getBlastResistance());
+
+        Block[] validLocatorBlocks = {
+                AITBlocks.ZEITON_BLOCK,
+                AITBlocks.ZEITON_COBBLE,
+                AITBlocks.BUDDING_ZEITON,
+                AITBlocks.COMPACT_ZEITON,
+                AITBlocks.SMALL_ZEITON_BUD,
+                AITBlocks.MEDIUM_ZEITON_BUD,
+                AITBlocks.LARGE_ZEITON_BUD,
+                AITBlocks.ZEITON_CLUSTER,
+        };
+
+        if (Arrays.asList(validLocatorBlocks).contains(block))
+        {
+            Tardis tardis = SonicItem.getTardisStatic(world, stack);
+            int x = tardis.travel().position().getPos().getX();
+            int y = tardis.travel().position().getPos().getY();
+            int z = tardis.travel().position().getPos().getZ();
+            Text message = Text.translatable("item.sonic.scanning.locator_message").append(String.format("%s %s %s", x, y, z));
+            user.sendMessage(message);
+        }
 
         String toolRequirement = "item.sonic.scanning.any_tool";
         if (block instanceof ICantBreak) {

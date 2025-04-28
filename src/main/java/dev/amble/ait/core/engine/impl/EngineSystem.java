@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
-import dev.amble.ait.core.tardis.animation.v2.datapack.TardisAnimationRegistry;
 import dev.amble.lib.util.ServerLifecycleHooks;
 import org.joml.Vector3f;
 
@@ -20,9 +19,9 @@ import dev.amble.ait.api.tardis.TardisEvents;
 import dev.amble.ait.core.AITBlocks;
 import dev.amble.ait.core.AITSounds;
 import dev.amble.ait.core.engine.DurableSubSystem;
-import dev.amble.ait.core.sounds.travel.TravelSoundRegistry;
 import dev.amble.ait.core.tardis.ServerTardis;
 import dev.amble.ait.core.tardis.Tardis;
+import dev.amble.ait.core.tardis.animation.v2.datapack.TardisAnimationRegistry;
 import dev.amble.ait.core.tardis.handler.travel.TravelHandler;
 import dev.amble.ait.core.tardis.handler.travel.TravelUtil;
 import dev.amble.ait.core.tardis.util.TardisUtil;

@@ -109,7 +109,7 @@ public class DoorHandler extends KeyedTardisComponent implements TardisTickable 
         leftDoorRot.flatMap(rot -> this.tryUpdateRot(rot, this.getDoorState() != DoorState.CLOSED));
         rightDoorRot.flatMap(rot -> this.tryUpdateRot(rot, this.getDoorState() == DoorState.BOTH));
 
-        if (this.doorOpenParticles != null && server.getTicks() % 5 == 0 && tardis.door().isOpen()) {
+        if (this.doorOpenParticles != null && !this.tardis().crash().isNormal() && server.getTicks() % 5 == 0 && tardis.door().isOpen()) {
             Vec3d exteriorPosition = TardisUtil.offsetPos(tardis.travel().position().toPos(), -0.15F);
             exteriorPosition = TardisUtil.offsetDoorPosition(exteriorPosition, tardis.travel().position().getRotation());
 
@@ -385,6 +385,7 @@ public class DoorHandler extends KeyedTardisComponent implements TardisTickable 
      */
     public void setDoorParticles(ParticleEffect particle) {
         this.doorOpenParticles = particle;
+        this.sync();
     }
 
     /**

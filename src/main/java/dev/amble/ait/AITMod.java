@@ -6,6 +6,7 @@ import java.util.Optional;
 import java.util.Random;
 import java.util.UUID;
 
+import dev.amble.ait.core.item.SonicItem;
 import dev.amble.lib.container.RegistryContainer;
 import dev.amble.lib.register.AmbleRegistries;
 import dev.amble.lib.util.ServerLifecycleHooks;
@@ -13,6 +14,7 @@ import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.biome.v1.BiomeModifications;
 import net.fabricmc.fabric.api.biome.v1.BiomeSelectors;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
+import net.fabricmc.fabric.api.event.player.UseBlockCallback;
 import net.fabricmc.fabric.api.gamerule.v1.GameRuleFactory;
 import net.fabricmc.fabric.api.gamerule.v1.GameRuleRegistry;
 import net.fabricmc.fabric.api.loot.v2.LootTableEvents;
@@ -21,6 +23,10 @@ import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricDefaultAttributeRegistry;
 import net.fabricmc.fabric.api.particle.v1.FabricParticleTypes;
 import net.fabricmc.loader.api.FabricLoader;
+import net.minecraft.block.Block;
+import net.minecraft.block.Blocks;
+import net.minecraft.item.Item;
+import net.minecraft.util.ActionResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -254,6 +260,22 @@ public class AITMod implements ModInitializer {
             FlightCommand.register(dispatcher);
             SetDoorParticleCommand.register(dispatcher, registryAccess);
         }));
+
+        UseBlockCallback.EVENT.register((player, world, hand, hitResult) -> {
+            // Player interacted with the block at the position of hitResult
+
+            if (!world.isClient()) {
+                Block hitBlock = world.getBlockState(hitResult.getBlockPos()).getBlock();
+                Item itemInHand = player.getStackInHand(hand).getItem();
+
+                // Enable sonic action when interacting with bell
+                if (!player.isSneaking() && hitBlock.equals(Blocks.BELL) && itemInHand instanceof SonicItem) {
+                    itemInHand.use(world, player, hand);
+                }
+            }
+
+            return ActionResult.PASS;
+        });
 
         ServerPlayNetworking.registerGlobalReceiver(TardisUtil.REGION_LANDING_CODE,
                 (server, player, handler, buf, responseSender) -> {

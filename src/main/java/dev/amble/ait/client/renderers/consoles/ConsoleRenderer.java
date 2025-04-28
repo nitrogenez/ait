@@ -11,6 +11,7 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.util.math.RotationAxis;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.profiler.Profiler;
 
 import dev.amble.ait.client.models.consoles.ConsoleModel;
@@ -193,5 +194,20 @@ public class ConsoleRenderer<T extends ConsoleBlockEntity> implements BlockEntit
             this.variant = variant;
             this.model = variant.model();
         }
+    }
+
+    @Override
+    public boolean rendersOutsideBoundingBox(ConsoleBlockEntity consoleBlockEntity) {
+        return true;
+    }
+
+    @Override
+    public int getRenderDistance() {
+        return 256;
+    }
+
+    @Override
+    public boolean isInRenderDistance(ConsoleBlockEntity consoleBlockEntity, Vec3d vec3d) {
+        return Vec3d.ofCenter(consoleBlockEntity.getPos()).multiply(1.0, 0.0, 1.0).isInRange(vec3d.multiply(1.0, 0.0, 1.0), this.getRenderDistance());
     }
 }

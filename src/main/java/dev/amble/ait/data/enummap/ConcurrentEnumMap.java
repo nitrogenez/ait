@@ -25,6 +25,11 @@ public class ConcurrentEnumMap<K extends Ordered, V> extends EnumMap<K, V> {
     }
 
     @Override
+    public synchronized V get(K k) {
+        return super.get(k);
+    }
+
+    @Override
     public synchronized V get(int index) {
         return super.get(index);
     }

@@ -1,2 +1,3 @@
 - fix: missing text for waypoint error message | by [@Mansarde](https://github.com/Mansarde) ([#1496](https://github.com/amblelabs/ait/pull/1496))
 - api(travel): temporary (de)mat anims for single flights | by [@duzos](https://github.com/duzos) ([#1474](https://github.com/amblelabs/ait/pull/1474))
+- Control Durability | by [@Loqor](https://github.com/Loqor) ([#1467](https://github.com/amblelabs/ait/pull/1467))

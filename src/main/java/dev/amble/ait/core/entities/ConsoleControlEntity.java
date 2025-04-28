@@ -387,6 +387,9 @@ public class ConsoleControlEntity extends LinkableDummyLivingEntity {
             }
         } else {
             this.playSound(AITSounds.KNOCK, 1, 0.25f);
+            Vec3d pos = this.getPos();
+            ((ServerWorld) this.getEntityWorld()).spawnParticles(ParticleTypes.SCRAPE,
+                    pos.getX(), pos.getY(), pos.getZ(), 2, 0.2, 0.4, 0.2, 0.02);
         }
 
         if (this.control.shouldHaveDelay(tardis) && !this.isOnDelay()) {

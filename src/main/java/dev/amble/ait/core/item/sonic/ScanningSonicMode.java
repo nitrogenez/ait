@@ -1,6 +1,6 @@
 package dev.amble.ait.core.item.sonic;
 
-import dev.amble.ait.core.AITBlocks;
+import dev.amble.ait.core.AITTags;
 import dev.amble.lib.api.ICantBreak;
 
 import net.minecraft.block.Block;
@@ -102,18 +102,7 @@ public class ScanningSonicMode extends SonicMode {
 
         String blastRes = String.format("%.2f", block.getBlastResistance());
 
-        Block[] validLocatorBlocks = {
-                AITBlocks.ZEITON_BLOCK,
-                AITBlocks.ZEITON_COBBLE,
-                AITBlocks.BUDDING_ZEITON,
-                AITBlocks.COMPACT_ZEITON,
-                AITBlocks.SMALL_ZEITON_BUD,
-                AITBlocks.MEDIUM_ZEITON_BUD,
-                AITBlocks.LARGE_ZEITON_BUD,
-                AITBlocks.ZEITON_CLUSTER,
-        };
-
-        if (Arrays.asList(validLocatorBlocks).contains(block))
+        if (state.isIn(AITTags.Blocks.SONIC_CAN_LOCATE))
         {
             Tardis tardis = SonicItem.getTardisStatic(world, stack);
             int x = tardis.travel().position().getPos().getX();

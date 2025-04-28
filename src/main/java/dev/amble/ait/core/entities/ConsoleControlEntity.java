@@ -23,6 +23,7 @@ import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
+import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
@@ -237,6 +238,11 @@ public class ConsoleControlEntity extends LinkableDummyLivingEntity {
 
         if (this.control == null && this.consoleBlockPos != null)
             this.discard();
+
+        switch (this.getDurabilityState(this.getDurability())) {
+            case JAMMED, SPARKING -> this.spark();
+            case CATCH_FIRE -> this.setOnFire(true);
+        }
     }
 
     @Override
@@ -364,15 +370,23 @@ public class ConsoleControlEntity extends LinkableDummyLivingEntity {
             return false;
 
         boolean hasMallet = player.getMainHandStack().getItem() instanceof HammerItem;
-        if ((this.getDurability() <= DurabilityStates.OCCASIONALLY_JAM.durability && !hasMallet) &&
-                (this.getDurability() <= DurabilityStates.CATCH_FIRE.durability || random.nextBoolean())) {
-            switch (this.getDurabilityState(this.getDurability())) {
-                case SPARKING -> this.spark();
-                case CATCH_FIRE -> this.setOnFireFor(2);
 
+        if (player.getMainHandStack().getItem() instanceof SonicItem) {
+            if (SonicItem.mode(player.getMainHandStack()).equals(SonicMode.Modes.TARDIS)) {
+                this.playSound(SoundEvents.ITEM_HONEYCOMB_WAX_ON, 1, 1);
+                this.setDurability(MAX_DURABILITY);
+                return true;
             }
-            if (random.nextBoolean()) {
-                return false;
+        }
+
+        if (!hasMallet) {
+            switch (this.getDurabilityState(this.getDurability())) {
+                case OCCASIONALLY_JAM, SPARKING -> {
+                    return !(random.nextBetween(0, 10) == 5);
+                }
+                case JAMMED -> {
+                    return false;
+                }
             }
         }
 
@@ -385,8 +399,8 @@ public class ConsoleControlEntity extends LinkableDummyLivingEntity {
         Control.Result result = this.control.handleRun(tardis, (ServerPlayerEntity) player, (ServerWorld) world, this.consoleBlockPos, leftClick);
 
         if (result == Control.Result.SEQUENCE) {
-            // This is just for testing but its funny as hell.
-            if (random.nextBetween(0, 40) == 20) {
+             //This is just for testing but its funny as hell.
+            if (random.nextBetween(0, 10) == 5) {
                 int subtractCauseICan = random.nextBetween(0, 200);
                 this.subtractDurability(subtractCauseICan / 200f);
             }
@@ -401,8 +415,12 @@ public class ConsoleControlEntity extends LinkableDummyLivingEntity {
     private void spark() {
         if (this.getEntityWorld().isClient()) return;
         Vec3d pos = this.getPos();
-        ((ServerWorld) this.getEntityWorld()).spawnParticles(ParticleTypes.ELECTRIC_SPARK, pos.getX(), pos.getY(), pos.getZ(), 5, 0.2, 0.2, 0.2, 0.01);
-        ((ServerWorld) this.getEntityWorld()).spawnParticles(ParticleTypes.LAVA,  pos.getX(), pos.getY(), pos.getZ(), 3, 0.1, 0.1, 0.1, 0.01);
+        ((ServerWorld) this.getEntityWorld()).spawnParticles(ParticleTypes.SMOKE, pos.getX(), pos.getY(), pos.getZ(), 1, 0, 0.1, 0, 0.01f);
+        if (random.nextBetween(0, 40) == 5 && random.nextBoolean()) {
+            playSound(SoundEvents.BLOCK_CHAIN_BREAK, 0.1f, random.nextBoolean() ? 1f : 2f);
+            ((ServerWorld) this.getEntityWorld()).spawnParticles(ParticleTypes.ELECTRIC_SPARK, pos.getX(), pos.getY(), pos.getZ(), 5, 0.2, 0.2, 0.2, 0.01);
+            ((ServerWorld) this.getEntityWorld()).spawnParticles(ParticleTypes.LAVA, pos.getX(), pos.getY(), pos.getZ(), 3, 0.1, 0.1, 0.1, 0.01);
+        }
     }
 
     /**

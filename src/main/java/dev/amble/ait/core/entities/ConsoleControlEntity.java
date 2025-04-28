@@ -192,11 +192,6 @@ public class ConsoleControlEntity extends LinkableDummyLivingEntity {
             return ActionResult.FAIL;
         }
 
-        if (player.getMainHandStack().getItem() == Items.SHEARS) {
-            this.playSound(SoundEvents.ENTITY_SHEEP_SHEAR, 1, 1);
-            this.dataTracker.set(STICKY, false);
-        }
-
         if (getSticky()) {
             if (player.getMainHandStack().getItem() == Items.SHEARS) {
                 this.playSound(SoundEvents.ENTITY_SHEEP_SHEAR, 1, 1);

@@ -359,7 +359,11 @@ public class ConsoleControlEntity extends LinkableDummyLivingEntity {
 
         if (player.getMainHandStack().getItem() instanceof SonicItem && this.getDurability() < 1.0f) {
             if (SonicItem.mode(player.getMainHandStack()).equals(SonicMode.Modes.TARDIS)) {
+                Vec3d pos = this.getPos();
+                ((ServerWorld) this.getEntityWorld()).spawnParticles(ParticleTypes.WAX_ON,
+                        pos.getX(), pos.getY(), pos.getZ(), 2, 0.2, 0.4, 0.2, 0.02);
                 this.setDurability(MAX_DURABILITY);
+                return true;
             }
         }
 
@@ -371,9 +375,9 @@ public class ConsoleControlEntity extends LinkableDummyLivingEntity {
 
         boolean hasMallet = player.getMainHandStack().getItem() instanceof HammerItem;
 
-        if (player.getMainHandStack().getItem() instanceof SonicItem) {
+        if (player.getMainHandStack().getItem() instanceof SonicItem && this.getDurability() != MAX_DURABILITY) {
             if (SonicItem.mode(player.getMainHandStack()).equals(SonicMode.Modes.TARDIS)) {
-                this.playSound(SoundEvents.ITEM_HONEYCOMB_WAX_ON, 1, 1);
+                this.playSound(SoundEvents.ENTITY_EXPERIENCE_ORB_PICKUP, 1, 1);
                 this.setDurability(MAX_DURABILITY);
                 return true;
             }

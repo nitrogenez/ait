@@ -18,6 +18,7 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RotationAxis;
 import net.minecraft.util.math.RotationPropertyHelper;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.profiler.Profiler;
 
 import dev.amble.ait.AITMod;
@@ -175,7 +176,7 @@ public class ExteriorRenderer<T extends ExteriorBlockEntity> implements BlockEnt
                 1, alpha);
 
         profiler.push("emission");
-        boolean alarms = tardis.alarm().enabled().get();
+        boolean alarms = tardis.alarm().isEnabled();
 
 
         if (alpha > 0.105f && emission != null && !emission.equals(DatapackConsole.EMPTY)) {
@@ -316,5 +317,20 @@ public class ExteriorRenderer<T extends ExteriorBlockEntity> implements BlockEnt
         }
 
         matrices.scale(scale.x, scale.y, scale.z);
+    }
+
+    @Override
+    public boolean rendersOutsideBoundingBox(ExteriorBlockEntity exteriorBlockEntity) {
+        return true;
+    }
+
+    @Override
+    public int getRenderDistance() {
+        return 256;
+    }
+
+    @Override
+    public boolean isInRenderDistance(ExteriorBlockEntity exteriorBlockEntity, Vec3d vec3d) {
+        return Vec3d.ofCenter(exteriorBlockEntity.getPos()).multiply(1.0, 0.0, 1.0).isInRange(vec3d.multiply(1.0, 0.0, 1.0), this.getRenderDistance());
     }
 }

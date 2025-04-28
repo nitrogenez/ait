@@ -12,6 +12,7 @@ import net.minecraft.entity.passive.SheepEntity;
 import net.minecraft.util.DyeColor;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.RotationAxis;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.profiler.Profiler;
 
 import dev.amble.ait.api.tardis.TardisComponent;
@@ -166,5 +167,20 @@ public class DoorRenderer<T extends DoorBlockEntity> implements BlockEntityRende
             this.variant = variant;
             this.model = variant.getDoor().model();
         }
+    }
+
+    @Override
+    public boolean rendersOutsideBoundingBox(DoorBlockEntity doorBlockEntity) {
+        return true;
+    }
+
+    @Override
+    public int getRenderDistance() {
+        return 256;
+    }
+
+    @Override
+    public boolean isInRenderDistance(DoorBlockEntity doorBlockEntity, Vec3d vec3d) {
+        return Vec3d.ofCenter(doorBlockEntity.getPos()).multiply(1.0, 0.0, 1.0).isInRange(vec3d.multiply(1.0, 0.0, 1.0), this.getRenderDistance());
     }
 }

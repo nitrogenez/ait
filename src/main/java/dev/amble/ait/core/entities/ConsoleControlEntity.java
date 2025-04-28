@@ -135,7 +135,7 @@ public class ConsoleControlEntity extends LinkableDummyLivingEntity {
         nbt.putInt("sequenceColor", this.getSequenceIndex());
         nbt.putBoolean("wasSequenced", this.wasSequenced());
         nbt.putFloat("durability", this.getDurability());
-        nbt.putBoolean("sticky", this.getSticky());
+        nbt.putBoolean("sticky", this.isSticky());
     }
 
     @Override
@@ -192,7 +192,7 @@ public class ConsoleControlEntity extends LinkableDummyLivingEntity {
             return ActionResult.FAIL;
         }
 
-        if (getSticky()) {
+        if (isSticky()) {
             if (player.getMainHandStack().getItem() == Items.SHEARS) {
                 this.playSound(SoundEvents.ENTITY_SHEEP_SHEAR, 1, 1);
                 this.dataTracker.set(STICKY, false);
@@ -354,7 +354,7 @@ public class ConsoleControlEntity extends LinkableDummyLivingEntity {
     public float getDurability() {
         return this.dataTracker.get(DURABILITY);
     }
-    public boolean getSticky() {
+    public boolean isSticky() {
         return this.dataTracker.get(STICKY);
     }
     public DurabilityStates getDurabilityState(float durability) {

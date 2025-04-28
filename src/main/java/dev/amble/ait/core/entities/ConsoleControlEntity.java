@@ -215,7 +215,7 @@ public class ConsoleControlEntity extends LinkableDummyLivingEntity {
 
         // spawn particle above the control
         world.spawnParticles(AITMod.CORAL_PARTICLE, this.getX(), this.getY() + 0.25, this.getZ(), 1, 0.05, 0.05, 0.05, 0.025);
-        world.playSound(null, this.getBlockPos(), AITSounds.KNOCK, SoundCategory.BLOCKS, 0.75F, AITMod.RANDOM.nextFloat(0.5F, 1.5F));
+        world.playSound(null, this.getBlockPos(), SoundEvents.ITEM_SHIELD_BREAK, SoundCategory.BLOCKS, 0.75F, AITMod.RANDOM.nextFloat(0.5F, 1.5F));
     }
 
     @Override
@@ -385,6 +385,8 @@ public class ConsoleControlEntity extends LinkableDummyLivingEntity {
                     return false;
                 }
             }
+        } else {
+            this.playSound(AITSounds.KNOCK, 1, 0.25f);
         }
 
         if (this.control.shouldHaveDelay(tardis) && !this.isOnDelay()) {
@@ -414,7 +416,7 @@ public class ConsoleControlEntity extends LinkableDummyLivingEntity {
         Vec3d pos = this.getPos();
         ((ServerWorld) this.getEntityWorld()).spawnParticles(ParticleTypes.SMOKE, pos.getX(), pos.getY(), pos.getZ(), 1, 0, 0.1, 0, 0.01f);
         if (random.nextBetween(0, 40) == 5 && random.nextBoolean()) {
-            playSound(SoundEvents.BLOCK_CHAIN_BREAK, 0.1f, random.nextBoolean() ? 1f : 2f);
+            this.playSound(SoundEvents.BLOCK_CHAIN_BREAK, 0.1f, random.nextBoolean() ? 1f : 2f);
             ((ServerWorld) this.getEntityWorld()).spawnParticles(ParticleTypes.ELECTRIC_SPARK, pos.getX(), pos.getY(), pos.getZ(), 5, 0.2, 0.2, 0.2, 0.01);
             ((ServerWorld) this.getEntityWorld()).spawnParticles(ParticleTypes.LAVA, pos.getX(), pos.getY(), pos.getZ(), 3, 0.1, 0.1, 0.1, 0.01);
         }

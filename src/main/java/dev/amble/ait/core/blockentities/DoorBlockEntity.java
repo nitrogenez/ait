@@ -100,7 +100,7 @@ public class DoorBlockEntity extends InteriorLinkableBlockEntity {
     }
 
     public void useOn(World world, boolean sneaking, PlayerEntity player) {
-        if (player == null || this.tardis().isEmpty())
+        if (player == null || this.tardis() == null || this.tardis().isEmpty())
             return;
 
         Tardis tardis = this.tardis().get();

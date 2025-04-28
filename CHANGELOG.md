@@ -1,0 +1,1 @@
+- fix: more stability | by [@DrTheodor](https://github.com/DrTheodor) ([#1505](https://github.com/amblelabs/ait/pull/1505))

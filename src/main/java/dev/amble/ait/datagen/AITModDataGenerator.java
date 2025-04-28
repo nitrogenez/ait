@@ -1449,8 +1449,8 @@ public class AITModDataGenerator implements DataGeneratorEntrypoint {
         provider.addTranslation("animation." + AITMod.MOD_ID + ".self_destruct", "Self Destruct");
         provider.addTranslation("animation." + AITMod.MOD_ID + ".zwip_demat", "Zwip");
         provider.addTranslation("animation." + AITMod.MOD_ID + ".zwip_mat", "Zwip");
-        provider.addTranslation("animation." + AITMod.MOD_ID + ".eight_demat", "Eight");
-        provider.addTranslation("animation." + AITMod.MOD_ID + ".eight_mat", "Eight");
+        provider.addTranslation("animation." + AITMod.MOD_ID + ".eighth_demat", "Eighth");
+        provider.addTranslation("animation." + AITMod.MOD_ID + ".eighth_mat", "Eighth");
         provider.addTranslation("animation." + AITMod.MOD_ID + ".proton_mat", "Proton");
         provider.addTranslation("animation." + AITMod.MOD_ID + ".proton_demat", "Proton");
 

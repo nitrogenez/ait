@@ -1,6 +1,8 @@
 package dev.amble.ait.core.item.sonic;
 
 import dev.amble.ait.core.AITTags;
+import dev.amble.ait.core.util.MonitorUtil;
+import dev.amble.ait.core.util.WorldUtil;
 import dev.amble.lib.api.ICantBreak;
 
 import net.minecraft.block.Block;
@@ -105,10 +107,14 @@ public class ScanningSonicMode extends SonicMode {
         if (state.isIn(AITTags.Blocks.SONIC_CAN_LOCATE))
         {
             Tardis tardis = SonicItem.getTardisStatic(world, stack);
-            int x = tardis.travel().position().getPos().getX();
-            int y = tardis.travel().position().getPos().getY();
-            int z = tardis.travel().position().getPos().getZ();
-            Text message = Text.translatable("item.sonic.scanning.locator_message").append(String.format("%s %s %s", x, y, z));
+            BlockPos tPos = tardis.travel().position().getPos();
+            String dimensionText = MonitorUtil.truncateDimensionName(WorldUtil.worldText(world.getRegistryKey()).getString(), 20);
+            String locationText = String.format("%s\nCoordinates: %s %s %s", dimensionText, tPos.getX(), tPos.getY(), tPos.getZ());
+            Text message = Text.translatable("item.sonic.scanning.locator_message").append(locationText);
+
+            // Output looks like:
+            // TARDIS Location: {DIMENSION}
+            // Coordinates: {X} {Y} {Z}
             user.sendMessage(message);
         }
 

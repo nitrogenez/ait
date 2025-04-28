@@ -234,7 +234,7 @@ public class InteriorChangingHandler extends KeyedTardisComponent implements Tar
                     ParticleEffect particle = ParticleTypes.CLOUD;
                     tardis.door().setDoorParticles(particle);
                     Scheduler.get().runTaskLater(() -> {
-                        tardis.door().tryReplaceDoorParticle(particle, null);
+                        tardis.door().setDoorParticles(null);
                     }, TimeUnit.SECONDS, 3);
                 }).execute();
     }

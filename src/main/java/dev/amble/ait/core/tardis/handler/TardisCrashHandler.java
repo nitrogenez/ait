@@ -81,11 +81,7 @@ public class TardisCrashHandler extends KeyedTardisComponent implements TardisTi
         ServerWorld exteriorWorld = exteriorPosition.getWorld();
 
         DoorHandler door = tardis.door();
-        if (state != State.NORMAL) {
-            door.setDoorParticles(ParticleTypes.CAMPFIRE_COSY_SMOKE);
-        } else {
-            door.tryReplaceDoorParticle(ParticleTypes.CAMPFIRE_COSY_SMOKE, null);
-        }
+        door.setDoorParticles(state != State.NORMAL ? ParticleTypes.CAMPFIRE_COSY_SMOKE : null);
 
         if (state != State.TOXIC)
             return;

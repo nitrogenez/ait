@@ -109,8 +109,9 @@ public class ScanningSonicMode extends SonicMode {
             Tardis tardis = SonicItem.getTardisStatic(world, stack);
             BlockPos tPos = tardis.travel().position().getPos();
             String dimensionText = MonitorUtil.truncateDimensionName(WorldUtil.worldText(world.getRegistryKey()).getString(), 20);
-            String locationText = String.format("%s\nCoordinates: %s %s %s", dimensionText, tPos.getX(), tPos.getY(), tPos.getZ());
-            Text message = Text.translatable("item.sonic.scanning.locator_message").append(locationText);
+            String coordinatesText = Text.translatable("item.sonic.scanning.locator_message.coordinates").getString();
+            String locationText = String.format("%s\n%s: %s %s %s", dimensionText, coordinatesText, tPos.getX(), tPos.getY(), tPos.getZ());
+            Text message = Text.translatable("item.sonic.scanning.locator_message.title").append(locationText);
 
             // Output looks like:
             // TARDIS Location: {DIMENSION}

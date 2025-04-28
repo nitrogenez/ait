@@ -1013,7 +1013,8 @@ public class AITModDataGenerator implements DataGeneratorEntrypoint {
         provider.addTranslation("item.sonic.scanning.stone_tool", "Stone Tool");
         provider.addTranslation("item.sonic.scanning.no_tool", "Hand (No Tool)");
         provider.addTranslation("item.sonic.scanning.cant_break", "Can't Break Block!");
-        provider.addTranslation("item.sonic.scanning.locator_message", "TARDIS location: ");
+        provider.addTranslation("item.sonic.scanning.locator_message.title", "TARDIS location: ");
+        provider.addTranslation("item.sonic.scanning.locator_message.coordinates", "Coordinates");
 
 
         // Loyalty Messages In Bed

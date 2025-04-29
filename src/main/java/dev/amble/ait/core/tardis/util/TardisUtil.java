@@ -332,21 +332,6 @@ public class TardisUtil {
         return world == null ? List.of() : world.getPlayers();
     }
 
-    public static List<LivingEntity> getLivingInInterior(ServerTardis tardis, Predicate<LivingEntity> predicate) {
-        ServerWorld world = tardis.worldRef().getOrDefault(() -> null);
-
-        if (world == null)
-            return List.of();
-
-        for (Entity entity : world.getEntitiesByType(TypeFilter.instanceOf(LivingEntity.class), predicate)) {
-            if (entity instanceof LivingEntity living && predicate.test(living)) {
-                return List.of(living);
-            }
-        }
-
-        return List.of();
-    }
-
     public static <T extends Entity> List<T> getEntitiesInBox(Class<T> clazz, World world, Box box,
             Predicate<T> predicate) {
         return fastFlatLookup(clazz, world, box, predicate);

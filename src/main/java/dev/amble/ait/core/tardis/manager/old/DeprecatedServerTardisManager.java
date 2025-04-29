@@ -8,6 +8,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import com.mojang.datafixers.util.Either;
+import dev.amble.ait.core.world.TardisServerWorld;
 import dev.amble.lib.data.CachedDirectedGlobalPos;
 import dev.drtheo.multidim.MultiDim;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
@@ -176,7 +177,6 @@ public abstract class DeprecatedServerTardisManager extends TardisManager<Server
     public void remove(MinecraftServer server, ServerTardis tardis) {
         tardis.setRemoved(true);
 
-        ServerWorld tardisWorld = tardis.getInteriorWorld();
         CachedDirectedGlobalPos exteriorPos = tardis.travel().position();
 
         if (exteriorPos != null) {
@@ -189,7 +189,7 @@ public abstract class DeprecatedServerTardisManager extends TardisManager<Server
             world.removeBlockEntity(pos);
         }
 
-        MultiDim.get(server).remove(tardisWorld.getRegistryKey());
+        MultiDim.get(server).remove(TardisServerWorld.keyForTardis(tardis));
 
         this.sendTardisRemoval(server, tardis);
 

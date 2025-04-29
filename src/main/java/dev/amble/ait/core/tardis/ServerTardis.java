@@ -9,7 +9,7 @@ import java.util.function.Consumer;
 import com.google.gson.InstanceCreator;
 
 import dev.amble.ait.core.tardis.handler.travel.TravelHandler;
-import dev.drtheo.multidim.MultiDim;
+import dev.amble.ait.core.util.Lazy;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.world.ServerWorld;
 
@@ -31,7 +31,7 @@ public class ServerTardis extends Tardis {
     private final Set<TardisComponent> delta = new HashSet<>(32);
 
     @Exclude
-    private ServerWorld world;
+    private final Lazy<ServerWorld> world = new Lazy<>(this::getOrCreateWorld);
 
     public ServerTardis(UUID uuid, TardisDesktopSchema schema, ExteriorVariantSchema variantType) {
         super(uuid, new TardisDesktop(schema), new TardisExterior(variantType));
@@ -50,6 +50,7 @@ public class ServerTardis extends Tardis {
     }
 
     public void tick(MinecraftServer server) {
+        this.world.get(); // force load the world
         this.getHandlers().tick(server);
     }
 
@@ -82,19 +83,22 @@ public class ServerTardis extends Tardis {
         return this.delta.size();
     }
 
-    public ServerWorld getInteriorWorld() {
-        if (this.world == null)
-            this.world = TardisServerWorld.get(this);
+    public Lazy<ServerWorld> worldRef() {
+        return world;
+    }
+
+    private ServerWorld getOrCreateWorld() {
+        ServerWorld world = TardisServerWorld.get(this);
 
         // If its still null, It's likely to be pre-1.2.0, meaning we should create a new one.
-        if (this.world == null)
-            this.world = TardisServerWorld.create(this);
+        if (world == null)
+            world = TardisServerWorld.create(this);
 
-        return this.world;
+        return world;
     }
 
     public boolean shouldTick() {
-        if (this.world != null && !this.world.getPlayers().isEmpty())
+        if (this.world.isCached() && !this.world.get().getPlayers().isEmpty())
             return true;
 
         TravelHandler travel = this.travel();

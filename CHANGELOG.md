@@ -1,1 +1,2 @@
 - fix: more stability | by [@DrTheodor](https://github.com/DrTheodor) ([#1505](https://github.com/amblelabs/ait/pull/1505))
+- fix: capsule interior door BOTI portal clipping into the blocks behind it | by [@Addi3](https://github.com/Addi3) ([#1510](https://github.com/amblelabs/ait/pull/1510))

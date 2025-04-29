@@ -36,8 +36,6 @@ import dev.amble.ait.data.landing.LandingPadRegion;
 import dev.amble.ait.data.landing.LandingPadSpot;
 import dev.amble.ait.data.schema.sonic.SonicSchema;
 
-import java.util.Arrays;
-
 public class ScanningSonicMode extends SonicMode {
     private static final Text RIFT_FOUND = Text.translatable("message.ait.sonic.riftfound").formatted(Formatting.AQUA)
             .formatted(Formatting.BOLD);
@@ -109,14 +107,14 @@ public class ScanningSonicMode extends SonicMode {
             Tardis tardis = SonicItem.getTardisStatic(world, stack);
             BlockPos tPos = tardis.travel().position().getPos();
             String dimensionText = MonitorUtil.truncateDimensionName(WorldUtil.worldText(world.getRegistryKey()).getString(), 20);
-            String coordinatesText = Text.translatable("item.sonic.scanning.locator_message.coordinates").getString();
-            String locationText = String.format("%s\n%s: %s %s %s", dimensionText, coordinatesText, tPos.getX(), tPos.getY(), tPos.getZ());
-            Text message = Text.translatable("item.sonic.scanning.locator_message.title").append(locationText);
+
+            Text coordinatesMessage = Text.translatable("item.sonic.scanning.locator_message.coordinates", tPos.getX(), tPos.getY(), tPos.getZ());
+            Text fullMessage = Text.translatable("item.sonic.scanning.locator_message.title", dimensionText).append("\n").append(coordinatesMessage);
 
             // Output looks like:
             // TARDIS Location: {DIMENSION}
             // Coordinates: {X} {Y} {Z}
-            user.sendMessage(message);
+            user.sendMessage(fullMessage);
         }
 
         String toolRequirement = "item.sonic.scanning.any_tool";

@@ -43,8 +43,7 @@ public class BellBlockMixin {
         // sonic summon used on bell (locator feature) -> play cloister sound
         if (entity instanceof PlayerEntity
                 && itemInHand.getItem() instanceof SonicItem
-                && SonicItem.mode(itemInHand) == SonicMode.Modes.SCANNING)
-        {
+                && SonicItem.mode(itemInHand) == SonicMode.Modes.SCANNING) {
             world.playSound(null, pos, AITSounds.CLOISTER, SoundCategory.BLOCKS, 2.0F, 1.0F);
             cir.cancel();
         }

@@ -8,6 +8,8 @@ import java.util.function.Consumer;
 
 import com.google.gson.InstanceCreator;
 
+import dev.amble.ait.core.tardis.handler.travel.TravelHandler;
+import dev.drtheo.multidim.MultiDim;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.world.ServerWorld;
 
@@ -89,6 +91,18 @@ public class ServerTardis extends Tardis {
             this.world = TardisServerWorld.create(this);
 
         return this.world;
+    }
+
+    public boolean shouldTick() {
+        if (this.world != null && !this.world.getPlayers().isEmpty())
+            return true;
+
+        TravelHandler travel = this.travel();
+
+        if (travel == null)
+            return false;
+
+        return travel.position().getWorld().shouldTickEntity(travel.position().getPos());
     }
 
     public static Object creator() {

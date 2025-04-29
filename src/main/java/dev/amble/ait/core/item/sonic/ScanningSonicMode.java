@@ -102,8 +102,7 @@ public class ScanningSonicMode extends SonicMode {
 
         String blastRes = String.format("%.2f", block.getBlastResistance());
 
-        if (state.isIn(AITTags.Blocks.SONIC_CAN_LOCATE))
-        {
+        if (state.isIn(AITTags.Blocks.SONIC_CAN_LOCATE)) {
             Tardis tardis = SonicItem.getTardisStatic(world, stack);
             BlockPos tPos = tardis.travel().position().getPos();
             String dimensionText = MonitorUtil.truncateDimensionName(WorldUtil.worldText(world.getRegistryKey()).getString(), 20);

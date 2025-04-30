@@ -8,3 +8,4 @@
 - Electric Discharge now is translatable | by [@Saturnorsomthing](https://github.com/Saturnorsomthing), [@duzos](https://github.com/duzos) ([#1513](https://github.com/amblelabs/ait/pull/1513))
 - fix: empty mug is drinkable | by [@MaketendoDev](https://github.com/MaketendoDev), [@duzos](https://github.com/duzos) ([#1282](https://github.com/amblelabs/ait/pull/1282))
 - feat: made milk mug clear status effects | by [@MaketendoDev](https://github.com/MaketendoDev), [@duzos](https://github.com/duzos) ([#1282](https://github.com/amblelabs/ait/pull/1282))
+- feat: updated disc textures | by [@Saturnorsomthing](https://github.com/Saturnorsomthing) ([#1517](https://github.com/amblelabs/ait/pull/1517))

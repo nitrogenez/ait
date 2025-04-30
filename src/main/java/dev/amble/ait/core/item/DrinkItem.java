@@ -67,18 +67,7 @@ public class DrinkItem extends Item {
             Criteria.CONSUME_ITEM.trigger((ServerPlayerEntity)playerEntity, stack);
         }
         if (!world.isClient) {
-
-            if (DrinkUtil.getDrink(stack) == DrinkRegistry.getInstance().get(AITMod.id("milk"))) user.clearStatusEffects();
-
-            List<StatusEffectInstance> list = DrinkUtil.getDrinkEffects(stack);
-            for (StatusEffectInstance statusEffectInstance : list) {
-                if (statusEffectInstance.getEffectType().isInstant()) {
-                    statusEffectInstance.getEffectType().applyInstantEffect(playerEntity, playerEntity, user, statusEffectInstance.getAmplifier(), 1.0);
-                    continue;
-                }
-                user.addStatusEffect(new StatusEffectInstance(statusEffectInstance));
-            }
-
+            DrinkUtil.applyEffects(stack, user);
         }
         if (playerEntity != null) {
             playerEntity.incrementStat(Stats.USED.getOrCreateStat(this));

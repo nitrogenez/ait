@@ -932,7 +932,7 @@ public class AITModDataGenerator implements DataGeneratorEntrypoint {
         provider.addTranslation("sonic.ait.song", "Song");
         provider.addTranslation("sonic.ait.singularity", "Singularity");
         provider.addTranslation("sonic.ait.candy_cane", "Candy Cane");
-        provider.addTranslation("sonic.ait.type_100", "Type 100");
+        provider.addTranslation("sonic.ait.type_100", "Frontier");
 
         // Consoles
         provider.addTranslation("console.ait.alnico", "Alnico");

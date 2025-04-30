@@ -23,6 +23,7 @@
     "rwf.DismountEntityMixin",
     "rwf.LivingEntityAccessor",
     "server.BedInTardisMixin",
+    "server.BellBlockMixin",
     "server.EnderDragonFightAccessor",
     "server.ItemEntityMixin",
     "server.MinecraftServerMixin",

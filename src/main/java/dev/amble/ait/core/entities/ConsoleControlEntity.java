@@ -3,6 +3,8 @@ package dev.amble.ait.core.entities;
 import java.util.List;
 import java.util.Optional;
 
+import dev.amble.ait.core.AITBlocks;
+import dev.amble.ait.core.entities.base.LinkableDummyEntity;
 import dev.drtheo.scheduler.api.Scheduler;
 import dev.drtheo.scheduler.api.TimeUnit;
 import org.jetbrains.annotations.Nullable;
@@ -38,7 +40,6 @@ import dev.amble.ait.core.AITEntityTypes;
 import dev.amble.ait.core.AITItems;
 import dev.amble.ait.core.AITSounds;
 import dev.amble.ait.core.blockentities.ConsoleBlockEntity;
-import dev.amble.ait.core.entities.base.LinkableDummyLivingEntity;
 import dev.amble.ait.core.item.HammerItem;
 import dev.amble.ait.core.item.SonicItem;
 import dev.amble.ait.core.item.control.ControlBlockItem;
@@ -48,7 +49,7 @@ import dev.amble.ait.core.tardis.control.Control;
 import dev.amble.ait.core.tardis.control.ControlTypes;
 import dev.amble.ait.data.schema.console.ConsoleTypeSchema;
 
-public class ConsoleControlEntity extends LinkableDummyLivingEntity {
+public class ConsoleControlEntity extends LinkableDummyEntity {
     private static final TrackedData<Float> WIDTH = DataTracker.registerData(ConsoleControlEntity.class,
             TrackedDataHandlerRegistry.FLOAT);
     private static final TrackedData<Float> HEIGHT = DataTracker.registerData(ConsoleControlEntity.class,
@@ -74,8 +75,8 @@ public class ConsoleControlEntity extends LinkableDummyLivingEntity {
     private Control control;
     private static final float MAX_DURABILITY = 1.0f;
 
-    public ConsoleControlEntity(EntityType<? extends LivingEntity> entityType, World world) {
-        super(entityType, world, false);
+    public ConsoleControlEntity(EntityType<? extends Entity> entityType, World world) {
+        super(entityType, world);
     }
 
     private ConsoleControlEntity(World world, Tardis tardis) {
@@ -85,11 +86,6 @@ public class ConsoleControlEntity extends LinkableDummyLivingEntity {
 
     public static ConsoleControlEntity create(World world, Tardis tardis) {
         return new ConsoleControlEntity(world, tardis);
-    }
-
-    @Override
-    public void remove(RemovalReason reason) {
-        this.setRemoved(reason);
     }
 
     @Override
@@ -185,8 +181,12 @@ public class ConsoleControlEntity extends LinkableDummyLivingEntity {
             return ActionResult.SUCCESS;
         }
 
-
-        handStack.useOnEntity(player, this, hand);
+        if (handStack.isOf(AITBlocks.REDSTONE_CONTROL_BLOCK.asItem())) {
+            NbtCompound nbt = handStack.getOrCreateNbt();
+            nbt.putString(ControlBlockItem.CONTROL_ID_KEY, this.getControl().id().toString());
+            this.getConsole().ifPresent(be -> nbt.putString(ControlBlockItem.CONSOLE_TYPE_ID_KEY, be.getTypeSchema().id().toString()));
+            return ActionResult.SUCCESS;
+        }
 
         if (handStack.getItem() instanceof ControlBlockItem) {
             return ActionResult.FAIL;

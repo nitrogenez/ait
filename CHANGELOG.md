@@ -5,3 +5,4 @@
 - perf: control entities are no longer living entities | by [@DrTheodor](https://github.com/DrTheodor), [@duzos](https://github.com/duzos) ([#1507](https://github.com/amblelabs/ait/pull/1507))
 - perf: improved ticking large amounts of tardises | by [@DrTheodor](https://github.com/DrTheodor) ([#1509](https://github.com/amblelabs/ait/pull/1509))
 - add: TARDIS locator functionality to sonic scanning mode | by [@Mansarde](https://github.com/Mansarde) ([#1497](https://github.com/amblelabs/ait/pull/1497))
+- Electric Discharge now is translatable | by [@Saturnorsomthing](https://github.com/Saturnorsomthing), [@duzos](https://github.com/duzos) ([#1513](https://github.com/amblelabs/ait/pull/1513))

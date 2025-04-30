@@ -2,3 +2,4 @@
 - fix: capsule interior door BOTI portal clipping into the blocks behind it | by [@Addi3](https://github.com/Addi3) ([#1510](https://github.com/amblelabs/ait/pull/1510))
 - fix: fix sonic modes makes double calls | by [@Mansarde](https://github.com/Mansarde) ([#1516](https://github.com/amblelabs/ait/pull/1516))
 - Sticky keys | by [@MaketendoDev](https://github.com/MaketendoDev), [@Loqor](https://github.com/Loqor) ([#1503](https://github.com/amblelabs/ait/pull/1503))
+- perf: control entities are no longer living entities | by [@DrTheodor](https://github.com/DrTheodor), [@duzos](https://github.com/duzos) ([#1507](https://github.com/amblelabs/ait/pull/1507))

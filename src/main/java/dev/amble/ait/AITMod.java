@@ -330,9 +330,6 @@ public class AITMod implements ModInitializer {
     }
 
     public void entityAttributeRegister() {
-        FabricDefaultAttributeRegistry.register(AITEntityTypes.CONTROL_ENTITY_TYPE,
-                ConsoleControlEntity.createDummyAttributes());
-
         FabricDefaultAttributeRegistry.register(AITEntityTypes.RIFT_ENTITY,
                 RiftEntity.createMobAttributes());
 

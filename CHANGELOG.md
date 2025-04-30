@@ -10,3 +10,4 @@
 - feat: made milk mug clear status effects | by [@MaketendoDev](https://github.com/MaketendoDev), [@duzos](https://github.com/duzos) ([#1282](https://github.com/amblelabs/ait/pull/1282))
 - feat: updated disc textures | by [@Saturnorsomthing](https://github.com/Saturnorsomthing) ([#1517](https://github.com/amblelabs/ait/pull/1517))
 - chore(sonic): Type 100 -> Frontier | by [@duzos](https://github.com/duzos) ([#1518](https://github.com/amblelabs/ait/pull/1518))
+- Updated proton flight sound | by [@Saturnorsomthing](https://github.com/Saturnorsomthing) ([#1521](https://github.com/amblelabs/ait/pull/1521))

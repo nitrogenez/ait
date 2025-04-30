@@ -147,7 +147,6 @@ public class DoorHandler extends KeyedTardisComponent implements TardisTickable 
     private void succ() {
         // Get all entities in the Tardis interior
         TardisUtil.getLivingEntitiesInInterior(tardis.asServer()).stream()
-                .filter(entity -> !(entity instanceof ConsoleControlEntity)) // Exclude control entities
                 .filter(entity -> !entity.isSpectator()) // Exclude spectators
                 .forEach(entity -> {
                     DirectedBlockPos directed = tardis.getDesktop().getDoorPos();

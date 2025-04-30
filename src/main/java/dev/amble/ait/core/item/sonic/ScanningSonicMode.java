@@ -13,7 +13,6 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
-import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.hit.EntityHitResult;
@@ -51,13 +50,6 @@ public class ScanningSonicMode extends SonicMode {
     @Override
     public int maxTime() {
         return 5 * 60 * 20;
-    }
-
-    @Override
-    public boolean startUsing(ItemStack stack, World world, PlayerEntity user, Hand hand) {
-        if (world.isClient()) return false;
-
-        return this.process(stack, world, user);
     }
 
     @Override

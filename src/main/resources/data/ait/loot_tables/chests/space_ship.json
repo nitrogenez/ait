@@ -101,11 +101,6 @@
         },
         {
           "type": "minecraft:item",
-          "name": "ait:mad_man_music_disc",
-          "weight": 1
-        },
-        {
-          "type": "minecraft:item",
           "name": "ait:venus_music_disc",
           "weight": 1
         },

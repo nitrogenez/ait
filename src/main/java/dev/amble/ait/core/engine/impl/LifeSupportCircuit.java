@@ -62,7 +62,6 @@ public class LifeSupportCircuit extends DurableSubSystem implements StructureHol
         List<LivingEntity> entities = TardisUtil.getLivingEntitiesInInterior(tardis);
 
         for (LivingEntity entity : entities) {
-            if (entity instanceof ConsoleControlEntity) continue;
             entity.addStatusEffect(new StatusEffectInstance(StatusEffects.REGENERATION, 20, 1, true, false));
         }
     }

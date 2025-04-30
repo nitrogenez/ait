@@ -10,6 +10,7 @@ import dev.drtheo.scheduler.api.TimeUnit;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3f;
 
+import net.minecraft.block.Blocks;
 import net.minecraft.entity.*;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.data.DataTracker;
@@ -21,6 +22,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtHelper;
+import net.minecraft.particle.BlockStateParticleEffect;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
@@ -66,6 +68,8 @@ public class ConsoleControlEntity extends LinkableDummyEntity {
             TrackedDataHandlerRegistry.BOOLEAN);
     private static final TrackedData<Float> DURABILITY = DataTracker.registerData(ConsoleControlEntity.class,
             TrackedDataHandlerRegistry.FLOAT);
+    private static final TrackedData<Boolean> STICKY = DataTracker.registerData(ConsoleControlEntity.class,
+            TrackedDataHandlerRegistry.BOOLEAN);
 
     private BlockPos consoleBlockPos;
     private Control control;
@@ -108,6 +112,7 @@ public class ConsoleControlEntity extends LinkableDummyEntity {
         this.dataTracker.startTracking(WAS_SEQUENCED, false);
         this.dataTracker.startTracking(ON_DELAY, false);
         this.dataTracker.startTracking(DURABILITY, MAX_DURABILITY);
+        this.dataTracker.startTracking(STICKY, false);
     }
 
     @Override
@@ -126,6 +131,7 @@ public class ConsoleControlEntity extends LinkableDummyEntity {
         nbt.putInt("sequenceColor", this.getSequenceIndex());
         nbt.putBoolean("wasSequenced", this.wasSequenced());
         nbt.putFloat("durability", this.getDurability());
+        nbt.putBoolean("sticky", this.isSticky());
     }
 
     @Override
@@ -157,6 +163,8 @@ public class ConsoleControlEntity extends LinkableDummyEntity {
 
         if (nbt.contains("durability"))
             this.setDurability(nbt.getFloat("durability"));
+        if (nbt.contains("sticky"))
+            this.setSticky(nbt.getBoolean("sticky"));
     }
 
     @Override
@@ -172,7 +180,7 @@ public class ConsoleControlEntity extends LinkableDummyEntity {
             controlEditorHandler(player);
             return ActionResult.SUCCESS;
         }
-        
+
         if (handStack.isOf(AITBlocks.REDSTONE_CONTROL_BLOCK.asItem())) {
             NbtCompound nbt = handStack.getOrCreateNbt();
             nbt.putString(ControlBlockItem.CONTROL_ID_KEY, this.getControl().id().toString());
@@ -180,12 +188,37 @@ public class ConsoleControlEntity extends LinkableDummyEntity {
             return ActionResult.SUCCESS;
         }
 
-        if (handStack.getItem() instanceof ControlBlockItem)
+        if (handStack.getItem() instanceof ControlBlockItem) {
             return ActionResult.FAIL;
+        }
+
+        if (isSticky()) {
+            if (player.getMainHandStack().getItem() == Items.SHEARS) {
+                this.playSound(SoundEvents.ENTITY_SHEEP_SHEAR, 1, 1);
+                this.dataTracker.set(STICKY, false);
+                return ActionResult.FAIL;
+            }
+
+            this.playSound(SoundEvents.BLOCK_SLIME_BLOCK_BREAK, 0.4f, 1);
+            player.getWorld().addParticle(
+                    new BlockStateParticleEffect(ParticleTypes.BLOCK, Blocks.SLIME_BLOCK.getDefaultState()),
+                    this.getX(), this.getY(), this.getZ(),
+                    0.2, 0.5, -0.1
+            );
+
+            return ActionResult.FAIL;
+        } else {
+            if (player.getMainHandStack().getItem() == Items.SLIME_BALL) {
+                this.playSound(SoundEvents.BLOCK_SLIME_BLOCK_BREAK, 1, 1);
+                this.dataTracker.set(STICKY, true);
+                return ActionResult.FAIL;
+            }
+        }
 
         if (hand == Hand.MAIN_HAND && !this.run(player, player.getWorld(), false)) {
             this.playFailFx();
         }
+
 
         return ActionResult.SUCCESS;
     }
@@ -321,13 +354,18 @@ public class ConsoleControlEntity extends LinkableDummyEntity {
     public float getDurability() {
         return this.dataTracker.get(DURABILITY);
     }
+    public boolean isSticky() {
+        return this.dataTracker.get(STICKY);
+    }
     public DurabilityStates getDurabilityState(float durability) {
         return DurabilityStates.get(durability);
     }
     public void setDurability(float durability) {
         this.dataTracker.set(DURABILITY, durability);
     }
-
+    public void setSticky(boolean sticky) {
+        this.dataTracker.set(STICKY, sticky);
+    }
     public void addDurability(float durability) {
         this.setDurability(Math.min(durability, MAX_DURABILITY));
     }
@@ -411,6 +449,7 @@ public class ConsoleControlEntity extends LinkableDummyEntity {
 
         this.getConsole().ifPresent(console -> this.getWorld().playSound(null, this.getBlockPos(), this.control.getSound(console.getTypeSchema(), result), SoundCategory.BLOCKS, 0.7f,
                 1f));
+
 
         return result.isSuccess();
     }

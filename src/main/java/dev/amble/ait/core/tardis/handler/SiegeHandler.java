@@ -143,9 +143,7 @@ public class SiegeHandler extends KeyedTardisComponent implements TardisTickable
             this.siegeTime = 0;
         }
 
-        for (BlockPos console : this.tardis.getDesktop().getConsolePos()) {
-            TardisDesktop.playSoundAtConsole(tardis.asServer().getInteriorWorld(), console, sound, SoundCategory.BLOCKS, 3f, 1f);
-        }
+        tardis.getDesktop().playSoundAtEveryConsole(sound, SoundCategory.BLOCKS, 3f, 1f);
 
         this.tardis.removeFuel(0.01 * FuelHandler.TARDIS_MAX_FUEL * this.tardis.travel().instability());
         this.active.set(siege);

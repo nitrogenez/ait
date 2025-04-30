@@ -4,3 +4,4 @@
 - Sticky keys | by [@MaketendoDev](https://github.com/MaketendoDev), [@Loqor](https://github.com/Loqor) ([#1503](https://github.com/amblelabs/ait/pull/1503))
 - perf: control entities are no longer living entities | by [@DrTheodor](https://github.com/DrTheodor), [@duzos](https://github.com/duzos) ([#1507](https://github.com/amblelabs/ait/pull/1507))
 - perf: improved ticking large amounts of tardises | by [@DrTheodor](https://github.com/DrTheodor) ([#1509](https://github.com/amblelabs/ait/pull/1509))
+- add: TARDIS locator functionality to sonic scanning mode | by [@Mansarde](https://github.com/Mansarde) ([#1497](https://github.com/amblelabs/ait/pull/1497))

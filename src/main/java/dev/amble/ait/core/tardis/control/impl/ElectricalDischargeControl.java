@@ -38,7 +38,7 @@ public class ElectricalDischargeControl extends Control {
         super.runServer(tardis, player, world, console, leftClick);
 
         if (tardis.fuel().getCurrentFuel() < ARTRON_COST) {
-            player.sendMessage(Text.translatable("tardis.message.control.electric.fail").formatted(Formatting.RED));
+            player.sendMessage(Text.translatable("tardis.message.control.electric.fail").formatted(Formatting.RED), true);
             return Result.FAILURE;
         }
 

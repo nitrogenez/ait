@@ -40,7 +40,6 @@ import dev.amble.ait.core.AITItems;
 import dev.amble.ait.core.AITSounds;
 import dev.amble.ait.core.blockentities.ConsoleBlockEntity;
 import dev.amble.ait.core.entities.base.LinkableDummyEntity;
-import dev.amble.ait.core.item.HammerItem;
 import dev.amble.ait.core.item.SonicItem;
 import dev.amble.ait.core.item.control.ControlBlockItem;
 import dev.amble.ait.core.item.sonic.SonicMode;
@@ -417,7 +416,9 @@ public class ConsoleControlEntity extends LinkableDummyEntity {
         if (!this.control.canRun(tardis, (ServerPlayerEntity) player))
             return false;
 
-        if (player.getMainHandStack().isOf(AITItems.HAMMER)) {
+        boolean hasMallet = player.getMainHandStack().isOf(AITItems.HAMMER);
+
+        if (hasMallet) {
             this.playSound(AITSounds.KNOCK, 1, 0.25f);
             Vec3d pos = this.getPos();
             ((ServerWorld) world).spawnParticles(ParticleTypes.SCRAPE,
@@ -426,14 +427,34 @@ public class ConsoleControlEntity extends LinkableDummyEntity {
 
         DurabilityStates state = this.getDurabilityState(this.getDurability());
 
-        if (state == DurabilityStates.JAMMED)
-            return false;
+        if (state == DurabilityStates.FULL) {
+            if (hasMallet)
+                this.subtractDurability(0.1f);
+        }
 
-        if (state == DurabilityStates.OCCASIONALLY_JAM && random.nextBetween(0, 10) == 5)
-            return false;
+        if (state == DurabilityStates.JAMMED) {
+            if (hasMallet) {
+                this.setDurability(state.next().durability);
+            } else {
+                return false;
+            }
+        }
 
-        if (state == DurabilityStates.SPARKING && random.nextBetween(0, 10) < 5)
-            return false;
+        if (state == DurabilityStates.OCCASIONALLY_JAM && random.nextBetween(0, 10) == 5) {
+            if (hasMallet) {
+                this.setDurability(state.next().durability);
+            } else {
+                return false;
+            }
+        }
+
+        if (state == DurabilityStates.SPARKING && random.nextBetween(0, 10) < 5) {
+            if (hasMallet) {
+                this.setDurability(state.next().durability);
+            } else {
+                return false;
+            }
+        }
 
         if (this.control.shouldHaveDelay(tardis) && !this.isOnDelay()) {
             this.dataTracker.set(ON_DELAY, true);
@@ -442,6 +463,14 @@ public class ConsoleControlEntity extends LinkableDummyEntity {
         }
 
         Control.Result result = this.control.handleRun(tardis, (ServerPlayerEntity) player, (ServerWorld) world, this.consoleBlockPos, leftClick);
+
+        if (result == Control.Result.SEQUENCE) {
+            // THIS IS LITERALLY A FEATURE DON'T REMOVE UNLESS I SAY SO DAMMIT - Loqor
+            if (random.nextBetween(0, 10) == 5) {
+                int subtractCauseICan = random.nextBetween(0, 200);
+                this.subtractDurability(subtractCauseICan / 200f);
+            }
+        }
 
         this.getConsole().ifPresent(console -> this.getWorld().playSound(null, this.getBlockPos(), this.control.getSound(console.getTypeSchema(), result), SoundCategory.BLOCKS, 0.7f,
                 1f));

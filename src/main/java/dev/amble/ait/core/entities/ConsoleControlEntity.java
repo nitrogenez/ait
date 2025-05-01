@@ -433,11 +433,7 @@ public class ConsoleControlEntity extends LinkableDummyEntity {
         }
 
         if (state == DurabilityStates.JAMMED) {
-            if (hasMallet) {
-                this.setDurability(state.next().durability);
-            } else {
-                return false;
-            }
+            if (!hasMallet) return false;
         }
 
         if (state == DurabilityStates.OCCASIONALLY_JAM && random.nextBetween(0, 10) == 5) {

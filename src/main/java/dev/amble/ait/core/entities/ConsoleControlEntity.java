@@ -3,8 +3,6 @@ package dev.amble.ait.core.entities;
 import java.util.List;
 import java.util.Optional;
 
-import dev.amble.ait.core.AITBlocks;
-import dev.amble.ait.core.entities.base.LinkableDummyEntity;
 import dev.drtheo.scheduler.api.Scheduler;
 import dev.drtheo.scheduler.api.TimeUnit;
 import org.jetbrains.annotations.Nullable;
@@ -36,10 +34,12 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
 import dev.amble.ait.AITMod;
+import dev.amble.ait.core.AITBlocks;
 import dev.amble.ait.core.AITEntityTypes;
 import dev.amble.ait.core.AITItems;
 import dev.amble.ait.core.AITSounds;
 import dev.amble.ait.core.blockentities.ConsoleBlockEntity;
+import dev.amble.ait.core.entities.base.LinkableDummyEntity;
 import dev.amble.ait.core.item.HammerItem;
 import dev.amble.ait.core.item.SonicItem;
 import dev.amble.ait.core.item.control.ControlBlockItem;
@@ -275,7 +275,7 @@ public class ConsoleControlEntity extends LinkableDummyEntity {
 
         switch (this.getDurabilityState(this.getDurability())) {
             case JAMMED, SPARKING -> this.spark();
-            case CATCH_FIRE -> this.setOnFire(true);
+            case CATCH_FIRE -> this.onFire();
         }
     }
 
@@ -463,6 +463,15 @@ public class ConsoleControlEntity extends LinkableDummyEntity {
             ((ServerWorld) this.getEntityWorld()).spawnParticles(ParticleTypes.ELECTRIC_SPARK, pos.getX(), pos.getY(), pos.getZ(), 5, 0.2, 0.2, 0.2, 0.01);
             ((ServerWorld) this.getEntityWorld()).spawnParticles(ParticleTypes.LAVA, pos.getX(), pos.getY(), pos.getZ(), 3, 0.1, 0.1, 0.1, 0.01);
         }
+        this.onFire();
+    }
+
+    private void onFire() {
+        if (this.getEntityWorld().isClient()) return;
+        Vec3d pos = this.getPos();
+        ((ServerWorld) this.getEntityWorld()).spawnParticles(ParticleTypes.SMOKE, pos.getX(), pos.getY(), pos.getZ(), 1, 0, 0, 0, 0.0f);
+        if (this.getEntityWorld().getServer().getTicks() % 10 == 0)
+            ((ServerWorld) this.getEntityWorld()).spawnParticles(ParticleTypes.SMALL_FLAME, pos.getX(), pos.getY() + 0.2f, pos.getZ(), 1, 0, 0.075f, 0, 0);
     }
 
     /**
@@ -525,11 +534,6 @@ public class ConsoleControlEntity extends LinkableDummyEntity {
                         + this.getControlHeight() + "f), new Vector3f(" + centered.getX() + "f, " + centered.getY()
                         + "f, " + centered.getZ() + "f)),"));
         }
-    }
-
-    @Override
-    public boolean doesRenderOnFire() {
-        return DurabilityStates.get(this.getDurability()).equals(DurabilityStates.CATCH_FIRE);
     }
 
     @Override

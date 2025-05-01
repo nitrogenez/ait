@@ -4,12 +4,11 @@ import java.util.*;
 
 import com.google.common.collect.Lists;
 import com.mojang.datafixers.util.Pair;
-import dev.amble.ait.AITMod;
 import me.shedaniel.math.Color;
-import net.minecraft.entity.LivingEntity;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3f;
 
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.attribute.EntityAttribute;
 import net.minecraft.entity.attribute.EntityAttributeModifier;
 import net.minecraft.entity.effect.StatusEffect;
@@ -24,6 +23,8 @@ import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
+
+import dev.amble.ait.AITMod;
 
 public class DrinkUtil {
 

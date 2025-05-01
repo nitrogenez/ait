@@ -1,8 +1,5 @@
 package dev.amble.ait.core.item.sonic;
 
-import dev.amble.ait.core.AITTags;
-import dev.amble.ait.core.util.MonitorUtil;
-import dev.amble.ait.core.util.WorldUtil;
 import dev.amble.lib.api.ICantBreak;
 
 import net.minecraft.block.Block;
@@ -25,9 +22,12 @@ import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
 
 import dev.amble.ait.core.AITSounds;
+import dev.amble.ait.core.AITTags;
 import dev.amble.ait.core.entities.RiftEntity;
 import dev.amble.ait.core.item.SonicItem;
 import dev.amble.ait.core.tardis.Tardis;
+import dev.amble.ait.core.util.MonitorUtil;
+import dev.amble.ait.core.util.WorldUtil;
 import dev.amble.ait.core.world.LandingPadManager;
 import dev.amble.ait.core.world.RiftChunkManager;
 import dev.amble.ait.core.world.TardisServerWorld;

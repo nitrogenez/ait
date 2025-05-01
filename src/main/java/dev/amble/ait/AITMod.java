@@ -55,7 +55,6 @@ import dev.amble.ait.core.advancement.TardisCriterions;
 import dev.amble.ait.core.commands.*;
 import dev.amble.ait.core.drinks.DrinkRegistry;
 import dev.amble.ait.core.engine.registry.SubSystemRegistry;
-import dev.amble.ait.core.entities.ConsoleControlEntity;
 import dev.amble.ait.core.entities.FlightTardisEntity;
 import dev.amble.ait.core.entities.RiftEntity;
 import dev.amble.ait.core.item.blueprint.BlueprintRegistry;

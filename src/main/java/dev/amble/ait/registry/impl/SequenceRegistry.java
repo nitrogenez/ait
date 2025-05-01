@@ -3,7 +3,6 @@ package dev.amble.ait.registry.impl;
 import java.util.ArrayList;
 import java.util.List;
 
-import dev.amble.ait.core.tardis.ServerTardis;
 import dev.amble.lib.data.DirectedBlockPos;
 import net.fabricmc.fabric.api.event.registry.FabricRegistryBuilder;
 
@@ -26,6 +25,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.explosion.Explosion;
 
 import dev.amble.ait.AITMod;
+import dev.amble.ait.core.tardis.ServerTardis;
 import dev.amble.ait.core.tardis.control.impl.*;
 import dev.amble.ait.core.tardis.control.impl.pos.IncrementControl;
 import dev.amble.ait.core.tardis.control.impl.pos.XControl;

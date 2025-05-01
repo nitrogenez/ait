@@ -173,10 +173,15 @@ public class ConsoleControlEntity extends LinkableDummyEntity {
     }
 
     @Override
+    public boolean canHit() {
+        return !isRemoved();
+    }
+
+    @Override
     public ActionResult interact(PlayerEntity player, Hand hand) {
         ItemStack handStack = player.getStackInHand(hand);
 
-        if (player.getOffHandStack().getItem() == Items.COMMAND_BLOCK) {
+        if (player.getOffHandStack().isOf(Items.COMMAND_BLOCK)) {
             controlEditorHandler(player);
             return ActionResult.SUCCESS;
         }
@@ -188,12 +193,8 @@ public class ConsoleControlEntity extends LinkableDummyEntity {
             return ActionResult.SUCCESS;
         }
 
-        if (handStack.getItem() instanceof ControlBlockItem) {
-            return ActionResult.FAIL;
-        }
-
         if (isSticky()) {
-            if (player.getMainHandStack().getItem() == Items.SHEARS) {
+            if (player.getMainHandStack().isOf(Items.SHEARS)) {
                 this.playSound(SoundEvents.ENTITY_SHEEP_SHEAR, 1, 1);
                 this.dataTracker.set(STICKY, false);
                 return ActionResult.FAIL;
@@ -207,18 +208,14 @@ public class ConsoleControlEntity extends LinkableDummyEntity {
             );
 
             return ActionResult.FAIL;
-        } else {
-            if (player.getMainHandStack().getItem() == Items.SLIME_BALL) {
-                this.playSound(SoundEvents.BLOCK_SLIME_BLOCK_BREAK, 1, 1);
-                this.dataTracker.set(STICKY, true);
-                return ActionResult.FAIL;
-            }
+        } else if (player.getMainHandStack().isOf(Items.SLIME_BALL)) {
+            this.playSound(SoundEvents.BLOCK_SLIME_BLOCK_BREAK, 1, 1);
+            this.dataTracker.set(STICKY, true);
+            return ActionResult.FAIL;
         }
 
-        if (hand == Hand.MAIN_HAND && !this.run(player, player.getWorld(), false)) {
+        if (hand == Hand.MAIN_HAND && !this.run(player, player.getWorld(), false))
             this.playFailFx();
-        }
-
 
         return ActionResult.SUCCESS;
     }
@@ -227,15 +224,16 @@ public class ConsoleControlEntity extends LinkableDummyEntity {
     public boolean damage(DamageSource source, float amount) {
         if (source.getSource() instanceof TntEntity)
             return false;
+
         if (source.getAttacker() instanceof PlayerEntity player) {
-            if (source.getSource() instanceof ProjectileEntity) {
+            if (source.getSource() instanceof ProjectileEntity)
                 source.getSource().discard();
-            }
-            if (player.getOffHandStack().getItem() == Items.COMMAND_BLOCK) {
+
+            if (player.getOffHandStack().isOf(Items.COMMAND_BLOCK))
                 controlEditorHandler(player);
-            } else
-                if (!this.run((PlayerEntity) source.getAttacker(), source.getAttacker().getWorld(), true))
-                    this.playFailFx();
+
+            else if (!this.run((PlayerEntity) source.getAttacker(), source.getAttacker().getWorld(), true))
+                this.playFailFx();
         }
 
         return false;
@@ -351,21 +349,27 @@ public class ConsoleControlEntity extends LinkableDummyEntity {
     public boolean isOnDelay() {
         return this.dataTracker.get(ON_DELAY);
     }
+
     public float getDurability() {
         return this.dataTracker.get(DURABILITY);
     }
+
     public boolean isSticky() {
         return this.dataTracker.get(STICKY);
     }
+
     public DurabilityStates getDurabilityState(float durability) {
         return DurabilityStates.get(durability);
     }
+
     public void setDurability(float durability) {
         this.dataTracker.set(DURABILITY, durability);
     }
+
     public void setSticky(boolean sticky) {
         this.dataTracker.set(STICKY, sticky);
     }
+
     public void addDurability(float durability) {
         this.setDurability(Math.min(durability, MAX_DURABILITY));
     }
@@ -373,15 +377,16 @@ public class ConsoleControlEntity extends LinkableDummyEntity {
     public void subtractDurability(float durability) {
         this.setDurability(Math.max(this.getDurability() - durability, 0));
     }
+
     public boolean run(PlayerEntity player, World world, boolean leftClick) {
+        if (world.isClient())
+            return false;
+
         if (world.getRandom().nextBetween(1, 10_000) == 72)
             this.getWorld().playSound(null, this.getBlockPos(), AITSounds.EVEN_MORE_SECRET_MUSIC, SoundCategory.MASTER,
                     1F, 1F);
 
-        if (world.isClient())
-            return false;
-
-        if (player.getMainHandStack().getItem() == AITItems.TARDIS_ITEM)
+        if (player.getMainHandStack().isOf(AITItems.TARDIS_ITEM))
             this.discard();
 
         if (!this.isLinked()) {
@@ -394,18 +399,17 @@ public class ConsoleControlEntity extends LinkableDummyEntity {
 
         Tardis tardis = this.tardis().get();
 
-        control.runAnimation(tardis, (ServerPlayerEntity) player, (ServerWorld) world);
-
-        if (player.getMainHandStack().getItem() instanceof SonicItem && this.getDurability() < 1.0f) {
-            if (SonicItem.mode(player.getMainHandStack()).equals(SonicMode.Modes.TARDIS)) {
-                Vec3d pos = this.getPos();
-                this.playSound(SoundEvents.ENTITY_EXPERIENCE_ORB_PICKUP, 1, 1);
-                ((ServerWorld) this.getEntityWorld()).spawnParticles(ParticleTypes.WAX_ON,
-                        pos.getX(), pos.getY(), pos.getZ(), 2, 0.2, 0.4, 0.2, 0.02);
-                this.setDurability(MAX_DURABILITY);
-                return true;
-            }
+        if (player.getMainHandStack().isOf(AITItems.SONIC_SCREWDRIVER) && this.getDurability() < 1.0f
+                && SonicItem.mode(player.getMainHandStack()) == SonicMode.Modes.TARDIS) {
+            Vec3d pos = this.getPos();
+            this.playSound(SoundEvents.ENTITY_EXPERIENCE_ORB_PICKUP, 1, 1);
+            ((ServerWorld) this.getEntityWorld()).spawnParticles(ParticleTypes.WAX_ON,
+                    pos.getX(), pos.getY(), pos.getZ(), 2, 0.2, 0.4, 0.2, 0.02);
+            this.setDurability(MAX_DURABILITY);
+            return true;
         }
+
+        control.runAnimation(tardis, (ServerPlayerEntity) player, (ServerWorld) world);
 
         if (this.isOnDelay())
             return false;
@@ -413,23 +417,23 @@ public class ConsoleControlEntity extends LinkableDummyEntity {
         if (!this.control.canRun(tardis, (ServerPlayerEntity) player))
             return false;
 
-        boolean hasMallet = player.getMainHandStack().getItem() instanceof HammerItem;
-
-        if (!hasMallet) {
-            switch (this.getDurabilityState(this.getDurability())) {
-                case OCCASIONALLY_JAM, SPARKING -> {
-                    return !(random.nextBetween(0, 10) == 5);
-                }
-                case JAMMED -> {
-                    return false;
-                }
-            }
-        } else {
+        if (player.getMainHandStack().isOf(AITItems.HAMMER)) {
             this.playSound(AITSounds.KNOCK, 1, 0.25f);
             Vec3d pos = this.getPos();
-            ((ServerWorld) this.getEntityWorld()).spawnParticles(ParticleTypes.SCRAPE,
+            ((ServerWorld) world).spawnParticles(ParticleTypes.SCRAPE,
                     pos.getX(), pos.getY(), pos.getZ(), 2, 0.2, 0.4, 0.2, 0.02);
         }
+
+        DurabilityStates state = this.getDurabilityState(this.getDurability());
+
+        if (state == DurabilityStates.JAMMED)
+            return false;
+
+        if (state == DurabilityStates.OCCASIONALLY_JAM && random.nextBetween(0, 10) == 5)
+            return false;
+
+        if (state == DurabilityStates.SPARKING && random.nextBetween(0, 10) < 5)
+            return false;
 
         if (this.control.shouldHaveDelay(tardis) && !this.isOnDelay()) {
             this.dataTracker.set(ON_DELAY, true);
@@ -439,17 +443,8 @@ public class ConsoleControlEntity extends LinkableDummyEntity {
 
         Control.Result result = this.control.handleRun(tardis, (ServerPlayerEntity) player, (ServerWorld) world, this.consoleBlockPos, leftClick);
 
-        if (result == Control.Result.SEQUENCE) {
-             //This is just for testing but its funny as hell.
-            if (random.nextBetween(0, 10) == 5) {
-                int subtractCauseICan = random.nextBetween(0, 200);
-                this.subtractDurability(subtractCauseICan / 200f);
-            }
-        }
-
         this.getConsole().ifPresent(console -> this.getWorld().playSound(null, this.getBlockPos(), this.control.getSound(console.getTypeSchema(), result), SoundCategory.BLOCKS, 0.7f,
                 1f));
-
 
         return result.isSuccess();
     }

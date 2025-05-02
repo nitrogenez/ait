@@ -516,8 +516,8 @@ public class AITModClient implements ClientModInitializer {
     public void gallifreyanBOTI(WorldRenderContext context) {
         MinecraftClient client = MinecraftClient.getInstance();
         SinglePartEntityModel contents = new GallifreyFallsModel(GallifreyFallsModel.getTexturedModelData().createModel());
-        Identifier frameTex = BOTIPaintingEntityRenderer.GALLIFREY_FRAME_TEXTURE;
-        Identifier contentsTex = BOTIPaintingEntityRenderer.GALLIFREY_PAINTING_TEXTURE;
+        Identifier frameTex = GallifreyanPaintingEntityRenderer.GALLIFREY_FRAME_TEXTURE;
+        Identifier contentsTex = GallifreyanPaintingEntityRenderer.GALLIFREY_PAINTING_TEXTURE;
         if (client.player == null || client.world == null) return;
         ClientWorld world = client.world;
         MatrixStack stack = context.matrixStack();
@@ -543,8 +543,8 @@ public class AITModClient implements ClientModInitializer {
     public void trenzaloreBOTI(WorldRenderContext context) {
         MinecraftClient client = MinecraftClient.getInstance();
         SinglePartEntityModel contents = new TrenzalorePaintingModel(TrenzalorePaintingModel.getTexturedModelData().createModel());
-        Identifier frameTex = BOTIPaintingEntityRenderer.TRENZALORE_FRAME_TEXTURE;
-        Identifier contentsTex = BOTIPaintingEntityRenderer.TRENZALORE_PAINTING_TEXTURE;
+        Identifier frameTex = TrenzalorePaintingEntityRenderer.TRENZALORE_FRAME_TEXTURE;
+        Identifier contentsTex = TrenzalorePaintingEntityRenderer.TRENZALORE_PAINTING_TEXTURE;
         if (client.player == null || client.world == null) return;
         ClientWorld world = client.world;
         MatrixStack stack = context.matrixStack();

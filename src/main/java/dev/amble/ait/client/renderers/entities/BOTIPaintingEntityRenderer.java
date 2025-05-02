@@ -8,16 +8,11 @@ import net.minecraft.client.render.entity.EntityRenderer;
 import net.minecraft.client.render.entity.EntityRendererFactory;
 import net.minecraft.util.Identifier;
 
-import dev.amble.ait.AITMod;
 import dev.amble.ait.core.entities.BOTIPaintingEntity;
 
 @Environment(value=EnvType.CLIENT)
 public abstract class BOTIPaintingEntityRenderer
         extends EntityRenderer<BOTIPaintingEntity> {
-    public static final Identifier GALLIFREY_PAINTING_TEXTURE = AITMod.id("textures/painting/gallifrey_falls/gallifrey_falls.png");
-    public static final Identifier GALLIFREY_FRAME_TEXTURE = AITMod.id("textures/painting/gallifrey_falls/gallifrey_falls_frame.png");
-    public static final Identifier TRENZALORE_PAINTING_TEXTURE = AITMod.id("textures/painting/trenzalore/trenzalore.png");
-    public static final Identifier TRENZALORE_FRAME_TEXTURE = AITMod.id("textures/painting/trenzalore/trenzalore_frame.png");
     public BOTIPaintingEntityRenderer(EntityRendererFactory.Context context) {
         super(context);
     }

@@ -70,7 +70,7 @@ public class InteriorSettingsScreen extends ConsoleScreen {
     private final int MAIN_SETTINGS_BUTTON_HEIGHT = 20;
 
     public InteriorSettingsScreen(ClientTardis tardis, BlockPos console, Screen parent) {
-        super(Text.translatable("screen.ait.interiorsettings.title"), tardis, console);
+        super(Text.translatable("screen." + AITMod.MOD_ID + ".interiorsettings.title"), tardis, console);
 
         this.parent = parent;
     }

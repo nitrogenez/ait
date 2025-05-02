@@ -46,7 +46,7 @@ public class SonicSettingsScreen extends ConsoleScreen {
     private final int SMALL_ARROW_BUTTON_HEIGHT = 12;
 
     public SonicSettingsScreen(ClientTardis tardis, BlockPos console, Screen parent) {
-        super(Text.translatable("screen.ait.sonicsettings.title"), tardis, console);
+        super(Text.translatable("screen." + AITMod.MOD_ID + ".sonicsettings.title"), tardis, console);
         this.parent = parent;
     }
 

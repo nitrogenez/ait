@@ -542,7 +542,7 @@ public class AITModClient implements ClientModInitializer {
 
     public void trenzaloreBOTI(WorldRenderContext context) {
         MinecraftClient client = MinecraftClient.getInstance();
-        SinglePartEntityModel contents = new TrenzalorePaintingModel(GallifreyFallsModel.getTexturedModelData().createModel());
+        SinglePartEntityModel contents = new TrenzalorePaintingModel(TrenzalorePaintingModel.getTexturedModelData().createModel());
         Identifier frameTex = BOTIPaintingEntityRenderer.TRENZALORE_FRAME_TEXTURE;
         Identifier contentsTex = BOTIPaintingEntityRenderer.TRENZALORE_PAINTING_TEXTURE;
         if (client.player == null || client.world == null) return;

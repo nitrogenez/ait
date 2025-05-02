@@ -152,7 +152,7 @@ public class AITModClient implements ClientModInitializer {
             WorldRenderEvents.AFTER_ENTITIES.register(this::exteriorBOTI);
             WorldRenderEvents.AFTER_ENTITIES.register(this::doorBOTI);
             WorldRenderEvents.AFTER_ENTITIES.register(this::gallifreyanBOTI);
-            WorldRenderEvents.END.register(this::trenzaloreBOTI);
+            WorldRenderEvents.AFTER_ENTITIES.register(this::trenzaloreBOTI);
             WorldRenderEvents.AFTER_ENTITIES.register(this::riftBOTI);
         }
 

@@ -84,7 +84,6 @@ import dev.amble.ait.core.drinks.DrinkRegistry;
 import dev.amble.ait.core.drinks.DrinkUtil;
 import dev.amble.ait.core.entities.BOTIPaintingEntity;
 import dev.amble.ait.core.entities.RiftEntity;
-import dev.amble.ait.core.entities.TrenzalorePaintingEntity;
 import dev.amble.ait.core.item.*;
 import dev.amble.ait.core.tardis.Tardis;
 import dev.amble.ait.core.world.TardisServerWorld;
@@ -146,12 +145,14 @@ public class AITModClient implements ClientModInitializer {
         if (DependencyChecker.hasIris()) {
             WorldRenderEvents.END.register(this::exteriorBOTI);
             WorldRenderEvents.END.register(this::doorBOTI);
-            WorldRenderEvents.END.register(this::paintingBOTI);
+            WorldRenderEvents.END.register(this::gallifreyanBOTI);
+            WorldRenderEvents.END.register(this::trenzaloreBOTI);
             WorldRenderEvents.END.register(this::riftBOTI);
         } else {
             WorldRenderEvents.AFTER_ENTITIES.register(this::exteriorBOTI);
             WorldRenderEvents.AFTER_ENTITIES.register(this::doorBOTI);
-            WorldRenderEvents.AFTER_ENTITIES.register(this::paintingBOTI);
+            WorldRenderEvents.AFTER_ENTITIES.register(this::gallifreyanBOTI);
+            WorldRenderEvents.AFTER_ENTITIES.register(this::trenzaloreBOTI);
             WorldRenderEvents.AFTER_ENTITIES.register(this::riftBOTI);
         }
 
@@ -410,8 +411,8 @@ public class AITModClient implements ClientModInitializer {
         EntityRendererRegistry.register(AITEntityTypes.CONTROL_ENTITY_TYPE, ControlEntityRenderer::new);
         EntityRendererRegistry.register(AITEntityTypes.FALLING_TARDIS_TYPE, FallingTardisRenderer::new);
         EntityRendererRegistry.register(AITEntityTypes.FLIGHT_TARDIS_TYPE, FlightTardisRenderer::new);
-        EntityRendererRegistry.register(AITEntityTypes.GALLIFREY_FALLS_PAINTING_ENTITY_TYPE, BOTIPaintingEntityRenderer::new);
-        EntityRendererRegistry.register(AITEntityTypes.TRENZALORE_PAINTING_ENTITY_TYPE, BOTIPaintingEntityRenderer::new);
+        EntityRendererRegistry.register(AITEntityTypes.GALLIFREY_FALLS_PAINTING_ENTITY_TYPE, GallifreyanPaintingEntityRenderer::new);
+        EntityRendererRegistry.register(AITEntityTypes.TRENZALORE_PAINTING_ENTITY_TYPE, TrenzalorePaintingEntityRenderer::new);
 //        if (isUnlockedOnThisDay(Calendar.DECEMBER, 26)) {
 //            EntityRendererRegistry.register(AITEntityTypes.COBBLED_SNOWBALL_TYPE, FlyingItemEntityRenderer::new);
 //        }
@@ -512,15 +513,15 @@ public class AITModClient implements ClientModInitializer {
         }
     }
 
-    public void paintingBOTI(WorldRenderContext context) {
+    public void gallifreyanBOTI(WorldRenderContext context) {
         MinecraftClient client = MinecraftClient.getInstance();
         SinglePartEntityModel contents = new GallifreyFallsModel(GallifreyFallsModel.getTexturedModelData().createModel());
-        Identifier frameTex = BOTIPaintingEntityRenderer.GALLIFREY_FRAME_TEXTURE;
-        Identifier contentsTex = BOTIPaintingEntityRenderer.GALLIFREY_PAINTING_TEXTURE;
+        Identifier frameTex = GallifreyanPaintingEntityRenderer.GALLIFREY_FRAME_TEXTURE;
+        Identifier contentsTex = GallifreyanPaintingEntityRenderer.GALLIFREY_PAINTING_TEXTURE;
         if (client.player == null || client.world == null) return;
         ClientWorld world = client.world;
         MatrixStack stack = context.matrixStack();
-        for (BOTIPaintingEntity painting : BOTI.PAINTING_RENDER_QUEUE) {
+        for (BOTIPaintingEntity painting : BOTI.GALLIFREYAN_RENDER_QUEUE) {
             if (painting == null) continue;
             Vec3d pos = painting.getPos();
             stack.push();
@@ -531,17 +532,39 @@ public class AITModClient implements ClientModInitializer {
             stack.translate(0, -0.5f, 0.5);
             PaintingFrameModel frame = new PaintingFrameModel(PaintingFrameModel.getTexturedModelData().createModel());
             BlockPos blockPos = BlockPos.ofFloored(painting.getClientCameraPosVec(client.getTickDelta()));
-            if (painting instanceof TrenzalorePaintingEntity) {
-                contents = new TrenzalorePaintingModel(TrenzalorePaintingModel.getTexturedModelData().createModel());
-                frameTex = BOTIPaintingEntityRenderer.TRENZALORE_FRAME_TEXTURE;
-                contentsTex = BOTIPaintingEntityRenderer.TRENZALORE_PAINTING_TEXTURE;
-            }
             PaintingBOTI.renderBOTIPainting(stack, frame,
                     LightmapTextureManager.pack(world.getLightLevel(LightType.BLOCK, blockPos),
                             world.getLightLevel(LightType.SKY, blockPos)), contents, frameTex, contentsTex);
             stack.pop();
         }
-        BOTI.PAINTING_RENDER_QUEUE.clear();
+        BOTI.GALLIFREYAN_RENDER_QUEUE.clear();
+    }
+
+    public void trenzaloreBOTI(WorldRenderContext context) {
+        MinecraftClient client = MinecraftClient.getInstance();
+        SinglePartEntityModel contents = new TrenzalorePaintingModel(TrenzalorePaintingModel.getTexturedModelData().createModel());
+        Identifier frameTex = TrenzalorePaintingEntityRenderer.TRENZALORE_FRAME_TEXTURE;
+        Identifier contentsTex = TrenzalorePaintingEntityRenderer.TRENZALORE_PAINTING_TEXTURE;
+        if (client.player == null || client.world == null) return;
+        ClientWorld world = client.world;
+        MatrixStack stack = context.matrixStack();
+        for (BOTIPaintingEntity painting : BOTI.TRENZALORE_PAINTING_QUEUE) {
+            if (painting == null) continue;
+            Vec3d pos = painting.getPos();
+            stack.push();
+            stack.translate(pos.getX() - context.camera().getPos().getX(),
+                    pos.getY() - context.camera().getPos().getY(), pos.getZ() - context.camera().getPos().getZ());
+            stack.multiply(RotationAxis.POSITIVE_X.rotationDegrees(180f));
+            stack.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(painting.getBodyYaw()));
+            stack.translate(0, -0.5f, 0.5);
+            PaintingFrameModel frame = new PaintingFrameModel(PaintingFrameModel.getTexturedModelData().createModel());
+            BlockPos blockPos = BlockPos.ofFloored(painting.getClientCameraPosVec(client.getTickDelta()));
+            PaintingBOTI.renderBOTIPainting(stack, frame,
+                    LightmapTextureManager.pack(world.getLightLevel(LightType.BLOCK, blockPos),
+                            world.getLightLevel(LightType.SKY, blockPos)), contents, frameTex, contentsTex);
+            stack.pop();
+        }
+        BOTI.TRENZALORE_PAINTING_QUEUE.clear();
     }
 
     public void riftBOTI(WorldRenderContext context) {

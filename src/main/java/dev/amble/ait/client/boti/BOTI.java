@@ -25,7 +25,8 @@ public class BOTI {
     public static BOTIInit BOTI_HANDLER = new BOTIInit();
     public static AITBufferBuilderStorage AIT_BUF_BUILDER_STORAGE = new AITBufferBuilderStorage();
     public static Queue<DoorBlockEntity> DOOR_RENDER_QUEUE = new LinkedList<>();
-    public static Queue<BOTIPaintingEntity> PAINTING_RENDER_QUEUE = new LinkedList<>();
+    public static Queue<BOTIPaintingEntity> GALLIFREYAN_RENDER_QUEUE = new LinkedList<>();
+    public static Queue<BOTIPaintingEntity> TRENZALORE_PAINTING_QUEUE = new LinkedList<>();
     public static Queue<ExteriorBlockEntity> EXTERIOR_RENDER_QUEUE = new LinkedList<>();
     private static boolean HAS_BEEN_WARNED = false;
 
